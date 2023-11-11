@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "AgingReportPanelWise";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/Accounts/JsModule/CreditControl/AgingReportPanelWise.js"></script>
+<style>
+    table a{
+        color:#0076d0;       
+    }
+    .row.colnospace [class*='col-'] {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="panel-body">
+            <div class="row colnospace" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-3">
+                    Choose Panel
+                    <select id="ddlPanel" class="form-control border-imp"><option>Select</option></select>
+                </div>
+                <div class="col-md-4">
+                    <br />
+                    <button id="btnCurrentPatient" onclick="AgingReportPanelWise()" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Get</button>
+                    <button id="btnExcel" data-logic="AgingReportPanelWise" onclick="DownloadExcel(this)" class="btn btn-primary"><i class="fa fa-file-excel-o">&nbsp;</i>Summary Excel</button>                   
+                </div>
+                <div class="col-md-5">
+                    Note <br />
+
+                    <label>1N To 2N => 1*Aging To 2*Aging, <b>Example : if aging=30 then 30 To 60.</b></label>
+                </div>
+            </div>
+            <div class="row colnospace">
+                <div class="scroll" style="margin-bottom: 5px;height:500px;overflow:auto;border: 1px solid #2478a9;">
+                    <table id="tblAgingInfo" class="table table-bordered">
+                        <thead>           
+                            <tr>
+                                <th>Panel Name</th>
+                                <th class="text-right">Aging</th>
+                                <th class="text-right">CurDay</th>
+                                <th class="text-right">Days 1 To 1N</th>
+                                <th class="text-right">Days 1N To 2N</th>
+                                <th class="text-right">Days 2N To 3N</th>
+                                <th class="text-right">Days Above 3N</th>
+                                <th class="text-right">OverAll Balance</th>                              
+                                <th>Download</th>                              
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

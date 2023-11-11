@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "RoomBillingCatLink";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/Masters/JsModule/RoomBillingCatLink.js?v1.0"></script>
+<style>
+    .panel-heading-text {
+        font-size: 17px;
+        line-height: 0;
+        background: #ddd;
+        padding: 0px;
+        margin: 5px -5px;
+    }
+    .select2-container .select2-selection--single {
+        border-radius: 2px;
+        border-color: #d2d2d2;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 23px;
+        user-select: none;
+        -webkit-user-select: none;
+        padding: 3px 0;
+        margin: 1px 0;
+    }
+    #tblRoomInfo input[type=text] {
+        height: 23px;
+        border-color: #cecece;
+        border-radius: 2px;
+    }
+    #tblRoomInfo thead th {
+        z-index: 9999;
+        padding: 4px 10px;
+        border-bottom: none;
+        background: #8b8b8b;
+        border-top: 0;
+        color: white;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    input:disabled span.slider {
+        background-color: #ddd !important;
+    }
+
+    .flex {
+        display: flex;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel" style="border: none;">
+                            <div class="panel-heading" style="background:#e4e4e4;">
+                                <h4 class="panel-heading-text">Room Billing Category Link</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-5">
+                                            <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
+                                                <select id="ddlRoomType" class="form-control"></select>
+                                                <button onclick="GetRoomInfo()" style="border-radius:0;margin-left: 10px;width: 18%;height: 23px;" class="btn btn-primary"><i class="fa fa-plus-circle">&nbsp;</i>Get</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr style="margin-top:-5px" />
+                                            <div class="table table-responsive">
+                                                <div class="scroll" style="height:450px;overflow:auto;">
+                                                    <table id="tblRoomInfo" class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:1%">#</th>
+                                                                <th>Room Name</th>
+                                                                <th style="width: 9%;">Room No.</th>
+                                                                <th style="width: 7%;">Bed No.</th>
+                                                                <th>Bed Full Name</th>
+                                                                <th style="width:22%">Billing Category</th>  
+                                                                <th style="width:9%">cmd</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,201 @@
+﻿
+@{
+    ViewBag.Title = "CaseSheet";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/EMR/JsModule/CaseSheet.js"></script>
+<style>
+    .flex {
+        display: flex;
+        align-items: flex-end;
+    }
+
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+        .custom-table td {
+            line-height: 24px;
+        }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    #filePath {
+        margin-top: 10px;
+        width: 100%;
+        height: 422px;
+        border: 1px solid #ddd;
+    }
+
+    .uploadSection {
+        border: 1px solid #dcdcdc;
+        margin-top: 11px;
+        background: #f5f5f5dd;
+        padding: 5px;
+    }
+
+    .btnPDF {
+        width: 43%;
+        height: 28px;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .loading {
+        border-width: 2px;
+        border-image: url(/images/loading.gif) 60;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white" style="font-size: 15px;">Case Sheet Info</h4>
+                            </div>
+                            <div class="panel-body" style="height:85vh">
+                                <div class="row" style="margin:5px 0">
+                                    <div class="col-md-6" style="padding:0 3px">
+                                        <input type="text" value="69289" id="txtIPDNo" class="form-control" placeholder="IPD No.." />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-warning" onclick="GetPatientInfo()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    </div>
+                                </div>
+                                <hr style="margin:5px 0" />
+                                <div class="col-md-12">
+                                    <div class="table table-responsive">
+                                        <div class="scroll" style="max-height:64vh">
+                                            <table id="tblPatientInfo" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>IPD No</th>
+                                                        <th>Patient Name</th>
+                                                        <th>Admit Date</th>
+                                                        <th>Discharge DateTime</th>
+                                                        <th>CMD</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="panel">
+                    <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                        <h4 class="text-white" style="font-size: 15px;">Upload Case Sheet</h4>
+                    </div>
+                    <div class="panel-body" style="background:#fff;padding: 8px 5px;height:84vh">
+                        <div class="col-md-12">
+                            <table class="table-striped custom-table">
+                                <tr>
+                                    <td> <b>IPD No : </b><span id="txtPatientIPDNO">-</span></td>
+                                    <td> <b>Patient Name. : </b><span id="txtPatientName">-</span></td>
+                                </tr>
+                                <tr>
+                                    <td> <b>Admit Date : </b><span id="txtAdmitDate">-</span></td>
+                                    <td> <b>Discharge DateTime : </b><span id="txtDischargeDateTime">-</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="flex">
+                                <label style="white-space:pre">File Rack: </label>
+                                <select id="ddlFileRack" class="form-control"></select>
+                                <button onclick="UpdateRackByIPDNo()" class="btn btn-success btnPDF pull-right" style="width:31%"><i class="fa fa-plus-circle">&nbsp;</i>Update</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <button onclick="$('#modalRackMaster').modal('show')" class="btn btn-primary btnPDF pull-right" style="width:39%"><i class="fa fa-plus-circle">&nbsp;</i>Create New Rack</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="flex uploadSection">
+                                <label style="white-space:pre">Choose File : </label>
+                                <input type="file" id="uploadFile" accept=".pdf" class="form-control" style="border-radius: 0;border-color: #f39c12;" />
+                                <img id="imgFile" class="hide" />
+                                <button id="btnUpload" onclick="UploadCaseSheet(this)" class="btn btn-warning btnPDF"><i class="fa fa-file-pdf-o">&nbsp;</i>Uplaod</button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <iframe src="https://ik.imagekit.io/hnlpilvl5t/webapp_assets/no-preview.png" id="filePath"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalRackMaster" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:10%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;">
+                <h5 class="text-white">Add New Rack Info</h5>
+                <span data-dismiss="modal" class="btn-close">x</span>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Rack Name</label>
+                        <input type="text" id="txtRackName" class="form-control border-imp" placeholder="Rack Name" autocomplete="off" />
+                    </div>
+                    <div class="col-md-7 form-group">
+                        <label>Description</label>
+                        <div class="flex">
+                            <input type="text" id="txtDescription" class="form-control" placeholder="Description" autocomplete="off" />
+                            <button id="btnSaveRack" onclick="InsertRackInfo()" class="btn btn-success btnPDF" style="width: 21%;margin-left: 5px;">Save</button>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="height:400px;overflow:auto;border:1px solid #009688;padding: 0;">
+                        <table id="tblRackInfo" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:1%">Action</th>
+                                    <th>Rack Name</th>
+                                    <th>Description</th>
+                                    <th>Cr. Date</th>
+                                    <th style="width:1%">cmd</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

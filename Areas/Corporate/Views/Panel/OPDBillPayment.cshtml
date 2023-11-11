@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "OPDBillPayment";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Corporate/JsModule/OPDBillPayment.js"></script>
+<style>
+    #txtTotalReceivable {
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .row.colnospace [class*='col-'] {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+
+    #tblSelectBillingInfo tbody button {
+        height: 18px;
+        line-height: 0;
+    }
+
+    #tblSelectBillingInfo tbody input {
+        width: 90%;
+    }
+
+    .col-md-2 {
+        width: 12.5%;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="panel-body">
+            <div class="row colnospace" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-4">
+                    Choose
+                    <select id="ddlPanel" class="form-control border-imp"><option>Select</option></select>
+                </div>
+                <div class="col-md-2">
+                    From Date
+                    <input type="date" id="txtFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                </div>
+                <div class="col-md-2">
+                    To Date
+                    <input type="date" id="txtTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button id="btnCurrentPatient" onclick="BalanceInfo('OPD_BalanceInfo:BetweenDate')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
+                </div>
+                <div class="col-md-2">
+                    By Claim No/Bill No
+                    <input type="text" id="txtIPDNo" name="name" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button id="btnCurrentPatient" onclick="BalanceInfo('OPD_BalanceInfo:ByIPDNo')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
+                </div>
+            </div>
+            <div class="row colnospace">
+                <div class="scroll" style="margin-bottom: 5px;height:180px;overflow:auto;border: 1px solid #2478a9;">
+                    <table id="tblBillingInfo" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>CMD</th>
+                                <th><input type="text" id="txt3" style="width:100px;color:#000" onkeyup="searchTable('txt3','tblBillingInfo')" placeholder="Seach Claim No.." /></th>
+                                <th><input type="text" id="txt4" style="width:100px;color:#000" onkeyup="searchTable('txt4','tblBillingInfo')" placeholder="Seach Bill No.." /></th>
+                                <th><input type="text" id="txt1" style="width:100px;color:#000" onkeyup="searchTable('txt1','tblBillingInfo')" placeholder="Seach OPD No.." /></th>
+                                <th>Patient Name</th>
+                                <th>Insurance Company Name</th>
+                                <th>Bill Date</th>
+                                <th>Total Amount</th>
+                                <th>Discount</th>
+                                <th>Net Payable</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="scroll" style="margin-bottom: 5px;height:180px;overflow:auto;border: 1px solid #2478a9;">
+                    <table id="tblSelectBillingInfo" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>CMD</th>
+                                <th>Claim No</th>
+                                <th>BillNo</th>
+                                <th>OPD No</th>
+                                <th>Patient Name</th>
+                                <th>Panel Name</th>
+                                <th>Bill Date</th>
+                                <th>Total Amount</th>
+                                <th>Discount</th>
+                                <th>Net Payable</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row colnospace" style="background-color: #bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-2">
+                    <label>Pay Mode</label>
+                    <select id="ddlPayMode" class="form-control">
+                        <option>Select</option>
+                        <option>Cash</option>
+                        <option>Cheque</option>
+                        <option>Swipe Card</option>
+                        <option>NEFT/RTGS/Online</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Bank Name</label>
+                    <select id="ddlBankName" class="form-control">
+                        <option>Select</option>
+                        <option>SBI</option>
+                        <option>BOB</option>
+                        <option>Axis Bank of India</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Reference No.</label>
+                    <input type="text" id="txtReferenceNo" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label>Pay Date</label>
+                    <input type="date" id="txtPayDate" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label>Total Receivable</label>
+                    <div class="flex">
+                        <input type="text" id="txtTotalReceivable" class="form-control" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row colnospace" style="margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-3">
+                    <div style="display: flex;align-items:baseline">
+                        <label style="white-space:pre">Attachment : </label>
+                        <input type="file" id="txtReferenceNo" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div style="display: flex;align-items:baseline">
+                        <label style="white-space:pre">Remark : </label>
+                        <input type="text" id="txtRemark" class="form-control" />
+                        <button id="btnPayment" onclick="IPD_BillPayment()" style="width: 14%;" class="btn btn-success"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

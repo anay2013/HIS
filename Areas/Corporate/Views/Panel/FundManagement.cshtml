@@ -1,0 +1,208 @@
+﻿
+@{
+    ViewBag.Title = "FundManagement";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Corporate/JsModule/FundManagement.js"></script>
+<style>
+    #btnVerify {
+        border: none;
+        border-radius: 0;
+        height: 28px;
+        margin: -1px;
+    }
+
+    .text-white {
+        color: #fff !important;
+    }
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .selected {
+        background: DodgerBlue !important;
+        color: #fff;
+    }
+
+    .flex {
+        display: flex;
+        align-items: baseline;
+    }
+
+        .flex label {
+            white-space: pre;
+        }
+
+    .panelInfo {
+        background: #ffdbdb;
+        padding: 5px 10px;
+        width: 100%;
+        border-radius: 2px;
+        font-size: 12px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white">Panel List</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-xs-4">
+                                    <input type="date" id="txtFrom" class="form-control" />
+                                </div>
+                                <div class="col-xs-4">
+                                    <input type="date" id="txtTo" class="form-control" />
+                                </div>
+                                <div class="col-xs-4">
+                                    <input type="text" id="txtSearch" onkeyup="searchTable('txtSearch','tblPanel')" placeholder="Search" class="form-control" />
+                                </div>
+                                <hr />
+                                <div class="example-box-wrapper">
+                                    <div class="form-horizontal bordered-row">
+                                        <div class="table table-responsive">
+                                            <div class="scroll">
+                                                <table id="tblPanel" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Panel Id</th>
+                                                            <th>Company Name</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white">Fund Management Info</h4>
+                            </div>
+                            <div class="panel-body" style="background:#fff;padding: 8px 20px;">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="flex">
+                                                <label class="panelInfo">-</label>
+                                                <button class="btn btn-success" onclick="InsertFundManagement()" style="width: 20%;margin-left: 10px;"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="flex">
+                                                <label>UHID : </label>
+                                                <div class="flex">
+                                                    <input type="text" id="txtUHID" style="border-radius: 0;border-color: #00a65a;" class="form-control" placeholder="UHID" />
+                                                    <button id="btnVerify" onclick="ValidateUHID()" class="btn btn-success"><i class="fa fa-check-circle">&nbsp;</i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="flex">
+                                                <label>Amount : </label>
+                                                <input type="text" id="txtAmount" class="form-control" placeholder="Amount" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 form-group">
+                                            <div class="flex">
+                                                <label>Ref. No. : </label>
+                                                <input type="text" id="txtRefNo" class="form-control" placeholder="Ref. No." />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 form-group">
+                                            <div class="flex">
+                                                <label>UTR No : </label>
+                                                <input type="text" id="txtUTRNo" class="form-control" placeholder="UTR No." />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 form-group">
+                                            <div class="flex">
+                                                <label>UTR Date : </label>
+                                                <input type="date" id="txtUTRDate" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <input type="text" id="txtRefDetail" class="form-control" placeholder="Ref. Detail" />
+                                        </div>
+                                        @*<div class="col-xs-12 form-group">
+                                                <div class="flex">
+                                                    <label>Ref. Detail : </label>
+                                                    <input type="text" id="txtRefDetail" class="form-control" placeholder="Ref. No." />
+                                                    <button class="btn btn-success" onclick="InsertFundManagement()" style="width: 20%;margin-left: 10px;"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="col-md-12">
+                                    <div class="table table-responsive">
+                                        <div class="scroll">
+                                            <table id="tblFundInfo" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>UHID</th>
+                                                        <th>Trn Date</th>
+                                                        <th>Amount</th>
+                                                        <th>Ref No</th>
+                                                        <th>Ref Detail</th>
+                                                        <th>Utr Date</th>
+                                                        <th>CMD</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

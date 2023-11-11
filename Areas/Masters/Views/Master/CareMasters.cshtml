@@ -1,0 +1,261 @@
+﻿
+@{
+    ViewBag.Title = "CareMasters";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/Masters/JsModule/CareMasters.js"></script>
+<style>
+    #tblAmbulanceMaster tbody tr
+    .btnDoc {
+        margin: 2px 0px;
+        font-size: 18px;
+        height: 17px;
+        line-height: 17px;
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn-tbl {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .btn-flat {
+        padding: 2px;
+        border: none;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .note {
+        list-style: disc;
+        color: red;
+        font-size: 11px;
+        font-weight: bold;
+        background: #f7f7f7;
+        border: 1px solid #d86c6c;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 30px;
+    }
+
+    .bc {
+        border: 1px solid #00a65a;
+        border-radius: 0;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="ml15">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white">Category Master</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-10 form-group">
+                                    <label>Category Name</label>
+                                    <div class="flex">
+                                        <input type="text" id="txtCategory" class="form-control bc" placeholder="Category Name" />
+                                        <button id="btnSaveCategory" onclick="InsertCategory()" style="width: 20%;height: 28px;" class="btn-success btn-add bn">Submit</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="scroll" style="height:480px;overflow:auto;border:1px solid #2492b3">
+                                        <table id="tblCategoryMaster" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:1%">CMD</th>
+                                                    <th style="width:15%">Cat Id</th>
+                                                    <th>Category Name</th>
+                                                    <th style="width:1%">CMD</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="ml151">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white">Sub Category Master</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Category</label>
+                                    <select id="ddlCategory" class="form-control"></select>
+                                </div>
+                                <div class="col-md-7 form-group">
+                                    <label>Sub Category</label>
+                                    <div class="flex">
+                                        <input type="text" id="txtSubCategory" placeholder="Sub Category" class="form-control" />
+                                        <button id="btnSaveSubCategory" style="width: 30%;height: 28px;" class="btn-success btn-add bn" onclick=" InsertSubCategory()">Submit</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="scroll" style="height:480px;overflow:auto;border:1px solid #2492b3">
+                                        <table id="tblSubCatMaster" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:1%">CMD</th>
+                                                    <th style="width:17%">Sub Cat Id</th>
+                                                    <th>Sub Category Name</th>
+                                                    <th style="width:1%">CMD</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="ml15">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white">Area Master</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-10 form-group">
+                                    <label>Area Name</label>
+                                    <div class="flex">
+                                        <input type="text" id="txtArea" class="form-control bc" placeholder="Area Name" />
+                                        <button id="btnSaveArea" style="width: 20%;height: 28px;" class="btn-success btn-add bn" onclick="InsertAreaMaster()">Submit</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="scroll" style="height:480px;overflow:auto;border:1px solid #2492b3">
+                                        <table id="tblAreaMaster" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:1%">CMD</th>
+                                                    <th style="width:15%">Area Id</th>
+                                                    <th>Area Name</th>
+                                                    <th style="width:19%">CMD</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalAreaShift" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="bg-success" style="padding: 5px 10px;color: #fff;background:#0076d0">
+                <h4 class="modal-title">
+                    Area Shift Info
+                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5 form-group">
+                        <label>Area Name</label>
+                        <input type="text" id="txtAreaName" disabled="disabled" class="form-control bc" />
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Shift From</label>
+                        <input type="time" id="txtShiftFrom" class="form-control bc" />
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Shift To</label>
+                        <div class="flex">
+                            <input type="time" id="txtShiftTo" class="form-control bc" />
+                            <button id="btnSaveShift" style="width: 35%;height: 28px;" class="btn-success btn-add bn" onclick="InsertAreaShiftMaster()">Submit</button>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mSchedule">
+                        <div class="table table-responsive scroll">
+                            <table class="table table-bordered" id="tblAreaShift">
+                                <thead>
+                                    <tr>
+                                        <th>cmd</th>
+                                        <th>Shift Id</th>
+                                        <th>Area Name</th>
+                                        <th>Shift From</th>
+                                        <th>Shift To</th>
+                                        <th>cmd</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

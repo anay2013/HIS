@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewBag.Title = "Room";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/Masters/JsModule/RoomAndBed.js?his-version-1.0"></script>
+<style>
+    #tblRoom input {
+        height: 25px;
+        border-radius: 1px;
+        border-color: #5e7b98;
+        margin-bottom: 2px;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    input:disabled span.slider {
+        background-color: #ddd !important;
+    }
+
+    .flex {
+        display: flex;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white">Create And Update Room</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <div class="flex" style="border: 1px solid #f39c12;">
+                                                <select id="ddlFloor" class="form-control"></select>
+                                                <button onclick="floorTask()" style="border-radius:0;margin:0;height: 28px;" class="btn btn-warning"><i class="fa fa-sign-in">&nbsp;</i>New</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                <select id="ddlRoomType" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <div class="flex">
+                                                <input type="text" id="txtRoomName" style="width:70%;border-radius:0" class="form-control" placeholder="Room Name" />
+                                                <input type="text" id="txtRoomNo" style="border-radius:0;width: 31%;margin-left: 5px;" class="form-control" placeholder="Room No" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
+                                                <input type="text" id="txtTotalBed" data-int data-count="3" class="form-control" placeholder="Total Bed" />
+                                                <button onclick="CreateRoom()" style="border-radius:0;margin-left: 10px;width: 23%;height: 28px;" class="btn btn-primary"><i class="fa fa-plus-circle">&nbsp;</i>Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr style="margin-top:0" />
+                                <div class="example-box-wrapper">
+                                    <div class="form-horizontal bordered-row">
+                                        <div class="table table-responsive">
+                                            <div class="scroll" style="height:400px;overflow:auto;border:1px solid #0076d0">
+                                                <table id="tblRoom" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:1%">#</th>
+                                                            <th>Floor Name</th>
+                                                            <th>Room Type</th>
+                                                            <th>Room Name</th>
+                                                            <th>Bed No.</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <button onclick="InsertRoom()" class="btn btn-success pull-right"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalFloorMaster" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="margin-top:25%;width: 370px;">
+            <div class="panel">
+                <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                    <h4 class="text-white">
+                        <button onclick="Clear()" style="border-radius:0;margin: 0;height: 24px;" class="btn btn-warning btn-xs"><i class="fa fa-refresh">&nbsp;</i>New</button>
+                        Floor Master
+                    </h4>
+                </div>
+                <div class="panel-body" style="padding: 8px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
+                                <input type="text" id="txtFloorName" style="border-color: #06a08b;border-radius:0" class="form-control" placeholder="Floor Name" />
+                                <button onclick="InsertUpdateFloor()" id="btnSaveFloor" style="width: 25%;border-radius:0;margin: 0;height: 28px;" class="btn btn-primary"><i class="fa fa-plus-circle">&nbsp;</i>Add</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="scroll" style="height:200px;overflow:auto;border:1px solid #0076d0">
+                                <table id="tblFloorMaster" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:1%">Active</th>
+                                            <th>Floor Name</th>
+                                            <th style="width:1%">cmd</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

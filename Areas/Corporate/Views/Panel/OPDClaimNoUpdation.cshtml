@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "OPDClaimNoUpdation";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<style>
+    #tblServiceRegister tbody button{
+        width: 63px;
+        border-radius: 0;
+        height: 24px;
+        margin: 0px;
+    }
+    #tblServiceRegister thead th{
+      white-space:pre;
+    }
+    #tblServiceRegister tbody input {
+        color: #000;
+    }
+
+    .row.colnospace [class*='col-'] {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+        .flex input[type=file] {
+            width: 166px;
+        }
+
+    .colnospace .col-md-2 {
+        width: 13%;
+    }
+</style>
+<script src="~/Areas/Corporate/JsModule/OPDClaimNoUpdation.js"></script>
+<div id="page-content">
+    <div class="container">
+        <div class="panel-body">
+            <div class="row colnospace" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-2">
+                    From Date
+                    <input type="date" id="txtFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                </div>
+                <div class="col-md-2">
+                    To Date
+                    <input type="date" id="txtTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                </div>
+                <div class="col-md-3">
+                    Insurance Company
+                    <select id="ddlPanel" class="form-control border-imp"><option>Select</option></select>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button id="btnAllPatient" onclick="AdmittedPatientList('OPD:ListForClaimUpdationByDate')" class="btn btn-success"><i class="fa fa-search">&nbsp;</i>Search</button>
+                </div>
+                <div class="col-md-3">
+                    Bill No / OPD No
+                    <div class="flex">
+                        <input type="text" id="txtIPDNo" style="border-color: #00a65a;border-radius: 0;" class="form-control" placeholder="Bill No / OPD No" />
+                        <button id="btnByIPDNo" style="width:40%;height: 28px;border-radius: 0;margin: 0;" onclick="AdmittedPatientList('OPD:ListForClaimUpdationByOPD')" class="btn btn-success">Get</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row colnospace">
+                <div class="scroll" style="height:70vh;overflow:auto">
+                    <table id="tblServiceRegister" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>OPD No</th>
+                                <th style="width: 11%;">Bill No</th>
+                                <th style="width: 16%;">Claim No</th>
+                                <th>Patient Name</th>
+                                <th>Panel</th>
+                                <th style="width: 7%;">Bill Date</th>
+                                <th class="text-right">T. Amt</th>
+                                <th class="text-right">T. Dis.</th>
+                                <th class="text-right">Net Payable</th>
+                                <th class="text-right">Received</th>
+                                <th class="text-right">Balance</th>
+                                <th style="width: 1%;">cmd</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>           
+        </div>
+    </div>
+</div>
+

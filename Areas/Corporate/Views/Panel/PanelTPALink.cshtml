@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "PanelTPALink";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/Corporate/JsModule/PanelTPALink.js"></script>
+<style>
+    #tblPanelInfo select {
+        height: 20px;
+        padding: 2px;
+        border-color: #d3b2b2;
+    }
+    .text-white {
+        color: #fff !important;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .selected {
+        background: DodgerBlue !important;
+        color: #fff;
+    }
+
+    .flex {
+        display: flex;
+        align-items: baseline;
+    }
+
+        .flex label {
+            white-space: pre;
+        }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white">Panel TPA Link</h4>
+                            </div>
+                            <div class="panel-body">                            
+                                <div class="col-xs-12 form-group">
+                                    <div class="scroll">
+                                        <table id="tblPanelInfo" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="white-space:pre">Panel Name</th>
+                                                    <th style="white-space:pre">Panel Type</th>                                                                                 
+                                                    <th style="white-space:pre">TPA Link</th>                                                
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

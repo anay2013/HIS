@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "AreaQuestLink";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/Masters/JsModule/AreaQuestLink.js"></script>
+<style>
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn-tbl {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .btn-flat {
+        padding: 2px;
+        border: none;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 30px;
+    }
+
+    .bc {
+        border: 1px solid #00a65a;
+        border-radius: 0;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ml15">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white">Area Quest Link Master</h4>
+                        </div>
+                        <div class="panel-body" style="padding:10px">
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Area Name</label>
+                                    <div class="flex">
+                                        <select id="ddlArea" onchange="GetQuestLinkInfo()" class="form-control"></select>&nbsp;
+                                        <button id="btnSaveCategory" onclick="InsertCategory()" style="width: 20%;height: 28px;" class="btn-success btn-add bn"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5" style="width: 45%;padding:3px">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="scroll" style="height:480px;overflow:auto;border:1px solid #2492b3">
+                                                <table id="tblQuestInfo" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:1%"><input type="checkbox" onchange="$('#tblQuestInfo tbody input:checkbox').prop('checked',$(this).is(':checked'))" /></th>
+                                                            <th style="width:15%">Quest Id</th>
+                                                            <th>Question</th>                                                      
+                                                            <th>Quest Type</th>                                                      
+                                                            <th>Access By</th>                                                      
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="margin-top: 30vh;padding:3px;width:10%">
+                                    <button class="btn btn-success btn-block" onclick="LinkAreaAndQuest('LinkAreaAndQuest')"><i class="fa fa-sign-in">&nbsp;</i>Link</button>
+                                    <button class="btn btn-danger btn-block" onclick="LinkAreaAndQuest('DelinkAreaAndQuest')"><i class="fa fa-sign-out">&nbsp;</i>Remove</button>
+                                </div>
+                                <div class="col-md-5" style="width: 45%;padding:3px">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="scroll" style="height:480px;overflow:auto;border:1px solid #2492b3">
+                                                <table id="tblAllotedQuestInfo" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>    
+                                                            <th style="width:1%"><input type="checkbox" onchange="$('#tblAllotedQuestInfo tbody input:checkbox').prop('checked',$(this).is(':checked'))" /></th>
+                                                            <th style="width:15%">Quest Id</th>
+                                                            <th>Question</th>
+                                                            <th>Quest Type</th>
+                                                            <th>Access By</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

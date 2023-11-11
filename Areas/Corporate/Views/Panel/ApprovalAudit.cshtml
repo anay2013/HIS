@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "ApprovalAudit";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<style>
+    .row.colnospace [class*='col-'] {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+        .flex input[type=file] {
+            width: 166px;
+        }
+
+    .colnospace .col-md-2 {
+        width: 13%;
+    }
+</style>
+<script src="~/Areas/Corporate/JsModule/ApprovalAudit.js"></script>
+<div id="page-content">
+    <div class="container">
+        <div class="panel-body">
+            <div class="row colnospace" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-2">
+                    From Date
+                    <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                </div>
+                <div class="col-md-2">
+                    To Date
+                    <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                </div>
+                <div class="col-md-3">
+                    Insurance Company
+                    <select id="ddlPanel" class="form-control border-imp"><option>Select</option></select>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button id="btnAllPatient" onclick="ApprovalAuditInfo()" class="btn btn-success"><i class="fa fa-search">&nbsp;</i>Search</button>
+                </div>
+            </div>
+            <div class="row colnospace">
+                <div class="scroll" style="height:200px">
+                    <table id="tblApprovalAuditInfo" class="table table-bordered" style="font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th>IPD No</th>
+                                <th>Patient Name</th>
+                                <th>Approval Type</th>
+                                <th>Approval Date</th>
+                                <th>Claim No</th>
+                                <th>Amount</th>
+                                <th>Co Pay</th>
+                                <th>Discount</th>
+                                <th>Receivable</th>
+                                <th style="width:1%">cmd</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

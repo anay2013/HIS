@@ -1,0 +1,96 @@
+﻿
+<link href="~/Content/css/MenuMaster.css?his-version-1.0" rel="stylesheet" />
+<script src="~/Areas/IPD/JsModule/BillingView/_BillingCategoryUpdate.js"></script>
+<style>
+    
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .btn-flat {
+        padding: 2px;
+        border: none;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 5px 0px 10px;
+        position: relative;
+    }
+    #tblRoomCharges th {
+        z-index:9999;
+    }
+</style>
+<div class="row" style="padding:5px">
+    <div class="col-md-8">
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <div class="table-responsive vertiscrl" style="margin-bottom:0;overflow:auto;height:440px;border: 1px solid #2478a9;">
+                <table id="tblRoomCharges" class="table table-bordered">
+                    <thead style="background: #00a65a;color: #fff;">
+                        <tr>
+                            <th>Date</th>
+                            <th>Room Type</th>
+                            <th>Billing Category</th>
+                            <th class="text-right">Amount</th>
+                            <th style="width: 10%;"><button data-logic="ALL" onclick="UpdateCategory(this)" class="btn btn-warning btn-xs"><i class="fa fa-sign-in">&nbsp;</i>Update</button></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <div class="col-xs-3">
+                <div class="flex">
+                    <label style="white-space:pre">From : </label>
+                    <input type="date" id="txtFrom" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="flex">
+                    <label style="white-space:pre">To : </label>
+                    <input type="date" id="txtTo" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <select id="ddlCategory" class="form-control"></select>
+            </div>
+            <div class="col-xs-2">
+                <button id="btnUpdate" class="btn btn-warning" onclick="UpdateCatBetweenDate()"><i class="fa fa-sign-in">&nbsp;</i>Update</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

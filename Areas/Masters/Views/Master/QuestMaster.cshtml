@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "QuestMaster";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script src="~/Areas/Masters/JsModule/QuestMaster.js"></script>
+<style>
+    #tblAmbulanceMaster tbody tr
+    .btnDoc {
+        margin: 2px 0px;
+        font-size: 18px;
+        height: 17px;
+        line-height: 17px;
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn-tbl {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .btn-flat {
+        padding: 2px;
+        border: none;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .note {
+        list-style: disc;
+        color: red;
+        font-size: 11px;
+        font-weight: bold;
+        background: #f7f7f7;
+        border: 1px solid #d86c6c;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 30px;
+    }
+
+    .bc {
+        border: 1px solid #00a65a;
+        border-radius: 0;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="ml151">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white">Question Info</h4>
+                        </div>
+                        <div class="panel-body" style="padding:10px">
+                            <div class="row">                             
+                                <div class="col-md-12">
+                                    <div class="scroll" style="height:520px;max-height:520px;overflow:auto;border:1px solid #2492b3">
+                                        <table id="tblQuestMaster" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:1%">CMD</th>
+                                                    <th>Question Id</th>
+                                                    <th>Question</th>
+                                                    <th>Quest Type</th>
+                                                    <th>Access By</th>
+                                                    <th style="width:1%">CMD</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="ml151">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white"><button onclick="Clear()" class="btn btn-warning btn-xs">New</button>Question Master</h4>
+                        </div>
+                        <div class="panel-body" style="padding:10px">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Category</label>
+                                    <select id="ddlCategory" onchange="GetSubCat()" class="form-control"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Sub Category</label>
+                                    <select id="ddlSubCategory" class="form-control"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Quest Type</label>
+                                    <select id="ddlQuestType" class="form-control">
+                                        <option>Optional</option>
+                                        <option>Summary</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Access By</label>
+                                    <select id="ddlAccessBy" class="form-control">
+                                        <option>Operator</option>                                        
+                                        <option>Supervisor</option>                                                                          
+                                    </select>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <label>Question</label>
+                                    <textarea rows="6" id="txtQuestion" onkeyup="trans()" class="form-control"></textarea>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <button id="btnSave" onclick="InsertQuest()" class="btn btn-success pull-right">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
