@@ -40,11 +40,11 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         {
             return PartialView(page);
         }
-        public ActionResult TPAApproval()
+        public ActionResult ApprovalCorrection()
         {
             return View();
         }
-        public ActionResult ApprovalCorrection()
+        public ActionResult TPAApproval()
         {
             return View();
         }
@@ -57,6 +57,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             return View();
         }
         public ActionResult IPDAdvancePayment()
+        {
+            return View();
+        }
+        public ActionResult HospitalDocuments()
         {
             return View();
         }

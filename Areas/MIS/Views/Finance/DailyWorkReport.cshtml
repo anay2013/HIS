@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "DailyWorkReport";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/MIS/JsModule/Finance/DailyWorkReport.js"></script>
+<style>
+    #tblReport thead th {
+        background: #2a86cd !important;
+        color: #fff;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#026cbd;padding: 4px;">
+                                <h4 class="text-white">Daily Work Report</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-2">
+                                    <label>Tran Type</label>
+                                    <select id="ddlTranType" class="form-control">
+                                        <option>ALL</option>
+                                        <option>Appointment</option>
+                                        <option>Service Booking</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1" style="padding: 0px 2px;">
+                                    <label>IPOP Type</label>
+                                    <select id="ddlIPOPType" class="form-control">
+                                        <option>ALL</option>
+                                        <option>OPD</option>
+                                        <option>IPD</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Panel</label>
+                                    <select id="ddlPanel" class="form-control"></select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Doctor</label>
+                                    <select id="ddlDoctor" class="form-control"></select>
+                                </div>
+                                <div class="col-md-1" style="padding: 0px 2px;">
+                                    <label>From</label>
+                                    <input type="date" id="txtFrom" onchange="CheckDateDiff()" class="form-control" />
+                                </div>
+                                <div class="col-md-1" style="padding: 0px 2px;">
+                                    <label>To</label>
+                                    <input type="date" id="txtTo" onchange="CheckDateDiff()" class="form-control" />
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="flex" style="margin-top: 23px;">
+                                        <button style="width:30%" id="btnGet" class="btn btn-primary" onclick="WorkOrderReport()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                        <button style="width:70%" id="btnXL" class="btn btn-warning" onclick="DownloadExcel(this)"><i class="fa fa-file-excel-o">&nbsp;</i>Download XL</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top:10px">
+                                    <dic class="scroll" style="max-height: 530px;overflow: auto;">
+                                        <table id="tblDailyWorkReport" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>UHID</th>
+                                                    <th>Patient Name</th>
+                                                    <th>Panel Name</th>
+                                                    <th>Doctor Name</th>
+                                                    <th>Referral</th>
+                                                    <th class="text-right">Total</th>
+                                                    <th class="text-right">Discount</th>
+                                                    <th class="text-right">Tax</th>
+                                                    <th class="text-right">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </dic>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

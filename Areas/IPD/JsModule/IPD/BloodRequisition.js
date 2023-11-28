@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     BloodRequisitionPatientInfo();
-    $('input[name=Transfusion]').on('change', function () {
+    $('input[name=Transfusion]').on('change', function () {     
         if ($(this).val() == 'No')
             $(this).closest('div.flex').find('input.TransfusionHistory').val('').prop('disabled', true);
         else
@@ -13,7 +13,7 @@ function selectedReqTime(elem) {
 }
 function ComponentChoose() {
     $('div.ComponentQuantity').empty();
-    var componentId = '', ItemId = '', componentName = '', Qty = 0, list = '';
+    var componentId = '',ItemId = '', componentName = '', Qty = 0, list = '';
     $('#tblComponentsInfo tbody tr').each(function () {
         if (parseInt($(this).find('td:eq(4)').find('input:text').val()) > 0) {
             componentId = $(this).find('td:eq(0)').text();
@@ -79,12 +79,12 @@ function BloodRequisitionPatientInfo() {
                     var tbody = "";
                     var count = 0;
                     $.each(data.ResultSet.Table2, function (key, val) {
-                        tbody += "<tr>";
+                        tbody += "<tr>";                                         
                         tbody += "<td>" + val.IPOPNo + "</td>";
                         tbody += "<td>" + val.IndentNo + "</td>";
                         tbody += "<td>" + val.PatientName + "</td>";
-                        tbody += "<td>" + val.IndentDate + "</td>";
-                        tbody += "<td><button onclick=PrintReport('" + val.IndentNo + "') class='btn btn-warning btn-xs'><i class='fa fa-print btn-xs'></i></button></td>";
+                        tbody += "<td>" + val.IndentDate + "</td>";                     
+                        tbody += "<td><button onclick=PrintReport('" + val.IndentNo+"') class='btn btn-warning btn-xs'><i class='fa fa-print btn-xs'></i></button></td>";
                         tbody += "</tr>";
                         count++;
                     });
@@ -128,7 +128,7 @@ function ComponentsInfo() {
                     var tbody = "";
                     var count = 0;
                     $.each(data.ResultSet.Table, function (key, val) {
-                        tbody += "<tr>";
+                        tbody += "<tr>";                      
                         tbody += "<td>" + val.ComponentID + "</td>";
                         tbody += "<td>" + val.ComponentName + "</td>";
                         tbody += "<td>" + val.AliasName + "</td>";
@@ -153,7 +153,7 @@ function Insert() {
     var objBO = {};
     var bloodRequisitionInfo = {};
     var selectedComponent = [];
-    if ($('#txtUHID').val() == '') {
+    if ($('#txtUHID').val()=='') {
         alert('Please Choose Patient Info.');
         return
     }

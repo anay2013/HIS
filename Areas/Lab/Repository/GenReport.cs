@@ -20,22 +20,41 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
         string _IsNABL = string.Empty;
         string _PrintWithHeader = "N";
         List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
-        public FileResult PrintLabReport(string visitNo, string SubCat)
+        public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic)
         {
-            LabReporting obj = new LabReporting();
-            obj.LabCode = "-";
-            obj.IpOpType = "-";
-            obj.ReportStatus = "-";
-            obj.SubCat = SubCat;
-            obj.VisitNo = visitNo;
-            obj.BarccodeNo = "-";
-            obj.TestCategory = "-";
-            obj.AutoTestId = 0;
-            obj.TestCode = "-";
-            obj.from = Convert.ToDateTime("1900/01/01");
-            obj.to = Convert.ToDateTime("1900/01/01");
-            obj.Logic = "PrintLabReport";
-            dsResult = APIProxy.CallWebApiMethod("sample/LabReporting_Queries", obj);
+            if (Logic =="ByReportEditing")
+            {
+                LabReporting obj = new LabReporting();
+                obj.LabCode = "-";
+                obj.IpOpType = "-";
+                obj.ReportStatus = "-";
+                obj.SubCat = SubCat;
+                obj.VisitNo = visitNo;
+                obj.BarccodeNo = "-";
+                obj.TestCategory = "-";
+                obj.AutoTestId = 0;
+                obj.TestCode = "-";
+                obj.from = Convert.ToDateTime("1900/01/01");
+                obj.to = Convert.ToDateTime("1900/01/01");
+                obj.Logic = "PrintLabReport";
+                dsResult = APIProxy.CallWebApiMethod("sample/LabReporting_Queries", obj);
+            }
+            if (Logic == "ByFinalPrint")
+            {
+                ReportPrintingInfo obj = new ReportPrintingInfo();
+                obj.LabCode = "-";
+                obj.PanelId = "-";
+                obj.DoctorId = "-";
+                obj.VisitNo = visitNo;
+                obj.TestCategory = "-";
+                obj.TestIds = TestIds;
+                obj.from = "1900/01/01";
+                obj.to = "1900/01/01";
+                obj.Prm1 = "-";
+                obj.Prm2 = "-";
+                obj.Logic = "PrintLabReport";
+                dsResult = APIProxy.CallWebApiMethod("Lab/Lab_ReportPrintingQueries", obj);
+            }
             PdfDocument repDocument=new PdfDocument();
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
             //Geting Distinct department list with NABL Flag to separate the report body for NABLE Logo at header
@@ -46,7 +65,6 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 SeqNo = y.Field<Int64>("SeqNo"),
                 RowNo = y.Field<Int64>("RowNo"),
             }).ToList().OrderBy(y =>y.SeqNo).GroupBy(x => new { x.SubCatName, x.IsNABL});
-
             foreach (var dept in DeptList)
             {
                 _Deptname = dept.First().SubCatName;
@@ -338,9 +356,6 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     }
                 }
             }
-
-        
-
             b.Append("</table>");
             string t = b.ToString();
             return b.ToString();

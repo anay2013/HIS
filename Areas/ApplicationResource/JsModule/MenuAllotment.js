@@ -288,7 +288,8 @@ function AllotSubMenuToEmployee() {
     $("#rolePanel ul input:checkbox:checked").each(function () {
         objBO.push({
             'EmpCode': $('#ddlEmployee option:selected').val(),
-            'SubMenuId': $(this).data('submenuid')
+            'SubMenuId': $(this).data('submenuid'),
+            'login_id': Active.userId
         });
     });
     $.ajax({

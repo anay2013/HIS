@@ -51,7 +51,7 @@ function GetCategory() {
     });
 }
 function GetTestBySubCategory() {
-    $("#ddlTest").empty().append($("<option></option>").val("0").html("Select"));
+    $("#ddlTest").empty().append($("<option></option>").val("0").html("Select")).select2();
     $("#ddlTest").append($("<option></option>").val("ALL").html("ALL"));
     var url = config.baseUrl + "/api/Lab/SampleLabReceivingQueries";
     var objBO = {};
@@ -69,7 +69,7 @@ function GetTestBySubCategory() {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, value) {
-                        $("#ddlTest").append($("<option></option>").val(value.TestCode).html(value.TestName)).select2();
+                        $("#ddlTest").append($("<option></option>").val(value.TestCode).html(value.TestName));
                     });
                 }
             }
@@ -99,7 +99,7 @@ function LabReceiveInfo(logic) {
         data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
-        success: function (data) {         
+        success: function (data) {
             var tbody = '';
             var count = 0;
             if (Object.keys(data.ResultSet).length > 0) {
@@ -118,6 +118,8 @@ function LabReceiveInfo(logic) {
                         tbody += "<td>" + val.patient_name + "</td>";
                         tbody += "<td style='display:none'>" + val.TestCode + "</td>";
                         tbody += "<td>" + val.testName + "</td>";
+                        tbody += "<td>" + val.LabReceivedBy + "</td>";
+                        tbody += "<td>" + val.LabReceivedDate + "</td>";
                         tbody += "<td>" + val.samp_type + "</td>";
                         if (val.IsLabReceived == '1')
                             tbody += "<td>-</td>";
@@ -209,10 +211,10 @@ function LabReceiveByScanning() {
         data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
-        success: function (data) {           
+        success: function (data) {
             if (data.includes('Success')) {
                 $('input[id=txtBarcodeNoByScan]').val('');
-                LabReceiveInfo('LabReceiveInfo:ByBarcodeNo');              
+                LabReceiveInfo('LabReceiveInfo:ByBarcodeNo');
             }
             else {
                 alert(data);

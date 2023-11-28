@@ -146,16 +146,17 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             }
             b.Append("<table style='width:100%;font-size:18px;text-align:left;border:0px solid #dcdcdc;margin-top:10px;'>");
             b.Append("<tr>");
-            b.Append("<th colspan='4'><hr style='margin-bottom:-6px;border:1px solid #000'></th>");
+            b.Append("<th colspan='5'><hr style='margin-bottom:-6px;border:1px solid #000'></th>");
             b.Append("</tr>");
             b.Append("<tr>");
-            b.Append("<th style='width:70%'>Particulars</th>");
+            b.Append("<th style='width:60%'>Particulars</th>");
             b.Append("<th style='width:10%;text-align:right'>Units</th>");
             b.Append("<th style='width:10%;text-align:right'>Rate(₹)</th>");
+            b.Append("<th style='width:10%;text-align:right'>Discount(₹)</th>");
             b.Append("<th style='width:10%;text-align:right'>Amount(₹)</th>");
             b.Append("</tr>");
             b.Append("<tr>");
-            b.Append("<th colspan='4'><hr style='margin-top:-4px;border:1px solid #000'></th>");
+            b.Append("<th colspan='5'><hr style='margin-top:-4px;border:1px solid #000'></th>");
             b.Append("</tr>");
             //Body			
             if (ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
@@ -163,13 +164,14 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                 foreach (DataRow dr in ds.Tables[2].Rows)
                 {
                     b.Append("<tr>");
-                    b.Append("<td style='width:70%;font-size:15px !important'>" + dr["CatName"].ToString() + "<br/>" + dr["ItemName"].ToString() + "</td>");
+                    b.Append("<td style='width:60%;font-size:15px !important'>" + dr["CatName"].ToString() + "<br/>" + dr["ItemName"].ToString() + "</td>");
                     b.Append("<td style='width:10%;text-align:right'>" + dr["Qty"].ToString() + "</td>");
                     b.Append("<td style='width:10%;text-align:right'>" + Convert.ToDecimal(dr["Rate"]).ToString("F") + "</td>");
+                    b.Append("<td style='width:10%;text-align:right'>" + Convert.ToDecimal(dr["discount"]).ToString("F") + "</td>");
                     b.Append("<td style='width:10%;text-align:right'>" + Convert.ToDecimal(dr["NetAmount"]).ToString("F") + "</td>");
                     b.Append("</tr>");
                     b.Append("<tr>");
-                    b.Append("<td colspan='4'><hr style='margin-bottom:1px;'></td>");
+                    b.Append("<td colspan='5'><hr style='margin-bottom:1px;'></td>");
                     b.Append("</tr>");
                 }
             }

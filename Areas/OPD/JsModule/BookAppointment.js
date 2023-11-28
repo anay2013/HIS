@@ -44,6 +44,8 @@ $(document).ready(function () {
             $('input[value=Credit]').prop('checked', true).trigger('change.select2');
             $('input[name=PaymentMode]').removeClass('pay');
             $('#ddlItemName').prop('selectedIndex', '0').trigger('change.select2');
+            $('#tblPaymentDetails').removeClass('pay');
+            $('#tblPaymentDetails tbody tr').hide();
         }
         else {
             $('#tblPaymentDetails tbody tr').each(function () {
@@ -458,9 +460,11 @@ function GetDoctorByDept() {
     });
 }
 function GetVisitTypeByDoctor(DoctorId) {
+    $('#ddlItemName').empty().append($('<option>Select</option>')).trigger('change.select2');
     PaymentAll();
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
     var objBO = {};
+    objBO.UHID = $('#txtUHID').val();
     objBO.DoctorId = DoctorId;
     objBO.Logic = 'GetVisitTypeByDoctor';
     $.ajax({
@@ -472,7 +476,6 @@ function GetVisitTypeByDoctor(DoctorId) {
         success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
-                    $('#ddlItemName').empty().append($('<option>Select</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#ddlItemName').append($('<option></option>').val(val.ItemId).html(val.SubCatName));
                     });
@@ -489,8 +492,16 @@ function GetVisitTypeByDoctor(DoctorId) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table2).length > 0) {
                     $.each(data.ResultSet.Table2, function (key, val) {
-                        $('#txtLastTokenNo').text(val.TokenNo);
-                        $('#txtLastTokenNo').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
+                        $('.paymentSection span:eq(3) span:last').text((eval(val.TokenNo) < 10 ? '0' + val.TokenNo : val.TokenNo));
+                        //$('.paymentSection span:eq(3) span').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
+                    });
+                }
+            }
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table3).length > 0) {
+                    $.each(data.ResultSet.Table3, function (key, val) {
+                        $('.paymentSection span:eq(3) span:first').text(val.LastAppDate);
+                        //$('.paymentSection span:eq(3) span').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
                     });
                 }
             }
@@ -795,7 +806,11 @@ function totalCal() {
     roundOff = parseFloat(netAmt + totalTax) - parseInt(netAmt + totalTax);
     $('#txtPayable').val(payable);
     $('#txtTotalTax').val(totalTax.toFixed(2));
-    $('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val(payable);
+    if ($('#ddlPanel option:selected').text().toLowerCase() != 'cash')
+        $('#txtBalance').val(payable);
+
+    if ($('#ddlPanel option:selected').text().toLowerCase() == 'cash')
+        $('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val(payable);
 
     $('#tblPayInfo tbody').empty();
     var tbody = "";
@@ -1328,7 +1343,6 @@ function Opd_AppointmentBooking1() {
                             if ($('#ddlVisitType option:selected').text() == 'Walk-In') {
                                 Receipt(tnxid);
                             }
-                            GetVisitTypeByDoctor(objBooking.DoctorId);
                             Clear();
                             _photo_url = null;
                             $('#liveCamera').hide();
@@ -1514,7 +1528,7 @@ function paymentCal(logic, val) {
         roundOff = parseFloat(netAmt) - parseInt(netAmt);
         $('input[name=PaymentMode]:not(.cash)').prop('checked', false).trigger('change.select2');
         $('#tblPaymentDetails tbody').find('input[type=text]').val(0);
-        $('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val(parseInt(payable));      
+        $('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val(parseInt(payable));
         $('#txtPayable').val(payable);
     }
 }
@@ -1685,16 +1699,19 @@ function Clear() {
     $('#AnonymousInformation #ddlVisitPurpose').prop('selectedIndex', '0').trigger('change.select2');
     $('#AnonymousInformation #ddlDept').prop('selectedIndex', '0').trigger('change.select2');
     $('#AnonymousInformation #ddlDoctor').prop('selectedIndex', '0').trigger('change.select2');
-    $('#AnonymousInformation #ddlItemName').prop('selectedIndex', '0').trigger('change.select2');
+    $('#AnonymousInformation #ddlItemName').empty();
+    $('#AnonymousInformation #ddlItemName').append($('<option></option>').val('Select').html('Select')).trigger('change.select2');;
     $('#AnonymousInformation #ddlVisitType').prop('selectedIndex', '0').trigger('change.select2');
     $('#AnonymousInformation').find('input[type=text],input[type=date]:not(#txtAppointmentOn)').val('');
     $('#PaymentInformation').find('input[type=text]:not(#txtDisResason)').val(0);
     $('#PaymentInformation').find('input[id=txtDisResason]').val('');
     $('#PaymentInformation').find('select').prop('selectedIndex', '0').trigger('change.select2');
     $('#tblPaymentDetails tbody').find('input[type=text]').val(0);
-    $('input[name=PaymentMode]:not(.cash)').prop('checked', false).trigger('change.select2');
+    $('input[name=PaymentMode]:not(.cash)').prop('checked', false).change();
     FillCurrentDate("txtAppointmentOn");
     $('#txtUHID').val('New');
+    $('.paymentSection span:eq(3) span:last').text('00');
+    $('.paymentSection span:eq(3) span:first').text('----------');
 }
 function query() {
     var vars = [], hash;

@@ -2,7 +2,7 @@
 var _IPDNo;
 var _PatientName;
 $(document).ready(function () {
-    FloorAndPanelList();
+    FloorAndPanelList(); 
     $('select').select2();
     FillCurrentDate('txtSearchFrom');
     FillCurrentDate('txtSearchTo');
@@ -30,7 +30,7 @@ function FloorAndPanelList() {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {
+        success: function (data) {          
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table1).length > 0) {
                     $.each(data.ResultSet.Table1, function (key, val) {
@@ -81,8 +81,8 @@ function AdmittedPatientList(logic) {
                     var tbody = "";
                     $.each(data.ResultSet.Table, function (key, val) {
                         if (val.ApprovalType == 'Final-Approval')
-                            tbody += "<tr style='background:#a4df9d'>";
-                        else
+                            tbody += "<tr style='background:#a4df9d'>";             
+                        else 
                             tbody += "<tr>";
                         tbody += "<td><button onclick=SelectPatient(this) class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
                         tbody += "<td>" + val.IPDNo + "</td>";
@@ -229,11 +229,11 @@ function IPD_TPApprovalEntry() {
                 'Logic': 'Insert'
             });
         }
-    });
-    //if (totalAmountPay > parseFloat($('#txtNetAmt').val())) {
-    //    alert('Approval Amount should be equal to Balance Amount')
-    //    return
-    //}
+    });  
+    if (totalAmountPay > parseFloat($('#txtNetAmt').val())) {
+        alert('Approval Amount should be equal to Balance Amount')
+        return
+    }
 
     $.ajax({
         method: "POST",
@@ -389,7 +389,7 @@ function RejectEntry(AutoId) {
         }
     });
 }
-function UploadFile(elem) {
+function UploadFile(elem) {    
     if ($(elem).siblings('input[type=file]').val() == '') {
         alert('Please Choose File')
         return

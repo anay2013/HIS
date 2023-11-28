@@ -256,8 +256,6 @@ function ItemInsert() {
     objBooking.IPDNo = _IPDNo;
     objBooking.ipAddress = '-';
     objBooking.login_id = Active.userId;
-    objBooking.BillingRole ="Billing";
-    
     objBooking.Logic = "Med-Item";
     var MasterObject = {};
     MasterObject.objBooking = objBooking;

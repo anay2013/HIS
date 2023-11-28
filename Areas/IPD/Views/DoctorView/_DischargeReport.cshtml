@@ -145,12 +145,10 @@
     .cke_contents {
         height: 130px !important;
     }
-
-    #modalHeader, #modalTemplate {
+    #modalHeader,#modalTemplate {
         z-index: 99999;
     }
-
-    .bc {
+   .bc {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         border-color: #06a08b;
@@ -161,11 +159,11 @@
         <div class="" style="height:70px;padding:5px;">
             <div class="col-md-4 flex-margin">
                 <label style="width:20%">Header</label>
-                <select id="ddlHeader" onchange="GetTemplateListByHeader()" class="form-control"></select>
+                <select id="ddlHeader" onchange="GetTemplateListByHeader()" class="form-control"></select>              
             </div>
             <div class="col-md-4 flex-margin">
                 <label style="width:30%">Templates</label>
-                <select id="ddlTemplates" class="form-control"></select>
+                <select id="ddlTemplates" class="form-control"></select>              
             </div>
             <div class="col-md-12" style="margin:10px 0;">
                 <textarea class="form-control" id="txtTemplate" placeholder="Describe Test Interpretation here..."></textarea>
@@ -182,7 +180,7 @@
             <table id="tblDischargeSummary" class="table table-bordered">
                 <thead style="background: #00a65a;color: #fff;">
                     <tr>
-                        <th style="width:1%;text-align:center">#</th>
+                        <th style="width:1%;text-align:center">#</th>                        
                         <th>Content</th>
                         <th>Date</th>
                         <th style="width:1px;text-align:center">CMD</th>
@@ -219,7 +217,7 @@
                                 <thead style="background: #00a65a;color: #fff;">
                                     <tr>
                                         <th style="width:1%;text-align:center">#</th>
-                                        <th>Header</th>
+                                        <th>Header</th>                                    
                                         <th style="width:20%;">Date</th>
                                         <th style="width:1px;text-align:center">CMD</th>
                                     </tr>
@@ -249,7 +247,7 @@
                 <div class="row" style="margin:10px 0">
                     <div class="col-md-6 flex">
                         <label style="width:20%">Header</label>
-                        <select id="ddlHeaderMaster" class="form-control"></select>
+                        <select id="ddlHeaderMaster" class="form-control"></select>                        
                     </div>
                     <div class="col-md-6 flex">
                         <label style="width:35%">Template</label>

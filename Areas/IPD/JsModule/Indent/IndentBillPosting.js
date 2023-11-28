@@ -1,6 +1,5 @@
 ﻿var _inv_no = '';
 var selectedRow;
-var _CreditOrCash = "";
 $(document).ready(function () {
     FillSwipeMachines();
     $('#tblPaymentDetails tbody').on('keyup', 'input[type=text]', function () {
@@ -10,7 +9,6 @@ $(document).ready(function () {
         var cc = parseFloat($('#tblPaymentDetails tbody').find('tr:eq(2)').find('td:eq(1)').find('input[type=text]').val());
         var ntfs = parseFloat($('#tblPaymentDetails tbody').find('tr:eq(3)').find('td:eq(1)').find('input[type=text]').val());
         var total = cash + cheque + cc + ntfs;
-
         if (total > netAmount) {
             $(this).css('border-color', 'red');
             $('#txtError').text('Paid Amount can not be more than Payable Amount...!').css({ 'color': 'red', 'font-size': '11px' });
@@ -53,6 +51,36 @@ $(document).ready(function () {
         }
     });
 });
+function FillSwipeMachines() {
+    $('#ddlMachine').empty().append($('<option></option>').val('Select').html('Select'));
+    var url = config.PharmacyWebAPI_baseUrl + "/api/hospital/ipopqueries";
+    var objBO = {};
+    objBO.unit_id = 'MS-H0048';
+    objBO.card_no = '-';
+    objBO.uhid = '-';
+    objBO.IPOPNo = $('#txtIPOPNo').val();;
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.prm_1 = '-';
+    objBO.Logic = 'SwipeMachines';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var tbody = "";
+            $.each(data.result.Table, function (key, val) {
+                $('#ddlMachine').append($('<option></option>').val(val.bank_name).html(val.bank_name));
+            });
+
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 
 function IndentBills() {
     $('#tblIndentBills tbody').empty();
@@ -99,9 +127,10 @@ function IndentBills() {
 function SetSelectedRow(elem) {
     selectedRow = elem
     SalesInvoiceInfo();
-    FillSwipeMachines();
+    SwipeMachines();
 }
 function SalesInvoiceInfo() {
+    debugger
     $('#tblItemInfo tbody').empty();
     var url = config.PharmacyWebAPI_baseUrl + "/api/sales/GetSalesInvoice_Info";
     var objBO = {};
@@ -128,17 +157,13 @@ function SalesInvoiceInfo() {
             $('#txtRefName').text(info[4]);
             $('#txtHealthCardNo').text(info[5]);
             $('#txtPanelName').text(info[6]);
-
             if (info[7].includes('Credit') || info[7].includes('CR')) {
-                _CreditOrCash = "Credit";
                 $('input[name=PaymentMode]').prop('checked', false).change();
                 $('input[name=PaymentMode]').prop('disabled', true);
                 $('input[name=Credit]').prop('checked', true).change();
             } else {
                 $('input[name=PaymentMode]').prop('checked', true).change();
                 $('input[name=PaymentMode]').prop('disabled', false);
-                $('input[name=Credit]').prop('checked', false).change();
-                _CreditOrCash = "Cash";
             }
 
             $.each(data.result.Table, function (key, val) {
@@ -183,17 +208,15 @@ function SalesInvoiceInfo() {
         }
     });
 }
-function FillSwipeMachines() {
-    $('.MachineName').empty().append($('<option></option>').val('Select').html('Select'));
-    var url = config.PharmacyWebAPI_baseUrl + "/api/hospital/ipopqueries";
+function SwipeMachines() {
+    $('.MachineName').empty();
+    var url = config.PharmacyWebAPI_baseUrl + "/api/sales/retailstorequeries";
     var objBO = {};
-    objBO.unit_id = 'MS-H0048';
-    objBO.card_no = '-';
-    objBO.uhid = '-';
-    objBO.IPOPNo = $('#txtIPOPNo').val();;
-    objBO.from = '1900/01/01';
-    objBO.to = '1900/01/01';
+    objBO.unit_id = Active.pharmacyId;
     objBO.prm_1 = '-';
+    objBO.prm_2 = '-';
+    objBO.prm_3 = '-';
+    objBO.login_id = Active.userId;
     objBO.Logic = 'SwipeMachines';
     $.ajax({
         method: "POST",
@@ -202,11 +225,13 @@ function FillSwipeMachines() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            var tbody = "";
-            console.log(data.result.Table);
-            $.each(data.result.Table, function (key, val) {
-                $('.MachineName').append($('<option></option>').val(val.account_id).html(val.bank_name));
-            });
+            if (Object.keys(data.result).length > 0) {
+                if (Object.keys(data.result.Table).length > 0) {
+                    $.each(data.result.Table, function (key, val) {
+                        $('.MachineName').append($('<option></option>').val(val.account_id).html(val.bank_name));
+                    });
+                }
+            }
         },
         error: function (response) {
             alert('Server Error...!');
@@ -295,57 +320,39 @@ function PostBill() {
         alert('Paid Amount can not be more than Net Amount...!');
         return
     }
-
     else if (total < netAmount) {
         alert('Paid Amount can not be less than Net Amount...!').css({ 'color': '#bb8202', 'font-size': '11px' });
         return
     }
     var IsPay = $('#tblPaymentDetails tbody tr.pay').length;
-
-    var AccNo = "";
-    if (_CreditOrCash == "Credit") {
-        AccNo = "16070050";
-        BillPaymentInfo.push({
-            'unit_id': Active.pharmacyId,
-            'InvNo': $('#txtSaleInvNo').text(), //Sale Inv No
-            'PayMode': "Credit", //Pay Mode
-            'AccountNo': AccNo, //Machine Id
-            'Amount': parseFloat($('#txtPayable').text()), //Pay Amount
-            'referenceNo': "-", //Ref No
-            'PayDetail': "-" //Machine Name  
-        });
-    }
     if (IsPay > 0) {
         $('#tblPaymentDetails tbody tr.pay').each(function () {
-                if ($(this).find('td:eq(5)').find('select option:selected').val() == "Select") {
-                    alert("Select Bank Name in Swipe Card");
-                    return;
-                }
-
-                if ($(this).find('td:eq(0)').text() == "Cash")
-                    AccNo = "16040001";
-                else if ($(this).find('td:eq(0)').text() == "Swipe Card")
-                    AccNo = $(this).find('td:eq(5)').find('select option:selected').val();
-
-                if (eval($(this).find('td:eq(1)').find('input[type=text]').val()) > 0) {
-                    BillPaymentInfo.push({
-                        'unit_id': Active.pharmacyId,
-                        'InvNo': $('#txtSaleInvNo').text(), //Sale Inv No
-                        'PayMode': $(this).find('td:eq(0)').text(), //Pay Mode
-                        'AccountNo': AccNo, //Machine Id
-                        'Amount': $(this).find('td:eq(1)').find('input[type=text]').val(), //Pay Amount
-                        'referenceNo': $(this).find('td:eq(4)').find('input[type=text]').val(), //Ref No
-                        'PayDetail': $(this).find('td:eq(5)').find('select option:selected').text() //Machine Name  
-                    });
-                }
-
-          });
+            BillPaymentInfo.push({
+                'unit_id': Active.pharmacyId,
+                'InvNo': $('#txtSaleInvNo').text(), //Sale Inv No
+                'PayMode': $(this).find('td:eq(0)').text(), //Pay Mode
+                'AccountNo': $(this).find('td:eq(5)').find('select option:selected').val(), //Machine Id
+                'Amount': $(this).find('td:eq(1)').find('input[type=text]').val(), //Pay Amount
+                'referenceNo': $(this).find('td:eq(4)').find('input[type=text]').val(), //Ref No
+                'PayDetail': $(this).find('td:eq(5)').find('select option:selected').text() //Machine Name  
+            });
+        });
     }
-
+    //else {
+    //    BillPaymentInfo.push({
+    //        'unit_id': Active.pharmacyId,
+    //        'InvNo': $('#txtSaleInvNo').text(), //Sale Inv No
+    //        'PayMode': '-',
+    //        'AccountNo': '-',
+    //        'Amount': 0,
+    //        'referenceNo': '-',
+    //        'PayDetail': '-',
+    //    });
+    //}
     objBO.unit_id = $('#txtUnitName').text();
     objBO.sale_type = 'Indent';
     objBO.order_no = $('#txtOrderNo').text();
-    objBO.estimateNo = $('#txtSaleInvNo').text();
+    objBO.estimateNo = '-';
     objBO.pt_name = $('#txtPatientName').text();
     objBO.mobile_no = '-';
     objBO.gstn_no = '-';
@@ -369,9 +376,7 @@ function PostBill() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            var prm = data.split(':')[1];
-            _inv_no = prm;
-            alert(data);
+            alert(data.message);
             IndentBills();
         },
         error: function (response) {
@@ -379,7 +384,7 @@ function PostBill() {
         }
     });
 }
-function Clear() {
+function Clear() {    
     $('#txtTotal').text(0.00);
     $('#txtDiscount').text(0.00);
     $('#txtRoundOff').text(0.00);

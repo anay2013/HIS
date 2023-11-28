@@ -7,7 +7,7 @@ $(document).ready(function () {
         else
             CKEDITOR.instances['txtContent'].insertText('');
     });
-    GetConsentMaster();    
+    GetConsentMaster();
 });
 function GetConsentMaster() {
     $("#tblConsentMaster tbody").empty();
@@ -23,7 +23,7 @@ function GetConsentMaster() {
         success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
                 var tbody = "";
-                if (Object.keys(data.ResultSet.Table).length > 0) {                
+                if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         tbody += '<tr>';
                         tbody += '<td class="hide">' + val.var_list + '</td>';
@@ -64,7 +64,7 @@ function consentInfo(elem) {
     for (var i = 0; i <= result.length; i++) {
         $('#tblTestDetails tbody tr').each(function () {
             if ($(this).find('td:eq(1)').text() == result[i])
-                $(this).find('td:eq(2)').find('input:checkbox').prop('checked', true);                           
+                $(this).find('td:eq(2)').find('input:checkbox').prop('checked', true);
         });
     }
     $('#btnSubmit').text('Update').addClass('btn-warning').removeClass('btn-success');
@@ -89,7 +89,7 @@ function InsertConsentForm() {
     objBO.prm1 = varList.join(',');
     objBO.login_id = Active.userId;
     objBO.hosp_id = Active.unitId;
-    objBO.Logic = ($('#btnSubmit').text() == 'Submit') ? "InsertLabConsentForm" :"UpdateLabConsentForm";
+    objBO.Logic = ($('#btnSubmit').text() == 'Submit') ? "InsertLabConsentForm" : "UpdateLabConsentForm";
     $.ajax({
         method: "POST",
         url: url,
@@ -97,9 +97,9 @@ function InsertConsentForm() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            if (data.includes('Success')) {              
+            if (data.includes('Success')) {
                 alert(data);
-                Clear();                       
+                Clear();
             }
             else {
                 alert(data);
@@ -110,10 +110,10 @@ function InsertConsentForm() {
         }
     });
 }
-function UpdatStatus(consentId) {    
-    var objBO = {};   
-    var url = config.baseUrl + "/api/Lab/mLabTemplateInsertUpdate";  
-    objBO.templatename ='-';
+function UpdatStatus(consentId) {
+    var objBO = {};
+    var url = config.baseUrl + "/api/Lab/mLabTemplateInsertUpdate";
+    objBO.templatename = '-';
     objBO.testcode = consentId;
     objBO.templatecontent = '-';
     objBO.prm1 = '-';
@@ -127,7 +127,7 @@ function UpdatStatus(consentId) {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            if (data.includes('Success')) {               
+            if (data.includes('Success')) {
             }
             else {
                 alert(data);

@@ -26,9 +26,8 @@ $(document).ready(function () {
         $(vaVal).siblings('input:text').val(val);
         InsertVisualAcuity();
         $('#modalVisualAcuity').modal('hide');
-    });
-    //Medicine Template On Row Editing
-    $('.MedicineTemplate tbody').on('mouseover', 'tr', function () {
+    });//Medicine Template On Row Editing
+    $('.MedicineTemplate:eq(0) tbody').on('mouseover', 'tr', function () {
         $(this).find('td:first').find('remove').show()
     }).on('mouseleave', 'tr', function () {
         $(this).find('td:first').find('remove').hide()
@@ -41,14 +40,15 @@ $(document).ready(function () {
                 $('.MedicineTemplate tbody').empty();
             }
         }
-        var container = $('.MedicineTemplate');
+        var container = $('.MedicineTemplate:eq(0)');
         if ($(container).has(e.target).length === 0) {
             if (IsActiveSeachbox)
                 return
 
-            $('.MedicineTemplate tbody td').each(function () {
+            $('.MedicineTemplate:eq(0) tbody td').each(function () {
                 if ($(this).index() == 0)
-                    $(this).find('.delRow').remove();
+                    return
+                //$(this).find('.delRow').remove();
 
                 $(this).removeAttr('style');
                 var content = '';
@@ -65,15 +65,20 @@ $(document).ready(function () {
             });
         }
     });
-    $(document).find('.MedicineTemplate tbody').on('click', '.delRow', function () {
+    $(document).find('.MedicineTemplate:eq(0) tbody').on('click', '.delRow', function () {
         $(this).closest('tr').remove();
-        if ($('#PrescribedMedicine .MedicineTemplate tbody tr').length == 0)
+        if ($('#PrescribedMedicine .MedicineTemplate:eq(0) tbody tr').length == 0)
             $('.OPDPrintPreview #PrescribedMedicine').hide();
     });
-    $('.MedicineTemplate tbody').on('click', 'td', function (e) {
+    $('.MedicineTemplate:eq(0) tbody').on('click', 'td', function (e) {
+        if ($(this).index() == 0)
+            return
         if ($(this).find('label.editable').length === 1)
             return
         $(this).closest('tr').find('td').each(function () {
+            if ($(this).index() == 0)
+                return
+
             $(this).find('.delRow').remove();
             var content = $(this).text();
             $(this).empty().css('padding', '2px');
@@ -86,7 +91,7 @@ $(document).ready(function () {
         })
         $(this).find('.editable').focus();
     });
-    $(document).find('.MedicineTemplate thead').on('click', '.addmedNewRow', function () {
+    $(document).find('.MedicineTemplate:eq(0) thead').on('click', '.addmedNewRow', function () {
         var tbody = "";
         tbody += "<tr data-itemid='newId'>";
         tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><button id='btnEye' class='btn btn-success btn-xs'>LE</button></td>";
@@ -98,9 +103,9 @@ $(document).ready(function () {
         tbody += "<td style='padding:2px;'><label id='med5' onkeyup=Route(this) class='editable' contenteditable='true'></label></td>";
         tbody += "<td style='padding:2px;'><label id='med6' class='editable' contenteditable='true'></label></td>";
         tbody += "</tr>";
-        $('.MedicineTemplate tbody').append(tbody);
+        $('.MedicineTemplate:eq(0) tbody').append(tbody);
     });
-    $('.MedicineTemplate tbody').on('keyup', 'label', function (e) {       
+    $('.MedicineTemplate:eq(0) tbody').on('keyup', 'label', function (e) {
         if ($('input[id=IsDB]').is(':checked') && $(this).closest('td').index() == 1) {
             var val = $(this).text();
             if (val.length > 2)
@@ -130,12 +135,12 @@ $(document).ready(function () {
     });
     $(document).on('keydown', function (e) {
         if (e.keyCode == 45) {
-            $('.MedicineTemplate thead .addmedNewRow').trigger('click');
-            $('.MedicineTemplate tbody tr:last').find('td:first').trigger('click');
+            $('.MedicineTemplate:eq(0) thead .addmedNewRow').trigger('click');
+            $('.MedicineTemplate:eq(0) tbody tr:last').find('td:first').trigger('click');
         }
         if (e.keyCode == 46) {
-            $('.MedicineTemplate tbody').find('tr:last').remove();
-            $('.MedicineTemplate tbody').find('tr:last').find('td:eq(1)').trigger('click');
+            $('.MedicineTemplate:eq(0) tbody').find('tr:last').remove();
+            $('.MedicineTemplate:eq(0) tbody').find('tr:last').find('td:eq(1)').trigger('click');
         }
     });
     $('#PatientVisits #tblPatientVisits tbody').on('click', '.currentVisit', function () {
@@ -2154,7 +2159,7 @@ function PresMedicineInfo() {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         tbody += "<tr data-itemid=" + val.Item_id + ">";
-                        tbody += "<td><remove class='delRow'>X</remove>" + val.EyesInfo + "</td>";
+                        tbody += "<td><remove class='delRow'>X</remove><button id='btnEye' class='btn btn-success btn-xs'>" + val.EyesInfo + "</button></td>";
                         tbody += "<td>" + val.Item_name + "</td>";
                         tbody += "<td>" + val.med_dose + "</td>";
                         tbody += "<td>" + val.med_times + "</td>";
@@ -2305,7 +2310,7 @@ function InsertMedicinePresItems() {
     objBO.objItems = objItems;
     objBO.objMedicine = objMedicine;
     objBO.ipPrescription = ipPrescription;
-    debugger
+
     $.ajax({
         method: "POST",
         url: url,
@@ -2352,11 +2357,19 @@ function NearSpecInfo() {
     $('#modalNear').modal('hide');
     InsertDistanceSpecInfo()
 }
-function InsertDistanceSpecInfo() {
+function checkEmpty(index) {
+    var count = 0;
+    $('#tblSpecDetail tbody tr:eq(' + index+')').find('td').each(function () {
+        if ($.trim($(this).find('input').val()) != "" && $(this).index() != 0) count += 1; else count += 0;
+    })
+    return count;
+}
+function InsertDistanceSpecInfo() {     
     var url = config.baseUrl + "/api/Prescription/CPOE_InsertSpecInfo";
     var objBO = {};
     var SpecInfo = [];
     $('#tblSpecDetail tbody tr').each(function () {
+        if (checkEmpty($(this).index()) < 1) return
         SpecInfo.push({
             'AutoId': 0,
             'DoctorId': Active.doctorId,
@@ -2380,7 +2393,7 @@ function InsertDistanceSpecInfo() {
             'login_id': Active.userId,
             'Logic': 'InsertSpecInfo'
         });
-    });
+    });    
     $.ajax({
         method: "POST",
         url: url,

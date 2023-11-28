@@ -3,8 +3,7 @@
     ViewBag.Title = "PrescriptionOPTH";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-      rel="stylesheet">
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet"/>
 <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="~/Areas/OPD/JsModule/Prescription/PrescriptionOPTH.js?1.1"></script>
 <style type="text/css">
@@ -658,7 +657,7 @@
         -ms-transform: scale(1.2);
         -webkit-transform: scale(1.2);
         position: absolute;
-        width: max-content;
+        width: 70%;
         height: max-content;
         border: 1px solid #ddd;
         top: 16%;
@@ -676,14 +675,16 @@
     .expandMedicine-divContainer {
         height: max-content !important;
     }
-
-    .divContainer {
-        min-height: 150px;
-        height: 150px;
-        overflow: auto;
-        margin-bottom: 5px;
-        border: 1px solid #2478a9;
-    }
+        .expandMedicine-divContainer #tblPresMedicineInfo thead th:nth-child(2){
+            width:30%;
+        }
+        .divContainer {
+            min-height: 150px;
+            height: 150px;
+            overflow: auto;
+            margin-bottom: 5px;
+            border: 1px solid #2478a9;
+        }
 
     .dbSearch {
         border: 1px dashed green !important;
@@ -1134,7 +1135,7 @@
                                     <div class="category">
                                         <span class="title">
                                             <button onclick="DeleteAllPresMedicine()" class="btn btn-danger btn-xs btnMore"><i class="fa fa-trash">&nbsp;</i>ALL</button>&nbsp;Medicine
-                                        </span><span style="margin-left:25%">Medicine Details</span>
+                                        </span><span style="margin-left:25%">DB Search : </span>
                                         <label class="switch"><input type="checkbox" class="IsActive" id="IsDB" checked=""><span class="slider round"></span></label>
                                         <button onclick="InsertMedicinePresItems()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i>Submit</button>
                                         <button onclick="expandMedicine()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i></button>

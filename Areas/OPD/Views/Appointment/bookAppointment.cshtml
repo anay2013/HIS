@@ -5,6 +5,27 @@
 }
 <script src="~/Areas/OPD/JsModule/BookAppointment.js?his-version-1.0"></script>
 <style>
+    .paymentSection span:nth-child(4) {
+        border: 1px solid #97d2ff;
+        width: 22%;
+        background: #def1ff;
+        border-radius: 30px;
+        padding: 3px 5px;
+        font-size: 11px;
+    }
+        .paymentSection span:nth-child(4) span:nth-last-child(1) {
+            color: #fff;
+            position: absolute;
+            background: #e58105;
+            padding: 1px 4px;
+            border-radius: 30px;
+            border: 1px solid #fff;
+            right: 11px;
+            margin-top: -2px;
+        }
+        .paymentSection span:nth-child(4) span:nth-last-child(2) {
+            color: #802a00;
+        }
     .itemHeight {
         height: 9vh !important;
     }
@@ -365,7 +386,7 @@
                         <div class="col-md-4">
                             <button style="background-color: #0e96fd !important;border:none" onclick="Opd_AppointmentBooking1()" id="btnFinalSubmit" class="btn-primary btn-pay-ctrl"><i class="fa fa-plus">&nbsp;</i>Save</button>
                             <button style="background-color: #0e96fd !important;border:none" id="btnPrintReceipt" class="btn-primary btn-pay-ctrl"><i class="fa fa-print">&nbsp;</i>Receipt</button>
-                            <button style="background-color: #0e96fd !important;border:none" id="btnClearAll" class="btn-primary btn-pay-ctrl"><i class="fa fa-refresh">&nbsp;</i>Reset</button>
+                            <button style="background-color: #f16546 !important;border:none" id="btnClearAll" onclick="Clear()" class="btn-primary btn-pay-ctrl"><i class="fa fa-refresh">&nbsp;</i>Reset</button>
                         </div>
                         <div class="col-md-6">
                             <label id="txtError"></label>
@@ -379,9 +400,9 @@
                         <div class="row paymentSection" style="display:none;max-height: 190px;margin-bottom: 7px;">
                             <div class="col-md-12">
                                 <div class="form-group flex">
-                                    <span style="width:17%">Payment Mode</span>
-                                    <span style="width:5%">:</span>
-                                    <span style="width:70%">
+                                    <span style="width:10%">Pay Mode</span>
+                                    <span style="width:1%">:</span>
+                                    <span style="width:63%">
                                         <label>
                                             <input type="checkbox" name="PaymentMode" class="cash" value="Cash" checked />Cash
                                         </label>
@@ -399,6 +420,7 @@
                                             <input type="checkbox" name="Credit" disabled="disabled" value="Credit" />Credit
                                         </label>
                                     </span>
+                                    <span style="width:26%">L.Visit : <span>----------</span>, Token : <span>00</span></span>
                                 </div>
                             </div>
                             <div class="col-md-12">

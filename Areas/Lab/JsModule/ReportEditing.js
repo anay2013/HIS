@@ -779,10 +779,10 @@ function UploadLabReport() {
     UploadDocumentInfo.send(data);
 }
 function Print() {
-    var url = config.rootUrl + "/lab/Print/PrintLabReport?visitNo=" + _VisitNo + "&SubCat=" + _SubCat;
+    var url = config.rootUrl + "/lab/Print/PrintLabReport?visitNo=" + _VisitNo + "&SubCat=" + _SubCat + "&TestIds='-'&Logic=ByReportEditing";
     window.open(url, '_blank');
 }
 function PrintAll() {
-    var url = config.rootUrl + "/lab/Print/PrintLabReport?visitNo=" + _VisitNo + "&SubCat=ALL";
+    var url = config.rootUrl + "/lab/Print/PrintLabReport?visitNo=" + _VisitNo + "&SubCat=ALL&TestIds='-'&Logic=ByReportEditing";
     window.open(url, '_blank');
 }

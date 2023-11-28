@@ -383,7 +383,9 @@ function ItemInsert() {
             'adl_disc_amount': 0,
             'net_amount': parseFloat(Info.panel_rate) - parseFloat(Info.panel_discount),
             'IsUrgent': ($(this).find('td:eq(5)').find('input:checkbox').is(':checked')) ? 'Y' : 'N',
-            'Remark': Info.Remark
+            'Remark': Info.Remark,
+            'TaxRate': Info.TaxRate,
+            'TaxAmt': 0
         });
     });
     objBooking.hosp_id = Active.HospId;

@@ -288,6 +288,7 @@
     <Content Include="Areas\IPD\JsModule\DoctorView\_DoctorBillingView.js" />
     <Content Include="Areas\IPD\JsModule\DoctorView\_TestWiseReport.js" />
     <Content Include="Areas\IPD\JsModule\Indent\HISPushReport.js" />
+    <Content Include="Areas\IPD\JsModule\IPD\HospitalDocuments.js" />
     <Content Include="Areas\IPD\JsModule\IPD\IPDAdvancePayment.js" />
     <Content Include="Areas\IPD\JsModule\IPD\IPDPatientRegister.js" />
     <Content Include="Areas\IPD\JsModule\IPD\BloodRequisition.js" />
@@ -364,6 +365,8 @@
     <Content Include="Areas\Lab\JsModule\PackageMaster.js" />
     <Content Include="Areas\Lab\JsModule\PatientInOut.js" />
     <Content Include="Areas\Lab\JsModule\ReportEditing.js" />
+    <Content Include="Areas\Lab\JsModule\Report\InvestigationReport.js" />
+    <Content Include="Areas\Lab\JsModule\Report\LabWorkBook.js" />
     <Content Include="Areas\Lab\JsModule\SampleCollection.js" />
     <Content Include="Areas\Lab\JsModule\SampleDispatch.js" />
     <Content Include="Areas\Lab\JsModule\SampleDispatchNew.js" />
@@ -400,6 +403,7 @@
     <Content Include="Areas\LinenLaundry\JsModule\LLDressIssueToStaff.js" />
     <Content Include="Areas\LinenLaundry\JsModule\LLIndentAudit.js" />
     <Content Include="Areas\Masters\JsModule\AmbulanceMaster.js" />
+    <Content Include="Areas\Masters\JsModule\AreaEmpLink.js" />
     <Content Include="Areas\Masters\JsModule\AreaQuestLink.js" />
     <Content Include="Areas\Masters\JsModule\CareMasters.js" />
     <Content Include="Areas\Masters\JsModule\ListRoomAndBed.js" />
@@ -417,6 +421,7 @@
     <Content Include="Areas\MenuMaster\Views\Master\MenuAllotmentMaster.cshtml" />
     <Content Include="Areas\MenuMaster\Views\web.config" />
     <Content Include="Areas\MIS\JsModule\Finance\DailyCollectionReport.js" />
+    <Content Include="Areas\MIS\JsModule\Finance\DailyWorkReport.js" />
     <Content Include="Areas\MIS\JsModule\Finance\ReceiptWiseCollectionReport.js" />
     <Content Include="Areas\MIS\JsModule\Finance\UserwiseCollectionReport.js" />
     <Content Include="Areas\MIS\JsModule\MISReport.js" />
@@ -1824,16 +1829,20 @@
     <Compile Include="Areas\IPD\Controllers\IndentController.cs" />
     <Compile Include="Areas\IPD\Controllers\IPDController.cs" />
     <Compile Include="Areas\IPD\Controllers\PrintableController.cs" />
+    <Compile Include="Areas\IPD\Repository\FormTemplateRepo.cs" />
     <Compile Include="Areas\IPD\IPDAreaRegistration.cs" />
+    <Compile Include="Areas\IPD\Repository\PrintIPDForms.cs" />
     <Compile Include="Areas\IPOPAudit\Controllers\PrintController.cs" />
     <Compile Include="Areas\IPOPAudit\IPOPAuditAreaRegistration.cs" />
     <Compile Include="Areas\IPOPAudit\Controllers\IPOPAuditController.cs" />
     <Compile Include="Areas\Lab\Controllers\MasterController.cs" />
-    <Compile Include="Areas\Lab\Controllers\PDFMerge.cs" />
+    <Compile Include="Areas\Lab\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Lab\Repository\PDFMerge.cs" />
     <Compile Include="Areas\Lab\Controllers\PrintController.cs" />
     <Compile Include="Areas\Lab\Controllers\SampleController.cs" />
     <Compile Include="Areas\Lab\LabAreaRegistration.cs" />
     <Compile Include="Areas\Lab\Repository\GenReport.cs" />
+    <Compile Include="Areas\Lab\Repository\WorkSheet.cs" />
     <Compile Include="Areas\LinenLaundry\Controllers\LinenMovementController.cs" />
     <Compile Include="Areas\LinenLaundry\Controllers\MasterController.cs" />
     <Compile Include="Areas\LinenLaundry\Controllers\PrintController.cs" />
@@ -2206,6 +2215,12 @@
     <Content Include="Areas\ApplicationResource\Views\Admin\Document.cshtml" />
     <Content Include="Areas\ApplicationResource\Views\Admin\ViewDocument.cshtml" />
     <Content Include="Areas\IPD\Views\DoctorView\_TemplateMaster.cshtml" />
+    <Content Include="Areas\Masters\Views\Master\AreaEmpLink.cshtml" />
+    <Content Include="Areas\IPD\Views\IPD\HospitalDocuments.cshtml" />
+    <Content Include="Areas\MIS\Views\Finance\DailyWorkReport.cshtml" />
+    <Content Include="Areas\Lab\Views\Report\InvestigationReport.cshtml" />
+    <Content Include="Areas\Lab\Views\Report\LabWorkBook.cshtml" />
+    <Content Include="Areas\Lab\Views\Master\ConsentMaster.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -2413,6 +2428,7 @@
     <Folder Include="Areas\EMR\Models\" />
     <Folder Include="Areas\EMR\Views\Shared\" />
     <Folder Include="Areas\IPD\Models\" />
+    <Folder Include="Areas\IPD\Views\PrintHospitalDoc\" />
     <Folder Include="Areas\IPOPAudit\Models\" />
     <Folder Include="Areas\IPOPAudit\Views\Print\" />
     <Folder Include="Areas\Lab\Models\" />

@@ -77,7 +77,7 @@ function HeaderInfo() {
             var tbody = "";
             var count = 0;
             if (Object.keys(data.ResultSet).length) {
-                if (Object.keys(data.ResultSet.Table).length) {
+                if (Object.keys(data.ResultSet.Table).length) {             
                     $.each(data.ResultSet.Table, function (key, val) {
                         if (val.IsActive == 'Y') {
                             $('#ddlHeader').append($('<option></option>').val(val.HeaderId).html(val.HeaderName));

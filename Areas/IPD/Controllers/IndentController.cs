@@ -20,11 +20,11 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         {
             return View();
         }
-        public ActionResult IndentBillPosting()
+        public ActionResult HISPushReport()
         {
             return View();
         }
-        public ActionResult HISPushReport()
+        public ActionResult IndentBillPosting()
         {
             return View();
         }

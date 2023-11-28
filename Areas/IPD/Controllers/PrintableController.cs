@@ -1,7 +1,9 @@
 ﻿using HIS.Repository;
 using MediSoftTech_HIS.App_Start;
+using MediSoftTech_HIS.Areas.IPD.Repository;
 using MediSoftTech_HIS.Repository;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -1525,7 +1527,6 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             string UHID = "";
             string patient_name = "";
             string ageInfo = "";
-            string contactNo = "";
             string AdmitDate = "";
             string AdmitTime = "";
             string IPDNo = "";
@@ -1592,7 +1593,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             b.Append("<td style='width:1%;'>&nbsp;</td>");
             b.Append("<td style='width:16%;'><b>Contact No.</b></td>");
             b.Append("<td style='width:1%;'><b>:</b></td>");
-            b.Append("<td style='width:33%;'>" + contactNo + "</td>");
+            b.Append("<td style='width:33%;'>" + ContactNo + "</td>");
             b.Append("</tr>");
 
             b.Append("<tr>");
@@ -1696,5 +1697,23 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "AdmissionAndDischargeReport.pdf");
         }
+
+        public string PrintFormsList(List<ipFormPrintingRequest> FormList)
+        {
+            if (FormList != null)
+            {
+                Session["FormList"] = null;
+            }
+            Session["FormList"] = FormList;
+            PrintForms();
+            return "Success";
+        }
+        public FileResult PrintForms()
+        {
+            var FormList = Session["FormList"] as List<ipFormPrintingRequest>;
+            PrintIPDForms obj = new PrintIPDForms();
+            return obj.PrintForms(FormList);
+        }
+
     }
 }

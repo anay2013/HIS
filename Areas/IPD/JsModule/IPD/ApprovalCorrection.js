@@ -5,7 +5,7 @@ $(document).ready(function () {
     FloorAndPanelList();
     $('select').select2();
     FillCurrentDate('txtApprDate');
-    _ActivePageName = window.location.pathname.split('/')[3].toLowerCase()
+    _ActivePageName = window.location.pathname.split('/')[3].toLowerCase()    
 });
 function FloorAndPanelList() {
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
@@ -246,7 +246,7 @@ function TPAApprovalList() {
                         else {
                             tbody += "<tr class='added'>";
                             tbody += "<td><button onclick=RejectEntry(" + val.auto_id + ") class='btn btn-danger btn-xs'><i class='fa fa-sign-in'>&nbsp;</i>Reject</button></td>";
-                        }
+                        }                            
                         tbody += "<td class='hide'>" + val.AdmitDate + "</td>";
                         tbody += "<td class='hide'>-</td>";
                         tbody += "<td>" + val.PanelName + "</td>";
@@ -429,3 +429,4 @@ function UploadFile(elem) {
     UploadDocumentInfo.open('POST', url, true);
     UploadDocumentInfo.send(data);
 }
+

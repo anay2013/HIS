@@ -4,6 +4,7 @@ $(document).ready(function () {
     LoadRoomTypes();   
     getCurrentDateTime();      
     $('#tblRoomType tbody').on('click', 'button', function () {
+        debugger
         selectRow(this);
         var RoomType = $(this).closest('tr').find('td:eq(0)').text();
         BedAvailability(RoomType);

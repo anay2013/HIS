@@ -20,5 +20,9 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
         {
             return View();
         }
+        public ActionResult DailyWorkReport()
+        {
+            return View();
+        }
     }
 }

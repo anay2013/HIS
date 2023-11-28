@@ -1,12 +1,9 @@
 ﻿using HiQPdf;
 using HISWebApi.Models;
 using MediSoftTech_HIS.App_Start;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -27,9 +24,9 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             obj.Logic = "OPD:Prescription";
             dsResult = APIProxy.CallWebApiMethod("Appointment/Opd_AppointmentQueries", obj);
             DataSet ds = dsResult.ResultSet;
-            PdfDocument repDocument=new PdfDocument();
+            PdfDocument repDocument = new PdfDocument();
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
-            PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10,50), PdfPageOrientation.Portrait);
+            PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10, 80), PdfPageOrientation.Portrait);
 
             string HtmlBody = GetBodyHTML(dsResult.ResultSet);
             PdfHtml htmlBody = new PdfHtml(HtmlBody, null);
@@ -55,24 +52,24 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
 
             //Set Header
             SetHeader(page1);
-            SetFooter(page1,false);
+            SetFooter(page1, false);
         }
         private void SetHeader(PdfPage pdfPage)
         {
-            if(pdfPage != null)
+            if (pdfPage != null)
             {
                 pdfPage.CreateHeaderCanvas(190);
                 string StrHTMLlHeader = GetHeaderHTML(dsResult.ResultSet);
-                PdfHtml headerHtml = new PdfHtml(0,0,StrHTMLlHeader,null);
+                PdfHtml headerHtml = new PdfHtml(0, 0, StrHTMLlHeader, null);
                 pdfPage.Header.Layout(headerHtml);
             }
         }
-        private void SetFooter(PdfPage pdfPage,bool IsLastPage)
+        private void SetFooter(PdfPage pdfPage, bool IsLastPage)
         {
             if (pdfPage != null)
             {
                 string StrhtmlFooter = string.Empty;
-                pdfPage.CreateFooterCanvas(150);
+                pdfPage.CreateFooterCanvas(70);
 
                 StrhtmlFooter = GetFooterHTML(dsResult.ResultSet);
                 if (pdfPage.Footer != null)
@@ -84,7 +81,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                     pdfPage.Footer.Layout(footerHtml);
                     Font pageNumberFont = new Font(new FontFamily("Arial"), 8, GraphicsUnit.Point); // 1
                     PdfText pageNumberText;
-                    pageNumberText = new PdfText(500,150, "Page {CrtPage} of {PageCount}", pageNumberFont); // 2
+                    pageNumberText = new PdfText(500, 150, "Page {CrtPage} of {PageCount}", pageNumberFont); // 2
                     //pdfPage.Footer.Layout(pageNumberText);
                 }
             }
@@ -94,13 +91,14 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             string _result = string.Empty;
             string temp = "-";
             StringBuilder b = new StringBuilder();
-           // b.Append("<div style='float:left;width:100%;margin-left:-1px;'>");
-            //Left Block Start
-            b.Append("<div style='float:left;width:26%;position:relative;'>");
+            // b.Append("<div style='float:left;width:100%;margin-left:-1px;'>");
+            //Left Block Start 
+            // b.Append("<div style='float:left;width:26%;height:67%;border-right:1px solid #000'>");
+            b.Append("<div style='float:left;width:26%;height:700px;'>");
             if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
             {
                 //Vital Sign
-                b.Append("<div style='width:95%;margin-top:0px;font-size:13px;border-right:1px solid #000'>");
+                b.Append("<div style='width:95%;margin-top:0px;font-size:13px;'>");
                 b.Append("<p style='text-align:left;margin:0'><b>Vital Sign :</b></p>");
                 b.Append("<table style='width:99%;font-size:11px;line-height:8px;margin-left:3px;'>");
                 foreach (DataRow dr in ds.Tables[3].Rows)
@@ -205,7 +203,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 foreach (DataRow dr in ds.Tables[2].Rows)
                 {
                     count++;
-                    tbody += "<tr>";                                  
+                    tbody += "<tr>";
                     tbody += "<td style='padding-left:3px;border:1px solid #000'>" + count + "</td>";
                     tbody += "<td style='padding-left:3px;font-size:12px;border:1px solid #000;'>" + dr["Item_name"].ToString() + "</td>";
                     tbody += "<td style='padding-left:3px;font-size:12px;border:1px solid #000'>" + dr["med_dose"].ToString() + "</td>";
@@ -221,8 +219,8 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             if (!string.IsNullOrEmpty(T00009))
             {
                 //Investigation
-                b.Append("<div style='width:95%;margin:5px;font-size:13px;border-right:1px solid #000'>");
-                b.Append("<p style='text-align:left;margin:0'><b>Investigation :</b></p>");
+                b.Append("<div style='width:95%;margin:5px;font-size:13px;'>");
+                b.Append("<p style='text-align:left;margin:-2px'><b>Investigation :</b></p>");
                 b.Append("<table style='width:99%;font-size:11px;line-height:12px;margin-left:3px;'>");
                 b.Append(T00009);
                 b.Append("</table>");
@@ -231,14 +229,14 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             if (!string.IsNullOrEmpty(T00010))
             {
                 //Procedure
-                b.Append("<div style='width:95%;margin:5px;font-size:13px;border-right:1px solid #000'>");
+                b.Append("<div style='width:95%;margin:5px;font-size:13px;'>");
                 b.Append("<p style='text-align:left;margin:0'><b>Procedure :</b></p>");
                 b.Append("<table style='width:99%;font-size:11px;line-height:12px;margin-left:3px;'>");
                 b.Append(T00010);
                 b.Append("</table>");
                 b.Append("</div>");
             }
-            b.Append("<div style='width:95%;margin:0 5px;font-size:12px;position:relative;bottom:0;border-right:1px solid #000'>");
+            b.Append("<div style='width:95%;margin:0 5px;font-size:12px;position:relative;bottom:0;'>");
             b.Append("<p style='text-align:center;margin:0;'>Note<hr style='width:90%;text-align:center;'/></p>");
             if (ds.Tables.Count > 0 && ds.Tables[4].Rows.Count > 0)
             {
@@ -252,7 +250,8 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             b.Append("</div>");
             b.Append("</div>");
             //Right Block Start
-            b.Append("<div style='float:right;width:73%;padding-top:5px;position:relative;'>");
+            b.Append("<div style='float:left;width:1%;border-left: 1px solid #000;height:730px;margin:-8px'></div>");
+            b.Append("<div style='float:right;width:72%;height:700px;'>");
             if (!string.IsNullOrEmpty(T00001))
             {
                 //Provisional Diagnosis Begin
@@ -284,7 +283,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             {
                 //Medicine Begin
                 b.Append("<div style='width:95%;font-size:13px;'><br>");
-                string rx =HttpContext.Current.Server.MapPath("/Content/logo/rx.png");
+                string rx = HttpContext.Current.Server.MapPath("/Content/logo/rx.png");
                 b.Append("<p style='text-align:left;margin:0'><img src=" + rx + " style='width:15px;margin-bottom:-7px;' /></p>");
                 b.Append("<table style='width:100%;float:left;font-size:11px;margin:10px 0;text-align:left;border-collapse: collapse;border:1px solid #000;'  >" +
                     "<tr>" +
@@ -340,18 +339,6 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 b.Append("<span style='font-size:15px;'>" + T00008.TrimEnd(',') + "</span>");
                 b.Append("</div>");
                 //History End
-            }
-            if (ds.Tables.Count > 0 && ds.Tables[5].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[5].Rows)
-                {
-                    //Doctor Details Bottom Begin
-                    b.Append("<div style='width:95%;position:absolute;bottom:0'>");
-                    b.Append("<h3 style='text-align:right;margin:0;padding:0'><img style='float:right' src='" + dr["SignVirtualPath"].ToString() + "'/><br/><br/><br/>" + dr["DoctorName"].ToString() + "</h3>");
-                    b.Append("<h4 style='text-align:right;margin:0 10px 10px'>" + dr["degree"].ToString() + "</h4>");
-                    b.Append("</div>");
-                    //Doctor Details Bottom End
-                }
             }
             b.Append("</div>"); //Right Block End
             b.Append("</div>");
@@ -421,16 +408,17 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
         {
             _PrintWithHeader = "Y";
             StringBuilder b = new StringBuilder();
-            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            if (ds.Tables.Count > 0 && ds.Tables[5].Rows.Count > 0)
             {
-                foreach (DataRow dr in ds.Tables[0].Rows)
+                foreach (DataRow dr in ds.Tables[5].Rows)
                 {
-                    b.Append("<table style='width:1500px;height:100px;font-size:25px;float:left;margin-top:200px;padding:8px;font-family:calibri'>");
-                    b.Append("<tr>");
-                    b.Append("<td style='width:50%'></td>");
-                    b.Append("<td style='width:50%'></td>");
-                    b.Append("</tr>");
-                    b.Append("</table>");
+                    //Doctor Details Bottom Begin
+                    b.Append("<div style='width:100%;zoom:1;position:absolute;font-size:18px;margin-top:-70px;right:20px'>");
+                    // b.Append("<div style='width:95%;position:absolute;bottom:0;right:20px'>");
+                    b.Append("<h3 style='text-align:right;margin:0;padding:0'><img style='float:right' src='" + dr["SignVirtualPath"].ToString() + "'/><br/><br/><br/>" + dr["DoctorName"].ToString() + "</h3>");
+                    b.Append("<h4 style='text-align:right;margin:0 10px 10px'>" + dr["degree"].ToString() + "</h4>");
+                    b.Append("</div>");
+                    //Doctor Details Bottom End
                 }
             }
             return b.ToString();

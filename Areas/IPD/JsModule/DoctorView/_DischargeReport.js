@@ -35,9 +35,8 @@ $(document).ready(function () {
     $('#tblDischargeSummary tbody').on('click', 'button.edit', function () {
         selectRow($(this));
         var HeaderId = $(this).closest('tr').find('td:eq(1)').text();
-        var TemplateId = $(this).closest('tr').find('td:eq(2)').text();
-        $('#ddlHeader').val(HeaderId).trigger('change.select2');
-        _TemplateId = TemplateId;
+        _AutoId = $(this).closest('tr').find('td:eq(2)').text();
+        $('#ddlHeader').val(HeaderId).change();
         var TemplateContent = $(this).closest('tr').find('td:eq(3)').html();
         CKEDITOR.instances['txtTemplate'].setData(TemplateContent);
     });
@@ -285,11 +284,11 @@ function InsertDischargeSummary(logic) {
     var url = config.baseUrl + "/api/IPDDoctor/IPD_InsertDischargeReportInfo";
     var objBO = {};
     objBO.IPDNo = _IPDNo;
-    objBO.TemplateId = $('#ddlTemplates option:selected').val();
-    objBO.TemplateName = $('#ddlTemplates option:selected').text();
+    objBO.TemplateId = _AutoId;
+    objBO.TemplateName = '-';
     objBO.TemplateContent = CKEDITOR.instances['txtTemplate'].getData();
-    objBO.Prm1 = '-';
-    objBO.Prm2 = '-';
+    objBO.Prm1 = $('#ddlHeader option:selected').val();
+    objBO.Prm2 = $('#ddlHeader option:selected').text();
     objBO.login_id = Active.userId;
     objBO.Logic = logic;
     $.ajax({
@@ -301,6 +300,7 @@ function InsertDischargeSummary(logic) {
         success: function (data) {
             if (data.includes('Success')) {
                 alert(data);
+                CKEDITOR.instances['txtTemplate'].setData('');
                 DischargeSummary();
             }
             else {
@@ -311,6 +311,38 @@ function InsertDischargeSummary(logic) {
             alert('Server Error...!');
         }
     });
+}
+function DeleteDischarge(AutoId) {
+    if (confirm('Are you sure?')) {
+        var url = config.baseUrl + "/api/IPDDoctor/IPD_InsertDischargeReportInfo";
+        var objBO = {};
+        objBO.IPDNo = _IPDNo;
+        objBO.TemplateId = AutoId;
+        objBO.TemplateName = '-';
+        objBO.TemplateContent = '-';
+        objBO.Prm1 = '-';
+        objBO.Prm2 = '-';
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'DeleteDischargeSummary';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            contentType: "application/json;charset=utf-8",
+            dataType: "JSON",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    DischargeSummary();
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
 }
 function DischargeSummary() {
     $('#tblDischargeSummary tbody').empty();
@@ -346,9 +378,9 @@ function DischargeSummary() {
                             temp = val.HeaderName;
                         }
                         tbody += "<tr>";
-                        tbody += "<td>" + count + "</td>";
+                        tbody += "<td><button onclick=DeleteDischarge(" + val.AutoId + ") class='btn btn-danger btn-xs edit'><i class='fa fa-trash'></i></button></td>";
                         tbody += "<td class='hide'>" + val.HeaderId + "</td>";
-                        tbody += "<td class='hide'>" + val.TemplateId + "</td>";
+                        tbody += "<td class='hide'>" + val.AutoId + "</td>";
                         tbody += "<td>" + val.template_content + "</td>";
                         tbody += "<td>" + val.cr_date + "</td>";
                         tbody += "<td><button class='btn btn-warning btn-xs edit'><i class='fa fa-edit'></i></button></td>";

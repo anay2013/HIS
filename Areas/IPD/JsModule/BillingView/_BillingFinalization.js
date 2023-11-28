@@ -140,7 +140,7 @@ function SaveCloseApproval(logic) {
         objBO.BillingType = '-';
         objBO.ApprAmount = $('#txtPanelApprovalAmount').val();
         objBO.CoPayAmount = $('#txtCoPayment').val();
-        objBO.DiscountAmount = $('#txtTPADiscount').val();
+        objBO.DiscountAmount = 0;
         objBO.Remark = '-';
         objBO.login_id = Active.userId;
         objBO.Logic = logic;

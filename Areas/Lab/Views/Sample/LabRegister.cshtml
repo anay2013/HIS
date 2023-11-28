@@ -6,6 +6,12 @@
 <script src="~/Areas/Lab/JsModule/LabRegister.js"></script>
 
 <style>
+    .consentForm iframe {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 15px;
+    }
+
     .pat-group {
         background: #f3cecca6;
     }
@@ -120,7 +126,7 @@
                                             <button class="btn btn-success bn" style="">From</button>
                                             <input type="date" id="txtFrom" class="form-control" style="width:82%;  font-size:11px; " />
                                         </div>
-                                    </div>                             
+                                    </div>
                                     <div class="col-md-2" style=" margin-top:5px;">
                                         <div class="form-group flex bc">
                                             <button class="btn btn-success bn" style="">To</button>
@@ -134,15 +140,15 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:1%;">#</th>
-                                                <th>IPOP Type</th>
-                                                <th>IPOP No</th>
-                                                <th>Visit No</th>
-                                                <th>Register Date</th>
-                                                <th>Patient Name</th>
-                                                <th>Age/Gender</th>
+                                                <th style="width:6%;">IPOP Type</th>
+                                                <th style="width:9%;">IPOP No</th>
+                                                <th style="width:9%;">Visit No</th>
+                                                <th style="width:7%;">Register Date</th>
+                                                <th style="width:9%;">Patient Name</th>
+                                                <th style="width:10%;">Age/Gender</th>
                                                 <th>Test List</th>
-                                                <th>Doctor Name</th>                                               
-                                                <th>Panel Name</th>                                               
+                                                <th style="white-space:pre">Doctor Name</th>
+                                                <th style="white-space:pre">View Consent</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -150,6 +156,22 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalViewConsent" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:5%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;">
+                <h5 class="text-white">View Consent</h5>
+                <span data-dismiss="modal" class="btn-close">x</span>
+            </div>
+            <div class="modal-body" style="height:600px;overflow:auto">
+                <div class="row">
+                    <div class="col-md-12 consentForm">
                     </div>
                 </div>
             </div>

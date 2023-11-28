@@ -78,6 +78,7 @@ $(document).ready(function () {
                 $('#txtQuantity').focus();
                 $('#txtItemID').val(itemid);
                 $('#txtIsCash').val(IsCash);
+                console.log(IsCash)
                 $('#ItemList').hide();
                 break;
             default:

@@ -158,7 +158,7 @@ function PatientRegister(logic) {
                         tbody += "<td>" + val.AdmitDate + "</td>";
                         tbody += "<td>" + val.Attendant + "</td>";
                         tbody += "<td>" + val.PanelName + "</td>";
-                        tbody += "<td><a class='btn btn-warning btn-xs' href='../Print/AdmissionAndDischargeReport?_IPDNo=" + val.IPDNo + "' target='_blank'>Print</a></td>";
+                        tbody += "<td><a class='btn btn-warning btn-xs' onclick=EncryptParams() href='#' target='_blank'>Print</a></td>";
                         tbody += "</tr>";
                     });
                     $('#tblPatientRegister tbody').append(tbody);
@@ -170,3 +170,24 @@ function PatientRegister(logic) {
         }
     });
 }
+function PrintReport() {
+    var url = '../Print/AdmissionAndDischargeReport?_IPDNo=' + val.IPDNo;
+}
+function EncryptParams() {
+    var url = "~/Controller/Utility/EncryptParams";
+    var strCrypt = "test";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: { strCrypt: strCrypt },        
+        dataType: "JSON",
+        crossDomain: true,
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+
