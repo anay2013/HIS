@@ -13,6 +13,7 @@
         padding: 3px 5px;
         font-size: 11px;
     }
+
         .paymentSection span:nth-child(4) span:nth-last-child(1) {
             color: #fff;
             position: absolute;
@@ -23,9 +24,11 @@
             right: 11px;
             margin-top: -2px;
         }
+
         .paymentSection span:nth-child(4) span:nth-last-child(2) {
             color: #802a00;
         }
+
     .itemHeight {
         height: 9vh !important;
     }
@@ -192,6 +195,32 @@
         /* width: 25px; */
         white-space: nowrap;
     }
+    .lock{
+        pointer-events:none;
+        opacity:0.5;
+    }
+    .employeeDiscount {      
+        border: 1px solid #d5d2d2;
+        margin: 13px 10px 11px 10px;
+        border-radius: 3px;
+        padding: 7px;
+        background: #f6fbff;
+        width: 97%;
+    }
+
+    .bt {
+        height: 24px;
+        width: 50%;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .employeeDiscount .title {
+        margin: -8px 0px 15px 3px;
+        background: #b4dcfb;
+        width: 99%;
+        padding: 4px 5px;
+    }
 </style>
 <div id="page-content">
     <div class="container">
@@ -208,7 +237,7 @@
                             <div class="panel-body" style="background:#fff;padding: 1px 8px;" id="AnonymousInformation">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="" style="padding: 6px 1px;background: #12b3f396;margin-bottom:3px;">
+                                        <div class="" style="padding: 6px 5px;background: #b4dcfb;margin-bottom:3px;line-height: 29px;">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group flex">
@@ -372,6 +401,23 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-12 employeeDiscount lock">
+                                                <div class="row">
+                                                    <div class="col-md-12 title">
+                                                        <label>Employee Payment Discount</label>
+                                                    </div>
+                                                    <div class="col-md-6 flex">
+                                                        <label style="white-space:pre">Emp Code : </label>
+                                                        <input type="text" id="txtEmpCodeForDiscount" style="border-color: #f39c12;" class="form-control" />
+                                                        <button class="btn btn-warning btn-xs bt" onclick="VerifyEmpForDiscount()"><i class="fa fa-send">&nbsp;</i>Send OTP</button>
+                                                    </div>
+                                                    <div class="col-md-6 flex">
+                                                        <label style="white-space:pre">Verify OTP : </label>
+                                                        <input type="text" id="txtVerifyOTP" style="border-color: #008d4c;" class="form-control" />
+                                                        <button class="btn btn-success btn-xs bt" onclick="AuthenticateOTP()" style="width: 38%;"><i class="fa fa-sign-in">&nbsp;</i>Validate</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -489,7 +535,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label>Dis. Resason</label>
-                                <input type="text" id="txtDisResason" class="form-control" placeholder="Discount Reason" />
+                                <input type="text" id="txtDisResason" class="form-control lock" placeholder="Discount Reason" />
                             </div>
                             <div class="col-md-4">
                                 <label>Approved By</label>

@@ -1,7 +1,10 @@
 ﻿var _photo_url = null;
 var isApp = '';
 var roundOff = 0.00;
+var _empDiscountInfo = {};
+var _otp;
 $(document).ready(function () {
+    // data = { "messages": [{ "messageId": "40089288737037212625", "status": { "description": "Message sent to next instance", "groupId": 1, "groupName": "PENDING", "id": 7, "name": "PENDING_ENROUTE" }, "to": "919670244590", "smsCount": 1 }] }
     TriggerEnter();
     CloseSidebar();
     isApp = window.location.href;
@@ -74,6 +77,7 @@ $(document).ready(function () {
         panelId = $('#ddlPanel option:selected').val();
         var UHID = $('#txtUHID').val();
         GetAppointmentRate(UHID, panelId, item);
+        $('.employeeDiscount').removeClass('lock');
     });
     $('input[value=Availbility]').on('click', function () {
         var val = $('#ddlState option:selected').text();
@@ -1731,4 +1735,66 @@ function TriggerEnter() {
             $('#btnSearchOldPatient').trigger('click');
         }
     });
+}
+function VerifyEmpForDiscount() {
+    if ($('#txtEmpCodeForDiscount').val() == '') {
+        alert('Please Provide Employee Code.');
+        $('#txtEmpCodeForDiscount').focus();
+        return
+    }
+    var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
+    var objBO = {};
+    objBO.prm_1 = $('#txtEmpCodeForDiscount').val();
+    objBO.SearchValue = "AppointmentBooking";
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'VerifyEmpForDiscount';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        async: false,
+        success: function (data) {
+            console.log(data)
+            if (data.Msg.includes('Mobile No not Found')) {
+                alert("Mobile No not Found");
+                return
+            }
+            if (JSON.parse(data.Msg.split('|')[3]).messages[0].status.groupName.includes('PENDING')) {
+                _empDiscountInfo.emp_name = data.Msg.split('|')[0];
+                _empDiscountInfo.perc = data.Msg.split('|')[1];
+                _empDiscountInfo.otp = data.Msg.split('|')[2];
+                alert("Sent");
+                $('#txtVerifyOTP').focus();
+            }
+            else {
+                alert(JSON.parse(data.Msg.split('|')[3]).messages[0].status.groupName);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function AuthenticateOTP() {
+    var val = $('#txtVerifyOTP').val();
+    if (val == '') {
+        alert('Please Provide OTP');
+        $('#txtVerifyOTP').focus();
+        return;
+    }
+    if (val != _empDiscountInfo.otp) {
+        alert('Incorrect OTP.');
+        $('#txtVerifyOTP').val('');
+        return;
+    }
+    if (val == _empDiscountInfo.otp) {
+        otp = '';
+        $('#txtDiscountByPer').val(_empDiscountInfo.perc).keyup();
+        $('#txtDisResason').val(_empDiscountInfo.emp_name + ':' + _empDiscountInfo.perc).addClass('lock');
+        $('#txtVerifyOTP').val('');
+        _empDiscountInfo = {};
+    }
 }

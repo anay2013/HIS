@@ -146,7 +146,9 @@ $(document).ready(function () {
     $('#PatientVisits #tblPatientVisits tbody').on('click', '.currentVisit', function () {
         var appno = $(this).closest('tr').find('td:eq(0)').text();
         sessionStorage.setItem('AppId', appno);
-        //sessionStorage.getItem('AppId') = appno;
+        $('.modal-body').find('input[name=Lens]').prop('checked', false);
+        $('input:checkbox').prop('checked', false);
+        $('input:text').val('');   
         PatientHeaderInfo();
         GetPrescriptionInfo();
         GetVisualAcuityInfo();
@@ -1559,7 +1561,10 @@ function UpdateEyeOtherInfo() {
 }
 //Other Services operation
 function GetOtherInfo() {
-    $('#tblOtherInfo tbody').find('input').val('');
+    $('input[id=PosteriorRatina]').prop('checked', false);
+    $('input[id=EyeLens]').prop('checked', false);
+    $('#tblSpecDetail tbody').find('input:checkbox').prop('checked', false);
+    $('#tblOtherInfo tbody').find('input').val('');   
     var url = config.baseUrl + "/api/master/CPOE_OPTHQueries";
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');

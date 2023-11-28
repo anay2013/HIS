@@ -650,12 +650,12 @@
 </style>
 <style>
     .expandMedicine {
-        transform: scale(1.2);
-        -moz-transform: scale(1.2);
-        -webkit-transform: scale(1.2);
-        -o-transform: scale(1.2);
-        -ms-transform: scale(1.2);
-        -webkit-transform: scale(1.2);
+        transform: scale(1);
+        -moz-transform: scale(1);
+        -webkit-transform: scale(1);
+        -o-transform: scale(1);
+        -ms-transform: scale(1);
+        -webkit-transform: scale(1);
         position: absolute;
         width: 70%;
         height: max-content;
@@ -1135,10 +1135,10 @@
                                     <div class="category">
                                         <span class="title">
                                             <button onclick="DeleteAllPresMedicine()" class="btn btn-danger btn-xs btnMore"><i class="fa fa-trash">&nbsp;</i>ALL</button>&nbsp;Medicine
-                                        </span><span style="margin-left:25%">DB Search : </span>
+                                        </span><span style="margin-left:5%">Database Search :  </span>
                                         <label class="switch"><input type="checkbox" class="IsActive" id="IsDB" checked=""><span class="slider round"></span></label>
                                         <button onclick="InsertMedicinePresItems()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i>Submit</button>
-                                        <button onclick="expandMedicine()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i></button>
+                                        Expand Full Mode :<button onclick="expandMedicine()" class="btn btn-warning btn-xs"><i class="fa fa-expand"></i></button>
                                     </div>
                                     <div class="divContainer">
                                         <table class="table table-bordered MedicineTemplate" id="tblPresMedicineInfo">
