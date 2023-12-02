@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "BugAudit";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/MIS/JsModule/Finance/BugReport.js"></script>
+<style>
+    #tblReport thead th {
+        background: #2a86cd !important;
+        color: #fff;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#026cbd;padding: 4px;">
+                                <h4 class="text-white">Bug Audit Report</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-1" style="padding: 0px 2px;">
+                                    <label>From</label>
+                                    <input type="date" id="txtFrom" onchange="CheckDateDiff()" class="form-control" />
+                                </div>
+                                <div class="col-md-1" style="padding: 0px 2px;">
+                                    <label>To</label>
+                                    <input type="date" id="txtTo" onchange="CheckDateDiff()" class="form-control" />
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="flex" style="margin-top: 23px;">
+                                        <button style="width:30%" id="btnGet" class="btn btn-primary" onclick="BugReport()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top:10px">
+                                    <dic class="scroll" style="max-height: 530px;overflow: auto;">
+                                        <table id="tblBugReport" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>IPOP No</th>
+                                                    <th>TnxId</th>
+                                                    <th>Patient Name</th>
+                                                    <th>Panel Name</th>
+                                                    <th>Date</th>
+                                                    <th class="text-right">Gross Amount</th>
+                                                    <th class="text-right">Discount</th>
+                                                    <th class="text-right">Net Amount</th>
+                                                    <th class="text-right">Received</th>
+                                                    <th>Entry By</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </dic>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

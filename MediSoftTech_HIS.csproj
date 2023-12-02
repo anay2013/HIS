@@ -424,6 +424,7 @@
     <Content Include="Areas\MenuMaster\Views\Master\GroupMenuAllotment.cshtml" />
     <Content Include="Areas\MenuMaster\Views\Master\MenuAllotmentMaster.cshtml" />
     <Content Include="Areas\MenuMaster\Views\web.config" />
+    <Content Include="Areas\MIS\JsModule\Finance\BugAudit.js" />
     <Content Include="Areas\MIS\JsModule\Finance\DailyCollectionReport.js" />
     <Content Include="Areas\MIS\JsModule\Finance\DailyWorkReport.js" />
     <Content Include="Areas\MIS\JsModule\Finance\ReceiptWiseCollectionReport.js" />
@@ -2224,6 +2225,7 @@
     <Content Include="Areas\Lab\Views\Report\InvestigationReport.cshtml" />
     <Content Include="Areas\Lab\Views\Report\LabWorkBook.cshtml" />
     <Content Include="Areas\Lab\Views\Master\ConsentMaster.cshtml" />
+    <Content Include="Areas\OPD\Views\Appointment\BugAudit.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
