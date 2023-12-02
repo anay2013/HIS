@@ -1,33 +1,68 @@
 ﻿var length = 0;
 var length1 = 0;
+var DoctorIds = "";
 $(document).ready(function () {
-    var doctorIds = query()['DoctorIds'];
-    var arrDoctorId = [];
-    arrDoctorId = doctorIds.split('|');
-    if (arrDoctorId.length == 1) {
-        $('.DoctorDisplay:eq(1)').hide();
-        $('.DoctorDisplay').css('height', '99vh');
-        $('.AllPending').css('height', '90vh');
-        $('#myMarquee').css('height', '60%');
-        $('#myMarquee').isNan;
-        DoctorDisplayScreen1(arrDoctorId[0]);
-        setInterval(function () { DoctorDisplayScreen1(arrDoctorId[0]); }, 1000)
-    }
-    if (arrDoctorId.length == 2) {
-        $('.DoctorDisplay:eq(1)').show();
-        $('.DoctorDisplay').css('height', '50vh');
-        $('.AllPending').css('height', '40vh');
-        $('#myMarquee').css('height', '60%');
-        $('#myMarquee1').css('height', '60%');
-        DoctorDisplayScreen1(arrDoctorId[0]);
-        DoctorDisplayScreen2(arrDoctorId[1]);
-
-        setInterval(function () {
-            DoctorDisplayScreen1(arrDoctorId[0]);
-            DoctorDisplayScreen2(arrDoctorId[1]);
-        }, 1000)
-    }
+    ActiveDoctorsByDisplayId(query()['DisplayId']);
 });
+function ActiveDoctorsByDisplayId(DisplayId) {
+    var DoctorIds = "";
+    var url = config.baseUrl + "/api/Appointment/Opd_DisplayTVQueries";
+    var objBO = {};
+    objBO.UHID = '-';
+    objBO.AppointmentId = '-';
+    objBO.DoctorId = DisplayId;
+    objBO.Logic = 'OPD:ActiveDoctorsByDisplayId';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data)
+            if (Object.keys(data.ResultSet).length > 0) {
+                $.each(data.ResultSet.Table, function (key, val) {
+                    DoctorIds = val.DoctorIds
+                    var arrDoctorId = [];
+
+                    //if (!DoctorIds.includes("|"))
+                    //    DoctorIds = DoctorIds + "|"
+
+                    arrDoctorId = DoctorIds.split('|');
+
+                    if (arrDoctorId.length == 1) {
+                        $('.DoctorDisplay:eq(1)').hide();
+                        $('.DoctorDisplay').css('height', '99vh');
+                        $('.AllPending').css('height', '90vh');
+                        $('#myMarquee').css('height', '60%');
+                        $('#myMarquee').isNan;
+                        DoctorDisplayScreen1(arrDoctorId[0]);
+                        setInterval(function () { DoctorDisplayScreen1(arrDoctorId[0]); }, 1000)
+                    }
+                    if (arrDoctorId.length == 2) {
+                        $('.DoctorDisplay:eq(1)').show();
+                        $('.DoctorDisplay').css('height', '50vh');
+                        $('.AllPending').css('height', '40vh');
+                        $('#myMarquee').css('height', '60%');
+                        $('#myMarquee1').css('height', '60%');
+                        DoctorDisplayScreen1(arrDoctorId[0]);
+                        DoctorDisplayScreen2(arrDoctorId[1]);
+
+                        setInterval(function () {
+                            DoctorDisplayScreen1(arrDoctorId[0]);
+                            DoctorDisplayScreen2(arrDoctorId[1]);
+                        }, 1000)
+                    }
+                });
+            }
+        },
+        complete: function () {
+        },
+        error: function (response) {
+        },
+    });
+}
+
 function DoctorDisplayScreen1(doctorId) {
     var url = config.baseUrl + "/api/Appointment/Opd_DisplayTVQueries";
     var objBO = {};

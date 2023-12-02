@@ -1161,6 +1161,7 @@ function Opd_AppointmentBooking() {
             MasterObject.objPatient = objPatient;
             MasterObject.objBooking = objBooking;
             MasterObject.objPayment = objPayment;
+
             $.ajax({
                 method: "POST",
                 url: url,

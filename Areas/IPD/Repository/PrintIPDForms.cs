@@ -20,13 +20,13 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         string _TemplateName = string.Empty;
         string _PageName = string.Empty;
         string _PageIndex = string.Empty;
-
+    
         string _IsNABL = string.Empty;
         string _PrintWithHeader = "N";
         List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
         public FileResult PrintForms(List<ipFormPrintingRequest> FormList)
         {
-            PdfDocument repDocument = new PdfDocument();
+            PdfDocument repDocument=new PdfDocument();
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
             FormTemplateRepo repo = new FormTemplateRepo();
             foreach (var form in FormList)
@@ -34,25 +34,26 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
                 _TemplateName = form.FormHeader;
                 _PageName = form.PageName;
                 _PageIndex = form.PageIndex;
-
+           
                 PdfPage page1;
                 if (form.PageOrientation == "Portrait")
                 {
-                    page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10, 10), PdfPageOrientation.Portrait);
+                    page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10,10), PdfPageOrientation.Portrait);
                 }
                 else
                 {
                     page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10, 10), PdfPageOrientation.Landscape);
                 }
-                string HtmlBody = repo.GetFormTemplate(form.TemplateName, form.pname, form.uhidno, form.gender, form.admitdate, form.ipdno, form.doctor, form.Diagnosis, form.PageName, form.PageIndex, form.PageOrientation, form.FormHeader);
-
+                
+                string HtmlBody= repo.GetFormTemplate(form.TemplateName,form.pname,form.uhidno,form.gender,form.admitdate,form.ipdno,form.doctor,form.Diagnosis,form.PageName, form.PageIndex,form.PageOrientation,form.FormHeader);
+                
                 PdfHtml htmlBody = new PdfHtml(HtmlBody, null);
                 htmlBody.BrowserWidth = 780;
                 htmlBody.FontEmbedding = false;
                 htmlBody.PageCreatingEvent += new PdfPageCreatingDelegate(htmlToPdfConverter_PageCreatingEvent);
                 htmlBody.ImagesCutAllowed = false;
                 page1.Layout(htmlBody);
-
+                
             }
             byte[] pdfdata = repDocument.WriteToMemory();
             FileResult fileResult = new FileContentResult(pdfdata, "application/pdf");
@@ -79,7 +80,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             if (pdfPage != null)
             {
-
+                
                 pdfPage.CreateFooterCanvas(18);
                 string StrhtmlFooter = GetFooterHTML(PageName, PageIndex);
                 PdfHtml footerHtml = new PdfHtml(0, 0, StrhtmlFooter, null);
@@ -91,13 +92,13 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
                 //pageNumberText = new PdfText(500, 105, "Page {CrtPage} of {PageCount}", pageNumberFont); // 2
                 //pdfPage.Footer.Layout(pageNumberText);
             }
-
+            
         }
         private string GetHeaderHTML(string TemplateName)
         {
-          return "<div style='text-align:center;margin-top:1px;font-size:24px;font-weight:bold;width:100%;'>" + TemplateName + "</div>";
+            return "<div style='text-align:center;margin-top:1px;font-size:24px;font-weight:bold;width:100%;'>" + TemplateName + "</div>";
         }
-        private string GetFooterHTML(string PageName, string PageIndex)
+        private string GetFooterHTML(string PageName,string PageIndex)
         {
             StringBuilder f = new StringBuilder();
             f.Append("<table style='width:100%; margin-top:-12px;'>");
@@ -112,8 +113,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
     }
     public class ipPageCounter
     {
-        public string FormName { get; set; }
-        public int PageIndex { get; set; }
+        public string FormName { get; set;}
+        public int  PageIndex { get; set; }
         public bool IsLastPage { get; set; }
     }
     public class ipFormPrintingRequest

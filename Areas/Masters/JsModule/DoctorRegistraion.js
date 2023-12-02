@@ -396,7 +396,7 @@ function AddUpdateDoctorProfile1() {
 }
 function AddUpdateDoctorProfile() {
     if (ValidateField()) {
-        var url = config.baseUrl + "/api/master/InsertUpdateDoctor";
+        var url = config.baseUrl + "/api/master/mInsertUpdateDoctor";
         var objBO = {};
         objBO.doctorId = _doctorId;
         objBO.Prefix = $("#ddlPrefix option:selected").text();
@@ -434,32 +434,59 @@ function AddUpdateDoctorProfile() {
         objBO.hosp_id = Active.unitId;
         objBO.login_id = Active.userId;
         objBO.Logic = ($('#btnSaveDoctor').text() == 'Save') ? 'Insert' : 'Update';
-        var UploadDocumentInfo = new XMLHttpRequest();
-        var data = new FormData();
-        data.append('obj', JSON.stringify(objBO));
-        var bytes = $('input[id=docImage]')[0].files[0];
-        data.append('ImageByte', $('input[id=docImage]')[0].files[0]);
-        UploadDocumentInfo.onreadystatechange = function () {
-            if (UploadDocumentInfo.status) {
-                if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {
-                    var json = JSON.parse(UploadDocumentInfo.responseText);
-                    if (json.Message.includes('Success')) {
-                        Clear();
-                        var res = json.Message.split("|");
-                        alert(res[0]);
-                        $("#txtDoctorInfo").text('');
-                    }
-                    else {
-                        alert(json.Message);
-                    }
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    Clear();
+                    var res = data.split("|");
+                    alert(res[0]);
+                    $("#txtDoctorInfo").text('');
                 }
+                else {
+                    alert(json.Message);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
             }
-        }
-        UploadDocumentInfo.open('POST', url, true);
-        UploadDocumentInfo.send(data);
+        });
     }
 }
-
+function UploadDoctorProfile(elem) {
+   
+    if ($('input[id=imgdoctors]').val() == '') {
+        alert('Please Choose Profile Image');
+        return
+    }
+    $(elem).addClass('loading');
+    var url = config.baseUrl + "/api/master/UploadDoctorProfile";
+    var objBO = {};
+    objBO.doctorId = _doctorId;
+    objBO.ImageName = _doctorId + '.jpg';
+    objBO.virtual_path = "-";
+    objBO.hosp_id = Active.unitId;
+    objBO.login_id = Active.userId;
+    var UploadDocumentInfo = new XMLHttpRequest();
+    var data = new FormData();
+    data.append('obj', JSON.stringify(objBO));
+    data.append('ImageByte', $('input[id=docImage]')[0].files[0]);
+    UploadDocumentInfo.onreadystatechange = function () {
+        if (UploadDocumentInfo.status) {
+            if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {              
+                var json = JSON.parse(UploadDocumentInfo.responseText);               
+                alert(json);
+                $(elem).removeClass('loading');
+            }
+        }
+    }
+    UploadDocumentInfo.open('POST', url, true);
+    UploadDocumentInfo.send(data);
+}
 function AddUpdateDoctorSlot() {
     if (ValidateOPDField()) {
         var days = '';
@@ -558,7 +585,6 @@ function EditDoctor(DoctorId) {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            console.log(data)
             var htmlSpec = '';
             var htmlAbout = '';
             var htmlEdu = '';
@@ -567,6 +593,7 @@ function EditDoctor(DoctorId) {
             var htmlMem = '';
             if (Object.keys(data.ResultSet.Table).length > 0) {
                 $.each(data.ResultSet.Table, function (key, val) {
+                    $('#profileUpload').css('visibility', 'visible');
                     if (val.VirtualPhotoPath != null)
                         $('#imgdoctors').prop('src', val.VirtualPhotoPath);
                     else
@@ -1268,7 +1295,45 @@ function Clear() {
     $('#imgdoctors').prop('src', '/Content/logo/noImage.png');
     $("#btnSaveDoctor").text('Save');
 }
-
+function UploadCaseSheet(elem) {
+    if ($("#ddlFileRack option:selected").text() == 'Select') {
+        alert('Please Select File Rack.');
+        return
+    }
+    $(elem).addClass('loading');
+    var objBO = {};
+    var url = config.baseUrl + "/api/EMR/UploadCaseSheet";
+    objBO.IPDNo = $("#txtPatientIPDNO").text();
+    objBO.RackId = $("#ddlFileRack option:selected").val();
+    objBO.hasfile = ($('#imgFile').attr('src').length > 10) ? 'Y' : 'N';
+    objBO.fileExtention = $('#uploadFile').val().split('.').pop();
+    objBO.Base64String = $('#imgFile').attr('src');
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'InsertCaseSheet';
+    var UploadDocumentInfo = new XMLHttpRequest();
+    var data = new FormData();
+    data.append('obj', JSON.stringify(objBO));
+    data.append('ImageByte', objBO.Base64String);
+    UploadDocumentInfo.onreadystatechange = function () {
+        if (UploadDocumentInfo.status) {
+            if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {
+                var json = JSON.parse(UploadDocumentInfo.responseText);
+                if (json.includes('Success')) {
+                    var date = new Date();
+                    alert('Successfully Uploaded..!');
+                    var FilePath = json.split('|')[1] + "?v=" + date.getMilliseconds();
+                    $("#filePath").prop('src', FilePath);
+                    $(elem).removeClass('loading');
+                }
+                else {
+                    alert(json);
+                }
+            }
+        }
+    }
+    UploadDocumentInfo.open('POST', url, true);
+    UploadDocumentInfo.send(data);
+}
 /* Start Edit Rate */
 
 function OnLoadGetRateRoomVisit() {

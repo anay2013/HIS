@@ -3,6 +3,7 @@
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 <script src="~/Areas/EDP/JsModule/PanelRateLink.js"></script>
+
 <style>
     .loading {
         border-width: 2px;
@@ -85,18 +86,10 @@
         text-align: left;
         height: 30px;
     }
+
     .bc {
         border: 1px solid #00a65a;
         border-radius: 0;
-    }
-    #tblRateLinkDetails select {
-        height: 20px;
-        padding: 2px;
-        border-color: #d3b2b2;
-    }
-    #tblRateLinkDetails button {
-        height: 19px;
-        line-height: 0;
     }
 </style>
 <div id="page-content">
@@ -122,13 +115,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive" style="height:495px;overflow:auto;border: 1px solid #2478a9;">
+                    <div class="table-responsive" style="min-height:495px;overflow:auto;border: 1px solid #2478a9;">
                         <table class="table table-bordered" id="tblRateLinkDetails">
                             <thead>
                                 <tr>
                                     <th style="width:85%">Rate List</th>
                                     <th>S. No.</th>
-                                    <th style="width:1%">CMD</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

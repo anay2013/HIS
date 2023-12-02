@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -13,6 +14,7 @@ namespace MediSoftTech_HIS
 {
     public static class UtilityClass
     {
+        public static string documentServerUrl = ConfigurationManager.AppSettings["documentServerUrl"].ToString();
         public static string decoding(string toEncode)
         {
             string base64Decoded;

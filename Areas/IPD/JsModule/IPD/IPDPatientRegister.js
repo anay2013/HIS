@@ -171,7 +171,8 @@ function PatientRegister(logic) {
     });
 }
 function PrintReport() {
-    var url = '../Print/AdmissionAndDischargeReport?_IPDNo=' + val.IPDNo;
+    var url = config.documentServerUrl + "/IPD/Print/AdmissionAndDischargeReport?_IPDNo=" + _IPOPNo;
+    window.open(url, '_blank');
 }
 function EncryptParams() {
     var url = "~/Controller/Utility/EncryptParams";

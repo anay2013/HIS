@@ -5,10 +5,14 @@
 }
 <script src="~/Areas/Masters/JsModule/DoctorRegistraion.js?ver=1.5"></script>
 <style>
+    #profileUpload {
+        margin-top: 5px;
+        background: #00a65a;
+        visibility: hidden;
+    }
     #RateModal h5, #RateModal input[type=checkbox] {
         margin: 0
     }
-
     #RateModal .panel-heading {
         padding: 2px 10px
     }
@@ -234,8 +238,10 @@
                                 <img id="imgdoctors" class="img-circle" src="~/Content/logo/noImage.png" style="width: 125px; height: 120px;">
 
                                 <input type="file" id="docImage" onchange="readURL(this)" style="display:none">
-
-                                <button id="btnBrowse" class="btn btn-success">Upload Image</button>
+                                <div class="flex" id="profileUpload">
+                                    <button id="btnBrowse" class="btn btn-default btn-xs">Browse</button>
+                                    <button id="btnUploadProfile" onclick="UploadDoctorProfile(this)" class="btn btn-success btn-xs"><i class="fa fa-cloud-upload">&nbsp;</i>Upload</button>
+                                </div>
                                 <input type="hidden" id="hidcombinepath">
                                 <input type="hidden" id="hidimgname">
                             </div>

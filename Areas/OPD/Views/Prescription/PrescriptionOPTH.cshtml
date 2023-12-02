@@ -3,10 +3,35 @@
     ViewBag.Title = "PrescriptionOPTH";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet"/>
+
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
 <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="~/Areas/OPD/JsModule/Prescription/PrescriptionOPTH.js?1.1"></script>
 <style type="text/css">
+    .btnTempMaster {
+        margin-bottom: 2px;
+        padding: 4px 6px;
+        cursor: pointer;
+        border-radius: 2px;
+    }
+
+    #TemplateMasterLeft .panel, #TemplateMasterRight .panel {
+        border: none;
+    }
+
+    #TemplateMasterRight [class^=col-] {
+        padding: 2px;
+    }
+
+    #TemplateMasterLeft .panel-heading, #TemplateMasterRight .panel-heading {
+        background: #7c7c7c;
+        padding: 0px 3px;
+    }
+
+        #TemplateMasterLeft .panel-heading h4, #TemplateMasterRight .panel-heading h4 {
+            font-size: 16px;
+        }
+
     table thead input {
         color: #3a3939;
     }
@@ -675,16 +700,18 @@
     .expandMedicine-divContainer {
         height: max-content !important;
     }
-        .expandMedicine-divContainer #tblPresMedicineInfo thead th:nth-child(2){
-            width:30%;
+
+        .expandMedicine-divContainer #tblPresMedicineInfo thead th:nth-child(2) {
+            width: 30%;
         }
-        .divContainer {
-            min-height: 150px;
-            height: 150px;
-            overflow: auto;
-            margin-bottom: 5px;
-            border: 1px solid #2478a9;
-        }
+
+    .divContainer {
+        min-height: 150px;
+        height: 150px;
+        overflow: auto;
+        margin-bottom: 5px;
+        border: 1px solid #2478a9;
+    }
 
     .dbSearch {
         border: 1px dashed green !important;
@@ -1078,8 +1105,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="section" style="min-height:150px;max-height:150px;">
-                                            <div class="list" style="min-height:145px;max-height:145px;">
+                                        <div class="section" style="min-height:120px;max-height:120px;">
+                                            <div class="list" style="min-height:115px;max-height:115px;">
                                                 <ul id="ulChiefComplaints"></ul>
                                             </div>
                                         </div>
@@ -1089,7 +1116,7 @@
                                             <span class="title"><button data-toggle="modal" data-target="#modalOtherServices" class="btn btn-default btn-xs btnMore">More</button>&nbsp;<button onclick="DeleteAllItem('T00011')" class="btn btn-danger btn-xs btnMore"><i class="fa fa-trash">&nbsp;</i>ALL</button>&nbsp;Examination</span>
                                             <button onclick="$(this).siblings('.divCustom').toggle('slow')" class="btn btn-success btn-xs pull-right"><i class="fa fa-edit"></i></button>
                                             <button onclick="GetGroupInfo('Examination|T00011')" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i></button>
-                                            <div class="divCustom" style="top:214px">
+                                            <div class="divCustom" style="top:175px">
                                                 <div class="flex">
                                                     <button class="btn btn-success btn-xs btnCMEyesInfo">LE</button>
                                                     <textarea type="text" id="txtCustomMedicine" style="top: -23px;height:75px;border-color:#f39c12;border-radius:0" class="form-control" placeholder="Input Remark"></textarea>
@@ -1097,8 +1124,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="section">
-                                            <div class="list" style="min-height:130px;max-height:130px;">
+                                        <div class="section" style="min-height:90px;max-height:90px;">
+                                            <div class="list" style="min-height:90px;max-height:90px;">
                                                 <ul id="ulExamination"></ul>
                                             </div>
                                         </div>
@@ -1108,7 +1135,7 @@
                                             <span class="title"><button onclick="DeleteAllItem('T00012')" class="btn btn-danger btn-xs btnMore"><i class="fa fa-trash">&nbsp;</i>ALL</button>&nbsp;Diagnosis</span>
                                             <button onclick="$(this).siblings('.divCustom').toggle('slow')" class="btn btn-success btn-xs pull-right"><i class="fa fa-edit"></i></button>
                                             <button onclick="GetDiagnosisInfo()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i></button>
-                                            <div class="divCustom" style="top:405px">
+                                            <div class="divCustom" style="top:301px">
                                                 <div class="flex">
                                                     <button class="btn btn-success btn-xs btnCMEyesInfo">LE</button>
                                                     <textarea type="text" id="txtCustomMedicine" style="top: -23px;height:75px;border-color:#f39c12;border-radius:0" class="form-control" placeholder="Input Remark"></textarea>
@@ -1116,9 +1143,27 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="section" style="min-height:130px;max-height:130px;">
-                                            <div class="list" style="min-height:118px;max-height:118px;">
+                                        <div class="section" style="min-height:100px;max-height:100px;">
+                                            <div class="list" style="min-height:100px;max-height:100px;">
                                                 <ul id="ulDiagnosis"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="divOther">
+                                        <div class="category">
+                                            <span class="title"><button onclick="DeleteAllItem('T00016')" class="btn btn-danger btn-xs btnMore"><i class="fa fa-trash">&nbsp;</i>ALL</button>&nbsp;History</span>
+                                            <button onclick="GetHistoryInfo()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i></button>
+                                            <div class="divCustom" style="top:405px">
+                                                <div class="flex">
+                                                    <button class="btn btn-success btn-xs btnCMEyesInfo">LE</button>
+                                                    <textarea type="text" id="txtCustomMedicine" style="top: -23px;height:75px;border-color:#f39c12;border-radius:0" class="form-control" placeholder="Input Remark"></textarea>
+                                                    <button onclick="InsertCustomMedicine($(this))" data-template="T00016" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus">&nbsp;</i>Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="section" style="min-height:100px;max-height:100px;">
+                                            <div class="list" style="min-height:100px;max-height:100px;">
+                                                <ul id="ulHistory"></ul>
                                             </div>
                                         </div>
                                     </div>
@@ -1134,7 +1179,7 @@
                                 <div class="col-md-6" id="expandMedicine">
                                     <div class="category">
                                         <span class="title">
-                                            <button onclick="DeleteAllPresMedicine()" class="btn btn-danger btn-xs btnMore"><i class="fa fa-trash">&nbsp;</i>ALL</button>&nbsp;Medicine
+                                            <button onclick="DeleteAllPresMedicine()" class="btn btn-danger btn-xs btnMore"><i class="fa fa-trash">&nbsp;</i>ALL</button>&nbsp;Medicine<button onclick="GetMedicineTemplate()" class="btn btn-primary btn-xs"><i class="fa fa-plus-square"></i></button>
                                         </span><span style="margin-left:5%">Database Search :  </span>
                                         <label class="switch"><input type="checkbox" class="IsActive" id="IsDB" checked=""><span class="slider round"></span></label>
                                         <button onclick="InsertMedicinePresItems()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i>Submit</button>
@@ -1259,31 +1304,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="modalMedicineSeach" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content" style="margin-top: 30%">
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Item Name</label>
-                            <input type="text" id="txtSearchProduct" data-imp="" class="form-control text-uppercase border-imp" autocomplete="off" placeholder="Item Name">
-                            <div id="ItemList" style="display:none">
-                                <table id="tblnavigate">
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <input type="text" id="txtItemID" class="form-control" style="display:none">
-                            <input type="text" id="txtIsCash" class="form-control" style="display:none">
-                        </div>
-                        <div class="msg"></div>
                     </div>
                 </div>
             </div>
@@ -1437,6 +1457,62 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalHistory" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top: 5%;height:485px">
+            <!-- Modal Header -->
+            <div class="modal-header bg-success" style="background: #2478a9;color:#fff;padding:5px;">
+                <h4 class="modal-title" style="font-size:15px;">
+                    <span class="text-center">History</span>
+                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+                </h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="padding: 2px 6px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#2478a9;padding: 4px;">
+                                <h5 class="text-white">Item Master</h5>
+                                <button onclick="$('#divHistoryItem').slideToggle()" style="margin-top: -19px;" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus">&nbsp;</i>New</button>
+                            </div>
+                            <div class="panel-body" style="background:#fff;padding:5px 0;">
+                                <div id="divHistoryItem" style="display:none">
+                                    <div class="col-md-8">
+                                        <div style="display:flex;margin-bottom:4px;">
+                                            <input type="text" id="txtHistoryItemName" style="border-color: #007792;border-radius: 0;" class="form-control" autocomplete="off" placeholder="New Item Name" />
+                                            <button class="btn-success" onclick="InsertHistoryItem()" style="background: #007792;border:none" id="btnSaveTemplate">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" id="txtSearchGroup" class="form-control" autocomplete="off" placeholder="Search.." />
+                                    </div>
+                                </div>
+                                <div class="table table-responsive">
+                                    <div class="scroll" style="max-height: 315px;min-height: 315px;">
+                                        <table id="tblHistoryItem" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 11%;">Eye</th>
+                                                    <th style="width:11%">Item Id</th>
+                                                    <th><input type="text" id="txtSearch" onkeyup="searchTable(this.id,'tblHistoryItem')" placeholder="Search..." /></th>
+                                                    <th style="width:20%">Duration</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="InsertHistoryPresItems()" style="margin:-12px 5px" class="btn btn-success pull-right"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="modalAdvice" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content" style="margin-top: 5%;height:485px">
@@ -1543,134 +1619,6 @@
                             </div>
                         </div>
                         <button onclick="InsertChiefComplaintPresItems()" style="margin:-12px 5px" class="btn btn-success pull-right"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="modalPresMediTemplate" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="margin-top: 5% -9%;height:485px;width:1100px">
-            <!-- Modal Header -->
-            <div class="modal-header bg-success" style="background: #007792;color:#fff;padding: 1px 10px;">
-                <h4 class="modal-title">
-                    Prescribed Medicine
-                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
-                </h4>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12" id="TemplateMasterRight">
-                        <div class="panel">
-                            <div class="panel-heading" style="background:#007792;padding: 4px;">
-                                <h4 class="text-white">Template Items <span style="color:#fff;" id="hiddenTemplateMasterId"></span></h4>
-                                <button style="margin: -23px 5px;float:right" class="btn btn-primary" id="btnSaveMediTempInfo" onclick="InsertMedicinePresItems()"><i class="fa fa-plus">&nbsp;</i>Submit</button>
-                            </div>
-                            <div class="panel-body" style="background:#fff;padding:5px 8px;height: 397px;">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <label>Type</label>
-                                            <select class="form-control" id="ddlSearchType">
-                                                <option value="ETHICAL">By Product</option>
-                                                <option value="BySaltName">By Salt</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Item Name</label>
-                                            <input type="text" id="txtSearchProduct" data-imp class="form-control text-uppercase" autocomplete="off" placeholder="Item Name" />
-                                            <div id="ItemList" style="display:none">
-                                                <table id="tblnavigate">
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>
-                                            <input type="text" id="txtItemID" class="form-control" style="display:none" />
-                                            <input type="text" id="txtIsCash" class="form-control" style="display:none" />
-                                        </div>
-                                        <div class="msg"></div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Dose</label>
-                                            <div class="select-editable">
-                                                <select id="ddlFreMaster" onchange="QtyCalculate()" class="form-control"></select>
-                                                <input type="text" id="txtFreqMaster" name="format" value="Select" class="form-control" placeholder="Dose" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Duration, Days, Quantity</label>
-                                        <div class="form-group" style="display:flex">
-                                            <input type="text" id="txtDuration" onkeyup="QtyCalculate()" data-imp data-int class="form-control text-uppercase" value="0" autocomplete="off" placeholder="Duration" />
-                                            <select id="ddlDays" class="form-control" data-imp><option>Days</option></select>
-                                            <input type="text" id="txtQty" data-imp data-int class="form-control text-uppercase" autocomplete="off" placeholder="Qty" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>When Take</label>
-                                            <div class="select-editable">
-                                                <select id="ddlIntake" class="form-control"></select>
-                                                <input type="text" id="txtIntake" name="format" class="form-control" value="Select" placeholder="In take" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Route</label>
-                                            <div class="select-editable">
-                                                <select id="ddlRoute" class="form-control">
-                                                    <option>Oral</option>
-                                                    <option>Nose</option>
-                                                    <option>Tropical</option>
-                                                </select>
-                                                <input type="text" id="txtRoute" name="format" class="form-control" placeholder="Route" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Remark</label>
-                                            <input type="text" id="txtRemark" data-imp class="form-control" autocomplete="off" placeholder="Remark" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <br />
-                                            <button class="btn btn-success" id="btnPresMediItem" onclick="AddMedicineTemplatge()"><i class="fa fa-plus">&nbsp;</i>Add</button>
-                                            <button style="display:none;" class="btn btn-primary" id="btnSaveMediTempInfo" onclick="InsertMedicineTemplateInfo()"><i class="fa fa-plus">&nbsp;</i>Save</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group" style="max-height: 270px;overflow:auto">
-                                            <img src="~/Content/logo/rx.png" style="width:15px;" />
-                                            <table class="table table-bordered MedicineTemplate" id="MedicineTemplate">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Eyes</th>
-                                                        <th>Name</th>
-                                                        <th>Dose</th>
-                                                        <th>Times</th>
-                                                        <th>Duration</th>
-                                                        <th>Meal</th>
-                                                        <th>Route</th>
-                                                        <th>Qty</th>
-                                                        <th>Remarks</th>
-                                                        <th>CMD</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -2098,14 +2046,14 @@
                                 <div class="category"><span class="title" style="padding:3px 93px 2px 6px;top:4px">Ratina Sigment</span><button class="btn btn-success pull-right" style="margin:1px 36px;height: 22px;line-height:20px;visibility:hidden" disabled><i class="fa fa-check-circle">&nbsp;</i></button></div>
                                 <div style="min-height: 180px;max-height:180px;overflow:auto;border: 1px solid #2478a9;padding: 3px 5px;">
                                     <img src="~/images/PostSig.png" class="img-responsive" style="padding:8px 0;" />
-                                    <label class="other-services-confirmation"><input id="PosteriorRatina" onchange="InsertVisualAcuity()" type="checkbox" name="RatinaSigment" />&nbsp;Posterior Ratina Sigment</label>
+                                    <label class="other-services-confirmation"><input id="PosteriorRatina" onchange="InsertVisualAcuity()" type="checkbox" name="RatinaSigment" />&nbsp;Posterior Sigment</label>
                                 </div>
                             </div>
                             <div class="col-md-3 text-center" style="border-right:1px solid #ddd">
                                 <div class="category"><span class="title" style="padding:1px 242px 2px 6px;top:0">Eye Lens</span></div>
                                 <div style="min-height: 180px;max-height:180px;overflow:auto;border: 1px solid #2478a9;padding: 3px 5px;">
                                     <img src="~/images/AnteriorSeg.png" class="img-responsive" style="padding:25px 43px" />
-                                    <label class="other-services-confirmation"><input id="EyeLens" onchange="InsertVisualAcuity()" type="checkbox" name="Lens" />&nbsp;Eye Concave Lens</label>
+                                    <label class="other-services-confirmation"><input id="EyeLens" onchange="InsertVisualAcuity()" type="checkbox" name="Lens" />&nbsp;Anterior Sigment</label>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -2374,7 +2322,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content" style="margin-top: 30%">
             <!-- Modal Header -->
-            <div class="modal-header bg-success">
+            <div class="modal-header bg-success" style="height: 28px;padding: 2px 5px;">
                 <h4 class="modal-title">
                     Next Follow-Up
                     <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
@@ -2384,15 +2332,15 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <input type="date" id="txtFollowUpDate" data-imp class="form-control" />
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <div class="form-group" style="display:flex">
                             <textarea class="form-control" id="txtFollowUpRemark" rows="1" placeholder="Follow-Up Remark"></textarea>
-                            <button id="btnSaveDoctorTemplate" style="margin-left: 6px;" class="btn btn-success">Save</button>
+                            <button id="btnFollowUpRemark" onclick="NextFollowUpVisit()" style="margin-left: 6px;" class="btn btn-success">Save</button>
                         </div>
                     </div>
                 </div>
@@ -2438,6 +2386,161 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div id="divPrevVisualAcuityInfo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalPresMediTemplate" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 1180px;">
+        <div class="modal-content" style="margin-top: 8%;height:515px">
+            <!-- Modal Header -->
+            <div class="modal-header bg-success" style="background: #007792;color:#fff;padding: 5px;">
+                <h4 class="modal-title">
+                    Prescribed Medicine
+                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+                </h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4" id="TemplateMasterLeft">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <input type="button" onclick="ClearTemplateMaster()" value="New" />
+                                <h4 class="text-white pull-right">Template Master</h4>
+                            </div>
+                            <div class="panel-body" style="background:#fff;padding:5px 0;">
+                                <div class="col-md-12">
+                                    <input type="text" id="txtTemplateName" data-imp class="form-control" style="border-radius:0;" autocomplete="off" placeholder="Template Name" />
+                                </div>
+                                <div class="col-md-12" style="margin:5px 0;">
+                                    <div style="display:flex">
+                                        <input type="text" id="txtDescription" class="form-control" style="border-radius:0;border-color:#ddd" autocomplete="off" placeholder="Description" />
+                                        <button class="btn btn-success" onclick="InsertMedicineTemplate()" style="height:28px;border-radius:0;margin:0" id="btnSavePresTemplate">Save</button>
+                                    </div>
+                                </div>
+                                <div class="scroll" style="height: 337px;border: 1px solid #2478a9;">
+                                    <table id="tblTemplateMaster" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Template Name</th>
+                                                <th>Description</th>
+                                                <th style="width:22%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8" id="TemplateMasterRight">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#939393;padding: 4px;display: flex;">
+                                <h4 class="text-white">Template Items <span style="color:#fff;" id="hiddenTemplateMasterId"></span></h4>
+                            </div>
+                            <div class="panel-body" style="height: 397px;">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Type</label>
+                                            <select class="form-control" id="ddlSearchType">
+                                                <option value="ETHICAL">By Product</option>
+                                                <option value="BySaltName">By Salt</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Item Name</label>
+                                            <input type="text" id="txtSearchProduct" data-imp class="form-control text-uppercase" autocomplete="off" placeholder="Item Name" />
+                                            <div id="ItemList" style="display:none">
+                                                <table id="tblnavigate">
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <input type="text" id="txtItemID" class="form-control" style="display:none" />
+                                            <input type="text" id="txtIsCash" class="form-control" style="display:none" />
+                                        </div>
+                                        <div class="msg"></div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Dose</label>
+                                            <div class="select-editable">
+                                                <select id="ddlFreMaster" onchange="QtyCalculate()" onkeydown="NextFocus('txtDuration')" class="form-control"></select>
+                                                <input type="text" id="txtFreqMaster" onkeydown="NextFocus('ddlFreMaster')" name="format" value="Select" class="form-control" placeholder="Dose" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Duration, Days, Quantity</label>
+                                        <div class="form-group" style="display:flex">
+                                            <input type="text" id="txtDuration" onkeyup="QtyCalculate()" onkeydown="NextFocus('ddlDays')" data-imp data-int class="form-control text-uppercase" value="0" autocomplete="off" placeholder="Duration" />
+                                            <select id="ddlDays" class="form-control" onkeydown="NextFocus('txtQty')" style="margin: 0 3px;" data-imp><option>Days</option></select>
+                                            <input type="text" id="txtQty" onkeydown="NextFocus('txtIntake')" data-imp data-int class="form-control text-uppercase" autocomplete="off" placeholder="Qty" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>When Take</label>
+                                            <div class="select-editable">
+                                                <select id="ddlIntake" onkeydown="test(this)" class="form-control"></select>
+                                                <input type="text" id="txtIntake" onkeydown="NextFocus('ddlIntake')" name="format" class="form-control" value="Select" placeholder="In take" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Route</label>
+                                            <div class="select-editable">
+                                                <select id="ddlRoute" onkeydown="NextFocus('txtRemark')" class="form-control">
+                                                    <option>Oral</option>
+                                                    <option>Nose</option>
+                                                </select>
+                                                <input type="text" id="txtRoute" name="format" class="form-control" placeholder="Route" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Remark</label>
+                                            <input type="text" id="txtRemark" data-imp class="form-control text-uppercase" autocomplete="off" placeholder="Remark" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @*<button class="btn btn-success" id="btnPresMediItem" style="border-radius: 0;margin-top: 25px;" onclick="AddMedicineTemplatge()"><i class="fa fa-plus">&nbsp;</i>Add</button>*@
+                                            <button style="border-radius: 0;margin-top: 25px;" class="btn btn-primary" id="btnSaveMediTempInfo" onclick="InsertMedicineTemplateInfo()"><i class="fa fa-plus">&nbsp;</i>Save</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group" style="height: 270px;overflow:auto;border: 1px solid #2478a9;">
+                                            <img src="~/Content/logo/rx.png" style="width:15px;" />
+                                            <button style="float:right" class="btn btn-warning btn-xs" id="btnUseMediTempInfo" onclick="UseMediTempInfo()"><i class="fa fa-share-square-o">&nbsp;</i>Use</button>
+                                            <table class="table table-bordered" id="MedicineTemplateForDB">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Dose</th>
+                                                        <th>Times</th>
+                                                        <th>Duration</th>
+                                                        <th>Meal</th>
+                                                        <th>Route</th>
+                                                        <th>Remarks</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

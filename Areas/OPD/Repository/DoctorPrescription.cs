@@ -415,7 +415,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                     //Doctor Details Bottom Begin
                     b.Append("<div style='width:100%;zoom:1;position:absolute;font-size:18px;margin-top:-70px;right:20px'>");
                     // b.Append("<div style='width:95%;position:absolute;bottom:0;right:20px'>");
-                    b.Append("<h3 style='text-align:right;margin:0;padding:0'><img style='float:right' src='" + dr["SignVirtualPath"].ToString() + "'/><br/><br/><br/>" + dr["DoctorName"].ToString() + "</h3>");
+                    b.Append("<h3 style='text-align:right;margin:0;padding:0'><img style='float:right' src='"+UtilityClass.documentServerUrl+"/" + dr["SignVirtualPath"].ToString() + "'/><br/><br/><br/>" + dr["DoctorName"].ToString() + "</h3>");
                     b.Append("<h4 style='text-align:right;margin:0 10px 10px'>" + dr["degree"].ToString() + "</h4>");
                     b.Append("</div>");
                     //Doctor Details Bottom End

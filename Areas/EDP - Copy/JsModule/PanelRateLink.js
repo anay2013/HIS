@@ -80,68 +80,6 @@ function CopyRateList() {
         });
     }
 }
-function DeleteRateList(elem) {
-    if (confirm('Are you sure to delete?')) {
-        var url = config.baseUrl + "/api/EDP/PanelRateListLinkInsertUpdate";
-        var objBO = {};
-        objBO.AutoId = $(elem).data('autoid');
-        objBO.PanelId = '-';
-        objBO.RateListId = '-';
-        objBO.Srno = '-';
-        objBO.login_id = Active.userId;
-        objBO.hosp_id = Active.unitId;
-        objBO.Logic = "DeleteRateList";
-        $.ajax({
-            method: "POST",
-            url: url,
-            data: JSON.stringify(objBO),
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                if (data.includes('success')) {
-                    $(elem).closest('tr').remove();
-                }
-                else {
-                    alert(data);
-                }
-            },
-            error: function (response) {
-                alert('Server Error...!');
-            }
-        });
-    }
-}
-function UpdateRateListSeqNo(elem) {
-    $(elem).addClass('loading');
-    var url = config.baseUrl + "/api/EDP/PanelRateListLinkInsertUpdate";
-    var objBO = {};
-    objBO.AutoId = $(elem).data('autoid');
-    objBO.PanelId = '-';
-    objBO.RateListId = '-';
-    objBO.Srno = $(elem).find('option:selected').text();
-    objBO.login_id = Active.userId;
-    objBO.hosp_id = Active.unitId;
-    objBO.Logic = "UpdateRateListSeqNo";
-    $.ajax({
-        method: "POST",
-        url: url,
-        data: JSON.stringify(objBO),
-        dataType: "json",
-        contentType: "application/json;charset=utf-8",
-        success: function (data) {
-            if (data.includes('Success')) {
-                onPanelChange();
-                $(elem).removeClass('loading');
-            }
-            else {
-                alert(data);
-            }
-        },
-        error: function (response) {
-            alert('Server Error...!');
-        }
-    });
-}
 function InsertUpdatePanelRateLink() {
     var url = config.baseUrl + "/api/EDP/PanelRateListLinkInsertUpdate";
     var objBO = {};
@@ -187,20 +125,11 @@ function BindPanelRateLinkItem(PanelId) {
         contentType: "application/json;charset=utf-8",
         success: function (data) {
             var htmldata = ""; var pnlname = "";
-            var option = "";
             $("#tblRateLinkDetails tbody").empty();
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
-                    $.each(data.ResultSet.Table, function (k, v) {     
-                        option = "";
-                        for (var i = 1; i <= v.rc; i++) {
-                            if (i < 10)
-                                option += (v.seqNo == i) ? '<option selected>' + '0' + i : '<option>' + '0' + i;
-                            else
-                                option += (v.seqNo == i) ? '<option selected>' + i : '<option>' + i;
-                        }
+                    $.each(data.ResultSet.Table, function (k, v) {
                         if (pnlname != v.PanelName) {
-                         
                             htmldata += '<tr>';
                             htmldata += '<td colspan="10" style="font-weight:bold;background-color:#d1ebfb">' + v.PanelName + '</td>';
                             htmldata += '</tr>';
@@ -209,16 +138,10 @@ function BindPanelRateLinkItem(PanelId) {
                         htmldata += '<tr>';
                         htmldata += '<td style="display:none"><a class="btn btn-warning btn-xs" href="javascript:void(0)" data-panelid=' + v.PanelId + ' data-ratelistid=' + v.RateListId + '>Update</a ></td>'; //onclick="selectRow(this);UpdateItemRateListSingle(this)"                        
                         htmldata += '<td>' + v.RateListName + '</td>';
-                        htmldata += '<td>';
-                        htmldata += '<select onchange=UpdateRateListSeqNo(this) data-autoid=' + v.AutoId + '>';
-                        htmldata += option;                   
-                        htmldata += '</select>';
-                        htmldata += '</td>';
-                        htmldata += '<td><button onclick=DeleteRateList(this) data-autoid=' + v.AutoId + ' class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button></td>';
+                        htmldata += '<td>' + v.seqNo + '</td>';
                         htmldata += '</tr>';
                     });
                     $("#tblRateLinkDetails tbody").append(htmldata);
-                    // $("#tblRateLinkDetails tbody select").select2();
                 }
                 else {
                     $("#tblRateLinkDetails tbody").empty();

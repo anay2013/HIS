@@ -5,7 +5,7 @@ $(document).ready(function () {
     searchTable('txtSearchPanelRateList', 'tblPanelRateList');
     BindDoctorList('Y');
     $('table thead').on('change', 'input:checkbox', function () {
-        var isCheck = $(this).is(':checked');
+        var isCheck = $(this).is(':checked');       
         if (isCheck)
             $(this).parents('table').find('tbody').find('input:checkbox').prop('checked', true);
         else
@@ -165,14 +165,9 @@ function SaveRateList() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            if (data.includes('Success')) {
-                alert(data);
-                $('input:checkbox').removeAttr('checked');
-                $("input:text").val("");
-            }
-            else {
-                alert(data);
-            }
+            alert(data);
+            $('input:checkbox').removeAttr('checked');
+            $("input:text").val("");
         },
         error: function (response) {
             alert('Server Error...!');
@@ -180,15 +175,11 @@ function SaveRateList() {
     });
 }
 function GetPanelRateList(RateListId) {
-    $('#tblPanelRateList').show();
-    $('#tblPanelRateList tbody').empty();
     var url = config.baseUrl + "/api/master/DoctorMasterQueries";
     var objBO = {};
     objBO.hosp_id = Active.unitId;
     objBO.login_id = Active.userId;
-    objBO.doctorId = _doctorId;
     objBO.prm_1 = RateListId;
-    objBO.prm_2 = $('input[name=status]:checked').val();
     objBO.Logic = "GetDoctorRateListByPanel";
     $.ajax({
         method: "POST",
@@ -200,6 +191,8 @@ function GetPanelRateList(RateListId) {
             var htmldata, roombillcategory;
             htmldata = roombillcategory = "";
             if (data.ResultSet.Table.length > 0) {
+                $('#tblPanelRateList').show();
+                $('#tblPanelRateList tbody').empty();
                 $.each(data.ResultSet.Table, function (key, val) {
                     if (roombillcategory != val.RoomBillingCategory) {
                         htmldata += '<tr class="uprow">';

@@ -174,10 +174,10 @@ function BedAvailability(roomType) {
 
                         listBed += "<div class='status'>";
                         //listBed += "<i class='fa fa-bed'>&nbsp;</i>";
-                        if (val.roomStatus =='Vacant')
-                            listBed += "<img src='/Content/logo/bedEmpty.png' />";
+                        if (val.roomStatus == 'Vacant')
+                            listBed += "<img src='" + config.rootUrl + "/Content/logo/bedEmpty.png' />";
                         else
-                            listBed += "<img src='/Content/logo/bedPatient.png' />";
+                            listBed += "<img src='" + config.rootUrl + "/Content/logo/bedPatient.png' />";
 
                         listBed += "<label class=" + val.roomStatus + ">" + val.roomStatus + "</label>";
                         listBed += "</div>";
@@ -238,9 +238,9 @@ function BedAvailabilityTotal(total) {
 
                         listBed += "<div class='status'>";
                         if (val.roomStatus == 'Vacant')
-                            listBed += "<img src='/Content/logo/bedEmpty.png' />";
+                            listBed += "<img src='" + config.rootUrl + "/Content/logo/bedEmpty.png' />";
                         else
-                            listBed += "<img src='/Content/logo/bedPatient.png' />";
+                            listBed += "<img src='" + config.rootUrl + "/Content/logo/bedPatient.png' />";
                         listBed += "<label class=" + val.roomStatus + ">" + val.roomStatus + "</label>";
                         listBed += "</div>";
 

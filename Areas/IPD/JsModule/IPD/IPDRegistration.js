@@ -144,7 +144,7 @@ function OnLoadQueries() {
                     });
                 }
                 if (Object.keys(data.ResultSet.Table8).length) {
-                    $('#ddlRquestRoom').empty().append($('<option>Select</option>')).trigger('change.select2');
+                    $('#ddlRquestRoom').empty().append($('<option>-</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table8, function (key, val) {
                         $('#ddlRquestRoom').append($('<option></option>').val(val.RoomTypeId).html(val.RoomTypeName));
                     });
@@ -454,7 +454,7 @@ function IPDRegistration() {
         }
     }
 } function PrintReceipt() {
-    var url = "/IPD/Print/AdmissionAndDischargeReport?_IPDNo=" + _IPOPNo;
+    var url = config.documentServerUrl+"/IPD/Print/AdmissionAndDischargeReport?_IPDNo=" + _IPOPNo;
     window.open(url, '_blank');
 }
 function IPDRegisteredInfo(IPDNo) {

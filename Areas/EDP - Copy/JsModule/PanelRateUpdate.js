@@ -183,16 +183,16 @@ function GetItemRateList() {
                 }
             }
         },
-        complete: function (response) {         
+        complete: function (response) {
             var index = -1;
             $("#tblRateListInfo tbody tr").each(function () {
                 if ($(this).hasClass('itemGroup'))
                     index++;
-                    
+
                 if ($(this).find('td:eq(1)').text() == 'OPD') {
                     var content = $(this).closest('tr').html();
                     $(this).closest('tr').remove();
-                    $('#tblRateListInfo > tbody > tr.itemGroup').eq(index).after("<tr class='bg-success'>" + content+"</tr>");                    
+                    $('#tblRateListInfo > tbody > tr.itemGroup').eq(index).after("<tr class='bg-success'>" + content + "</tr>");
                 }
             });
         },
@@ -217,7 +217,7 @@ function RoomChargesUpdate() {
                     'RoomBillCategory': $(this).find("td:eq(1)").text(),
                     'hosp_id': Active.HospId,
                     'login_id': Active.userId,
-                    'Logic': 'RoomChargesUpdate',
+                    'Logic': 'SelectedUpdate',
                 });
             }
         }
@@ -292,4 +292,3 @@ function ValidateRatePanel() {
     }
     return true;
 }
-

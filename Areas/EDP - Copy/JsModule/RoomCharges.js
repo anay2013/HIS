@@ -99,7 +99,7 @@ function RoomChargesUpdate() {
                 'RoomBillCategory': $(this).closest('tr').find('td:eq(2)').text(),
                 'hosp_id': Active.HospId,
                 'login_id': Active.userId,
-                'Logic': 'RoomChargesUpdate',
+                'Logic': 'SelectedUpdate',
             });
         });
     });

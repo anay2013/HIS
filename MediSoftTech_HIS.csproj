@@ -274,8 +274,12 @@
     <Content Include="Areas\EDP\JsModule\PanelRateUpdate.js" />
     <Content Include="Areas\EDP\JsModule\RateForceToSelfPanel.js" />
     <Content Include="Areas\EDP\JsModule\RoomCharges.js" />
+    <Content Include="Areas\EDP\Views\EDP\ConsultationRateList.cshtml" />
     <Content Include="Areas\EDP\Views\EDP\PanelRateItem.cshtml" />
     <Content Include="Areas\EDP\Views\EDP\PanelRateLink.cshtml" />
+    <Content Include="Areas\EDP\Views\EDP\PanelRateUpdate.cshtml" />
+    <Content Include="Areas\EDP\Views\EDP\RateForceToSelfPanel.cshtml" />
+    <Content Include="Areas\EDP\Views\EDP\RoomCharges.cshtml" />
     <Content Include="Areas\EDP\Views\web.config" />
     <Content Include="Areas\EMR\JsModule\CaseSheet.js" />
     <Content Include="Areas\IPD\JsModule\DoctorView\_TemplateMaster.js" />
@@ -1146,6 +1150,9 @@
     <Content Include="Content\js\tableHeadFixer.js" />
     <Content Include="Content\js\widgets-init.js" />
     <Content Include="Content\logo\admin.png" />
+    <Content Include="Content\logo\bedEmpty.png" />
+    <Content Include="Content\logo\bedPatient.png" />
+    <Content Include="Content\logo\bedTotal.png" />
     <Content Include="Content\logo\bg.jpg" />
     <Content Include="Content\logo\ChandanLogo.jpg" />
     <Content Include="Content\logo\gear.gif" />
@@ -1829,8 +1836,8 @@
     <Compile Include="Areas\IPD\Controllers\IndentController.cs" />
     <Compile Include="Areas\IPD\Controllers\IPDController.cs" />
     <Compile Include="Areas\IPD\Controllers\PrintableController.cs" />
-    <Compile Include="Areas\IPD\Repository\FormTemplateRepo.cs" />
     <Compile Include="Areas\IPD\IPDAreaRegistration.cs" />
+    <Compile Include="Areas\IPD\Repository\FormTemplateRepo.cs" />
     <Compile Include="Areas\IPD\Repository\PrintIPDForms.cs" />
     <Compile Include="Areas\IPOPAudit\Controllers\PrintController.cs" />
     <Compile Include="Areas\IPOPAudit\IPOPAuditAreaRegistration.cs" />
@@ -2126,8 +2133,6 @@
     <Content Include="Areas\Pharmacy\Views\Report\CreditSaleSummary.cshtml" />
     <Content Include="Areas\CSSD\Views\Master\RenewSet.cshtml" />
     <Content Include="Areas\CSSD\Views\Movement\SetStatus.cshtml" />
-    <Content Include="Areas\EDP\Views\EDP\ConsultationRateList.cshtml" />
-    <Content Include="Areas\EDP\Views\EDP\RoomCharges.cshtml" />
     <Content Include="Areas\Online\Views\Online\CMEPayment.cshtml" />
     <Content Include="Areas\Online\Views\Online\CMERegistration.cshtml" />
     <Content Include="Areas\Online\Views\Online\HealthCard.cshtml" />
@@ -2135,7 +2140,6 @@
     <Content Include="Areas\Dietician\Views\Dietician\DietAnalytics.cshtml" />
     <Content Include="Areas\IPD\Views\Shared\_BedAvailability.cshtml" />
     <Content Include="Areas\Dietician\Views\Dietician\DietInTakeEntry.cshtml" />
-    <Content Include="Areas\EDP\Views\EDP\RateForceToSelfPanel.cshtml" />
     <Content Include="Areas\IPD\Views\Shared\_IPDCommunication.cshtml" />
     <Content Include="Areas\IPD\Views\Shared\_DischargeStatus.cshtml" />
     <Content Include="Areas\IPD\Views\BillingView\_BillingClearance.cshtml" />
@@ -2182,7 +2186,6 @@
     <Content Include="Areas\LinenLaundry\Views\LinenMovement\LLDamageTransfer.cshtml" />
     <Content Include="Areas\Lab\Views\Sample\TestHiqPDF.cshtml" />
     <Content Include="Areas\IPD\Views\DoctorView\_PatientReportAnalysis.cshtml" />
-    <Content Include="Areas\EDP\Views\EDP\PanelRateUpdate.cshtml" />
     <Content Include="Areas\Accounts\Views\Ledger\PharAmountTakeOver.cshtml" />
     <Content Include="Areas\EMR\Views\Document\CaseSheet.cshtml" />
     <Content Include="Areas\EMR\Views\web.config" />

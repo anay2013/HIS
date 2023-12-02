@@ -2,6 +2,7 @@
 var dataVal = [];
 var activeSeachbox;
 var IsActiveSeachbox = false;
+var _DoctorId = null;
 $(document).ready(function () {
     CloseSidebar()
     PatientHeaderInfo();
@@ -16,6 +17,22 @@ $(document).ready(function () {
     searchTable('txtSearchGroup', 'tblGroup');
     searchList('txtSearchLaboratoryRadiology', 'LaboratoryRadiologyList');
     var vaVal;
+    $('#tblTemplateMaster tbody').on('click', '.fa-edit', function () {
+        debugger
+        selectRow($(this));
+        var templateId = $(this).data('templateid');
+        var templateName = $(this).closest('tr').find('td:eq(0)').text();
+        var Description = $(this).closest('tr').find('td:eq(1)').text();
+        $('#txtTemplateName').val(templateName);
+        $('#txtDescription').val(Description);
+        $('#btnSavePresTemplate').switchClass('btn-success', 'btn-warning').text('Update');
+        $('#hiddenTemplateMasterId').text(templateId);
+    })
+    $('#tblTemplateMaster tbody').on('click', '.fa-arrow-right', function () {
+        selectRow($(this));
+        var templateId = $(this).data('templateid');
+        $('#hiddenTemplateMasterId').text(templateId);
+    })
     $('table thead').find('input[type=text]').attr('placeholder', 'Search..');
     $('#tblVisualAcuity').on('click', 'button.fillValue', function () {
         vaVal = $(this);
@@ -94,7 +111,7 @@ $(document).ready(function () {
     $(document).find('.MedicineTemplate:eq(0) thead').on('click', '.addmedNewRow', function () {
         var tbody = "";
         tbody += "<tr data-itemid='newId'>";
-        tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><button id='btnEye' class='btn btn-success btn-xs'>LE</button></td>";
+        tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><button id='btnEye' class='btn btn-success btn-xs'>BE</button></td>";
         tbody += "<td style='padding:2px;'><label class='editable' contenteditable='true'></label></td>";
         tbody += "<td style='padding:2px;'><label id='med1' onkeyup=Dose(this) class='editable' contenteditable='true'></label></td>";
         tbody += "<td style='padding:2px;'><label id='med2' class='editable' contenteditable='true'></label></td>";
@@ -133,22 +150,12 @@ $(document).ready(function () {
         //    })
         //}       
     });
-    $(document).on('keydown', function (e) {
-        if (e.keyCode == 45) {
-            $('.MedicineTemplate:eq(0) thead .addmedNewRow').trigger('click');
-            $('.MedicineTemplate:eq(0) tbody tr:last').find('td:first').trigger('click');
-        }
-        if (e.keyCode == 46) {
-            $('.MedicineTemplate:eq(0) tbody').find('tr:last').remove();
-            $('.MedicineTemplate:eq(0) tbody').find('tr:last').find('td:eq(1)').trigger('click');
-        }
-    });
     $('#PatientVisits #tblPatientVisits tbody').on('click', '.currentVisit', function () {
         var appno = $(this).closest('tr').find('td:eq(0)').text();
         sessionStorage.setItem('AppId', appno);
         $('.modal-body').find('input[name=Lens]').prop('checked', false);
         $('input:checkbox').prop('checked', false);
-        $('input:text').val('');   
+        $('input:text').val('');
         PatientHeaderInfo();
         GetPrescriptionInfo();
         GetVisualAcuityInfo();
@@ -208,13 +215,13 @@ $(document).ready(function () {
         var val = $(this).text();
         switch (val) {
             case (val = 'NA'):
-                $(this).text('LE').switchClass('btn-info', 'btn-success');
+                $(this).text('BE').switchClass('btn-info', 'btn-success');
                 return;
-            case (val = 'LE'):
+            case (val = 'BE'):
                 $(this).text('RE').switchClass('btn-success', 'btn-warning');
                 return;
             case (val = 'RE'):
-                $(this).text('BE').switchClass('btn-warning', 'btn-danger');
+                $(this).text('LE').switchClass('btn-warning', 'btn-danger');
                 return;
             default:
                 $(this).text('NA').switchClass('btn-danger', 'btn-info');
@@ -249,6 +256,7 @@ $(document).ready(function () {
         $(this).addClass('SelectedGlass', 1000).append('&nbsp;<i class="fa fa-check-circle">&nbsp;</i>');
     });
     $('#txtSearchProduct').keydown(function (e) {
+        debugger
         var tbody = $('#tblnavigate').find('tbody');
         var selected = tbody.find('.selected');
         var KeyCode = e.keyCode;
@@ -413,7 +421,8 @@ function InTake(elem) {
 function Route(elem) {
     var data = [
         "Oral",
-        "Nose"
+        "Nose",
+        "Tropical"
     ];
     $(elem).autocomplete({
         source: data
@@ -457,7 +466,7 @@ function InOutMarking() {
     }
     var url = config.baseUrl + "/api/Appointment/Opd_InOutMarking";
     var objBO = {};
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.BookingNo = sessionStorage.getItem('AppId');
     objBO.inputDate = '1900/01/01';
     objBO.Prm1 = '-';
@@ -485,13 +494,51 @@ function InOutMarking() {
         }
     });
 }
+function NextFollowUpVisit() {
+    var url = config.baseUrl + "/api/Appointment/Opd_AppointmentUpdate";
+    var objBO = {};
+    if ($('#txtFollowUpDate').val() == '') {
+        alert('Please Provide Next Follow Up Date');
+        return
+    }
+    objBO.UHID = $('#txtHeaderUHID').text();
+    objBO.app_no = sessionStorage.getItem('AppId');
+    objBO.DoctorId = _DoctorId;
+    objBO.AppDate = $('#txtFollowUpDate').val();
+    objBO.prm_1 = $('#txtFollowUpRemark').val();
+    objBO.AppInTime = '00:00';
+    objBO.AppOutTime = '00:00';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'NextFollowUpVisit';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('Successfully')) {
+                alert('Saved Successfully..');
+                $('#txtFollowUpDate').val('');
+                $('#txtFollowUpRemark').val('');
+                $('#modalNextFollowUp').modal('hide');
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function CloseAppointment() {
     if (confirm('Are you sure want to close this Appointment.')) {
         var url = config.baseUrl + "/api/Appointment/Opd_AppointmentUpdate";
         var objBO = {};
         var d = new Date();
         objBO.app_no = sessionStorage.getItem('AppId');
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.AppDate = d;
         objBO.AppInTime = '02:49';
         objBO.AppOutTime = '02:55';
@@ -544,6 +591,7 @@ function PatientHeaderInfo() {
                     $('#tblOPTHHeaderInfo tbody').find('tr:eq(0)').find('td:eq(14)').text(val.AppDate);
 
                     $('#tblOPTHHeaderInfo').find('tr:eq(1)').find('td:eq(2)').text(val.DoctorName);
+                    _DoctorId = val.DoctorId;
                     $('#tblOPTHHeaderInfo').find('tr:eq(1)').find('td:eq(6)').text(val.UHID);
                     $('#tblOPTHHeaderInfo').find('tr:eq(1)').find('td:eq(10)').text(val.PanelName);
 
@@ -591,7 +639,7 @@ function GetGroupInfo(template) {
     var url = config.baseUrl + "/api/master/CPOE_OPTHMasterQueries";
     var objBO = {};
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.login_id = Active.userId;
@@ -631,7 +679,7 @@ function GetItemInfoByGroup() {
     var url = config.baseUrl + "/api/master/CPOE_OPTHMasterQueries";
     var objBO = {};
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = $('#tblGroup tbody tr.select-row').find('td:eq(1)').text();
@@ -677,13 +725,14 @@ function GetItemInfoByGroup() {
 function GetPrescriptionInfo() {
     $('#ulExamination').empty();
     $('#ulDiagnosis').empty();
+    $('#ulHistory').empty();
     $('#ulAdvice').empty();
     $('#ulChiefComplaints').empty();
     var url = config.baseUrl + "/api/master/CPOE_OPTHQueries";
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '-';
@@ -750,6 +799,17 @@ function GetPrescriptionInfo() {
                     });
                     $('#ulChiefComplaints').append(tbody2);
                 }
+                if (Object.keys(data.ResultSet.Table3).length > 0) {
+                    var tbodyHistory = "";
+                    var temp2 = "";
+                    var count = 0;
+                    tbodyHistory += "<li class='group'>History</li> ";
+                    $.each(data.ResultSet.Table4, function (key, val) {
+                        count++;
+                        tbodyHistory += "<li data-itemid=" + val.ItemId + ">" + val.ItemName + "<span class='delete' onclick=DeleteItem(" + val.auto_id + ")>X</span></li> ";
+                    });
+                    $('#ulHistory').append(tbodyHistory);
+                }
             }
         },
         error: function (response) {
@@ -767,7 +827,7 @@ function InsertGroup() {
     objBO.GroupType = 'Opthalmic';
     objBO.TemplateType = '';
     objBO.GroupName = $('#txtGroupName').val();
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -800,7 +860,7 @@ function UpdateGroupStatus(AutoId) {
     objBO.GroupType = '-';
     objBO.TemplateType = '-';
     objBO.GroupName = '-';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '-';
     objBO.ItemName = '-';
@@ -833,7 +893,7 @@ function InsertTemplateInfoAsGroup() {
     objBO.GroupType = 'Opthalmic';
     objBO.TemplateType = 'Opthalmic';
     objBO.GroupName = $('#txtSelectedGroupName').text();
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = $('#txtTemplate').data('templateid');
     objBO.ItemId = '';
     objBO.ItemName = $('#txtItemName').val();
@@ -864,7 +924,7 @@ function DeleteItem(AutoId) {
         var url = config.baseUrl + "/api/Prescription/CPOE_InsertDeletePrescribedItems";
         var objBO = {};
         objBO.AutoId = AutoId;
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = '';
         objBO.app_no = '';
         objBO.ItemId = '';
@@ -898,7 +958,7 @@ function DeleteAllItem(TemplateId) {
         var url = config.baseUrl + "/api/Prescription/CPOE_InsertDeletePrescribedItems";
         var objBO = {};
         objBO.AutoId = 0;
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = TemplateId;
         objBO.app_no = sessionStorage.getItem('AppId');
         objBO.ItemId = '';
@@ -932,7 +992,7 @@ function DeleteAllPresMedicine() {
         var url = config.baseUrl + "/api/Prescription/CPOE_InsertDeletePrescribedItems";
         var objBO = {};
         objBO.AutoId = 0;
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = '';
         objBO.app_no = sessionStorage.getItem('AppId');
         objBO.ItemId = '';
@@ -965,7 +1025,7 @@ function DeleteAllSpecInfo() {
         var url = config.baseUrl + "/api/Prescription/CPOE_InsertDeletePrescribedItems";
         var objBO = {};
         objBO.AutoId = 0;
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = '';
         objBO.app_no = sessionStorage.getItem('AppId');
         objBO.ItemId = '';
@@ -1031,7 +1091,7 @@ function DeleteAllReport() {
         var url = config.baseUrl + "/api/Prescription/CPOE_InsertDeletePrescribedItems";
         var objBO = {};
         objBO.AutoId = 0;
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = '';
         objBO.app_no = sessionStorage.getItem('AppId');
         objBO.ItemId = '';
@@ -1083,7 +1143,7 @@ function InsertPresItems() {
             });
         }
     })
-    ipPrescription.DoctorId = Active.doctorId;
+    ipPrescription.DoctorId = _DoctorId;
     ipPrescription.app_no = sessionStorage.getItem('AppId');
     ipPrescription.login_id = Active.userId;
     ipPrescription.Logic = 'NonMedicineItemsForOPTH';
@@ -1119,7 +1179,7 @@ function GetChiefComplaintInfo() {
     var url = config.baseUrl + "/api/master/CPOE_OPTHMasterQueries";
     var objBO = {};
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.ItemId = '';
@@ -1141,7 +1201,7 @@ function GetChiefComplaintInfo() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;
                         tbody += "<tr>";
-                        tbody += "<td><button id='btnEye' class='btn btn-success btn-xs'>LE</button><input type='checkbox'/></td>";
+                        tbody += "<td><button id='btnEye' class='btn btn-success btn-xs'>BE</button><input type='checkbox'/></td>";
                         tbody += "<td>" + val.ItemId + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td class='flex'>";
@@ -1169,7 +1229,7 @@ function InsertChiefComplaintItem() {
     objBO.GroupType = 'Chief Complaint';
     objBO.TemplateType = 'Chief Complaint';
     objBO.GroupName = 'Chief Complaint';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = 'T00014';
     objBO.ItemId = '';
     objBO.ItemName = $('#txtChiefComplaintItemName').val();
@@ -1218,7 +1278,7 @@ function InsertChiefComplaintPresItems() {
             });
         }
     })
-    ipPrescription.DoctorId = Active.doctorId;
+    ipPrescription.DoctorId = _DoctorId;
     ipPrescription.app_no = sessionStorage.getItem('AppId');
     ipPrescription.login_id = Active.userId;
     ipPrescription.Logic = 'NonMedicineItemsForOPTH';
@@ -1261,7 +1321,7 @@ function InsertCustomMedicine(elem) {
         'ItemName': $(elem).closest('.divCustom').find('#txtCustomMedicine').val(),
         'Remark': '-',
     });
-    ipPrescription.DoctorId = Active.doctorId;
+    ipPrescription.DoctorId = _DoctorId;
     ipPrescription.app_no = sessionStorage.getItem('AppId');
     ipPrescription.login_id = Active.userId;
     ipPrescription.Logic = 'NonMedicineItemsForOPTH';
@@ -1298,7 +1358,7 @@ function InsertDiagnosisItem() {
     objBO.GroupType = 'Diagnosis';
     objBO.TemplateType = 'Diagnosis';
     objBO.GroupName = 'Diagnosis';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = 'T00012';
     objBO.ItemId = '';
     objBO.ItemName = $('#txtDiagnosisItemName').val();
@@ -1330,7 +1390,7 @@ function GetDiagnosisInfo() {
     var url = config.baseUrl + "/api/master/CPOE_OPTHMasterQueries";
     var objBO = {};
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.app_no = sessionStorage.getItem('AppId');
@@ -1352,7 +1412,7 @@ function GetDiagnosisInfo() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;
                         tbody += "<tr>";
-                        tbody += "<td><button id='btnEye' class='btn btn-success btn-xs'>LE</button><input type='checkbox'/></td>";
+                        tbody += "<td><button id='btnEye' class='btn btn-success btn-xs'>BE</button><input type='checkbox'/></td>";
                         tbody += "<td>" + val.ItemId + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td class='flex'>";
@@ -1397,7 +1457,7 @@ function InsertDiagnosisPresItems() {
             });
         }
     })
-    ipPrescription.DoctorId = Active.doctorId;
+    ipPrescription.DoctorId = _DoctorId;
     ipPrescription.app_no = sessionStorage.getItem('AppId');
     ipPrescription.login_id = Active.userId;
     ipPrescription.Logic = 'NonMedicineItemsForOPTH';
@@ -1426,6 +1486,141 @@ function InsertDiagnosisPresItems() {
         }
     });
 }
+//History Items operation
+function InsertHistoryItem() {
+    var url = config.baseUrl + "/api/master/CPOE_OPTHInsertUpdateMaster";
+    var objBO = {};
+    objBO.GroupType = 'History';
+    objBO.TemplateType = 'History';
+    objBO.GroupName = 'History';
+    objBO.DoctorId = _DoctorId;
+    objBO.TemplateId = 'T00016';
+    objBO.ItemId = '';
+    objBO.ItemName = $('#txtHistoryItemName').val();
+    objBO.IsFavourite = 0;
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'InsertTemplateInfo';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('success')) {
+                GetHistoryInfo();
+            }
+            else {
+                alert(data);
+            };
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function GetHistoryInfo() {
+    $('#modalHistory').modal('show');
+    $('#tblHistoryItem tbody').empty();
+    var url = config.baseUrl + "/api/master/CPOE_OPTHMasterQueries";
+    var objBO = {};
+    objBO.TemplateType = '';
+    objBO.DoctorId = _DoctorId;
+    objBO.TemplateId = '';
+    objBO.ItemId = '';
+    objBO.app_no = sessionStorage.getItem('AppId');
+    objBO.ItemName = 'History';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'GetItemInfoByGroup';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    var tbody = "";
+                    var temp = "";
+                    var count = 0;
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        count++;
+                        tbody += "<tr>";
+                        tbody += "<td><button id='btnEye' class='btn btn-success btn-xs'>NA</button><input type='checkbox'/></td>";
+                        tbody += "<td>" + val.ItemId + "</td>";
+                        tbody += "<td>" + val.ItemName + "</td>";
+                        tbody += "<td class='flex'>";
+                        tbody += "<input type='number' id='txtDuration' value='0' class='form-control duration'/>";
+                        tbody += "<select id='ddlDay' class='form-control duration'>";
+                        tbody += "<option>Days</option>";
+                        tbody += "<option>Month</option>";
+                        tbody += "<option>Year</option>";
+                        tbody += "</select>";
+                        tbody += "</td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblHistoryItem tbody').append(tbody);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function InsertHistoryPresItems() {
+    var url = config.baseUrl + "/api/Prescription/CPOE_InsertPrescribedItems";
+    var ipPrescription = {};
+    var objItems = [];
+    var objMedicine = [];
+    var objBO = {};
+    if ($('#tblHistoryItem tbody input:checkbox:checked').length == 0) {
+        alert('Item Not Selected.');
+        return;
+    };
+    $('#tblHistoryItem tbody tr').each(function () {
+        if ($(this).closest('tr').find('td:eq(0)').find('input:checkbox').is(':checked')) {
+            var duration = $(this).closest('tr').find('td:eq(3)').find('#txtDuration').val() + ' ' + $(this).closest('tr').find('td:eq(3)').find('select option:selected').text();
+            objItems.push({
+                'TemplateId': 'T00016',
+                'Duration': duration,
+                'EyesInfo': $(this).closest('tr').find('td:eq(0)').find('button').text(),
+                'ItemId': $(this).closest('tr').find('td:eq(1)').text(),
+                'ItemName': $(this).closest('tr').find('td:eq(2)').text(),
+                'Remark': '-',
+            });
+        }
+    })
+    ipPrescription.DoctorId = _DoctorId;
+    ipPrescription.app_no = sessionStorage.getItem('AppId');
+    ipPrescription.login_id = Active.userId;
+    ipPrescription.Logic = 'NonMedicineItemsForOPTH';
+
+    objBO.objItems = objItems;
+    objBO.objMedicine = objMedicine;
+    objBO.ipPrescription = ipPrescription;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('Success')) {
+                //alert(data)
+                GetPrescriptionInfo();
+                $('#modalHistory').modal('hide');
+            }
+            else {
+                alert(data)
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 //Visual Acuity operation
 function GetVisualAcuityInfo() {
     $('#tblVisualAcuity tbody').find('input').val('');
@@ -1433,7 +1628,7 @@ function GetVisualAcuityInfo() {
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -1451,20 +1646,20 @@ function GetVisualAcuityInfo() {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;
-                        $('#tblVisualAcuity tbody tr:eq(0)').find('td:eq(1)').find('input:text').val(val.left_unaided);
-                        $('#tblVisualAcuity tbody tr:eq(0)').find('td:eq(2)').find('input:text').val(val.right_unaided);
+                        $('#tblVisualAcuity tbody tr:eq(0)').find('td:eq(2)').find('input:text').val(val.left_unaided);
+                        $('#tblVisualAcuity tbody tr:eq(0)').find('td:eq(1)').find('input:text').val(val.right_unaided);
 
-                        $('#tblVisualAcuity tbody tr:eq(1)').find('td:eq(1)').find('input:text').val(val.left_withPinHole);
-                        $('#tblVisualAcuity tbody tr:eq(1)').find('td:eq(2)').find('input:text').val(val.right_withPinHole);
+                        $('#tblVisualAcuity tbody tr:eq(1)').find('td:eq(2)').find('input:text').val(val.left_withPinHole);
+                        $('#tblVisualAcuity tbody tr:eq(1)').find('td:eq(1)').find('input:text').val(val.right_withPinHole);
 
-                        $('#tblVisualAcuity tbody tr:eq(2)').find('td:eq(1)').find('input:text').val(val.left_withPrvGlass);
-                        $('#tblVisualAcuity tbody tr:eq(2)').find('td:eq(2)').find('input:text').val(val.right_withPrvGlass);
+                        $('#tblVisualAcuity tbody tr:eq(2)').find('td:eq(2)').find('input:text').val(val.left_withPrvGlass);
+                        $('#tblVisualAcuity tbody tr:eq(2)').find('td:eq(1)').find('input:text').val(val.right_withPrvGlass);
 
-                        $('#tblVisualAcuity tbody tr:eq(3)').find('td:eq(1)').find('input:text').val(val.left_PrvSpectPowerDist);
-                        $('#tblVisualAcuity tbody tr:eq(3)').find('td:eq(2)').find('input:text').val(val.right_PrvSpectPowerDist);
+                        $('#tblVisualAcuity tbody tr:eq(3)').find('td:eq(2)').find('input:text').val(val.left_PrvSpectPowerDist);
+                        $('#tblVisualAcuity tbody tr:eq(3)').find('td:eq(1)').find('input:text').val(val.right_PrvSpectPowerDist);
 
-                        $('#tblVisualAcuity tbody tr:eq(4)').find('td:eq(1)').find('input:text').val(val.left_PrvSpectPowerNear);
-                        $('#tblVisualAcuity tbody tr:eq(4)').find('td:eq(2)').find('input:text').val(val.right_PrvSpectPowerNear);
+                        $('#tblVisualAcuity tbody tr:eq(4)').find('td:eq(2)').find('input:text').val(val.left_PrvSpectPowerNear);
+                        $('#tblVisualAcuity tbody tr:eq(4)').find('td:eq(1)').find('input:text').val(val.right_PrvSpectPowerNear);
                     });
                 }
             }
@@ -1478,7 +1673,7 @@ function InsertVisualAcuity() {
     var url = config.baseUrl + "/api/Prescription/CPOE_OPTHVisualAcuityInsertUpdate";
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.left_unaided = $('#tblVisualAcuity tbody tr:eq(0)').find('td:eq(2)').find('input:text').val();
     objBO.right_unaided = $('#tblVisualAcuity tbody tr:eq(0)').find('td:eq(1)').find('input:text').val();
     objBO.left_withPinHole = $('#tblVisualAcuity tbody tr:eq(1)').find('td:eq(2)').find('input:text').val();
@@ -1510,7 +1705,7 @@ function InsertVisualAcuity() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            if (data.includes('Successfully')) {
+            if (data.includes('Success')) {
                 //alert(data)
                 GetVisualAcuityInfo();
             }
@@ -1564,12 +1759,12 @@ function GetOtherInfo() {
     $('input[id=PosteriorRatina]').prop('checked', false);
     $('input[id=EyeLens]').prop('checked', false);
     $('#tblSpecDetail tbody').find('input:checkbox').prop('checked', false);
-    $('#tblOtherInfo tbody').find('input').val('');   
+    $('#tblOtherInfo tbody').find('input').val('');
     var url = config.baseUrl + "/api/master/CPOE_OPTHQueries";
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -1597,14 +1792,14 @@ function GetOtherInfo() {
                         else
                             $('input[id=EyeLens]').prop('checked', false);
 
-                        $('#tblOtherInfo tbody tr:eq(0)').find('td:eq(1)').find('input:text').val(val.left_MCT);
-                        $('#tblOtherInfo tbody tr:eq(0)').find('td:eq(2)').find('input:text').val(val.right_MCT);
+                        $('#tblOtherInfo tbody tr:eq(0)').find('td:eq(2)').find('input:text').val(val.left_MCT);
+                        $('#tblOtherInfo tbody tr:eq(0)').find('td:eq(1)').find('input:text').val(val.right_MCT);
 
-                        $('#tblOtherInfo tbody tr:eq(1)').find('td:eq(1)').find('input:text').val(val.left_AT);
-                        $('#tblOtherInfo tbody tr:eq(1)').find('td:eq(2)').find('input:text').val(val.right_AT);
+                        $('#tblOtherInfo tbody tr:eq(1)').find('td:eq(2)').find('input:text').val(val.left_AT);
+                        $('#tblOtherInfo tbody tr:eq(1)').find('td:eq(1)').find('input:text').val(val.right_AT);
 
-                        $('#tblOtherInfo tbody tr:eq(2)').find('td:eq(1)').find('input:text').val(val.left_Gonioscopy);
-                        $('#tblOtherInfo tbody tr:eq(2)').find('td:eq(2)').find('input:text').val(val.right_Gonioscopy);
+                        $('#tblOtherInfo tbody tr:eq(2)').find('td:eq(2)').find('input:text').val(val.left_Gonioscopy);
+                        $('#tblOtherInfo tbody tr:eq(2)').find('td:eq(1)').find('input:text').val(val.right_Gonioscopy);
                     });
                 }
             }
@@ -1622,7 +1817,7 @@ function InsertAdviceItem() {
     objBO.GroupType = 'Advice';
     objBO.TemplateType = 'Advice';
     objBO.GroupName = 'Advice';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = 'T00013';
     objBO.ItemId = '';
     objBO.ItemName = $('#txtAdviceItemName').val();
@@ -1654,7 +1849,7 @@ function GetAdviceInfo() {
     var url = config.baseUrl + "/api/master/CPOE_OPTHMasterQueries";
     var objBO = {};
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = 'Advice';
@@ -1675,7 +1870,7 @@ function GetAdviceInfo() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;
                         tbody += "<tr>";
-                        tbody += "<td><button id='btnEye' class='btn btn-success btn-xs'>LE</button><input type='checkbox'/></td>";
+                        tbody += "<td><button id='btnEye' class='btn btn-success btn-xs'>BE</button><input type='checkbox'/></td>";
                         tbody += "<td>" + val.ItemId + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td class='flex'>";
@@ -1720,7 +1915,7 @@ function InsertAdvicePresItems() {
             });
         }
     })
-    ipPrescription.DoctorId = Active.doctorId;
+    ipPrescription.DoctorId = _DoctorId;
     ipPrescription.app_no = sessionStorage.getItem('AppId');
     ipPrescription.login_id = Active.userId;
     ipPrescription.Logic = 'NonMedicineItemsForOPTH';
@@ -1951,7 +2146,7 @@ function GetOPTHMedicineInfo() {
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = 'Diagnosis';
@@ -1999,7 +2194,7 @@ function GetPrevSpecInfo() {
     objBO.UHID = $('#tblOPTHHeaderInfo tbody').find('#txtHeaderUHID').text();
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -2073,7 +2268,7 @@ function GetPrevVisualAcuity() {
     objBO.UHID = $('#tblOPTHHeaderInfo tbody').find('#txtHeaderUHID').text();
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -2145,7 +2340,7 @@ function PresMedicineInfo() {
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = 'Diagnosis';
@@ -2158,7 +2353,6 @@ function PresMedicineInfo() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            console.log(data)
             var tbody = "";
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
@@ -2168,7 +2362,7 @@ function PresMedicineInfo() {
                         tbody += "<td>" + val.Item_name + "</td>";
                         tbody += "<td>" + val.med_dose + "</td>";
                         tbody += "<td>" + val.med_times + "</td>";
-                        tbody += "<td>" + val.med_duration + " Days</td>";
+                        tbody += "<td>" + val.med_duration + "</td>";
                         tbody += "<td>" + val.med_intake + "</td>";
                         tbody += "<td>" + val.med_route + "</td>";
                         tbody += "<td>" + val.remark + "</td>";
@@ -2214,7 +2408,7 @@ function GetSpecInfo() {
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -2294,7 +2488,7 @@ function InsertMedicinePresItems() {
     $('#tblPresMedicineInfo tbody tr').each(function () {
         objMedicine.push({
             'app_no': sessionStorage.getItem('AppId'),
-            'DoctorId': Active.doctorId,
+            'DoctorId': _DoctorId,
             'Item_id': $(this).data('itemid'),
             'EyesInfo': $(this).find('td:eq(0)').find('button').text().trim(),
             'Item_name': $(this).find('td:eq(1)').text().trim(),
@@ -2307,7 +2501,7 @@ function InsertMedicinePresItems() {
             'remark': $(this).find('td:eq(7)').text(),
         });
     });
-    ipPrescription.DoctorId = Active.doctorId;
+    ipPrescription.DoctorId = _DoctorId;
     ipPrescription.app_no = sessionStorage.getItem('AppId');
     ipPrescription.login_id = Active.userId;
     ipPrescription.Logic = 'MedicineItemsForOPTH';
@@ -2364,12 +2558,12 @@ function NearSpecInfo() {
 }
 function checkEmpty(index) {
     var count = 0;
-    $('#tblSpecDetail tbody tr:eq(' + index+')').find('td').each(function () {
+    $('#tblSpecDetail tbody tr:eq(' + index + ')').find('td').each(function () {
         if ($.trim($(this).find('input').val()) != "" && $(this).index() != 0) count += 1; else count += 0;
     })
     return count;
 }
-function InsertDistanceSpecInfo() {     
+function InsertDistanceSpecInfo() {
     var url = config.baseUrl + "/api/Prescription/CPOE_InsertSpecInfo";
     var objBO = {};
     var SpecInfo = [];
@@ -2377,7 +2571,7 @@ function InsertDistanceSpecInfo() {
         if (checkEmpty($(this).index()) < 1) return
         SpecInfo.push({
             'AutoId': 0,
-            'DoctorId': Active.doctorId,
+            'DoctorId': _DoctorId,
             'app_no': sessionStorage.getItem('AppId'),
             'SpecType': $(this).find('td:eq(0)').find('button').text(),
             'left_Sph': $(this).find('td:eq(5)').find('input:text').val(),
@@ -2398,7 +2592,7 @@ function InsertDistanceSpecInfo() {
             'login_id': Active.userId,
             'Logic': 'InsertSpecInfo'
         });
-    });    
+    });
     $.ajax({
         method: "POST",
         url: url,
@@ -2424,7 +2618,7 @@ function GetLabTestInfo() {
     var url = config.baseUrl + "/api/master/CPOE_OPTHMasterQueries";
     var objBO = {};
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -2463,7 +2657,7 @@ function GetPresTestInfo() {
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
     objBO.TemplateType = '';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = '';
     objBO.ItemId = '';
     objBO.ItemName = '';
@@ -2496,7 +2690,7 @@ function MarkAsFavourite(TemplateId, ItemId, ItemName, IsFav, temp, ul) {
     var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
     var objBO = {};
     objBO.TemplateType = 'Doctor';
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.TemplateId = TemplateId;
     objBO.ItemId = ItemId;
     objBO.prm_1 = ItemName;
@@ -2532,7 +2726,7 @@ function FilteredTemplate(FilterType, TemplateId, ul) {
     var objBO = {};
     objBO.TemplateId = TemplateId;
     objBO.FilterType = FilterType;
-    objBO.DoctorId = Active.doctorId;
+    objBO.DoctorId = _DoctorId;
     objBO.Logic = 'FilteredTemplateOfDoctor';
     $.ajax({
         method: "POST",
@@ -2571,7 +2765,7 @@ function DeleteTemplateInfo(TemplateId, ItemId) {
         var url = config.baseUrl + "/api/master/CPOE_InsertUpdateMaster";
         var objBO = {};
         objBO.TemplateType = 'Doctor';
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = TemplateId;
         objBO.ItemId = ItemId;
         objBO.ItemName = '';
@@ -2645,7 +2839,7 @@ function InsertTestPresItems() {
             'Remark': '-',
         });
     })
-    ipPrescription.DoctorId = Active.doctorId;
+    ipPrescription.DoctorId = _DoctorId;
     ipPrescription.app_no = sessionStorage.getItem('AppId');
     ipPrescription.login_id = Active.userId;
     ipPrescription.Logic = 'NonMedicineItems';
@@ -2704,7 +2898,7 @@ function InsertTemplateInfo() {
         var url = config.baseUrl + "/api/master/CPOE_InsertUpdateMaster";
         var objBO = {};
         objBO.TemplateType = 'Doctor';
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = $('#ddlDoctorTemplate option:selected').val();
         objBO.ItemId = '';
         objBO.ItemName = $('#txtDoctorItemName').val();
@@ -2740,7 +2934,7 @@ function UpdateTemplateInfo() {
         var url = config.baseUrl + "/api/master/CPOE_InsertUpdateMaster";
         var objBO = {};
         objBO.TemplateType = 'Doctor';
-        objBO.DoctorId = Active.doctorId;
+        objBO.DoctorId = _DoctorId;
         objBO.TemplateId = $('#ddlDoctorTemplate option:selected').val();
         objBO.ItemId = $('#hiddenDoctorTempItemId').text();
         objBO.ItemName = $('#txtDoctorItemName').val();
@@ -2847,5 +3041,310 @@ function Test() {
     t += "</table>";
     $('#divEntryForm').empty();
     $('#divEntryForm').html(t);
+}
 
+//Medicine template Section
+function UseMediTempInfo() {
+    var tbody = "";
+    $('#MedicineTemplateForDB tbody tr').each(function () {
+        tbody += "<tr data-itemid='newId'>";
+        tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><button id='btnEye' class='btn btn-success btn-xs'>BE</button></td>";
+        tbody += "<td>" + $(this).find('td:eq(0)').text() + "</td>";
+        tbody += "<td>" + $(this).find('td:eq(1)').text() + "</td>";
+        tbody += "<td>" + $(this).find('td:eq(2)').text() + "</td>";
+        tbody += "<td>" + $(this).find('td:eq(3)').text() + "</td>";
+        tbody += "<td>" + $(this).find('td:eq(4)').text() + "</td>";
+        tbody += "<td>" + $(this).find('td:eq(5)').text() + "</td>";
+        tbody += "<td>" + $(this).find('td:eq(6)').text() + "</td>";
+        tbody += "</tr>";
+    });
+    $('#tblPresMedicineInfo tbody').append(tbody);
+    $('#modalPresMediTemplate').modal('hide');
+}
+function GetMedicineTemplate() {
+    $('#MedicineTemplateForDB tbody').empty();
+    $('#tblTemplateMaster tbody').empty();
+    $('#hiddenTemplateMasterId').text('');
+    var url = config.baseUrl + "/api/Prescription/CPOE_PrescriptionAdviceQueries";
+    var objBO = {};
+    objBO.DoctorId = _DoctorId;
+    objBO.Logic = 'DoctorTemplateItems';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var tbody = "";
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table9).length > 0) {
+                    $.each(data.ResultSet.Table9, function (key, val) {
+                        tbody += "<tr>";
+                        tbody += "<td>" + val.med_TemplateName + "</td>";
+                        tbody += "<td>" + val.Description + "</td>";
+                        tbody += "<td>";
+                        tbody += "<span data-templateid=" + val.med_TemplateId + " onclick=DeleteMediTemplate('" + val.med_TemplateId + "',this) class='btn-danger fa fa-trash btnTempMaster'></span>&nbsp;";
+                        tbody += "<span data-templateid=" + val.med_TemplateId + " class='btn-warning fa fa-edit btnTempMaster'></span>&nbsp;";
+                        tbody += "<span data-templateid=" + val.med_TemplateId + " onclick=GetCPOEMedicineTemplateInfo('" + val.med_TemplateId + "') class='btn-primary fa fa-arrow-right btnTempMaster'></span>";
+                        tbody += "</td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblTemplateMaster tbody').append(tbody);
+                }
+            }
+            $('#modalPresMediTemplate').modal('show');
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+
+function InsertMedicineTemplate() {
+    var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
+    var objBO = {};
+    objBO.DoctorId = _DoctorId;
+    objBO.TemplateId = $('#hiddenTemplateMasterId').text();
+    objBO.TemplateName = $('#txtTemplateName').val();
+    objBO.Description = $('#txtDescription').val();
+    objBO.login_id = Active.userId;
+    objBO.Logic = ($('#btnSavePresTemplate').text() == 'Save') ? 'InsertCPOEMedicineTemplate' : 'UpdateCPOEMedicineTemplate';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('success')) {
+                GetMedicineTemplate();
+                ClearTemplateMaster();
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+
+function GetCPOEMedicineTemplateInfo(templateId) {
+    var url = config.baseUrl + "/api/Prescription/CPOE_PrescriptionAdviceQueries";
+    var objBO = {};
+    objBO.TemplateId = templateId;
+    objBO.DoctorId = _DoctorId;
+    objBO.Logic = 'GetCPOEMedicineTemplateInfo';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            console.log(data)
+            $('#MedicineTemplateForDB tbody').empty();
+            var tbody = "";
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr data-itemid=" + val.Item_id + ">";
+                        tbody += "<td>" + val.Item_name + "</td>";
+                        tbody += "<td>" + val.med_dose + "</td>";
+                        tbody += "<td>" + val.med_times + "</td>";
+                        tbody += "<td>" + val.med_duration + " Days</td>";
+                        tbody += "<td>" + val.med_intake + "</td>";
+                        tbody += "<td>" + val.med_route + "</td>";
+                        tbody += "<td>" + val.remark + "</td>";
+                        tbody += "<td><button class='btn btn-danger btn-xs' onclick=DeleteMedicineInfo('" + val.med_TemplateId + "','" + val.Item_id + "',this)><i class='fa fa-trash'>&nbsp;</i>Delete</button></td>";
+                        tbody += "</tr>";
+                    });
+                    $('#MedicineTemplateForDB tbody').append(tbody);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function DeleteMediTemplate(tempid, elem) {
+    if (confirm('Are you sure to delete this Template? All Related Medicine Items will be deleted from this Template Group.')) {
+        var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
+        var objBO = {};
+        objBO.DoctorId = _DoctorId;
+        objBO.TemplateId = tempid;
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'DeleteCPOEMedicineTemplate';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('success')) {
+                    GetCPOEMedicineTemplateInfo(tempid);
+                    $(elem).closest('tr').remove();
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function InsertMedicineTemplateInfo() {
+    if (ValidationMediInfo()) {
+        var url = config.baseUrl + "/api/Prescription/CPOE_InsertMedicineTemplateInfo";
+        var objBO = {};
+        objBO.med_TemplateId = $('#hiddenTemplateMasterId').text();
+        objBO.DoctorId = _DoctorId;
+        objBO.Item_id = $('#txtItemID').val();
+        objBO.Item_name = $('#txtSearchProduct').val();
+        objBO.med_dose = $('#txtFreqMaster').val();
+        objBO.med_times = $('#txtDuration').val();
+        objBO.med_duration = $('#txtDuration').val();
+        objBO.med_intake = $('#txtIntake').val();
+        objBO.med_route = $('#txtRoute').val();
+        objBO.qty = $('#txtQty').val();
+        objBO.remark = $('#txtRemark').val();
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'InsertMedicineTemplateInfo';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('success')) {
+                    GetCPOEMedicineTemplateInfo(objBO.med_TemplateId);
+                    $('.modal-body').find('input:text').val('');
+                    $('.modal-body').find('select').prop('selectedIndex', '0').change();
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function DeleteMedicineInfo(tempid, itemid, elem) {
+    if (confirm('are you sure?')) {
+        var url = config.baseUrl + "/api/Prescription/CPOE_InsertMedicineTemplateInfo";
+        var objBO = {};
+        objBO.med_TemplateId = tempid;
+        objBO.DoctorId = _DoctorId;
+        objBO.Item_id = itemid;
+        objBO.Logic = 'DeleteMedicineInfo';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('success')) {
+                    $(elem).closest('tr').remove();
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function ClearTemplateMaster() {
+
+    $('#txtTemplateName').val('');
+    $('#txtDescription').val('');
+    $('#hiddenTemplateMasterId').text('');
+    $('#btnSavePresTemplate').switchClass('btn-warning', 'btn-success').text('Save');
+
+}
+function ValidationMediInfo() {
+    var hiddenTemplateId = $('#hiddenTemplateMasterId').text();
+    var Item_id = $('#txtItemID').val();
+    var Item_name = $('#txtSearchProduct').val();
+    var med_dose = $('#txtFreqMaster').val();
+    var med_times = $('#txtDuration').val();
+    var med_duration = $('#txtDuration').val();
+    var med_intake = $('#txtIntake').val();
+    var med_route = $('#txtRoute').val();
+    var qty = $('#txtQty').val();
+    var remark = $('#txtRemark').val();
+
+    if (hiddenTemplateId == '') {
+        alert('Please Choose Template From Left Template List');
+        return false;
+    }
+    if (Item_id == '') {
+        alert('Please Choose Medicine..');
+        $('#txtSearchProduct').css('border-color', 'red').focus();
+        return false;
+    }
+    else {
+        $('#txtSearchProduct').removeAttr('style');
+    }
+    if (Item_name == '') {
+        alert('Please Choose Item Name');
+        $('#txtSearchProduct').css('border-color', 'red').focus();
+        return false;
+    }
+    else {
+        $('#txtSearchProduct').removeAttr('style');
+    }
+    if (med_dose == 'Select') {
+        alert('Please Choose Dose..');
+        $('#txtFreqMaster').css('border-color', 'red').focus();
+        return false;
+    }
+    else {
+        $('#txtFreqMaster').removeAttr('style');
+    }
+    if (med_intake == 'Select') {
+        alert('Please Choose In Take..');
+        $('#txtIntake').css('border-color', 'red').focus();
+        return false;
+    }
+    else {
+        $('#txtIntake').removeAttr('style');
+    }
+    //if (med_duration=='') {
+    //	alert('Please Provide Duration..');
+    //	$('#txtDuration').css('border-color', 'red');
+    //	return false;
+    //}
+    //else {
+    //	$('#txtDuration').removeAttr('style');
+    //}
+    //if (med_duration == '') {
+    //	alert('Please Provide Duration..');
+    //	$('#txtDuration').css('border-color', 'red');
+    //	return false;
+    //}
+    //else {
+    //	$('#txtDuration').removeAttr('style');
+    //}
+    //if (qty == '') {
+    //	alert('Please Provide Qty..');
+    //	$('#txtQty').css('border-color', 'red');
+    //	return false;
+    //}
+    //else {
+    //	$('#txtQty').removeAttr('style');
+    //}
+    return true;
 }

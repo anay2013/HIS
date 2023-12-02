@@ -15,6 +15,7 @@
         });
     });
     $('#tblPatientRegister tbody').on('click', '.PatientReports', function () {
+
         $('span[data-pname]').text($(this).data('pname'));
         $('span[data-ipdno]').text($(this).data('ipdno'));
         $('span[data-uhidno]').text($(this).data('uhidno'));
@@ -22,19 +23,16 @@
         $('span[data-doctor]').text($(this).data('doctor'));
         $('span[data-gender]').text($(this).data('gender'));
 
+        //$('#formList').find("button").prop('disabled', false);
+
+        $('#ddlDoumentList').prop('disabled', false);
+
     });
 
     $('#ddlDoumentList').on('change', function () {
         var val = $(this).find('option:selected').text();
         SurgeryDocList(val)
 
-        //if (val == "Surgery")
-
-        //    $('#formList').find(".formInfo button").prop('disabled', false);
-        //else if (val == "Blood Bank")
-        //    $('#formList').find(".formInfo button").prop('disabled', true);
-        //else
-        //    $('#formList').find(".formInfo button").prop('disabled', true);
     });
 
     DoucmentListGroup();
@@ -81,7 +79,7 @@ function DoucmentListGroup() {
     objBO.Prm1 = '';
     objBO.Prm2 = '';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'DocListGroup';
+    objBO.Logic = 'FormListGroup';
     $.ajax({
         method: "POST",
         url: url,
@@ -92,7 +90,8 @@ function DoucmentListGroup() {
             console.log(data);
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
-                    $('#ddlDoumentList').append($('<option></option>').val('ALL').html('ALL')).select2();
+                    //$('#ddlDoumentList').append($('<option></option>').val('Select').html('Select')).select2();
+                    $('#ddlDoumentList').append($('<option></option>').val('Select').html('Select')).select2().prop('disabled', true);
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#ddlDoumentList').append($('<option></option>').val(val.FormFor).html(val.FormFor));
 
@@ -173,8 +172,7 @@ function SurgeryDocList(selectvalue) {
     objBO.Prm1 = selectvalue;
     objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'SurgeryDocList';
-
+    objBO.Logic = 'FormList';
     $.ajax({
         method: "POST",
         url: url,
@@ -182,23 +180,25 @@ function SurgeryDocList(selectvalue) {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            console.log(data)
+            console.log(data);
             var html = "";
-            //var docUrl = "FormS11";
+            var count = 0;
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         html += '<div class="col-md-12 formInfo">';
-                        html += '<button id="btnPrintSurgery" onclick=PrintData("' + val.DocUrl + '")  class="btn btn-warning btn-sm " style="float:right; margin-top:2px;width: 63px;height: 26px;font-size: 12px;"><i class="fa fa-print"></i>&nbsp;Print</button>';
+                        html += '<label class="hide">' + JSON.stringify(data.ResultSet.Table[count]) + '</label>';
+                        html += '<button id="btnPrintSurgery" data-type="Single" onclick=PrintData(this) class="btn btn-warning btn-sm" style="float:right; margin-top:2px;width: 63px;height: 26px;font-size: 12px;"><i class="fa fa-print"></i>&nbsp;Print</button>';
                         html += '<label class="formName">' + val.DocName + '</label>';
                         html += '<label class="Details">' + val.DocDescription + '</label>';
                         html += '</div>';
+                        count++;
                     })
                     $('#formList').append(html);
-
-                    // $('#formList').find(".formInfo button").prop('disabled', true);
-
                 }
+                var printAllButton = $('<button class="btn btn-success btn-sm" data-type="Multi" id="btnPrintAll" onclick=PrintData(this) style="margin-top:10px;">Print All</button>');
+                $('#formList').append(printAllButton);
+
             }
         },
         error: function (error) {
@@ -206,8 +206,7 @@ function SurgeryDocList(selectvalue) {
         }
     });
 }
-function PrintData(docUrl) {
-
+function PrintData(element) {
     var pname = $('[data-pname]').text();
     var uhidno = $('[data-uhidno]').text();
     var gender = $('[data-gender]').text();
@@ -215,12 +214,61 @@ function PrintData(docUrl) {
     var ipdno = $('[data-ipdno]').text();
     var doctor = $('[data-doctor]').text();
     var Diagnosis = "";
-    var url = config.documentServerUrl + docUrl + '?pname=' + pname + ' &uhidno=' + uhidno + ' &gender=' + gender + '&admitdate=' + admitdate + '&ipdno=' + ipdno + ' &doctor=' + doctor + '&Diagnosis=' + Diagnosis;
-    window.open(url, '_blank');
+    var objBO = [];
+
+    if ($(element).data('type') == 'Single') {
+        var info = JSON.parse($(element).closest('.formInfo').find('label').eq(0).text());
+        objBO.push({
+            'UsedIn': $('#ddlDoumentList option:selected').val(),
+            'templateName': info.templateName,
+            'DocName': info.DocName,
+            'PageName': info.PageName,
+            'PageIndex': info.PageIndex,
+            'pname': pname,
+            'uhidno': uhidno,
+            'gender': gender,
+            'admitdate': admitdate,
+            'ipdno': ipdno,
+            'doctor': doctor,
+            'Diagnosis': Diagnosis,
+            'PageOrientation': info.PageOrientation,
+            'FormHeader': info.FormHeader
+        });
+    }
+    if ($(element).data('type') == 'Multi') {
+        $("#formList .formInfo").each(function () {
+            var info = JSON.parse($(this).find('label').eq(0).text());
+            objBO.push({
+                'UsedIn': $('#ddlDoumentList option:selected').val(),
+                'templateName': info.templateName,
+                'DocName': info.DocName,
+                'PageName': info.PageName,
+                'PageIndex': info.PageIndex,
+                'pname': pname,
+                'uhidno': uhidno,
+                'gender': gender,
+                'admitdate': admitdate,
+                'ipdno': ipdno,
+                'doctor': doctor,
+                'Diagnosis': Diagnosis,
+                'PageOrientation': info.PageOrientation,
+                'FormHeader': info.FormHeader
+
+            });
+        })
+    }
+
+    $.ajax({
+        method: "POST",
+        url: config.rootUrl + '/IPD/Print/PrintFormsList',
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        complete: function () {
+            window.open(config.rootUrl + '/IPD/Print/PrintForms', '_blank');
+        },
+    });
 }
-
-
-
 function FloorAndPanelList() {
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
     var objBO = {};
