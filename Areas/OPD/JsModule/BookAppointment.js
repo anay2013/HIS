@@ -1791,6 +1791,7 @@ function AuthenticateOTP() {
     if (val != _empDiscountInfo.otp) {
         alert('Incorrect OTP.');
         $('#txtVerifyOTP').val('');
+
         return;
     }
     if (val == _empDiscountInfo.otp) {
