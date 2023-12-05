@@ -183,7 +183,9 @@ function CalSurgeryAmount(elem) {
                 'adl_disc_amount': 0,
                 'net_amount': 0,
                 'IsUrgent': '-',
-                'Remark': '-'
+                'Remark': '-',
+                'TaxRate': 0,
+                'TaxAmt': 0
             });
         }
     });
@@ -269,7 +271,7 @@ function CalculateDiscount(elem) {
     var _totalCharges = 0;
     var _disAmount = 0;
     var _netAmount = 0;
-    $('#tblSurguryItemCalculation tbody tr:not(.total)').each(function () {        
+    $('#tblSurguryItemCalculation tbody tr:not(.total)').each(function () {
         var charges = parseFloat($(this).find('td').eq(5).find('input').val());
         var disPerc = parseFloat($(this).find('td').eq(6).find('input').val());
         var disAmount = parseFloat($(this).find('td').eq(7).find('input').val());
@@ -285,7 +287,7 @@ function CalculateDiscount(elem) {
         $(this).find('td').eq(8).find('input').val(netAmount.toFixed(2));
         _totalCharges += parseFloat($(this).find('td').eq(5).find('input').val());
         _disAmount += parseFloat($(this).find('td').eq(7).find('input').val());
-        _netAmount += parseFloat($(this).find('td').eq(8).find('input').val());       
+        _netAmount += parseFloat($(this).find('td').eq(8).find('input').val());
     });
     $(elem).parents('table').find('tbody').find('tr:last').find('td:eq(1)').find('b').text(_totalCharges);
     $(elem).parents('table').find('tbody').find('tr:last').find('td:eq(3)').find('b').text(_disAmount);
@@ -328,7 +330,9 @@ function ItemInsert() {
                 'adl_disc_amount': $(this).find('td:eq(7)').find('input').val(),
                 'net_amount': $(this).find('td:eq(8)').find('input').val(),
                 'IsUrgent': 'N',
-                'Remark': '-'
+                'Remark': '-',
+                'TaxRate': 0,
+                'TaxAmt': 0
             });
         });
         objRateList.push({
@@ -351,7 +355,9 @@ function ItemInsert() {
             'adl_disc_amount': totalCharges - netAmount,
             'net_amount': netAmount,
             'IsUrgent': 'N',
-            'Remark': '-'
+            'Remark': '-',
+            'TaxRate': 0,
+            'TaxAmt': 0
         });
         objBooking.hosp_id = Active.HospId;
         objBooking.DoctorId = _doctorId;
@@ -383,7 +389,7 @@ function ItemInsert() {
                 alert('Server Error...!');
             }
         });
-    }  
+    }
 }
 
 function SurguryItemCalculation(elem) {

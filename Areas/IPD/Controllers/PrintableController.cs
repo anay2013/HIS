@@ -697,9 +697,12 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "StaffAlloted.pdf");
         }
+
         public FileResult IPDBillSummary(string _IPDNo,string _ReceiptList, string _BillPrintType)
         {
             _IPDNo = UtilityClass.decoding(_IPDNo);
+            if (_ReceiptList == null)
+                _ReceiptList = "";
             _ReceiptList = UtilityClass.decoding(_ReceiptList);
 
             PdfGenerator pdfConverter = new PdfGenerator();
@@ -786,7 +789,11 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             h.Append("<td style='width:1%;'><b>:</b></td>");
             h.Append("<td style='width:29%;'>" + PanelName + "</td>");
             h.Append("</tr>");
-            if(_BillPrintType=="BillTypeCategorywiseOnly")
+
+            b.Append("<div style='height:110px;'>");
+            b.Append("</div>");
+
+            if (_BillPrintType=="BillTypeCategorywiseOnly")
             b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>"+ BillType + " Summary Bill Detail</h2>");
 
             if (_BillPrintType == "ItemWise")
@@ -1307,7 +1314,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
             pdfConverter.Header_Enabled = true;
             pdfConverter.Footer_Enabled = true;
-            pdfConverter.Footer_Hight = 17;
+            pdfConverter.Footer_Hight = 60;
             pdfConverter.Header_Hight = 70;
             pdfConverter.PageMarginLeft = 20;
             pdfConverter.PageMarginRight = 15;

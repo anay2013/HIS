@@ -2225,7 +2225,7 @@
     <Content Include="Areas\Lab\Views\Report\InvestigationReport.cshtml" />
     <Content Include="Areas\Lab\Views\Report\LabWorkBook.cshtml" />
     <Content Include="Areas\Lab\Views\Master\ConsentMaster.cshtml" />
-    <Content Include="Areas\OPD\Views\Appointment\BugAudit.cshtml" />
+    <Content Include="Areas\MIS\Views\Finance\BugAudit.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

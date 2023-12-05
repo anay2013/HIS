@@ -281,7 +281,7 @@ function UploadPanelRateList(elem) {
             formData.append("ExcelFile", files[0]);
             formData.append("LoginId", Active.userId);
             formData.append("HospId", Active.HospId);
-            formData.append("Logic", "RoomChargesUpdate");
+            formData.append("Logic", "BulkUpdate");
             $.ajax({
                 url: config.baseUrl + '/api/EDP/ReadFile',
                 type: 'POST',

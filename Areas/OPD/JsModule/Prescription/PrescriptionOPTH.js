@@ -65,12 +65,26 @@ $(document).ready(function () {
             $('.MedicineTemplate:eq(0) tbody td').each(function () {
                 if ($(this).index() == 0)
                     return
+
+                if ($(this).index() == 1) {
+                    if ($(this).find('label').length > 0) {
+                        if ($(this).text().trim() == '') {
+                            $(this).closest('tr').remove();
+                            return
+                        }
+                    }
+                }
+
                 //$(this).find('.delRow').remove();
 
                 $(this).removeAttr('style');
                 var content = '';
                 if ($(this).find('input:text').length > 0)
                     content = $(this).find('input:text').val();
+                else if ($(this).find('select').length > 0)
+                    content = $(this).find('label').text() + ' ' + $(this).find('select option:selected').text();
+                else if ($(this).find('label').length > 0)
+                    content = $(this).find('label').text();
                 else
                     content = $(this).text();
 
@@ -113,11 +127,16 @@ $(document).ready(function () {
         tbody += "<tr data-itemid='newId'>";
         tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><button id='btnEye' class='btn btn-success btn-xs'>BE</button></td>";
         tbody += "<td style='padding:2px;'><label class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med1' onkeyup=Dose(this) class='editable' contenteditable='true'></label></td>";
+        tbody += "<td style='padding:2px;'><label id='med1' onkeyup=Dose(this) class='editable' contenteditable='true'>ONE DROP</label></td>";
         tbody += "<td style='padding:2px;'><label id='med2' class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med3' class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med4' onkeyup=InTake(this) class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med5' onkeyup=Route(this) class='editable' contenteditable='true'></label></td>";
+        tbody += "<td style='display: flex;'><label id='med3' class='editable' contenteditable='true'></label>";
+        tbody += "<select class='editable'>";
+        tbody += "<option>Day</option>";
+        tbody += "<option>Week</option>";
+        tbody += "<option>Month</option>";
+        tbody += "</select>";
+        tbody += "</td>";
+        tbody += "<td style='padding:2px;'><label id='med5' onkeyup=Route(this) class='editable' contenteditable='true'>TOPICAL</label></td>";
         tbody += "<td style='padding:2px;'><label id='med6' class='editable' contenteditable='true'></label></td>";
         tbody += "</tr>";
         $('.MedicineTemplate:eq(0) tbody').append(tbody);
@@ -2363,7 +2382,6 @@ function PresMedicineInfo() {
                         tbody += "<td>" + val.med_dose + "</td>";
                         tbody += "<td>" + val.med_times + "</td>";
                         tbody += "<td>" + val.med_duration + "</td>";
-                        tbody += "<td>" + val.med_intake + "</td>";
                         tbody += "<td>" + val.med_route + "</td>";
                         tbody += "<td>" + val.remark + "</td>";
                         tbody += "</tr>";
@@ -2495,10 +2513,10 @@ function InsertMedicinePresItems() {
             'med_dose': $(this).find('td:eq(2)').text().trim(),
             'med_times': $(this).find('td:eq(3)').text().trim(),
             'med_duration': $(this).find('td:eq(4)').text(),
-            'med_intake': $(this).find('td:eq(5)').text(),
-            'med_route': $(this).find('td:eq(6)').text(),
+            'med_intake': '-',
+            'med_route': $(this).find('td:eq(5)').text(),
             'qty': '0',
-            'remark': $(this).find('td:eq(7)').text(),
+            'remark': $(this).find('td:eq(6)').text(),
         });
     });
     ipPrescription.DoctorId = _DoctorId;
@@ -3049,13 +3067,12 @@ function UseMediTempInfo() {
     $('#MedicineTemplateForDB tbody tr').each(function () {
         tbody += "<tr data-itemid='newId'>";
         tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><button id='btnEye' class='btn btn-success btn-xs'>BE</button></td>";
-        tbody += "<td>" + $(this).find('td:eq(0)').text() + "</td>";
+        tbody += "<td>" + $(this).find('td:eq(0)').text().split('~')[0] + "</td>";
         tbody += "<td>" + $(this).find('td:eq(1)').text() + "</td>";
         tbody += "<td>" + $(this).find('td:eq(2)').text() + "</td>";
         tbody += "<td>" + $(this).find('td:eq(3)').text() + "</td>";
         tbody += "<td>" + $(this).find('td:eq(4)').text() + "</td>";
         tbody += "<td>" + $(this).find('td:eq(5)').text() + "</td>";
-        tbody += "<td>" + $(this).find('td:eq(6)').text() + "</td>";
         tbody += "</tr>";
     });
     $('#tblPresMedicineInfo tbody').append(tbody);
@@ -3155,7 +3172,6 @@ function GetCPOEMedicineTemplateInfo(templateId) {
                         tbody += "<td>" + val.med_dose + "</td>";
                         tbody += "<td>" + val.med_times + "</td>";
                         tbody += "<td>" + val.med_duration + " Days</td>";
-                        tbody += "<td>" + val.med_intake + "</td>";
                         tbody += "<td>" + val.med_route + "</td>";
                         tbody += "<td>" + val.remark + "</td>";
                         tbody += "<td><button class='btn btn-danger btn-xs' onclick=DeleteMedicineInfo('" + val.med_TemplateId + "','" + val.Item_id + "',this)><i class='fa fa-trash'>&nbsp;</i>Delete</button></td>";
@@ -3313,14 +3329,6 @@ function ValidationMediInfo() {
     }
     else {
         $('#txtFreqMaster').removeAttr('style');
-    }
-    if (med_intake == 'Select') {
-        alert('Please Choose In Take..');
-        $('#txtIntake').css('border-color', 'red').focus();
-        return false;
-    }
-    else {
-        $('#txtIntake').removeAttr('style');
     }
     //if (med_duration=='') {
     //	alert('Please Provide Duration..');

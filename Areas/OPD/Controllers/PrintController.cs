@@ -70,17 +70,17 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px'>" + HospitalName + "</h1>");
                     b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;'>" + HospitalAddress + "<br/>Phone No : " + HospitalPhone + ", Email : " + HospitalEmail + "</h3>");
                     //b.Append("<h2 style='text-align:center;font-size:21px;'></h2>");
-                    b.Append("<h1 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Receipt</h1>");
+                    b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Receipt</h3>");
                     b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
-                    b.Append("<table style='width:100%;font-size:17px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
+                    b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
                     b.Append("<tr>");
-                    b.Append("<td><b>Token No</b></td>");
-                    b.Append("<td><b>:</b></td>");
-                    b.Append("<td><b style='font-size:20px;'>" + dr["token_no"].ToString() + "</b></td>");
+                    b.Append("<td>Token No</td>");
+                    b.Append("<td></td>");
+                    b.Append("<td>" + dr["token_no"].ToString() + "</td>");
                     b.Append("<td>&nbsp;</td>");
-                    b.Append("<td><b>Appointment No</b></td>");
-                    b.Append("<td><b>:</b></td>");
-                    b.Append("<td><b>" + dr["app_no"].ToString() + "</b></td>");
+                    b.Append("<td>Appointment No</td>");
+                    b.Append("<td>:</td>");
+                    b.Append("<td>" + dr["app_no"].ToString() + "</td>");
                     b.Append("</tr>");
                     b.Append("<tr>");
                     b.Append("<td>UHID No.</td>");
@@ -143,16 +143,16 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     CancelAgainstNo = dr["visitType"].ToString();
                 }
             }
-            b.Append("<table style='width:100%;font-size:18px;text-align:left;border:0px solid #dcdcdc;margin-top:10px;'>");
+            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-top:10px;'>");
             b.Append("<tr>");
             b.Append("<th colspan='5'><hr style='margin-bottom:-6px;border:1px solid #000'></th>");
             b.Append("</tr>");
             b.Append("<tr>");
-            b.Append("<th style='width:60%'>Particulars</th>");
-            b.Append("<th style='width:10%;text-align:right'>Units</th>");
-            b.Append("<th style='width:10%;text-align:right'>Rate(₹)</th>");
-            b.Append("<th style='width:10%;text-align:right'>Discount(₹)</th>");
-            b.Append("<th style='width:10%;text-align:right'>Amount(₹)</th>");
+            b.Append("<th style='width:60%;padding:3px'>Particulars</th>");
+            b.Append("<th style='width:10%;text-align:right;padding:5px'>Units</th>");
+            b.Append("<th style='width:10%;text-align:right;padding:5px'>Rate(₹)</th>");
+            b.Append("<th style='width:10%;text-align:right;padding:5px'>Discount(₹)</th>");
+            b.Append("<th style='width:10%;text-align:right;padding:5px'>Amount(₹)</th>");
             b.Append("</tr>");
             b.Append("<tr>");
             b.Append("<th colspan='5'><hr style='margin-top:-4px;border:1px solid #000'></th>");
@@ -184,17 +184,15 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
 
             if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
             {
-                b.Append("<table style='width:100%;font-size:14px;text-align:left;' border='1' cellspacing='0'>");
+                b.Append("<table style='width:80%;font-size:14px;text-align:left;' border='1' cellspacing='0'>");
                 b.Append("<tr>");
-                b.Append("<th style='padding-left:5px'>Type</th>");
-                b.Append("<th style='padding-left:5px'>Pay Mode</th>");
+                b.Append("<th style='padding-left:5px'>Payment Mode</th>");
                 b.Append("<th style='padding-left:5px'>Receipt Date</th>");
                 b.Append("<th style='text-align:right'>Amount</th>");
                 b.Append("</tr>");
                 foreach (DataRow dr in ds.Tables[3].Rows)
                 {
                     b.Append("<tr>");
-                    b.Append("<td style='padding-left:5px'>" + dr["payType"].ToString() + "</td>");
                     b.Append("<td style='padding-left:5px'>" + dr["PayMode"].ToString() + "</td>");
                     b.Append("<td style='padding-left:5px'>" + dr["receiptDate"].ToString() + "</td>");
                     b.Append("<td style='text-align:right;padding-right:5px'>" + Convert.ToDecimal(dr["Amount"]).ToString("F") + "</td>");
@@ -208,7 +206,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                 b.Append("Cancel Against No : " + CancelAgainstNo);
                 b.Append("</p>");
             }
-            b.Append("<img src=" + BarcodeGenerator.GenerateBarCode(appNo, 300, 70) + " style='float:left;margin-top:25px;' />");
+            //b.Append("<img src=" + BarcodeGenerator.GenerateBarCode(appNo, 300, 70) + " style='float:left;margin-top:25px;' />");
             b.Append("</div>");
             b.Append("<div style='width:40%;float:right'>");
             b.Append("<table style='font-size:14px;float:right' border='0' cellspacing='0'>");
@@ -224,7 +222,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                 b.Append("</tr>");
             }
             b.Append("<tr style='font-size:16px'>");
-            b.Append("<td colspan='3' style='width:80%;text-align:right'><b>Amount : </b></td>");
+            b.Append("<td colspan='3' style='width:80%;text-align:right'><b>Net Amount : </b></td>");
             b.Append("<td style='width:15%;text-align:right;white-space: nowrap;'><b>" + NetAmount.ToString("F") + "</b></td>");
             b.Append("</tr>");
 
@@ -267,10 +265,10 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("</div>");
 
             b.Append("<div style='width:100%;float:left'>");
-            b.Append("<p style='font-size:14px'><b>Please download our Chandan24x7 App at Play Store & App Store.</b></p>");
-            b.Append("<p style='font-size:11px'>Note : this is a computerized Bill and does not require Seal & Sign</p>");
+            b.Append("<p style='font-size:14px'><b>Please download our Chandan24x7 App.</b></p>");
+            b.Append("<p style='font-size:11px'>Note : This is a computerized Bill and does not require Seal & Sign</p>");
             b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
-            b.Append("<table style='font-size:17px;text-align:center;border:0px solid #dcdcdc;width:100%'>");
+            b.Append("<table style='font-size:13px;text-align:center;border:0px solid #dcdcdc;width:100%'>");
             b.Append("<tr>");
             b.Append("<td>" + DateTime.Now.ToString("dd-mm-yyyy hh:mm") + "</td>");
             b.Append("<td>Printed By : " + ActiveUser + "</td>");
@@ -841,7 +839,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                 {
                     count++;
                     tbody += "<tr style='text-align:center'>" +
-                "<td style='padding-left:3px;'>" + count + "</td><td style='padding-left:3px;'>" + dr["EyesInfo"].ToString() + "</td><td style='padding-left:3px;'>" + dr["Item_name"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_dose"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_times"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_duration"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_intake"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_route"].ToString() + "</td><td style='padding-left:3px;'>" + dr["remark"].ToString() + "</td>" +
+                "<td style='padding-left:3px;'>" + count + "</td><td style='padding-left:3px;'>" + dr["EyesInfo"].ToString() + "</td><td style='padding-left:3px;text-align:left'>" + dr["Item_name"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_dose"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_times"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_duration"].ToString() + "</td><td style='padding-left:3px;'>" + dr["med_route"].ToString() + "</td><td style='padding-left:3px;'>" + dr["remark"].ToString() + "</td>" +
                 "</tr>";
                 }
             }
@@ -1165,7 +1163,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                 //b.Append("<p style='text-align:left;margin:0'><img src=" + rx + " style='width:15px;margin-bottom:-7px;' /></p>");
                 b.Append("<table style='width:100%;float:left;font-size:10px;margin:10px 0;text-align:left;border-collapse: collapse;' border='1' >" +
                     "<tr style='background:#ddd;text-align:center'>" +
-                    "<th style='padding-left:3px;'>Sr</th><th style='padding-left:3px;'>Eye</th><th style='padding-left:3px;'>Name</th><th style='padding-left:3px;'>Dose</th><th style='padding-left:3px;'>Freq.</th><th style='padding-left:3px;'>Duration</th><th style='padding-left:3px;'>Meal</th><th style='padding-left:3px;'>Route</th><th style='padding-left:3px;'>Remarks</th>" +
+                    "<th style='padding-left:3px;'>Sr</th><th style='padding-left:3px;'>Eye</th><th style='padding-left:3px;'>Name</th><th style='padding-left:3px;'>Dose</th><th style='padding-left:3px;'>Freq.</th><th style='padding-left:3px;'>Duration</th><th style='padding-left:3px;'>Route</th><th style='padding-left:3px;'>Remarks</th>" +
                     "</tr>" +
                     tbody +
                     "</table>");

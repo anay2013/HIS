@@ -32,11 +32,11 @@ $(document).ready(function () {
     }).on('keyup', 'input[type=number]', function () {
         var val = parseFloat($(this).val()) || 0;
         CalculateItem(val, $(this), 'row');
-        });
+    });
     $('#tblItemsInfo tbody').on('mouseover', '.entryBy', function () {
-        var entryBy ='<b>Entry By : </b>'+$(this).data('entryby');
+        var entryBy = '<b>Entry By : </b>' + $(this).data('entryby');
         $(this).siblings('span').html(entryBy).show('fast');
-    }).on('mouseleave', '.entryBy', function () {        
+    }).on('mouseleave', '.entryBy', function () {
         $(this).siblings('span').empty().hide('fast');
     });
     $('#tblItemsInfo tbody').on('click', 'button[id=btnItemRemark]', function () {
@@ -265,7 +265,7 @@ function GetComSeenCount() {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {                    
+        success: function (data) {
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
@@ -347,7 +347,7 @@ function SummarisedBilling() {
                     });
                     $('#tblBillingInfo tbody').append(tbody);
                 }
-            }    
+            }
         },
         error: function (response) {
             alert('Server Error...!');
@@ -469,7 +469,9 @@ function Calculation() {
             'adl_disc_amount': 0,
             'net_amount': 0,
             'IsUrgent': '-',
-            'Remark': '-'
+            'Remark': '-',
+            'TaxRate': 0,
+            'TaxAmt': 0
         });
     });
     objBooking.hosp_id = Active.HospId;
@@ -527,7 +529,10 @@ function ItemWiseCalculation() {
                 'adl_disc_amount': $(this).find('td:eq(8)').find('input').val(),
                 'net_amount': $(this).find('td:eq(9)').find('input').val(),
                 'IsUrgent': '-',
-                'Remark': '-'
+                'Remark': '-',
+                'TaxRate': 0,
+                'TaxAmt': 0
+
             });
         }
     });
@@ -586,7 +591,9 @@ function DoctorShift() {
                 'adl_disc_amount': 0,
                 'net_amount': 0,
                 'IsUrgent': '-',
-                'Remark': '-'
+                'Remark': '-',
+                'TaxRate': 0,
+                'TaxAmt': 0
             });
         }
     });
@@ -648,7 +655,9 @@ function CancelItem() {
         'adl_disc_amount': 0,
         'net_amount': 0,
         'IsUrgent': '-',
-        'Remark': $('#txtCancelRemark').val()
+        'Remark': $('#txtCancelRemark').val(),
+        'TaxRate': 0,
+        'TaxAmt': 0
     });
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;
@@ -708,7 +717,9 @@ function SubmitRemark() {
         'adl_disc_amount': 0,
         'net_amount': 0,
         'IsUrgent': '-',
-        'Remark': $('#txtItemRemark').val()
+        'Remark': $('#txtItemRemark').val(),
+        'TaxRate': 0,
+        'TaxAmt': 0
     });
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;
@@ -858,7 +869,9 @@ function MoveItemToPackage() {
                 'adl_disc_amount': 0,
                 'net_amount': 0,
                 'IsUrgent': '-',
-                'Remark': '-'
+                'Remark': '-',
+                'TaxRate': 0,
+                'TaxAmt': 0
             });
         }
     });
@@ -882,7 +895,9 @@ function MoveItemToPackage() {
         'adl_disc_amount': 0,
         'net_amount': 0,
         'IsUrgent': '-',
-        'Remark': '-'
+        'Remark': '-',
+        'TaxRate': 0,
+        'TaxAmt': 0
     });
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;
@@ -939,7 +954,9 @@ function RemoveItemFromPackage() {
                 'adl_disc_amount': 0,
                 'net_amount': 0,
                 'IsUrgent': '-',
-                'Remark': '-'
+                'Remark': '-',
+                'TaxRate': 0,
+                'TaxAmt': 0
             });
         }
     });
@@ -963,7 +980,9 @@ function RemoveItemFromPackage() {
         'adl_disc_amount': 0,
         'net_amount': 0,
         'IsUrgent': '-',
-        'Remark': '-'
+        'Remark': '-',
+        'TaxRate': 0,
+        'TaxAmt': 0
     });
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;

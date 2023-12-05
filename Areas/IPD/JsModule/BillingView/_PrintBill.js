@@ -2,7 +2,7 @@
 $(document).ready(function () {
     ReceiptInfoByIPDNo();
     $('table thead').on('change', 'input:checkbox', function () {
-        var IsCheck = $(this).is(':checked');  
+        var IsCheck = $(this).is(':checked');
         if (IsCheck)
             $(this).parents('table').find('tbody').find('input:checkbox').prop('checked', true);
         else
@@ -60,18 +60,33 @@ function ReceiptInfoByIPDNo() {
     });
 }
 function BillPrint_CategoryWiseOnlyBill() {
-    var url = "../Print/IPDBillSummary?_BillNo=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=CategorywiseOnly";
+    var strReceiptList = [];
+    $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
+        strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
+    });
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=CategorywiseOnly";
     window.open(url, '_blank');
 }
 function BillPrint_ItemWise() {
-    var url = "../Print/IPDBillSummary?_BillNo=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=ItemWise";
+    var strReceiptList = [];
+    $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
+        strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
+    });
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=ItemWise";
     window.open(url, '_blank');
+
+    //var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=ItemWise";
+    //window.open(url, '_blank');
 }
 function BillPrint_DateWise() {
-    var url = "../Print/IPDBillSummary?_BillNo=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=DateWise";
+    var strReceiptList = [];
+    $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
+        strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
+    });
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=DateWise";
     window.open(url, '_blank');
 }
 function BillPrint_IncludingPackagedItem() {
-    var url = "../Print/IPDBillSummary?_BillNo=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=IncludingPackagedItem";
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=IncludingPackagedItem";
     window.open(url, '_blank');
 }

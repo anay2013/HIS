@@ -1161,7 +1161,6 @@ function Opd_AppointmentBooking() {
             MasterObject.objPatient = objPatient;
             MasterObject.objBooking = objBooking;
             MasterObject.objPayment = objPayment;
-
             $.ajax({
                 method: "POST",
                 url: url,
@@ -1270,21 +1269,23 @@ function Opd_AppointmentBooking1() {
                 });
             });
             $('#tblPaymentDetails tbody tr.pay').each(function () {
-                objPayment.push({
-                    'ReceiptNo': '-',
-                    'PayMode': $(this).find('td:eq(0)').text(),
-                    'CardNo': '-',
-                    'BankName': $(this).find('td:eq(3)').find('select option:selected').text(),
-                    'RefNo': $(this).find('td:eq(4)').find('input[type=text]').val(),
-                    'MachineId': $(this).find('td:eq(5)').find('select option:selected').val(),
-                    'MachineName': $(this).find('td:eq(5)').find('select option:selected').text(),
-                    'Amount': $(this).find('td:eq(1)').find('input[type=text]').val(),
-                    'OnlPaymentId': '',
-                    'OnlPayStatus': '',
-                    'OnlPayResponse': '',
-                    'OnlPaymentDate': new Date(),
-                    'login_id': Active.userId
-                });
+                if (parseFloat($(this).find('td:eq(1)').find('input[type=text]').val()) > 0) {
+                    objPayment.push({
+                        'ReceiptNo': '-',
+                        'PayMode': $(this).find('td:eq(0)').text(),
+                        'CardNo': '-',
+                        'BankName': $(this).find('td:eq(3)').find('select option:selected').text(),
+                        'RefNo': $(this).find('td:eq(4)').find('input[type=text]').val(),
+                        'MachineId': $(this).find('td:eq(5)').find('select option:selected').val(),
+                        'MachineName': $(this).find('td:eq(5)').find('select option:selected').text(),
+                        'Amount': $(this).find('td:eq(1)').find('input[type=text]').val(),
+                        'OnlPaymentId': '',
+                        'OnlPayStatus': '',
+                        'OnlPayResponse': '',
+                        'OnlPaymentDate': new Date(),
+                        'login_id': Active.userId
+                    });
+                }
             });
             objBooking.hosp_id = Active.unitId;
             objBooking.UHID = $('#txtUHID').val().toUpperCase();
@@ -1336,6 +1337,7 @@ function Opd_AppointmentBooking1() {
             var data = new FormData();
             data.append('obj', JSON.stringify(MasterObject));
             data.append('ImageByte', _photo_url);
+
             UploadDocumentInfo.onreadystatechange = function () {
                 if (UploadDocumentInfo.status) {
                     if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {

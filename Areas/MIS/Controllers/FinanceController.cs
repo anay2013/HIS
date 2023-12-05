@@ -24,5 +24,9 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
         {
             return View();
         }
+        public ActionResult BugAudit()
+        {
+            return View();
+        }
     }
 }
