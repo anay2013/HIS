@@ -663,14 +663,14 @@ function DeleteTemplateInfo(TemplateId, ItemId) {
     });
 }
 function AdvicePreview(appno) {
-    $('#PresPreview').attr('src', '/loading.html');
+    $('#PresPreview').attr('src', config.rootUr+'/loading.html');
     setTimeout(function () {
         var url = config.rootUrl + "/opd/print/AdvicePreview?app_no=" + appno;
         $('#PresPreview').attr('src', url);
     }, 200);
 }
 function PresPreview() {
-    $('#PresPreview').attr('src', '/loading.html');
+    $('#PresPreview').attr('src', config.rootUr + '/loading.html');
     setTimeout(function () {
         var url = config.rootUrl + "/opd/print/AdvicePreview?app_no=" + Active.AppId;
         $('#PresPreview').attr('src', url);

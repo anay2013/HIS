@@ -127,8 +127,8 @@ function InsertMedicineItems() {
                 'med_duration': $(this).find('td:eq(3)').text(),
                 'med_intake': $(this).find('td:eq(4)').text(),
                 'med_route': $(this).find('td:eq(5)').text(),
-                'qty': $(this).find('td:eq(6)').text(),
-                'remark': $(this).find('td:eq(7)').text(),
+                'qty': 0,
+                'remark': $(this).find('td:eq(6)').text(),
             });
         }
     });

@@ -33,6 +33,7 @@ $(document).ready(function () {
         $('#tblOldPatient tbody').empty();
         $('#txtSearchValue').val('');
         $('#modalOldPatient').modal('show');
+        Clear();
     });
     $('#btnSearchOldPatient').on('click', function () {
         GetOldPatient();

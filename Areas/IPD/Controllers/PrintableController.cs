@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using static HISWebApi.Models.IPDBO;
 
@@ -698,7 +697,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "StaffAlloted.pdf");
         }
 
-        public FileResult IPDBillSummary(string _IPDNo,string _ReceiptList, string _BillPrintType)
+        public FileResult IPDBillSummary(string _IPDNo, string _ReceiptList, string _BillPrintType)
         {
             _IPDNo = UtilityClass.decoding(_IPDNo);
             if (_ReceiptList == null)
@@ -740,7 +739,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 UHID = dr["UHID"].ToString();
-                BillType= dr["BillType"].ToString();
+                BillType = dr["BillType"].ToString();
                 IPDNo = dr["IPDNo"].ToString();
                 patient_name = dr["patient_name"].ToString();
                 ageInfo = dr["ageInfo"].ToString();
@@ -756,6 +755,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 ContactNo = dr["ContactNo"].ToString();
                 Address = dr["Address"].ToString();
             }
+            h.Append("<div style='height:110px;'></div>");
             h.Append("<table style='width:2080px;padding:10px 0;background:#fff;font-size:42px;text-align:left;border:1px solid #000;margin:0 15px'>");
             //h.Append("<tr>");
             //h.Append("<td colspan='7' style='font-size:62px;text-align:center'>Final Bill Detail<hr/ style='margin:7px'></td>");
@@ -790,17 +790,16 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             h.Append("<td style='width:29%;'>" + PanelName + "</td>");
             h.Append("</tr>");
 
-            b.Append("<div style='height:110px;'>");
-            b.Append("</div>");
+            b.Append("<div style='height:110px;'></div>");
 
-            if (_BillPrintType=="BillTypeCategorywiseOnly")
-            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>"+ BillType + " Summary Bill Detail</h2>");
+            if (_BillPrintType == "BillTypeCategorywiseOnly")
+                b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + BillType + " Summary Bill Detail</h2>");
 
             if (_BillPrintType == "ItemWise")
-            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + BillType + " Item wise Bill Detail</h2>");
+                b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + BillType + " Item wise Bill Detail</h2>");
 
-            if(_BillPrintType == "IncludingPackagedItem")
-            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + BillType + " Package Breakup Detail</h2>");
+            if (_BillPrintType == "IncludingPackagedItem")
+                b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + BillType + " Package Breakup Detail</h2>");
 
             b.Append("<table style='padding:10px 0;background:#fff;width:100%;font-size:14px;text-align:left;border:1px solid #000;margin-bottom:-15px;margin-top:0'>");
             b.Append("<tr>");
@@ -872,7 +871,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             b.Append("<td style='width:29%;'>" + DischargeDate + "</td>");
             b.Append("</tr>");
             b.Append("</table>");
-            if(_BillPrintType!="IncludingPackagedItem")
+            if (_BillPrintType != "IncludingPackagedItem")
             {
                 b.Append("<br/><label style='padding:2px 5px;margin-top:20px'><b>Category Wise Details</b></label>");
                 b.Append("<table border='1' style='width:100%;font-size:12px;border-collapse: collapse'>");
@@ -898,7 +897,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 }
                 b.Append("</table>");
             }
-            if(_BillPrintType=="ItemWise")
+            if (_BillPrintType == "ItemWise")
             {
                 b.Append("<br/><label style='padding:2px 5px;margin-top:20px'><b>Item Wise Details</b></label>");
                 b.Append("<table border='0' style='width:100%;font-size:12px;border-collapse: collapse'>");
@@ -951,7 +950,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                             b.Append("<td colspan='7' style='font-size:11px;text-align:left;white-space: nowrap;padding:5px 4px;'><b>" + dr["SurgeryName"].ToString() + "<b></td>");
                             b.Append("</tr>");
                             temp3 = dr["SurgeryName"].ToString();
-                            tSurgeryAmt =0;
+                            tSurgeryAmt = 0;
                             CountSurgeryItem++;
                         }
                         b.Append("<tr>");
@@ -985,7 +984,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
                 b.Append("</table>");
             }
-            if(_BillPrintType=="DateWise")
+            if (_BillPrintType == "DateWise")
             {
                 b.Append("<br/><label style='padding:2px 5px;margin-top:20px'><b>Item Wise Details</b></label>");
                 b.Append("<table border='0' style='width:100%;font-size:12px;border-collapse: collapse'>");
@@ -1011,7 +1010,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 {
                     foreach (DataRow dr in ds.Tables[2].Rows)
                     {
-                        if(tempDateWise != dr["TnxDate"].ToString())
+                        if (tempDateWise != dr["TnxDate"].ToString())
                         {
                             if (CountDateWise != 0)
                             {
@@ -1069,7 +1068,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                         b.Append("</tr>");
                         tAmount = tAmount + Convert.ToDecimal(dr["amount"]);
                         tSurgeryAmt = tSurgeryAmt + Convert.ToDecimal(dr["amount"]);
-                        tDateWiseAmount= tDateWiseAmount + Convert.ToDecimal(dr["amount"]);
+                        tDateWiseAmount = tDateWiseAmount + Convert.ToDecimal(dr["amount"]);
                         CountDateWise++;
                     }
                 }
@@ -1095,7 +1094,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
                 b.Append("</table>");
             }
-            if (_BillPrintType=="IncludingPackagedItem")
+            if (_BillPrintType == "IncludingPackagedItem")
             {
                 b.Append("<br/><label style='padding:2px 5px;margin-top:20px'><b>Item Wise Details</b></label>");
                 b.Append("<table border='0' style='width:100%;font-size:12px;border-collapse: collapse'>");
@@ -1117,9 +1116,9 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 {
                     foreach (DataRow dr in ds.Tables[5].Rows)
                     {
-                        if (temp!=dr["PackageName"].ToString())
+                        if (temp != dr["PackageName"].ToString())
                         {
-                            if(CounItem!=1)
+                            if (CounItem != 1)
                             {
                                 b.Append("<tr style='background:#fff'>");
                                 b.Append("<td colspan='6' style='text-align:right;white-space: nowrap;padding-right:4px;hight:15px'></td>");
@@ -1128,13 +1127,13 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                                 b.Append("<tr style='background:#fff'>");
                                 b.Append("<td colspan='4' style='text-align:right;white-space: nowrap;padding-right:4px;width:5%;font-size:13px;'><b>Item wise Total<b></td>");
                                 b.Append("<td style='text-align:center;white-space: nowrap;padding-left:4px;width:5%;font-size:13px;'>:<b></td>");
-                                b.Append("<td style='text-align:right;white-space: nowrap;padding-right:4px;width:15%;font-size:13px;'><b>" + Convert.ToDecimal(tAmount).ToString(".00")  + "<b></td>");
+                                b.Append("<td style='text-align:right;white-space: nowrap;padding-right:4px;width:15%;font-size:13px;'><b>" + Convert.ToDecimal(tAmount).ToString(".00") + "<b></td>");
                                 b.Append("</tr>");
 
                                 b.Append("<tr style='background:#fff'>");
                                 b.Append("<td colspan='4' style='text-align:right;white-space: nowrap;padding-left:4px;width:5%;font-size:13px;'><b>Package Discount Amount<b></td>");
                                 b.Append("<td style='text-align:center;white-space: nowrap;padding-left:4px;width:5%;font-size:13px;'>:<b></td>");
-                                b.Append("<td style='text-align:right;white-space: nowrap;padding-right:4px;width:15%;font-size:13px;'><b>" + Convert.ToDecimal(tAmount- PackageAmount).ToString(".00") + "<b></td>");
+                                b.Append("<td style='text-align:right;white-space: nowrap;padding-right:4px;width:15%;font-size:13px;'><b>" + Convert.ToDecimal(tAmount - PackageAmount).ToString(".00") + "<b></td>");
                                 b.Append("</tr>");
 
                                 b.Append("<tr style='background:#fff'>");
@@ -1161,10 +1160,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                         b.Append("<td style='text-align:left;white-space: nowrap;padding-left:4px;width:20%'>" + dr["SubCatNameDisplayName"].ToString() + "</td>");
                         b.Append("<td style='text-align:left;white-space: nowrap;padding-left:4px;width:45%'>" + dr["ItemName"].ToString() + "</td>");
                         b.Append("<td style='text-align:right;white-space: nowrap;padding-right:4px;width:5%'>" + dr["Qty"].ToString() + "</td>");
-                        b.Append("<td style='text-align:right;white-space: nowrap;padding-right:4px;width:15%'>" +Convert.ToDecimal(dr["amount"]).ToString(".00") + "</td>");
+                        b.Append("<td style='text-align:right;white-space: nowrap;padding-right:4px;width:15%'>" + Convert.ToDecimal(dr["amount"]).ToString(".00") + "</td>");
                         b.Append("</tr>");
                         tAmount = tAmount + Convert.ToDecimal(dr["amount"]);
-                   }
+                    }
                 }
                 b.Append("<tr style='background:#fff'>");
                 b.Append("<td colspan='6' style='text-align:right;white-space: nowrap;padding-right:4px;hight:15px'><hr/></td>");
@@ -1191,10 +1190,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
                 b.Append("</table>");
 
-         
+
 
             }
-            if(_BillPrintType!="IncludingPackagedItem")
+            if (_BillPrintType != "IncludingPackagedItem")
             {
                 double GrossAmount = 0;
                 double PanelDiscount = 0;
@@ -1315,7 +1314,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.Header_Enabled = true;
             pdfConverter.Footer_Enabled = true;
             pdfConverter.Footer_Hight = 60;
-            pdfConverter.Header_Hight = 70;
+            pdfConverter.Header_Hight = 150;
             pdfConverter.PageMarginLeft = 20;
             pdfConverter.PageMarginRight = 15;
             pdfConverter.PageMarginBottom = 10;
@@ -1379,6 +1378,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 ContactNo = dr["ContactNo"].ToString();
                 Address = dr["Address"].ToString();
             }
+            h.Append("<div style='height:320px;border-bottom:1px solid #000'></div>");
             h.Append("<table style='width:2080px;padding:10px 0;background:#fff;font-size:42px;text-align:left;border:1px solid #000;margin:0 15px'>");
             //h.Append("<tr>");
             //h.Append("<td colspan='7' style='font-size:62px;text-align:center'>Final Bill Detail<hr/ style='margin:7px'></td>");
@@ -1411,6 +1411,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             h.Append("<td style='width:1%;'><b>:</b></td>");
             h.Append("<td style='width:29%;'>" + PanelName + "</td>");
             h.Append("</tr>");
+
+            b.Append("<div style='height:110px;'></div>");
 
             b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>IPD Discharge Report</h2>");
             b.Append("<table style='padding:10px 0;background:#fff;width:100%;font-size:15px;text-align:left;border:1px solid #000;margin-bottom:-15px;margin-top:0'>");
@@ -1499,7 +1501,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.Header_Enabled = true;
             pdfConverter.Footer_Enabled = true;
             pdfConverter.Footer_Hight = 17;
-            pdfConverter.Header_Hight = 70;
+            pdfConverter.Header_Hight = 150;
             pdfConverter.PageMarginLeft = 20;
             pdfConverter.PageMarginRight = 15;
             pdfConverter.PageMarginBottom = 10;

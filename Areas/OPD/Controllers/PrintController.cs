@@ -118,6 +118,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<td><b>:</b></td>");
                     b.Append("<td>" + dr["visitType"].ToString() + "</td>");
                     b.Append("</tr>");
+
                     b.Append("<tr>");
                     b.Append("<td>Relative Name</td>");
                     b.Append("<td><b>:</b></td>");
@@ -127,18 +128,18 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<td><b>:</b></td>");
                     b.Append("<td style='text-transform:uppercase'>" + dr["DoctorName"].ToString() + "</td>");
                     b.Append("</tr>");
+
                     b.Append("<tr>");
+                    b.Append("<td>Panel Name</td>");
+                    b.Append("<td><b>:</b></td>");
+                    b.Append("<td>" + dr["PanelName"].ToString() + "</td>");
+                    b.Append("<td>&nbsp;</td>");
                     b.Append("<td>Referred By</td>");
                     b.Append("<td><b>:</b></td>");
-                    b.Append("<td>" + dr["ref_name"].ToString() + "</td>");
-                    b.Append("<td>&nbsp;</td>");
+                    b.Append("<td style='text-transform:uppercase'>" + dr["ref_name"].ToString() + "</td>");
+                    b.Append("</tr>");
 
-                    b.Append("</tr>");
-                    b.Append("<tr>");
-                    b.Append("<td>Panel</td>");
-                    b.Append("<td><b>:</b></td>");
-                    b.Append("<td colspan='5'>" + dr["PanelName"].ToString() + "</td>");
-                    b.Append("</tr>");
+
                     b.Append("</table>");
                     CancelAgainstNo = dr["visitType"].ToString();
                 }
@@ -1116,6 +1117,8 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("<div style='width:100%'><br>");
             b.Append("<div style='width:100%;float:left;'>");
             b.Append("<div style='width:100%;margin-bottom:10px'><br>");
+            var left = (PosteriorRatina == "N") ? "left" : "right";
+
             if (PosteriorRatina == "Y")
             {
                 //Posterior Ratina Begin
@@ -1128,7 +1131,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             if (EyeLens == "Y")
             {
                 //Eye Lens Begin
-                b.Append("<div style='width:47%;float:right;text-align:center;border:1px solid #000;margin-right:5%;margin-bottom:10px'>");
+                b.Append("<div style='width:47%;float:" + left + ";text-align:center;border:1px solid #000;margin-right:5%;margin-bottom:10px'>");
                 b.Append("<p style='width:99%;margin:1px 1px;text-align:center;background:#ddd'>Anterior Segment<p>");
                 b.Append("<img src=" + lensEye + " />");
                 b.Append("</div>");

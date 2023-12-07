@@ -150,7 +150,7 @@ function ReceiptInfo() {
     });
 }
 function PrintReceipt(receiptNo) {
-    var url = "/OPD/Print/AdvanceReceipt?ReceiptNo=" + receiptNo + "&loginName=" + Active.userName;
+    var url = config.documentServerUrl+"/OPD/Print/AdvanceReceipt?ReceiptNo=" + receiptNo + "&loginName=" + Active.userName;
     window.open(url, '_blank');
 }
 function OnLoadQueries() {

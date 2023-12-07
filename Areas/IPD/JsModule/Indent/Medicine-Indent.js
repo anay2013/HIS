@@ -1,47 +1,8 @@
 ﻿
-$(document).ready(function () {    
-    GetPatientDetails();
+$(document).ready(function () {
+    $('#dash-dynamic-section').find('label.title').text('Medicine-Indent Section').show();
     GetDoctor();
     GetNurseDetails();
-    $('#ddlReqBy tbody').on('click', 'tr', function () {
-        var val = $(this).data('name');
-        $('a[id=txtReqBy]').empty().text(val);
-        $('#txtSearchNurse').val('');
-        GetNurseDetails();
-        $('#ddlReqBy').hide();
-    });
-    $('#txtSearchPatient').on('keyup', function () {
-        var val = $(this).val().toLowerCase();
-        $('#tblAdmittedIPDPatient tbody tr').filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(val) > -1);
-        });
-    });
-    $('#ddlRoom').on('change', function () {
-        var val = $(this).val().toLowerCase();
-        $('#tblAdmittedIPDPatient tbody tr').filter(function () {
-            var i = $(this).find('td').eq(0).data('room');
-            $(this).toggle($(this).find('td').eq(0).data('room').toLowerCase().indexOf(val) > -1);
-        });
-    });
-    $('#tblAdmittedIPDPatient tbody').on('click', '.getPatient', function () {
-        $('span[data-pname]').text($(this).data('pname'));
-        $('span[data-gender]').text($(this).data('gender'));
-        $('span[data-age]').text($(this).data('age'));
-        $('span[data-admiteddate]').text($(this).data('admiteddate'));
-        $('span[data-doctor]').text($(this).data('doctor'));
-        $('span[data-uhid]').text($(this).data('uhid'));
-        $('span[data-ipd]').text($(this).data('ipd'));
-        $('span[data-roomno]').text($(this).data('roomno'));
-        $('span[data-panelid]').text($(this).data('panelid'));
-        $('span[data-companyname]').text($(this).data('companyname'));
-        $('span[data-department]').text($(this).data('department'));
-        var doctor = $(this).data('doctor');
-        $('#ddlDoctor option').map(function () {
-            if ($(this).val() == doctor) {
-                $('#ddlDoctor').val(doctor).change()
-            }
-        });
-    });
     $('#txtSearchProduct').keydown(function (e) {
         var tbody = $('#tblnavigate').find('tbody');
         var selected = tbody.find('.selected');
@@ -78,7 +39,6 @@ $(document).ready(function () {
                 $('#txtQuantity').focus();
                 $('#txtItemID').val(itemid);
                 $('#txtIsCash').val(IsCash);
-                console.log(IsCash)
                 $('#ItemList').hide();
                 break;
             default:
@@ -120,8 +80,8 @@ $(document).ready(function () {
         var Premark = $('#txtRemark').val();
         var ItemID = $('#txtItemID').val();
         var IsCash = $('#txtIsCash').val();
-        
-     
+
+
         if (ValidateProduct()) {
             var ids = $('#tblProduct tbody').find('tr').filter(function () {
                 if ($(this).find('td').eq(0).text() == ItemID) return true;
@@ -162,64 +122,38 @@ $(document).ready(function () {
     });
 });
 
-function GetPatientDetails() {
-    var url = config.baseUrl + "/api/IPDNursing/GetAdmittedIPDPatient";
-    $.ajax({
-        method: "GET",
-        url: url,
-        dataType: "json",
-        success: function (data) {
-            if (data != '') {
-                $("#tblAdmittedIPDPatient tbody").empty();
-                $('#ddlRoom').empty().append('<option>Select Room</option>');
-                
-                var room = [];
-                $.each(data.ResultSet.Table, function (key, val) {
-                    var r = val.RoomName.split('/');
-                    room.push(r[3]);
-                    $('<tr><td data-room="' + r[3] + '">' + val.IPDNO + '</td><td>' + val.PName + '</td><td>' + val.Patient_ID + '</td><td>' + val.DName + '</td>' +
-                        '<td class="btn text-green getPatient" data-PName="' + val.PName + '" data-Gender="' + val.Gender + '" data-Age="' + val.Age + '" data-AdmitedDate="' + val.AdmitDate + '" data-Doctor="' + val.DName + '"data-UHID="' + val.Patient_ID + '"data-IPD="' + val.IPDNO + '"data-RoomNo="' + val.RoomName + '"data-panelid="' + val.Panel_ID + '"data-companyname="' + val.Company_Name + '" data-department="' + val.Department + '">' +
-                        '<span class="fa fa-arrow-right"></span></td></tr>').appendTo($("#tblAdmittedIPDPatient tbody"));
-
-                });
-                var unique = room.filter(function (itm, i, room) {
-                    return i == room.indexOf(itm);
-                });
-                for (i = 0; i < unique.length; i++) {
-                    var data = '<option>' + unique[i] + '</option>'
-                    $('#ddlRoom').append(data);
-                }
-                ////$("#tblAdmittedIPDPatient").tableHeadFixer();
-                //$('#tblAdmittedIPDPatient').tableScroll({ height: 200 });
-                ////$('#thetable').tableScroll({ height: 200 });
-                ////$('#thetable').tableScroll({ width: 400 });
-                ////$('#thetable').tableScroll({ containerClass: 'myCustomClass' });
-            }
-            else {
-                alert("Error");
-            };
-        },
-        error: function (response) {
-            alert('Server Error...!');
-        }
-    });
-}
 function GetDoctor() {
-    var url = config.baseUrl + "/api/IPDNursing/GetDoctor";
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = '';
+    objBO.Floor = '';
+    objBO.PanelId = '';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = '';
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'GetCategory';
     $.ajax({
-        method: "GET",
+        method: "POST",
         url: url,
-        dataType: "json",
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
         success: function (data) {
-            $('#ddlDoctor').empty();
-            if (data != '') {
-                $.each(data.ResultSet.Table, function (key, val) {
-                    $("#ddlDoctor").append($("<option data-id=" + val.Doctor_id + "></option>").val(val.DoctorName).html(val.DoctorName)).select2();
-                });
-            }
-            else {
-                alert("Error");
-            };
+            $('#ddlDoctor').empty().append($("<option data-id='Select'></option>").val('Select').html('Select')).select2();
+            $.each(data.ResultSet.Table1, function (key, val) {
+                $("#ddlDoctor").append($("<option></option>").val(val.DoctorId).html(val.DoctorName));
+            });
+        },
+        complete: function () {
+            $('#ddlDoctor option').each(function () {
+                if ($(this).val() == _doctorId) {
+                    $('#ddlDoctor').prop('selectedIndex', '' + $(this).index() + '').change()
+                }
+            });
         },
         error: function (response) {
             alert('Server Error...!');
@@ -241,11 +175,11 @@ function SearchMedicine(key, type) {
         success: function (data) {
             $('#tblnavigate tbody').empty();
             if (data != '') {
-                
+
                 $.each(data.ResultSet.Table, function (key, val) {
                     $('#tblnavigate').show();
                     $('<tr class="searchitems" data-AlertMsg="' + val.AlertMsg + '" data-itemid=' + val.item_id + ' data-iscash=' + val.IsCash + '><td>' + val.item_name + "</td></tr>").appendTo($('#tblnavigate tbody'));
-                });                
+                });
             }
             else {
                 alert("Error");
@@ -262,22 +196,22 @@ function SaveIPOPIndent() {
     $("#tblProduct tbody tr").each(function () {
         objBO.push({
             'HospId': Active.unitId,
-            'pt_name': $('span[data-pname]').text(),
-            'ipop_no': $('span[data-ipd]').text(),
+            'pt_name': $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(3)').text(),
+            'ipop_no': $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(9)').text(),
             'gen_from': 'IPD',
-            'dept_name': $('span[data-department]').text(),
-            'room_no': $('span[data-roomno]').text(),
+            'dept_name': _deptName,
+            'room_no': _roomNo,
             'bed_no': '-',
-            'doctor_id': $("#ddlDoctor option:selected").data('id'),
+            'doctor_id': $("#ddlDoctor option:selected").val(),
             'doctor_name': $('#ddlDoctor option:selected').text(),
             'item_id': $(this).find('td:nth-child(1)').text(),
             'item_name': $(this).find('td:nth-child(2)').text(),
             'qty': $(this).find('td:nth-child(3)').text(),
             'login_id': Active.userId,
-            'UHID': $('span[data-uhid]').text(),
+            'UHID': $('#tblAdviceHeader tbody').find('tr:eq(5)').find('td:eq(3)').text(),
             'pay_type': '-',
-            'PanelId': $('span[data-panelid]').text(),
-            'panel_name': $('span[data-companyname]').text(),
+            'PanelId': _panelId,
+            'panel_name': $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(8)').text(),
             'ReqBy': $('#ddlReqBy option:selected').text(),
             'ReqType': $('#ddlReqType option:selected').text(),
             'ProductSaleType': $(this).find('td:nth-child(5)').text(),
@@ -400,8 +334,7 @@ function ClearIndent() {
 function ValidateIndent() {
     var doctor = $('#ddlDoctor option:selected').text();
     var ids = $('#tblProduct tbody').find('tr').length;
-    var pname = $('span[data-pname]').text();
-
+    var pname = $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(3)').text();
 
     if (pname == '') {
         $('span[data-pname]').prev().css({ 'color': 'red' });

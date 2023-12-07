@@ -555,7 +555,7 @@ function PatientAdvance() {
     }
 }
 function PrintAdvanceReceipt() {
-    var url = "/OPD/Print/AdvanceReceipt?ReceiptNo=" + _ReceiptNo + "&loginName=" + Active.userName;
+    var url = config.documentServerUrl+ "/OPD/Print/AdvanceReceipt?ReceiptNo=" + _ReceiptNo + "&loginName=" + Active.userName;
     window.open(url, '_blank');
 }
 function ReferralSearch(referral) {

@@ -104,10 +104,11 @@ function ViewConsultation() {
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentSearch";
     var objBO = {};
     objBO.SearchValue = $('#txtSearchValue').val();
+    objBO.prm_1 = $('#ddlStatus').val();
     objBO.DoctorId = $('#ddlDoctor option:selected').val();
     objBO.from = $('#txtFromAppDate').val();
     objBO.to = $('#txtToAppDate').val();
-    objBO.Logic = 'ViewConsultation';
+    objBO.Logic = 'ViewConsultationNew';
     $.ajax({
         method: "POST",
         url: url,

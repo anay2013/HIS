@@ -154,4 +154,31 @@ function UploadDocumentInfo() {
     }
 }
 
+function DownloadExcel(elem) {
+    var url = config.baseUrl + "/api/warehouse/PurchaseQuery";
+    var objBO = {};
+    objBO.prm_1 = $('#ddlVendor option:selected').val();
+    objBO.from = $('#txtFrom').val();
+    objBO.to = $('#txtTo').val();
+    objBO.OutPutType = "Excel";
+    objBO.Logic = 'PurchaseBills';
+    Global_DownloadExcel(url, objBO, "PurchaseBills.xlsx", elem);
+}
+function Global_DownloadExcel(Url, objBO, fileName, elem) {
+    $(elem).addClass('loading');
+    var ajax = new XMLHttpRequest();
+    ajax.open("Post", Url, true);
+    ajax.responseType = "blob";
+    ajax.setRequestHeader("Content-type", "application/json")
+    ajax.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            var blob = new Blob([this.response], { type: "application/octet-stream" });
+            saveAs(blob, fileName); //refernce by ~/JsModule/FileSaver.min.js
+            $(elem).removeClass('loading');
+        }
+    };
+    ajax.send(JSON.stringify(objBO));
+}
+
+
 

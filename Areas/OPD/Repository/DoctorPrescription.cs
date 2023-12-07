@@ -69,7 +69,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             if (pdfPage != null)
             {
                 string StrhtmlFooter = string.Empty;
-                pdfPage.CreateFooterCanvas(70);
+                pdfPage.CreateFooterCanvas(50);
 
                 StrhtmlFooter = GetFooterHTML(dsResult.ResultSet);
                 if (pdfPage.Footer != null)
@@ -94,7 +94,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             // b.Append("<div style='float:left;width:100%;margin-left:-1px;'>");
             //Left Block Start 
             // b.Append("<div style='float:left;width:26%;height:67%;border-right:1px solid #000'>");
-            b.Append("<div style='float:left;width:26%;height:700px;'>");
+            b.Append("<div style='float:left;width:26%;height:680px;'>");
             if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
             {
                 //Vital Sign
@@ -250,8 +250,8 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             b.Append("</div>");
             b.Append("</div>");
             //Right Block Start
-            b.Append("<div style='float:left;width:1%;border-left: 1px solid #000;height:730px;margin:-8px'></div>");
-            b.Append("<div style='float:right;width:72%;height:700px;'>");
+            b.Append("<div style='float:left;width:1%;border-left: 1px solid #000;height:680px;margin:-8px'></div>");
+            b.Append("<div style='float:right;width:72%;height:680px;'>");
             if (!string.IsNullOrEmpty(T00001))
             {
                 //Provisional Diagnosis Begin
@@ -413,10 +413,11 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 foreach (DataRow dr in ds.Tables[5].Rows)
                 {
                     //Doctor Details Bottom Begin
-                    b.Append("<div style='width:100%;zoom:1;position:absolute;font-size:18px;margin-top:-70px;right:20px'>");
+                    b.Append("<div style='width:100%;zoom:1;position:absolute;font-size:18px;margin-top:0px;right:20px'>");
                     // b.Append("<div style='width:95%;position:absolute;bottom:0;right:20px'>");
-                    b.Append("<h3 style='text-align:right;margin:0;padding:0'><img style='float:right' src='"+UtilityClass.documentServerUrl+"/" + dr["SignVirtualPath"].ToString() + "'/><br/><br/><br/>" + dr["DoctorName"].ToString() + "</h3>");
-                    b.Append("<h4 style='text-align:right;margin:0 10px 10px'>" + dr["degree"].ToString() + "</h4>");
+                    b.Append("<h3 style='text-align:right;margin:0;padding:0'><img style='float:right' src='" + UtilityClass.documentServerUrl + "/" + dr["SignVirtualPath"].ToString() + "'/><br/></h3>");
+                    b.Append("<h4 style='text-align:right;margin:0'>" + dr["DoctorName"].ToString() + "</h4>");
+                    b.Append("<h4 style='text-align:right;margin:0'>" + dr["degree"].ToString() + "</h4>");
                     b.Append("</div>");
                     //Doctor Details Bottom End
                 }

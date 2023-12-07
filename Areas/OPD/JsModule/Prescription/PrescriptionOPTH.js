@@ -2422,6 +2422,22 @@ function PresMedicineInfo() {
 function GetSpecInfo() {
     $('#tblSpecDetail tbody tr:eq(0)').find('input').val('');
     $('#tblSpecDetail tbody tr:eq(1)').find('input').val('');
+
+    $('#txtNearLeftEyeSph').val('')
+    $('#txtNearLeftEyeVA').val('')
+    $('#txtNearRightEyeSph').val('')
+    $('#txtNearRightEyeVA').val('')
+
+
+    $('#txtLeftSph').val('')
+    $('#txtLeftCyl').val('')
+    $('#txtLeftAxis').val('')
+    $('#txtLeftVA').val('')
+
+    $('#txtRightSph').val('')
+    $('#txtRightCyl').val('')
+    $('#txtRightAxis').val('')
+    $('#txtRightVA').val('')
     var url = config.baseUrl + "/api/master/CPOE_OPTHQueries";
     var objBO = {};
     objBO.app_no = sessionStorage.getItem('AppId');
@@ -2474,15 +2490,20 @@ function GetSpecInfo() {
                             $('#txtRightVA').val(val.right_VA);
                         }
                         if (val.SpecType == 'Near-Add') {
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(1)').find('input').val(val.left_Sph);
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(2)').find('input').val(val.left_Cyl);
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(3)').find('input').val(val.left_Axis);
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(4)').find('input').val(val.left_VA);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(1)').find('input').val(val.right_Sph);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(2)').find('input').val(val.right_Cyl);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(3)').find('input').val(val.right_Axis);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(4)').find('input').val(val.right_VA);
 
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(5)').find('input').val(val.right_Sph);
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(6)').find('input').val(val.right_Cyl);
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(7)').find('input').val(val.right_Axis);
-                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(8)').find('input').val(val.right_VA);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(5)').find('input').val(val.left_Sph);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(6)').find('input').val(val.left_Cyl);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(7)').find('input').val(val.left_Axis);
+                            $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(8)').find('input').val(val.left_VA);
+
+                            $('#txtNearLeftEyeSph').val(val.left_Sph)
+                            $('#txtNearLeftEyeVA').val(val.left_VA)
+                            $('#txtNearRightEyeSph').val(val.right_Sph)
+                            $('#txtNearRightEyeVA').val(val.right_VA)
                         }
                     });
                 }
@@ -2548,29 +2569,42 @@ function InsertMedicinePresItems() {
         }
     });
 }
-function DistanceSpecInfo() {
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(1)').find('input').val($('#txtLeftSph').val());
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(2)').find('input').val($('#txtLeftCyl').val());
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(3)').find('input').val($('#txtLeftAxis').val());
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(4)').find('input').val($('#txtLeftVA').val());
 
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(5)').find('input').val($('#txtRightSph').val());
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(6)').find('input').val($('#txtRightCyl').val());
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(7)').find('input').val($('#txtRightAxis').val());
-    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(8)').find('input').val($('#txtRightVA').val());
+function DistanceSpecInfo() {
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(1)').find('input').val($('#txtRightSph').val());
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(2)').find('input').val($('#txtRightCyl').val());
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(3)').find('input').val($('#txtRightAxis').val());
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(4)').find('input').val($('#txtRightVA').val());
+
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(5)').find('input').val($('#txtLeftSph').val());
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(6)').find('input').val($('#txtLeftCyl').val());
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(7)').find('input').val($('#txtLeftAxis').val());
+    $('#tblSpecDetail tbody tr:eq(0)').find('td:eq(8)').find('input').val($('#txtLeftVA').val());
     $('#modalDistance').modal('hide');
+
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(1)').find('input').val($('#txtLeftSph').val());
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(2)').find('input').val($('#txtLeftCyl').val());
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(3)').find('input').val($('#txtLeftAxis').val());
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(4)').find('input').val($('#txtLeftVA').val());
+
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(5)').find('input').val($('#txtRightSph').val());
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(6)').find('input').val($('#txtRightCyl').val());
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(7)').find('input').val($('#txtRightAxis').val());
+    //$('#tblSpecDetail tbody tr:eq(0)').find('td:eq(8)').find('input').val($('#txtRightVA').val());
+
+
     InsertDistanceSpecInfo()
 }
 function NearSpecInfo() {
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(1)').find('input').val($('#txtNearLeftEyeSph').val());
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(2)').find('input').val($('#txtLeftCyl').val());
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(3)').find('input').val($('#txtLeftAxis').val());
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(4)').find('input').val($('#txtNearLeftEyeVA').val());
+    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(5)').find('input').val($('#txtNearLeftEyeSph').val());
+    //$('#tblSpecDetail tbody tr:eq(1)').find('td:eq(2)').find('input').val($('#txtLeftCyl').val());
+    //$('#tblSpecDetail tbody tr:eq(1)').find('td:eq(3)').find('input').val($('#txtLeftAxis').val());
+    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(8)').find('input').val($('#txtNearLeftEyeVA').val());
 
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(5)').find('input').val($('#txtNearRightEyeSph').val());
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(6)').find('input').val($('#txtRightCyl').val());
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(7)').find('input').val($('#txtRightAxis').val());
-    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(8)').find('input').val($('#txtNearRightEyeVA').val());
+    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(1)').find('input').val($('#txtNearRightEyeSph').val());
+    //$('#tblSpecDetail tbody tr:eq(1)').find('td:eq(6)').find('input').val($('#txtRightCyl').val());
+    //$('#tblSpecDetail tbody tr:eq(1)').find('td:eq(7)').find('input').val($('#txtRightAxis').val());
+    $('#tblSpecDetail tbody tr:eq(1)').find('td:eq(4)').find('input').val($('#txtNearRightEyeVA').val());
     $('#modalNear').modal('hide');
     InsertDistanceSpecInfo()
 }

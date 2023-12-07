@@ -395,6 +395,10 @@ function DischargeSummary() {
         }
     });
 }
+function PrintDischargeReport() {
+    var url = config.rootUrl + "/ipd/print/IPDDischargeReport?_IPDNo=" + _IPDNo;
+    window.open(url, '_blank')
+}
 function Clear() {
     $('#txtHeaderName').val('');
     $('#txtTemplateName').val('');

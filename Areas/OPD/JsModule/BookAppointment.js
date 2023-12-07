@@ -1,6 +1,6 @@
 ﻿var _photo_url = null;
 var isApp = '';
-var roundOff = 0.00;
+var roundOff = 0;
 var _empDiscountInfo = {};
 var _otp;
 $(document).ready(function () {
@@ -412,7 +412,7 @@ function BookAppointmentQueries() {
         },
         complete: function (response) {
             $('#ddlPanel option').map(function () {
-                if ($(this).text() == 'CASH') {
+                if ($(this).val() == '1') {
                     $('#ddlPanel').prop('selectedIndex', '' + $(this).index() + '').trigger('change.select2');
                 }
             });
@@ -760,21 +760,21 @@ function OverAllDiscount(dislogic) {
         }
     }
     $('#tblItemInfo tbody tr').each(function () {
-        var perc_hold = parseFloat($(this).closest('tr').find('td:eq(4)').text()) * 100 / TPRate;
+        var perc_hold = eval($(this).closest('tr').find('td:eq(4)').text()) * 100 / TPRate;
         var adl_disc = (TDisc * perc_hold / 100)
-        $(this).find('td:eq(6)').find('input:text').val(adl_disc.toFixed(2));
-        var TRate = parseFloat($(this).closest('tr').find('td:eq(2)').text());
-        var PDis = parseFloat($(this).closest('tr').find('td:eq(3)').text());
-        var PRate = parseFloat($(this).closest('tr').find('td:eq(4)').text());
-        var disPerc = parseFloat(adl_disc) * 100 / parseFloat(PRate);
-        $(this).find('td:eq(5)').find('input:text').val(disPerc.toFixed(2));
-        var TDis = parseFloat(PDis) + parseFloat(adl_disc);
-        var NetAmount = parseFloat(TRate) - parseFloat(TDis);
-        $(this).find('td:eq(5)').find('input:text').val(disPerc.toFixed(2));
-        $(this).find('td:eq(7)').text(TDis.toFixed(2));
-        $(this).find('td:eq(8)').text(NetAmount.toFixed(2));
-        const TaxRate = parseFloat($(this).find('td:eq(14)').text());
-        const TaxAboveAmount = parseFloat($(this).find('td:eq(15)').text());
+        $(this).find('td:eq(6)').find('input:text').val(adl_disc.toFixed(4));
+        var TRate = eval($(this).closest('tr').find('td:eq(2)').text());
+        var PDis = eval($(this).closest('tr').find('td:eq(3)').text());
+        var PRate = eval($(this).closest('tr').find('td:eq(4)').text());
+        var disPerc = eval(adl_disc) * 100 / eval(PRate);
+        $(this).find('td:eq(5)').find('input:text').val(disPerc.toFixed(4));
+        var TDis = eval(PDis) + eval(adl_disc);
+        var NetAmount = eval(TRate) - eval(TDis);
+        $(this).find('td:eq(5)').find('input:text').val(disPerc.toFixed(4));
+        $(this).find('td:eq(7)').text(TDis.toFixed(4));
+        $(this).find('td:eq(8)').text(NetAmount.toFixed(4));
+        const TaxRate = eval($(this).find('td:eq(14)').text());
+        const TaxAboveAmount = eval($(this).find('td:eq(15)').text());
         var tax = 0;
         if (TaxRate > 0 && (NetAmount > TaxAboveAmount)) {
             tax = (NetAmount * TaxRate) / 100;
@@ -806,14 +806,17 @@ function totalCal() {
     $('#txtTDiscount').val(PDis + AdlDisc);
     $('#txtADiscount').val(AdlDisc);
     $('#txtNetAmount').val(netAmt);
+    debugger
     var payable = parseInt(netAmt + totalTax);
-    roundOff = parseFloat(netAmt + totalTax) - parseInt(netAmt + totalTax);
+    roundOff = 0;
+    roundOff = (parseFloat(netAmt + totalTax).toFixed(2)) - (parseInt(netAmt + totalTax).toFixed(2));
     $('#txtPayable').val(payable);
     $('#txtTotalTax').val(totalTax.toFixed(2));
-    if ($('#ddlPanel option:selected').text().toLowerCase() != 'cash')
+    $(this).find('option:selected').data('iscredit')
+    if ($('#ddlPanel option:selected').data('iscredit'))
         $('#txtBalance').val(payable);
 
-    if ($('#ddlPanel option:selected').text().toLowerCase() == 'cash')
+    if (!$('#ddlPanel option:selected').data('iscredit'))
         $('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val(payable);
 
     $('#tblPayInfo tbody').empty();
@@ -1312,7 +1315,7 @@ function Opd_AppointmentBooking1() {
             objBooking.GrossAmount = $('#txtGrossAmount').val();
             objBooking.TaxAmount = $('#txtTotalTax').val();
             objBooking.discount = $('#txtTDiscount').val();
-            objBooking.roundOff = roundOff;
+            objBooking.roundOff = roundOff.toFixed(2);
             objBooking.discount_remark = $('#txtDisResason').val();
             objBooking.discountType = ($('#ddlDiscountType option:selected').text() == 'Select') ? '-' : $('#ddlDiscountType option:selected').text();
             objBooking.discountBy = ($('#ddlApprovedBy option:selected').text() == 'Select') ? '-' : $('#ddlApprovedBy option:selected').text();
@@ -1337,7 +1340,6 @@ function Opd_AppointmentBooking1() {
             var data = new FormData();
             data.append('obj', JSON.stringify(MasterObject));
             data.append('ImageByte', _photo_url);
-
             UploadDocumentInfo.onreadystatechange = function () {
                 if (UploadDocumentInfo.status) {
                     if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {
@@ -1522,7 +1524,7 @@ function paymentCal(logic, val) {
         $('#tblPaymentDetails tbody').find('input[type=text]').val(0);
         $('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val(parseInt(netAmt));
         var payable = parseInt(netAmt);
-        roundOff = parseFloat(netAmt) - parseInt(netAmt);
+        roundOff = (parseFloat(netAmt)) - (parseInt(netAmt));
         $('#txtPayable').val(payable);
     }
     else if (logic == 'percent') {
@@ -1695,6 +1697,7 @@ function ValidateBooking() {
     return true;
 }
 function Clear() {
+    roundOff = 0;
     $('#BasicInformation').find('input[type=text],input[type=date]').val('');
     $('#BasicInformation').find('select:not(#ddlCountry)').prop('selectedIndex', '0').trigger('change.select2');
     $('#ddlCountry').val(14).trigger('change.select2');
