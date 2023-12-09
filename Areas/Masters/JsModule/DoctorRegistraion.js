@@ -369,7 +369,7 @@ function AddUpdateDoctorProfile1() {
         objBO.IsProfile = ($('input[name=IsProfile]').is(':checked')) ? 'Y' : 'N';
         objBO.feefreq = $("#txtFeeFreq").val();
         objBO.floorno = $("#ddlFloorNo option:selected").val();
-        objBO.roomno = $("#ddlRoomNo option:selected").val();
+        objBO.roomno = $("#txtRoomNo").val();
         objBO.patientduration = $("#ddlDuration option:selected").val();
         objBO.hosp_id = Active.unitId;
         objBO.login_id = Active.userId;
@@ -427,7 +427,7 @@ function AddUpdateDoctorProfile() {
         objBO.IsExamRoomByPass = ($('input[name=IsExamRoomByPass]').is(':checked')) ? 'Y' : 'N';
         objBO.feefreq = $("#txtFeeFreq").val();
         objBO.floorno = $("#ddlFloorNo option:selected").text();
-        objBO.roomno = $("#ddlRoomNo option:selected").text();
+        objBO.roomno = $("#txtRoomNo").val();
         objBO.patientduration = $("#ddlDuration option:selected").val();
         objBO.ImageName = _doctorId + '.jpg';
         objBO.virtual_path = "-";
@@ -458,7 +458,7 @@ function AddUpdateDoctorProfile() {
     }
 }
 function UploadDoctorProfile(elem) {
-   
+
     if ($('input[id=imgdoctors]').val() == '') {
         alert('Please Choose Profile Image');
         return
@@ -477,8 +477,8 @@ function UploadDoctorProfile(elem) {
     data.append('ImageByte', $('input[id=docImage]')[0].files[0]);
     UploadDocumentInfo.onreadystatechange = function () {
         if (UploadDocumentInfo.status) {
-            if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {              
-                var json = JSON.parse(UploadDocumentInfo.responseText);               
+            if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {
+                var json = JSON.parse(UploadDocumentInfo.responseText);
                 alert(json);
                 $(elem).removeClass('loading');
             }
@@ -669,13 +669,9 @@ function EditDoctor(DoctorId) {
                         if ($(this).text() == val.FloorName) {
                             $("#ddlFloorNo").prop('selectedIndex', '' + $(this).index() + '').change();
                         }
-                        $("#ddlRoomNo option").each(function () {
-                            if ($(this).text() == val.RoomNo) {
-                                $("#ddlRoomNo").prop('selectedIndex', '' + $(this).index() + '').change();
-                            }
-                        });
                     });
 
+                    $("#txtRoomNo").val(val.RoomNo);
                     $("#txtPhone").val(val.landline_no);
                     $("#txtMobile").val(val.mobile_no);
                     $("#txtAddress").val(val.addres1);

@@ -131,6 +131,30 @@ function GenerateBill() {
         });
     }
 }
+function MarkDischarge() {
+    if (confirm('Are you sure to Submit?')) {
+        var url = config.baseUrl + "/api/IPDNursingService/IPD_GenerateBill";
+        var objBO = {};
+        objBO.IPDNo = _IPDNo;
+        objBO.BillingType ="-";
+        objBO.Remark = "";
+        objBO.login_id = Active.userId;
+        objBO.Logic = "MarkDischarged";
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            contentType: "application/json;charset=utf-8",
+            dataType: "JSON",
+            success: function (data) {
+                alert(data);
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
 function SaveCloseApproval(logic) {
     if (confirm('Are you sure?')) {
         var url = config.baseUrl + "/api/IPDNursingService/IPD_GenerateBill";

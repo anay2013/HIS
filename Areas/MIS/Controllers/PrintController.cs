@@ -166,23 +166,25 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
             StringBuilder b = new StringBuilder();
             StringBuilder h = new StringBuilder();
             StringBuilder f = new StringBuilder();
-            int Count = 0;         
+            int Count = 0;
             b.Append("<div style='text-align:center;float:left;width:100%;'>");
             b.Append("<h2 style='font-weight:bold;margin:0'>Chandan Hospital</h2>");
             b.Append("<h3 style='font-weight:bold;margin:0'>Daily Collection Report</h3>");
             b.Append("<h4 style='font-weight:bold;margin:0'>From : " + Convert.ToDateTime(from).ToString("MM/dd/yyyy") + ", To : " + Convert.ToDateTime(to).ToString("MM/dd/yyyy") + "</h4>");
-            b.Append("</div>");           
-            b.Append("<hr/>");                   
+            b.Append("</div>");
+            b.Append("<hr/>");
             b.Append("<div style='text-align:center;float:left;width:1200px;'>");
-            b.Append("<table border='1' style='width:100%;font-size:12px;border-collapse: collapse;margin-top:10px;'>");        
+            b.Append("<table border='1' style='width:100%;font-size:12px;border-collapse: collapse;margin-top:10px;'>");
             b.Append("<tr>");
             b.Append("<th style='padding-left:4px;text-align:left'>S.No</th>");
             b.Append("<th style='padding-left:4px;text-align:left'>Date</th>");
             b.Append("<th style='padding-left:4px;text-align:left'>Receipt No.</th>");
             b.Append("<th style='padding-left:4px;text-align:left'>UHID</th>");
+            b.Append("<th style='padding-left:4px;text-align:left'>IPOP No.</th>");
             b.Append("<th style='padding-left:4px;text-align:left'>Patient Name</th>");
             b.Append("<th style='padding-left:4px;text-align:left'>Panel Name</th>");
-            b.Append("<th style='padding-left:4px;text-align:left'>Tnx Type</th>");           
+            b.Append("<th style='padding-left:4px;text-align:left'>Tnx Type</th>");
+            b.Append("<th style='padding-left:4px;text-align:left'>Ref No</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Bill Total</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Cash</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Cheque</th>");
@@ -190,21 +192,23 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
             b.Append("<th style='padding-right:4px;text-align:right'>NEFT</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Received</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Opd Credit</th>");
-            b.Append("<th style='padding-left:4px;text-align:left'>User</th>");          
+            b.Append("<th style='padding-left:4px;text-align:left'>User</th>");
             b.Append("</tr>");
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
-                {                   
+                {
                     Count++;
                     b.Append("<tr>");
                     b.Append("<td>" + dr["SrNo"].ToString() + "</td>");
                     b.Append("<td>" + dr["RcptDate"].ToString() + "</td>");
                     b.Append("<td>" + dr["ReceiptNo"].ToString() + "</td>");
                     b.Append("<td>" + dr["uhid"].ToString() + "</td>");
+                    b.Append("<td>" + dr["ipop_no"].ToString() + "</td>");
                     b.Append("<td>" + dr["patient_name"].ToString() + "</td>");
                     b.Append("<td>" + dr["PanelName"].ToString() + "</td>");
-                    b.Append("<td>" + dr["tnxType"].ToString() + "</td>");                  
+                    b.Append("<td>" + dr["tnxType"].ToString() + "</td>");
+                    b.Append("<td>" + dr["RefNo"].ToString() + "</td>");
                     b.Append("<td style='padding-right:4px;text-align:right'>" + dr["BillTotal"].ToString() + "</td>");
                     b.Append("<td style='padding-right:4px;text-align:right'>" + dr["Cash"].ToString() + "</td>");
                     b.Append("<td style='padding-right:4px;text-align:right'>" + dr["Cheque"].ToString() + "</td>");

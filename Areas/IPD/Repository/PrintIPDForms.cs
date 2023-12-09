@@ -96,7 +96,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         }
         private string GetHeaderHTML(string TemplateName)
         {
-            return "<div style='text-align:center;margin-top:1px;font-size:24px;font-weight:bold;width:100%;'>" + TemplateName + "</div>";
+            //return "<div style='text-align:center;margin-top:1px;font-size:24px;font-weight:bold;width:100%;'>" + TemplateName + "</div>";
+            return "<div style='text-align:center;margin-top:1px;font-size:24px;font-weight:bold;width:100%;'></div>";
         }
         private string GetFooterHTML(string PageName,string PageIndex)
         {

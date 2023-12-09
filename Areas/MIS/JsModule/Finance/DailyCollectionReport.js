@@ -60,9 +60,11 @@ function DailyCollectionReport() {
                         tbody += '<td>' + val.RcptDate + '</td>';
                         tbody += '<td>' + val.ReceiptNo + '</td>';
                         tbody += '<td>' + val.uhid + '</td>';
+                        tbody += '<td>' + val.ipop_no + '</td>';
                         tbody += '<td>' + val.patient_name + '</td>';
                         tbody += '<td>' + val.PanelName + '</td>';
                         tbody += '<td>' + val.tnxType + '</td>';
+                        tbody += '<td>' + val.RefNo + '</td>';
                         tbody += '<td class="text-right">' + val.BillTotal + '</td>';
                         tbody += '<td class="text-right">' + val.Cash + '</td>';
                         tbody += '<td class="text-right">' + val.Cheque + '</td>';

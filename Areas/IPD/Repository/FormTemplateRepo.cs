@@ -5454,7 +5454,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("</table>");
 
             body.Append("<div class='row' style='text-align: justify; margin-top:50px'>.................................................................................................................................................................</div>");
-            body.Append("<div class='row' style='text-align: justify'><p><center><b>Discharge summary has been expained to me in details in my language,<br>Patient/Attendant name & Signature </b></center></p></div>");
+            body.Append("<div class='row' style='text-align: justify'><p><center><b>Discharge summary has been explained to me in details in my language,<br>Patient/Attendant name & Signature </b></center></p></div>");
             body.Append("<div class='row' style='text-align: justify'><p><center><h3 style='height:60px;width:200px; border:1px solid black'></h3></center></p></div>");
             body.Append("</div>");
            

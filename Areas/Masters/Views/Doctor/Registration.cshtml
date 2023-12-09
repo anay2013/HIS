@@ -3,16 +3,18 @@
     ViewBag.Title = "Registration";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/Masters/JsModule/DoctorRegistraion.js?ver=1.5"></script>
+<script src="~/Areas/Masters/JsModule/DoctorRegistraion.js?ver=1.6"></script>
 <style>
     #profileUpload {
         margin-top: 5px;
         background: #00a65a;
         visibility: hidden;
     }
+
     #RateModal h5, #RateModal input[type=checkbox] {
         margin: 0
     }
+
     #RateModal .panel-heading {
         padding: 2px 10px
     }
@@ -396,7 +398,7 @@
                                     <th>Room No</th>
                                     <th>:</th>
                                     <td>
-                                        <select id="ddlRoomNo" class="form-control"></select>
+                                        <input type="text" id="txtRoomNo" class="form-control" placeholder="Room No." />
                                     </td>
                                 </tr>
                                 <tr>

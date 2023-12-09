@@ -42,6 +42,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             decimal NetPayable = 0;
             decimal Balance = 0;
             string appNo = string.Empty;
+            string preparedBy = string.Empty;
             string CancelAgainstNo = "";
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -58,6 +59,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                 foreach (DataRow dr in ds.Tables[1].Rows)
                 {
                     appNo = dr["app_no"].ToString();
+                    preparedBy = dr["preparedBy"].ToString();
                     GrossAmount = Convert.ToDecimal(dr["GrossAmount"]);
                     discount = Convert.ToDecimal(dr["discount"]);
                     NetAmount = Convert.ToDecimal(dr["NetAmount"]);
@@ -73,6 +75,15 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Receipt</h3>");
                     b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
                     b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
+                    b.Append("<tr>");
+                    b.Append("<td>Room No</td>");
+                    b.Append("<td>:</td>");
+                    b.Append("<td><b>" + dr["RoomNo"].ToString() + "</b></td>");
+                    b.Append("<td>&nbsp;</td>");
+                    b.Append("<td></td>");
+                    b.Append("<td></td>");
+                    b.Append("<td></td>");
+                    b.Append("</tr>");
                     b.Append("<tr>");
                     b.Append("<td>Token No</td>");
                     b.Append("<td></td>");
@@ -265,23 +276,25 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("</div>");
             b.Append("</div>");
 
+
             b.Append("<div style='width:100%;float:left'>");
             b.Append("<p style='font-size:14px'><b>Please download our Chandan24x7 App.</b></p>");
             b.Append("<p style='font-size:11px'>Note : This is a computerized Bill and does not require Seal & Sign</p>");
             b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
-            b.Append("<table style='font-size:13px;text-align:center;border:0px solid #dcdcdc;width:100%'>");
+            b.Append("<table style='font-size:13px;border:0px solid #dcdcdc;width:100%'>");
             b.Append("<tr>");
-            b.Append("<td>" + DateTime.Now.ToString("dd-mm-yyyy hh:mm") + "</td>");
-            b.Append("<td>Printed By : " + ActiveUser + "</td>");
+            b.Append("<td style='text-align:left'>Print Date & Time :" + DateTime.Now.ToString("dd-mm-yyyy hh:mm") + "</td>");
+            b.Append("<td style='text-align:center'>Prepared By : " + preparedBy + "</td>");
+            b.Append("<td style='text-align:right'>Printed By : " + ActiveUser + "</td>");
             b.Append("</tr>");
             b.Append("</table>");
             b.Append("</div>");
 
             //b.Append("<span style='text-aligh:center'>");
             //b.Append("<p style='font-size:13px'>09-Oct-2020 12:04PM</p>");
-            //b.Append("<p style='font-size:13px'>Prepared By : Arshad Ahmad</p>");			
+            //b.Append("<p style='font-size:13px'>Prepared By : Arshad Ahmad</p>");
             //b.Append("<p style='font-size:13px'>Printed By : Mr. Vijay Singh</p>");
-            //b.Append("</span>");						
+            //b.Append("</span>");
             pdfConverter.Header_Enabled = false;
             pdfConverter.Footer_Enabled = false;
             pdfConverter.Header_Hight = 150;

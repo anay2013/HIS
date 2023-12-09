@@ -134,7 +134,7 @@
         }
 
     });
-    GetPatientDetails();
+   GetPatientDetails('OLD_HIS');
     GetDoctor();
     GetNurseDetails();
     $('#ddlReqBy tbody').on('click', 'tr', function () {
@@ -198,47 +198,69 @@
     });
 
 });
-function GetPatientDetails() {
-    var url = config.baseUrl + "/api/IPDNursing/GetAdmittedIPDPatient";
-    $.ajax({
-        method: "GET",
-        url: url,
-        dataType: "json",
-        success: function (data) {
-            if (data != '') {
-                $("#tblAdmittedIPDPatient tbody").empty();
-                $('#ddlRoom').empty().append('<option>Select Room</option>');
-                debugger;
-                var room = [];
-                $.each(data.ResultSet.Table, function (key, val) {
-                    var r = val.RoomName.split('/');
-                    room.push(r[3]);
-                    $('<tr><td data-room="' + r[3] + '">' + val.IPDNO + '</td><td>' + val.PName + '</td><td>' + val.Patient_ID + '</td><td>' + val.DName + '</td>' +
-                        '<td class="btn text-green getPatient" data-PName="' + val.PName + '" data-Gender="' + val.Gender + '" data-Age="' + val.Age + '" data-AdmitedDate="' + val.AdmitDate + '" data-Doctor="' + val.DName + '"data-UHID="' + val.Patient_ID + '"data-IPD="' + val.IPDNO + '"data-RoomNo="' + val.RoomName + '"data-panelid="' + val.Panel_ID + '"data-companyname="' + val.Company_Name + '" data-department="' + val.Department + '">' +
-                        '<span class="fa fa-arrow-right"></span></td></tr>').appendTo($("#tblAdmittedIPDPatient tbody"));
-
-                });
-                var unique = room.filter(function (itm, i, room) {
-                    return i == room.indexOf(itm);
-                });
-                for (i = 0; i < unique.length; i++) {
-                    var data = '<option>' + unique[i] + '</option>'
-                    $('#ddlRoom').append(data);
+function GetPatientDetails(logic) {
+    $("#tblAdmittedIPDPatient tbody").empty();
+    $('#ddlRoom').empty().append('<option>Select Room</option>');
+    if (logic == 'NEW_HIS') {
+        var url = config.baseUrl + "/api/warehouse/wh_ConsumptionQueries";
+        var objConsumpBO = {};
+        objConsumpBO.login_id = Active.userId;
+        objConsumpBO.Logic = "IPD_PatientInfo";
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objConsumpBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    BindPatient(data)
                 }
-                ////$("#tblAdmittedIPDPatient").tableHeadFixer();
-                //$('#tblAdmittedIPDPatient').tableScroll({ height: 200 });
-                ////$('#thetable').tableScroll({ height: 200 });
-                ////$('#thetable').tableScroll({ width: 400 });
-                ////$('#thetable').tableScroll({ containerClass: 'myCustomClass' });
+            },
+            error: function (response) {
+                alert('Server Error...!');
             }
-            else {
-                alert("Error");
-            };
-        },
-        error: function (response) {
-            alert('Server Error...!');
-        }
-    });
+        });
+    }
+    if (logic == 'OLD_HIS') {
+        var url = config.baseUrl + "/api/IPDNursing/GetAdmittedIPDPatient";
+        $.ajax({
+            method: "GET",
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                if (data != '') {
+                    BindPatient(data)
+                }
+                else {
+                    alert("Error");
+                };
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function BindPatient(data) {
+    if (data != '') {      
+        var room = [];
+        $.each(data.ResultSet.Table, function (key, val) {
+            var r = val.RoomName.split('/');
+            room.push(r[3]);
+            $('<tr><td data-room="' + r[3] + '">' + val.IPDNO + '</td><td>' + val.PName + '</td><td>' + val.Patient_ID + '</td><td>' + val.DName + '</td>' +
+                '<td class="btn text-green getPatient" data-PName="' + val.PName + '" data-Gender="' + val.Gender + '" data-Age="' + val.Age + '" data-AdmitedDate="' + val.AdmitDate + '" data-Doctor="' + val.DName + '"data-UHID="' + val.Patient_ID + '"data-IPD="' + val.IPDNO + '"data-RoomNo="' + val.RoomName + '"data-panelid="' + val.Panel_ID + '"data-companyname="' + val.Company_Name + '" data-department="' + val.Department + '">' +
+                '<span class="fa fa-arrow-right"></span></td></tr>').appendTo($("#tblAdmittedIPDPatient tbody"));
+
+        });
+        var unique = room.filter(function (itm, i, room) {
+            return i == room.indexOf(itm);
+        });
+        for (i = 0; i < unique.length; i++) {
+            var data = '<option>' + unique[i] + '</option>'
+            $('#ddlRoom').append(data);
+        }      
+    }
 }
 function GetDoctor() {
     var url = config.baseUrl + "/api/IPDNursing/GetDoctor";

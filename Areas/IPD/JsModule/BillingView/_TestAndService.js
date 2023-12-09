@@ -264,15 +264,20 @@ function BookingInfo() {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
-                        if (parseFloat(val.panel_rate) > 1) {
+                        if (parseFloat(val.panel_rate) > 0) {
                             tbody += "<tr>";
                             tbody += "<td style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</td>";
                             tbody += "<td style='display:none'>" + val.ItemId + "</td>";
-                            tbody += "<td>" + counter + "</td>";
-                            tbody += "<td>" + val.ItemName + "</td>";
-                            tbody += "<td><input type='text' style='width:80%;height: 17px;' class='form-control text-right' value='1'/></td>";
-                            tbody += "<td><input type='checkbox'/></td>";
-                            tbody += "<td><button style='height: 15px;line-height:0;' onclick=$(this).closest('tr').remove() class='btn btn-danger btn-xs'><i class='fa fa-remove'></i></button></td>";
+                            tbody += "<td style='width:5%'>" + counter + "</td>";
+                            tbody += "<td style='width:55%'>" + val.ItemName + "</td>";
+                            if (val.IsRateEditable == "1")
+                                tbody += "<td style='width:25%;'><input style='height:20px' class='form-control'  type='text' value='" + val.panel_rate+"'/></td>";
+                            else
+                                tbody += "<td style='width:25%;'><input style='height:20px' class='form-control' readonly type='text' value='" + val.panel_rate +"'/></td>";
+
+                            tbody += "<td style='width:5%'><input type='text' style='height:20px' class='form-control'   value='1'/></td>";
+                            tbody += "<td style='width:5%'><input type='checkbox'/></td>";
+                            tbody += "<td style='width:5%'><button style='height: 15px;line-height:0;' onclick=$(this).closest('tr').remove() class='btn btn-danger btn-xs'><i class='fa fa-remove'></i></button></td>";
                             tbody += "</tr>";
                             count++;
                         }
@@ -370,9 +375,9 @@ function ItemInsert() {
             'ItemSection': Info.ItemSection,
             'IsPackage': Info.IsPackage,
             'Rate': Info.mrp_rate,
-            'panel_discount': Info.panel_discount,
-            'panel_rate': Info.panel_rate,
-            'qty': $(this).find('td:eq(4)').find('input:text').val(),
+            'panel_discount': Info.IsRateEditable=1 ? 0 : Info.panel_discount,
+            'panel_rate': $(this).find('td:eq(4)').find('input:text').val(),
+            'qty': $(this).find('td:eq(5)').find('input:text').val(),
             'adl_disc_perc': 0,
             'adl_disc_amount': 0,
             'net_amount': parseFloat(Info.panel_rate) - parseFloat(Info.panel_discount),

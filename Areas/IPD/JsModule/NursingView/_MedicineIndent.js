@@ -142,7 +142,7 @@ function GetDoctor() {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {          
+        success: function (data) {
             $('#ddlDoctor').empty().append($("<option data-id='Select'></option>").val('Select').html('Select')).select2();
             $.each(data.ResultSet.Table1, function (key, val) {
                 $("#ddlDoctor").append($("<option></option>").val(val.DoctorId).html(val.DoctorName));
@@ -197,12 +197,12 @@ function SaveIPOPIndent() {
         objBO.push({
             'HospId': Active.unitId,
             'pt_name': $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(3)').text(),
-            'ipop_no': $('#tblAdviceHeader tbody').find('tr:eq(9)').find('td:eq(3)').text(),
+            'ipop_no': $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(9)').text(),
             'gen_from': 'IPD',
             'dept_name': _deptName,
             'room_no': _roomNo,
             'bed_no': '-',
-            'doctor_id': $("#ddlDoctor option:selected").data('id'),
+            'doctor_id': $("#ddlDoctor option:selected").val(),
             'doctor_name': $('#ddlDoctor option:selected').text(),
             'item_id': $(this).find('td:nth-child(1)').text(),
             'item_name': $(this).find('td:nth-child(2)').text(),
@@ -334,8 +334,7 @@ function ClearIndent() {
 function ValidateIndent() {
     var doctor = $('#ddlDoctor option:selected').text();
     var ids = $('#tblProduct tbody').find('tr').length;
-    var pname = $('span[data-pname]').text();
-
+    var pname = $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(3)').text();
 
     if (pname == '') {
         $('span[data-pname]').prev().css({ 'color': 'red' });
