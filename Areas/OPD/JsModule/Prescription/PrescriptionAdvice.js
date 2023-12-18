@@ -176,7 +176,7 @@ $(document).ready(function () {
     $('.OPDPrintPreview .prescribedItem').on('click', 'span', function () {
         var itemid = $(this).attr('id');
         var itemName = $(this).text();
-        $(this).replaceWith('<input type="text" value="' + itemName + '"/>');        
+        $(this).replaceWith('<input type="text" value="' + itemName + '"/>');
         $('input:text').focus();
     });
     $('.OPDPrintPreview .prescribedItem').on('blur', 'input:text', function () {
@@ -253,20 +253,20 @@ function DischargeReportContent(ipdNo) {
                 else {
                     alert('No Record Found..');
                 }
-            }          
+            }
         },
         error: function (response) {
             alert('Server Error...!');
         },
     });
 }
-function copyContent(elem) {    
+function copyContent(elem) {
     var content = $(elem).closest('tr').find('td:eq(0)').text();
     var $temp = $("<input>");
     $("body").append($temp);
     $temp.val(content).select();
     document.execCommand("copy");
-    $temp.remove();   
+    $temp.remove();
     $('#tblDischargeReportContent tbody').find('.fa-check-circle-o').remove();
     $(elem).append('<i class="fa fa-check-circle-o text-success"></i>');
 }
@@ -663,14 +663,14 @@ function DeleteTemplateInfo(TemplateId, ItemId) {
     });
 }
 function AdvicePreview(appno) {
-    $('#PresPreview').attr('src', config.rootUr+'/loading.html');
+    $('#PresPreview').attr('src', config.rootUrl + '/loading.html');
     setTimeout(function () {
         var url = config.rootUrl + "/opd/print/AdvicePreview?app_no=" + appno;
         $('#PresPreview').attr('src', url);
     }, 200);
 }
 function PresPreview() {
-    $('#PresPreview').attr('src', config.rootUr + '/loading.html');
+    $('#PresPreview').attr('src', config.rootUrl + '/loading.html');
     setTimeout(function () {
         var url = config.rootUrl + "/opd/print/AdvicePreview?app_no=" + Active.AppId;
         $('#PresPreview').attr('src', url);

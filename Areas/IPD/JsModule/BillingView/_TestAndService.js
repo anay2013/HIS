@@ -4,6 +4,8 @@
             e.preventDefault();
         }
     }, false);
+    FillCurrentDate('txtBookingFrom')
+    FillCurrentDate('txtBookingTo')
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')
     $('select').select2();
@@ -19,7 +21,7 @@
         }
     };
     var count = 0;
-    $('#txtDBSearch').on('keydown', function (e) {        
+    $('#txtDBSearch').on('keydown', function (e) {
         var tbody = $('#tblItemInfo').find('tbody');
         var selected = tbody.find('.selected');
         var KeyCode = e.keyCode;
@@ -79,6 +81,8 @@
         $(this).closest('tr').addClass('selected');
         $("#txtDBSearch").focus();
     });
+
+    $('#txtBookingFrom').attr('max', '2024-12-14');
 });
 function searchTable12(txt, tbl) {
     $('#' + txt).on('keyup', function () {
@@ -250,7 +254,9 @@ function BookingInfo() {
     objBO.ItemIds = _itemId;
     objBO.Qty = 1;
     objBO.login_id = Active.userId;
-    objBO.Logic = "BookingInfo";
+    objBO.from = $("#txtBookingFrom").val();
+    objBO.to = $("#txtBookingTo").val();
+    objBO.Logic = "FromBilling";
     $.ajax({
         method: "POST",
         url: url,
@@ -260,20 +266,22 @@ function BookingInfo() {
         success: function (data) {
             var tbody = '';
             var count = 0;
-            var counter = $('#tblBookingInfo tbody tr').length + 1;
+            var counter = 0;
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
+                        counter++;
                         if (parseFloat(val.panel_rate) > 0) {
                             tbody += "<tr>";
                             tbody += "<td style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</td>";
                             tbody += "<td style='display:none'>" + val.ItemId + "</td>";
                             tbody += "<td style='width:5%'>" + counter + "</td>";
-                            tbody += "<td style='width:55%'>" + val.ItemName + "</td>";
+                            tbody += "<td style='width:45%'>" + val.ItemName + "</td>";
+                            tbody += "<td style='width:19%'>" + val.EntryDate + "</td>";
                             if (val.IsRateEditable == "1")
-                                tbody += "<td style='width:25%;'><input style='height:20px' class='form-control'  type='text' value='" + val.panel_rate+"'/></td>";
+                                tbody += "<td style='width:20%;'><input style='height:20px' class='form-control'  type='text' value='" + val.panel_rate + "'/></td>";
                             else
-                                tbody += "<td style='width:25%;'><input style='height:20px' class='form-control' readonly type='text' value='" + val.panel_rate +"'/></td>";
+                                tbody += "<td style='width:20%;'><input style='height:20px' class='form-control' readonly type='text' value='" + val.panel_rate + "'/></td>";
 
                             tbody += "<td style='width:5%'><input type='text' style='height:20px' class='form-control'   value='1'/></td>";
                             tbody += "<td style='width:5%'><input type='checkbox'/></td>";
@@ -284,7 +292,7 @@ function BookingInfo() {
                         else {
                             alert('This Item has no Rate');
                         }
-                      
+
                     });
                     $('#tblBookingInfo tbody').append(tbody);
                 }
@@ -363,25 +371,26 @@ function BookingInfoByIPDNo() {
     });
 }
 function ItemInsert() {
-    var url = config.baseUrl + "/api/IPDNursingService/IPD_NursingItemInsert";
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_BillingItemInsert";
     var objBooking = {};
     var objRateList = [];
     $('#tblBookingInfo tbody tr').each(function () {
         var Info = JSON.parse($(this).find('td:eq(0)').text());
         objRateList.push({
+            'EntryDateTime': Info.EntryDate,
             'RateListId': Info.RateListId,
             'ItemId': Info.ItemId,
             'RateListName': Info.RateListName,
             'ItemSection': Info.ItemSection,
             'IsPackage': Info.IsPackage,
             'Rate': Info.mrp_rate,
-            'panel_discount': Info.IsRateEditable=1 ? 0 : Info.panel_discount,
-            'panel_rate': $(this).find('td:eq(4)').find('input:text').val(),
-            'qty': $(this).find('td:eq(5)').find('input:text').val(),
+            'panel_discount': Info.IsRateEditable = 1 ? 0 : Info.panel_discount,
+            'panel_rate': $(this).find('td:eq(5)').find('input:text').val(),
+            'qty': $(this).find('td:eq(6)').find('input:text').val(),
             'adl_disc_perc': 0,
             'adl_disc_amount': 0,
             'net_amount': parseFloat(Info.panel_rate) - parseFloat(Info.panel_discount),
-            'IsUrgent': ($(this).find('td:eq(5)').find('input:checkbox').is(':checked')) ? 'Y' : 'N'
+            'IsUrgent': ($(this).find('td:eq(7)').find('input:checkbox').is(':checked')) ? 'Y' : 'N'
         });
     });
     objBooking.hosp_id = Active.HospId;
@@ -406,6 +415,8 @@ function ItemInsert() {
                 alert('Successfully Submited');
                 BookingInfoByIPDNo();
                 $('#tblBookingInfo tbody').empty();
+                FillCurrentDate('txtBookingFrom')
+                FillCurrentDate('txtBookingTo')
                 //$('#ddlSubCategory').prop('selectedIndex', '0');
             }
             else {

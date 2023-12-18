@@ -93,14 +93,6 @@ function SummarisedBilling() {
         }
     });
 }
-function Receipt_IPDBillSummary() {
-    var url = "../Print/IPDBillSummary?_BillNo=" + _BillNo + "&_IPDNo=" + _IPDNo + "&_BillPrintType=IncludingPackagedItem";
-    window.open(url, '_blank');
-}
-function Receipt_IPDDischargeReport() {
-    var url = "../Print/IPDDischargeReport?_IPDNo=" + _IPDNo;
-    window.open(url, '_blank');
-}
 function GenerateBill() {
     if (confirm('Are you sure to Submit?')) {
         var url = config.baseUrl + "/api/IPDNursingService/IPD_GenerateBill";

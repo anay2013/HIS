@@ -1,4 +1,5 @@
 ﻿/// <reference path="../../../jsmodule/filesaver.min.js" />
+var _DoctorId = "";
 $(document).ready(function () {
     CloseSidebar();
     var AppId = sessionStorage.getItem('AppId');
@@ -57,6 +58,44 @@ function downloadFile(ele) {
     objBO.Logic = 'PatientForAdvice';
     Global_DownloadPdf(url, '', 'test.pdf')
 }
+function NextFollowUpVisit() {
+    var url = config.baseUrl + "/api/Appointment/Opd_AppointmentUpdate";
+    var objBO = {};
+    if ($('#txtFollowUpDate').val() == '') {
+        alert('Please Provide Next Follow Up Date');
+        return
+    }
+    objBO.UHID = $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(5)').text();
+    objBO.app_no = sessionStorage.getItem('AppId');
+    objBO.DoctorId = _DoctorId;
+    objBO.AppDate = $('#txtFollowUpDate').val();
+    objBO.prm_1 = $('#txtFollowUpRemark').val();
+    objBO.AppInTime = '00:00';
+    objBO.AppOutTime = '00:00';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'NextFollowUpVisit';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('Successfully')) {
+                alert('Saved Successfully..');
+                $('#txtFollowUpDate').val('');
+                $('#txtFollowUpRemark').val('');
+                $('#modalNextFollowUp').modal('hide');
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function PatientHeaderInfo() {
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
     var objBO = {};
@@ -76,6 +115,7 @@ function PatientHeaderInfo() {
                     $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(9)').text(val.app_no);
                     $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(12)').text(val.AppDate);
 
+                    _DoctorId = val.DoctorId;
                     $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(2)').text(val.DoctorName);
                     $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(5)').text(val.UHID);
                     $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(8)').text(val.PanelName);
@@ -177,7 +217,7 @@ function PatientForAdvice() {
                     tbody += "<td>" + val.med_times + "</td>";
                     tbody += "<td>" + val.med_duration + "</td>";
                     tbody += "<td>" + val.med_intake + "</td>";
-                    tbody += "<td>" + val.med_route + "</td>";                   
+                    tbody += "<td>" + val.med_route + "</td>";
                     tbody += "<td>" + val.remark + "</td>";
                     tbody += "</tr>"
                     $('div[id=PrescribedMedicine]:eq(1)').show();
@@ -206,13 +246,13 @@ function PatientForAdvice() {
                 $('#PatientVisits #tblPatientVisits tbody').append(tbody);
                 $('#tblIPDDischargeSummary tbody').empty();
                 var tbody1 = "";
-                $.each(data.ResultSet.Table8, function (key, val) {                
-                    tbody1 += "<tr>";                   
+                $.each(data.ResultSet.Table8, function (key, val) {
+                    tbody1 += "<tr>";
                     tbody1 += "<td>" + val.IPDNo + "</td>";
                     tbody1 += "<td>" + val.AdmitDate + "</td>";
                     tbody1 += "<td><i class='fa fa-copy IPDDisList'></i></td>";
                     tbody1 += "</tr>";
-                });               
+                });
                 $('#tblIPDDischargeSummary tbody').append(tbody1);
             }
             else {

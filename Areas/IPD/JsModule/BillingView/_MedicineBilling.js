@@ -10,10 +10,11 @@ $(document).ready(function () {
             $(this).parents('table').find('tbody').find('input[type=checkbox]').prop('checked', true);
         else
             $(this).parents('table').find('tbody').find('input[type=checkbox]').prop('checked', false);
-    });  
+    });
     $('#txtSearchIPDNO').val($('#tblAdviceHeader tr:eq(0) td:eq(9)').text());
 });
 function IPDSalebyIPDNo() {
+    $('#tblIPDInfo tbody').empty();
     $('#div#skill .circle').show();
     if ($('#txtSearchIPDNO').val() == '') {
         alert('Please Provide IPD No.');
@@ -27,7 +28,7 @@ function IPDSalebyIPDNo() {
     objBO.prm_2 = $('#ddlFilterBy option:selected').text();
     objBO.prm_3 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = "IPDSalebyIPDNo";
+    objBO.Logic = "SaleByIpdNoNewHIS";
     $.ajax({
         method: "POST",
         url: url,
@@ -75,8 +76,9 @@ function IPDSalebyIPDNo() {
                             }
 
                             TAmount += val.amount;
-                            if (val.SaleStatus == 'Pending') {
-                                tbody += "<tr style='background:#e5bcc2'>";
+
+                            if (val.his_push_flag == 'Y') {
+                                tbody += "<tr style='background:#00a66961'>";
                             }
                             else {
                                 tbody += "<tr>";
@@ -84,19 +86,20 @@ function IPDSalebyIPDNo() {
 
                             tbody += "<td>" + count + "</td>";
                             tbody += "<td>" + val.indent_no + "</td>";
-                            tbody += "<td>" + val.IndentStatus + "</td>";
+                            tbody += "<td>" + val.ItemId + "</td>";
+                            tbody += "<td>" + val.ItemName + "</td>";
                             tbody += "<td class='text-right'>" + val.ItemCount + "</td>";
-                            tbody += "<td>" + val.SaleStatus + "</td>";
-                            tbody += "<td><a class='billrecpt' href='/IPD/Print/SalesBill?InvoiceNo=" + val.sale_inv_no + "' target='_blank'>" + val.sale_inv_no + "</a></td>";
+                            tbody += "<td><a class='billrecpt' href=" + config.documentServerUrl+"/IPD/Print/SalesBill?InvoiceNo=" + val.sale_inv_no + "' target='_blank'>" + val.sale_inv_no + "</a></td>";
                             tbody += "<td class='text-right'>" + val.saleCount + "</td>";
                             tbody += "<td class='text-right'>" + val.Total + "</td>";
                             tbody += "<td class='text-right'>" + val.discount + "</td>";
                             tbody += "<td class='text-right'>" + val.amount + "</td>";
                             tbody += "<td>" + val.pay_mode + "</td>";
                             tbody += "<td>" + val.card_no + "</td>";
-                            tbody += "<td>" + val.VerifiedBy + "</td>";
-                            tbody += "<td>" + val.VerifyDate + "</td>";
-                            tbody += "<td><input type='checkbox'/></td>";
+                            if (val.his_push_flag=="N")
+                                tbody += "<td><input type='checkbox'/></td>";
+                            else
+                                tbody += "<td></td>";
                             tbody += "</tr>";
                             if (count == totalLength) {
                                 tbody += "<tr style='background:#afdfc9'>";
@@ -111,20 +114,6 @@ function IPDSalebyIPDNo() {
                     }
 
                 }
-                //if (Object.keys(data.ResultSet).length > 0) {
-                //    if (Object.keys(data.ResultSet.Table1).length > 0) {
-                //        $.each(data.ResultSet.Table1, function (key, val) {
-                //            tbody += "<tr style='background:#ffaeae'>";
-                //            tbody += "<td colspan='9' class='text-right'><b>Total Amount</b></td>";
-                //            tbody += "<td class='text-right'><b>" + TAmount.toFixed(2) + "</b></td>";
-                //            tbody += "<td class='text-right'>Cash Amount : <b>" + val.tCashAmount.toFixed(2) + "</b></td>";
-                //            tbody += "<td class='text-right'>Credit Amount : <b>" + val.tCreditAmount.toFixed(2) + "</b></td>";
-                //            tbody += "<td colspan='3'></td>";
-                //            tbody += "</tr>";
-                //        });
-                //    }
-                //}
-
                 $('#tblIPDInfo tbody').append(tbody);
             }
             else {
@@ -152,17 +141,17 @@ function DownloadExcel() {
     Global_DownloadExcel(url, objBO, "BillInfoBetweenDate.xlsx");
 }
 function ItemInsert() {
-    var url = config.baseUrl + "/api/IPDNursingService/IPD_NursingItemInsert";
+    var url = config.baseUrl + "/api/IPDNursingService/Pharmacy_InsertBillInfo";
     var objBooking = {};
     var objRateList = [];
     $('#tblIPDInfo tbody tr').each(function () {
-        if ($(this).find('td:eq(14)').find('input[type=checkbox]').is(':checked')) {
+        if ($(this).find('td:eq(12)').find('input[type=checkbox]').is(':checked')) {
             objRateList.push({
                 'AutoId': 0,
-                'TnxId': '-',
+                'TnxId': $(this).find('td:eq(5)').find('a').text(),
                 'RateListId': '-',
-                'CatId': $(this).find('td:eq(5)').find('a').text(),
-                'ItemId': 'IM0007870',
+                'CatId': "PharmacyItems",
+                'ItemId': $(this).find('td:eq(2)').text(),
                 'RateListName': $(this).find('td:eq(1)').text(),
                 'ItemSection': '-',
                 'IsPackage': 0,

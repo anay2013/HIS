@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 
-<script src="~/Areas/EMR/JsModule/CaseSheet.js"></script>
+<script src="~/Areas/EMR/JsModule/CaseSheet.js?v1.1"></script>
 <style>
     .flex {
         display: flex;
@@ -70,11 +70,17 @@
         border-width: 2px;
         border-image: url(/images/loading.gif) 60;
     }
+
+    .btnget {
+        width: 45%;
+        height: 26px;
+        border-radius: 2px;
+    }
 </style>
 <div id="page-content">
     <div class="container">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <div class="ml15">
                     <div class="">
                         <div class="panel">
@@ -83,11 +89,23 @@
                             </div>
                             <div class="panel-body" style="height:85vh">
                                 <div class="row" style="margin:5px 0">
-                                    <div class="col-md-6" style="padding:0 3px">
-                                        <input type="text" value="69289" id="txtIPDNo" class="form-control" placeholder="IPD No.." />
+                                    <div class="col-md-3" style="padding:0 3px">
+                                        <label>From</label>
+                                        <input type="date" id="txtFrom" class="form-control" />
                                     </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-warning" onclick="GetPatientInfo()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    <div class="col-md-4" style="padding:0 3px">
+                                        <label>To</label>
+                                        <div class="flex">
+                                            <input type="date" id="txtTo" class="form-control" />
+                                            <button class="btn btn-warning btnget" onclick="GetPatientInfo('GetPatientBetweenDate')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5" style="padding:0 3px">
+                                        <label>IPD No</label>
+                                        <div class="flex">
+                                            <input type="text" value="69289" id="txtIPDNo" class="form-control" placeholder="IPD No.." />
+                                            <button class="btn btn-warning btnget" style="width: 33%;" onclick="GetPatientInfo('GetPatientInfo')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <hr style="margin:5px 0" />
@@ -100,6 +118,7 @@
                                                         <th>IPD No</th>
                                                         <th>Patient Name</th>
                                                         <th>Admit Date</th>
+                                                        <th>Upload By</th>
                                                         <th>Discharge DateTime</th>
                                                         <th>CMD</th>
                                                     </tr>
@@ -114,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <div class="panel">
                     <div class="panel-heading" style="background:#0076d0;padding: 4px;">
                         <h4 class="text-white" style="font-size: 15px;">Upload Case Sheet</h4>
@@ -136,18 +155,18 @@
                             <div class="flex">
                                 <label style="white-space:pre">File Rack: </label>
                                 <select id="ddlFileRack" class="form-control"></select>
-                                <button onclick="UpdateRackByIPDNo()" class="btn btn-success btnPDF pull-right" style="width:31%"><i class="fa fa-plus-circle">&nbsp;</i>Update</button>
+                                <button onclick="UpdateRackByIPDNo()" class="btn btn-success btnPDF pull-right" style="width:40%"><i class="fa fa-plus-circle">&nbsp;</i>Update</button>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <button onclick="$('#modalRackMaster').modal('show')" class="btn btn-primary btnPDF pull-right" style="width:39%"><i class="fa fa-plus-circle">&nbsp;</i>Create New Rack</button>
+                            <button onclick="$('#modalRackMaster').modal('show')" class="btn btn-primary btnPDF pull-right" style="width:47%"><i class="fa fa-plus-circle">&nbsp;</i>Create New Rack</button>
                         </div>
                         <div class="col-md-6">
                             <div class="flex uploadSection">
                                 <label style="white-space:pre">Choose File : </label>
                                 <input type="file" id="uploadFile" accept=".pdf" class="form-control" style="border-radius: 0;border-color: #f39c12;" />
                                 <img id="imgFile" class="hide" />
-                                <button id="btnUpload" onclick="UploadCaseSheet(this)" class="btn btn-warning btnPDF"><i class="fa fa-file-pdf-o">&nbsp;</i>Uplaod</button>
+                                <button id="btnUpload" style="width:50%" onclick="UploadCaseSheet(this)" class="btn btn-warning btnPDF"><i class="fa fa-file-pdf-o">&nbsp;</i>Uplaod</button>
                             </div>
                         </div>
 

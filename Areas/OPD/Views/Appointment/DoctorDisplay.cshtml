@@ -7,7 +7,7 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />    
+    <meta name="viewport" content="width=device-width" />
     <title>DoctorDisplay</title>
     @Html.Partial("_header")
     <script src="~/JsModule/global.js"></script>
@@ -37,6 +37,15 @@
             padding: 7px 6px
         }
 
+        table > thead > tr > td {
+            font-size: 25px;
+            font-weight: bold;
+            color: #fff;
+            border: 3px solid #fff;
+            background: #66a60e;
+            padding: 7px 6px
+        }
+
         .table > tbody > tr > td {
             font-size: 25px;
             font-weight: bold;
@@ -47,6 +56,20 @@
 
             .table > tbody > tr > td:nth-child(odd) {
                 width: 15%;
+            }
+
+            .table > tbody > tr > td:nth-child(1) {
+                width: 10%;
+            }
+
+            .table > tbody > tr > td:nth-child(3) {
+                font-size: 23px !important;
+                text-align: center !important;
+                width: 20%;
+            }
+
+            .table > tbody > tr > td:nth-child(4) {
+                width: 13%;
             }
 
         .DoctorDisplay {
@@ -131,6 +154,32 @@
                 font-size: 23px;
             }
 
+            .DoctorInfo room-no {
+                text-align: center;
+                width: 25%;
+                background: #2e8dd1;
+                color: #fff;
+                font-size: 19px;
+                float: right;
+                font-weight: bold;
+                border-radius: 30px;
+                padding: 5px 14px;
+                margin-top: -16px;
+            }
+
+            .DoctorInfo timing {
+                text-align: center;
+                width: 25%;
+                background: #2e8dd1;
+                color: #fff;
+                font-size: 19px;
+                font-weight: bold;
+                float: right;
+                border-radius: 30px;
+                padding: 5px 14px;
+                margin-top: -16px;
+            }
+
             .DoctorInfo .info hr {
                 margin: 5px 0;
                 width: 100%;
@@ -148,23 +197,34 @@
                 </div>
                 <div class="col-md-10 info">
                     <doctor-name>-</doctor-name><br />
-                    <degree>-</degree><br />
+                    <degree>-</degree>
+                    <room-no>-</room-no>
+                    <br />
                     <hr />
                     <designation>-</designation><br />
                     <department>-</department>
+                    <timing>-</timing>
                 </div>
             </div>
             <div class="AllConsulting">
                 <table class="table tblConsulting" id="tblConsulting" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <td>Token No</td>
+                            <td>Patient Name</td>
+                            <td class="text-center">Entry Time</td>
+                            <td class="text-center">Status</td>
+                        </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>
             <div class="AllPending">
-                <table class="table tblAllPendingAbsent1" id="tblAllPendingAbsent1" style="margin-bottom: 0;">
+                <table class="table tblAllPendingAbsent1" id="tblAllPendingAbsent1" style="margin-bottom: 0;">                    
                     <tbody></tbody>
                 </table>
                 <marquee class="myMarquee" id="myMarquee" direction="up" scrollAmount="4">
-                    <table class="table tblAllPendingAbsent" id="tblAllPendingAbsent">
+                    <table class="table tblAllPendingAbsent" id="tblAllPendingAbsent">                      
                         <tbody></tbody>
                     </table>
                 </marquee>
@@ -177,14 +237,25 @@
                 </div>
                 <div class="col-md-10 info">
                     <doctor-name>-</doctor-name><br />
-                    <degree>-</degree><br />
+                    <degree>-</degree>
+                    <room-no>-</room-no>
+                    <br />
                     <hr />
                     <designation>-</designation><br />
                     <department>-</department>
+                    <timing>-</timing>
                 </div>
             </div>
             <div class="AllConsulting">
                 <table class="table tblConsulting" id="tblConsulting" style="margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <td>Token No</td>
+                            <td>Patient Name</td>
+                            <td class="text-center">Entry Time</td>
+                            <td class="text-center">Status</td>
+                        </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>

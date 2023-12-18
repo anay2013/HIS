@@ -19,9 +19,9 @@ $(document).ready(function () {
     sessionStorage.setItem('ActiveFormId', document.location.href.split('=')[1])
 	//urlEncript();
 });
-var Active = {
-	userName: sessionStorage.getItem('Username'),
-	userId: sessionStorage.getItem('UserID'),
+var Active ={
+	userName:sessionStorage.getItem('Username'),
+	userId:sessionStorage.getItem('UserID'),
     unitId: "CH01",
     HospId: "CH01",
     pharmacyId: "MS-H0048",

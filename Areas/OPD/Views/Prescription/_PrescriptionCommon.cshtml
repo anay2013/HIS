@@ -11,6 +11,24 @@
 <script src="~/Areas/OPD/JsModule/Prescription/InsertPrescribedItems.js"></script>
 <script src="~/Areas/OPD/JsModule/Prescription/MedicineTemplate.js"></script>
 <style>
+    .MedicineTemplate label.editable {
+        width: 100%;
+        border: 1px solid #625f5f;
+        border-radius: 2px;
+        padding: 2px;
+        min-height: 22px;
+        font-size: 11px;
+    }
+
+    .MedicineTemplate label[id=med3] {
+        width: 45px !important;
+    }
+
+    .MedicineTemplate select.editable {
+        min-height: 21px;
+        margin-left: 2px;
+    }
+
     .expandMedicine {
         transform: scale(1.2);
         -moz-transform: scale(1.2);
@@ -37,34 +55,39 @@
     .expandMedicine-divContainer {
         height: max-content !important;
     }
+
         .expandMedicine-divContainer tbody td:first-child {
             width: 35%;
         }
+
     .divContainer {
         min-height: 150px;
         height: 150px;
         overflow: auto;
         margin-bottom: 5px;
         border: 1px solid #2478a9;
-    }   
+    }
+
     .dbSearch {
         border: 1px dashed green !important;
     }
+
     .ui-widget-content {
         border: 1px solid #ddd !important;
         background: #fff !important;
     }
 
         .ui-widget-content li {
-            font-size:12px !important;          
+            font-size: 12px !important;
             border-top: 1px solid #ddd !important;
         }
 
 
     .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
-        background: #efefef !important;        
+        background: #efefef !important;
         color: #625f5f !important;
     }
+
     #btnInitMediTemp {
         padding: 2px 21px 16px 8px;
         margin-right: 5px;
@@ -107,6 +130,7 @@
         border-radius: 2px;
         float: right;
     }
+
     .expandMedTab {
         color: #fff;
         margin-left: 6px;
@@ -116,6 +140,7 @@
         background: #c5ad07;
         border-radius: 3px;
     }
+
     .delMedRow {
         margin-right: 20px;
         padding: 2px 6px;
@@ -778,12 +803,12 @@
                                     </div>
                                     <div class="prescribedItem" id="SignSymptomsItems">
                                         <TemplateGroup id="T00003">Sign Symptoms : </TemplateGroup><br />
-                                    </div>                                   
+                                    </div>
                                     <div class="prescribedItem" id="PrescribedMedicine" style="border: 1px solid #ddd;padding:5px">
 
                                         <TemplateGroup id="PrescribedMedicine"></TemplateGroup>
                                         <img src="~/Content/logo/rx.png" style="width:15px;cursor:grabbing" id="imgRx" />
-                                        Database Search : 
+                                        Database Search :
                                         <label class="switch"><input type="checkbox" class="IsActive" id="IsDB" checked=""><div class="slider round"></div></label>
                                         &nbsp;&nbsp;Expand Full Mode : <i class="fa fa-expand expandMedTab" onclick="expandMedicine()"></i>
                                         <table class="table table-bordered MedicineTemplate" style="font-size: 11px;margin-bottom:0">
@@ -820,7 +845,7 @@
                                         <TemplateGroup id="T00008">Doctor Advice : </TemplateGroup><br />
                                     </div>
                                     <div class="OPDPrintPreview-body-right-doctor">
-                                        <div class="doctorName" id="doctorName">Dr. Mukul Misra</div>
+                                        <div class="doctorName" id="doctorName"></div>
                                     </div>
                                 </div>
                             </div>
@@ -837,31 +862,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modalMedicineSeach" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content" style="margin-top: 30%">          
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Item Name</label>
-                            <input type="text" id="txtSearchProduct" data-imp="" class="form-control text-uppercase border-imp" autocomplete="off" placeholder="Item Name">
-                            <div id="ItemList" style="display:none">
-                                <table id="tblnavigate">
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <input type="text" id="txtItemID" class="form-control" style="display:none">
-                            <input type="text" id="txtIsCash" class="form-control" style="display:none">
-                        </div>
-                        <div class="msg"></div>
-                    </div>                
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="modal fade" id="modalTemplate" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content" style="margin-top: 30%">
@@ -1005,6 +1006,7 @@
                                             <label>Route</label>
                                             <div class="select-editable">
                                                 <select id="ddlRoute" onkeydown="NextFocus('txtRemark')" class="form-control">
+                                                    <option>Topical</option>
                                                     <option>Oral</option>
                                                     <option>Nose</option>
                                                 </select>

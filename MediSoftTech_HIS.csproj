@@ -1840,6 +1840,7 @@
     <Compile Include="Areas\IPD\IPDAreaRegistration.cs" />
     <Compile Include="Areas\IPD\Repository\FormTemplateRepo.cs" />
     <Compile Include="Areas\IPD\Repository\PrintIPDForms.cs" />
+    <Compile Include="Areas\IPD\Repository\IPDBillPrint.cs" />
     <Compile Include="Areas\IPOPAudit\Controllers\PrintController.cs" />
     <Compile Include="Areas\IPOPAudit\IPOPAuditAreaRegistration.cs" />
     <Compile Include="Areas\IPOPAudit\Controllers\IPOPAuditController.cs" />

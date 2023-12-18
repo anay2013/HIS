@@ -20,7 +20,7 @@ $(document).ready(function () {
         selectRow($(this));
         _AppId = AppId;
         _doctorId = DoctorId;
-        InOutMarking('DoctorRoom_CALL','');
+        InOutMarking('DoctorRoom_CALL', '');
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnView', function () {
         var AppId = $(this).closest('tr').find('td:eq(1)').text();
@@ -42,7 +42,7 @@ $(document).ready(function () {
         selectRow($(this));
         _AppId = AppId;
         _doctorId = DoctorId;
-        InOutMarking('DoctorRoom_CALL','');
+        InOutMarking('DoctorRoom_CALL', '');
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnIn', function () {
         var AppId = $(this).closest('tr').find('td:eq(1)').text();
@@ -129,7 +129,6 @@ function ViewConsultation() {
                         tbody += "<td>" + val.app_no + "</td>";
                         tbody += "<td style='display:none'>" + val.DoctorId + "</td>";
                         tbody += "<td>" + val.patient_name + "</td>";
-                        tbody += "<td>" + val.ageInfo + "</td>";
                         tbody += "<td>" + val.AppDate + "</td>";
                         tbody += "<td>" + val.DoctorName + "</td>";
                         tbody += "<td style='background:#fff;'>";
@@ -155,7 +154,6 @@ function ViewConsultation() {
                         tbody1 += "<td>" + total + "</td>";
                         tbody1 += "<td>" + val.app_no + "</td>";
                         tbody1 += "<td>" + val.patient_name + "</td>";
-                        tbody1 += "<td>" + val.ageInfo + "</td>";
                         tbody1 += "<td>" + val.AppDate + "</td>";
                         tbody1 += "<td>" + val.DoctorName + "</td>";
                         tbody1 += "<td style='background:#fff;'>";
@@ -181,7 +179,6 @@ function ViewConsultation() {
                         tbody2 += "<td>" + total + "</td>";
                         tbody2 += "<td>" + val.app_no + "</td>";
                         tbody2 += "<td>" + val.patient_name + "</td>";
-                        tbody2 += "<td>" + val.ageInfo + "</td>";
                         tbody2 += "<td>" + val.AppDate + "</td>";
                         tbody2 += "<td>" + val.DoctorName + "</td>";
                         tbody2 += "<td style='background:#fff;'>";

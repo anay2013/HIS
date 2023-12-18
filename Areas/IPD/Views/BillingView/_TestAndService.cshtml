@@ -125,42 +125,42 @@
         margin: 10px 20px;
     }
 </style>
-<div class="example-box-wrapper">
+<div class="example-box-wrapper">    
     <div class="row">
-        <div class="col-md-4">
-            <div style="display:flex">
-                <label class="doctor">Doctor </label>
-                <div style="width:100%">
-                    <select class="form-control" id="ddlDoctor">
-                        <option>Choose Doctor </option>
-                    </select>
+        <div class="col-md-4" style="padding:0">
+            <div class="row">
+                <div class="col-md-11">
+                    <div style="display:flex">
+                        <label class="doctor">Doctor </label>
+                        <div style="width:250px">
+                            <select class="form-control" id="ddlDoctor">
+                                <option>Choose Doctor </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div style="display:flex">
-                <label class="doctor">Category </label>
-                <div style="width:100%">
-                    <select class="form-control" onchange="GetSubCategory()" id="ddlCategory">
-                        <option>Choose Category </option>
-                    </select>
+                <div class="col-md-11">
+                    <div style="display:flex">
+                        <label class="doctor">Category </label>
+                        <div style="width:250px">
+                            <select class="form-control" onchange="GetSubCategory()" id="ddlCategory">
+                                <option>Choose Category </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4" style="margin-left:3px;width: 31.7%;">
-            <div style="display:flex">
-                <label class="doctor">Sub Category </label>
-                <div style="width:100%">
-                    <select class="form-control" id="ddlSubCategory" onchange="ItemSearch('Billing:ItemListBySubCat')" >
-                        <option>Choose Sub Category </option>
-                    </select>
+                <div class="col-md-11">
+                    <div style="display:flex">
+                        <label class="doctor" style="white-space:pre">Sub Category </label>
+                        <div style="width:250px">
+                            <select class="form-control" id="ddlSubCategory" onchange="ItemSearch('Billing:ItemListBySubCat')">
+                                <option>Choose Sub Category </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+                <hr />
             </div>
-        </div>
-        <hr />
-    </div>
-    <div class="row">
-        <div class="col-md-6" style="padding:0">
             <div class="table table-responsive">
                 <div id="ProductList">
                     <table id="tblItemInfo" class="table table-bordered">
@@ -181,14 +181,30 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" style="padding:0">
+        <div class="col-md-8" style="padding:0">
+            <div class="row" style="margin:10px 0">
+                <div class="col-md-3">
+                    <div style="display:flex;align-items: baseline;">
+                        <label style="white-space:pre">From : </label>
+                        <input type="date" id="txtBookingFrom" value="1" class="form-control" style="border-radius:0;border-color:#00a65a" />
+                    </div>
+                </div>
+                <div class="col-md-4" style="margin:0 11px">
+                    <div style="display:flex;align-items: center;">
+                        <label style="white-space:pre">To : </label>
+                        <input type="date" id="txtBookingTo" value="1" class="form-control" style="border-radius:0;border-color:#00a65a" />
+                        <button class="btn btn-success" onclick="BookingInfoByIPDNo()" style="height: 28px;margin: 0;border-radius: 0;width: 35%;"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                    </div>
+                </div>             
+            </div>
             <div class="table table-responsive">
-                <div id="ProductList">
+                <div id="ProductList" style="height:230px">
                     <table id="tblBookingInfo" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th style="width: 1px;">SNo.</th>
                                 <th>Item Name</th>
+                                <th style="width: 19%;">Entry Date</th>
                                 <th style="width: 15%;" class="text-right">Rate</th>
                                 <th style="width: 15%;" class="text-right">Qty</th>
                                 <th style="width: 2%;">IsUrgent</th>

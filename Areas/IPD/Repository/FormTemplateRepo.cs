@@ -291,7 +291,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             {
                 TemplateContent = NotifiedConsentFormforBloodTransfusionForm(pname, uhidno, gender, admitdate, ipdno, doctor, Diagnosis, PageIndex, PageName, PageOrientation);
             }
-
+            else if (TemplateName == "MorseFailRiskAssessmentTool")
+            {
+                TemplateContent = MorseFailRiskAssessmentToolForm(pname, uhidno, gender, admitdate, ipdno, doctor, Diagnosis, PageIndex, PageName, PageOrientation);
+            }
             
             return TemplateContent;
         }
@@ -829,8 +832,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             StringBuilder body = new StringBuilder();
 
             string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
-            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-2px;' />");
-            body.Append("<h5 style = 'border:1px solid;margin-left:600px;margin-right:100px;text-align: justify ; margin-top:-72px; width:500px;height:55px; padding:10px;'>");
+            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-3px;' />");
+            body.Append("<h5 style = 'border:1px solid;margin-left:600px;margin-right:100px;text-align: justify ; margin-top:-73px; width:500px;height:55px; padding:10px;'>");
             body.Append("<table style='width:100%;font-size:14px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px; '>");
             body.Append("<tr>");
             body.Append("<td><b>Patient Name</b> </td>");
@@ -5454,7 +5457,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("</table>");
 
             body.Append("<div class='row' style='text-align: justify; margin-top:50px'>.................................................................................................................................................................</div>");
-            body.Append("<div class='row' style='text-align: justify'><p><center><b>Discharge summary has been explained to me in details in my language,<br>Patient/Attendant name & Signature </b></center></p></div>");
+            body.Append("<div class='row' style='text-align: justify'><p><center><b>Discharge summary has been expained to me in details in my language,<br>Patient/Attendant name & Signature </b></center></p></div>");
             body.Append("<div class='row' style='text-align: justify'><p><center><h3 style='height:60px;width:200px; border:1px solid black'></h3></center></p></div>");
             body.Append("</div>");
            
@@ -8514,7 +8517,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
 
             body.Append("<div class='row'><h4 style='color:black;text-align:center;margin-left:100px;margin-right:100px;width:600px;margin-top:-2%'>सुचित सहमति प्रपत्रः कोरोनरी एन्जियोप्लास्टी (PTCA)</ h4></div>");
             body.Append("<div class='row' style='text-align: justify; font-size:14px;margin-left:2px;margin-top:-2%'><b>दिनांक......................</b></div>");
-            body.Append("<table style='width:100%; font-size:15px;margin-right:20px'>");
+            body.Append("<table style='width:100%; font-size:15px;'>");
             body.Append("<tr>");
             body.Append("<td><b> रोगी का नाम</b></td>");
             body.Append("<td></td>");
@@ -8559,7 +8562,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("<div class='row' style='text-align: justify;margin-right:20px;Font-size:15px;'>1.5 में 1 व्यक्ति में Restenosis अर्थात Stent. Angioplasty की जगह, अगले 6 माह में फिर से स्कवाट की संभावना।</div>");
             body.Append("<div class='row' style='text-align: justify;margin-right:20px;Font-size:15px;'>2.2 में 1 व्यक्ति में तुरन्त/urgent बायपास की आवश्यकता रेडियल/फीमोरल अथवा अन्य पंक्चर की जगह सूजन या खून कर जमना।</div>");
             body.Append("<div class='row' style='text-align: justify;margin-right:20px;Font-size:15px;'>3. 100 में 01 व्यक्ति में हार्ट अटैक, खून का थक्का बनने से रोकने वाली दवाईयों की खतरनाक रिएक्शन, हृदय की धड़कन / गति का अनियमित होना, मृत्यु।</div>");
-            body.Append("<div class='row' style='text-align: justify;margin-right:20px;Font-size:15px;'4. दिल के दौरे, एलर्जी प्रतिक्रियाओं, धमनियों के धक्के, स्ट्रोक, थ्रोम्बस और दुर्लभ स्थिति में मौत जैसी नैदानिक स्थिति में बिगड़ना।</div>");
+            body.Append("<div class='row' style='text-align: justify;margin-right:20px;Font-size:15px;'>4. दिल के दौरे, एलर्जी प्रतिक्रियाओं, धमनियों के धक्के, स्ट्रोक, थ्रोम्बस और दुर्लभ स्थिति में मौत जैसी नैदानिक स्थिति में बिगड़ना।</div>");
             body.Append("<div class='row' style='text-align: justify;margin-right:20px;Font-size:15px;'> 5. कोई अन्य.........................................................................</div>");
 
             body.Append("<div class='row' style='text-align: justify;margin-right:20px;Font-size:15px; margin-top:10px'><b>लाभ: </b></div>");
@@ -10456,8 +10459,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
             string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
-            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-3%' />");
-            body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px;margin-top:-3%'>कीमोथैरेपी के लिए अधिसूचित सहमति</h3></div>");
+            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-5%' />");
+            body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px;margin-top:-4%'>कीमोथैरेपी के लिए अधिसूचित सहमति</h3></div>");
             body.Append("<table style='width:100%;font-size:16px;text-align:left;border:0px solid #dcdcdc;margin-top:-3px;'>");
             body.Append("<tr>");
             body.Append("<td><b>रोगी का नाम</b></td>");
@@ -10501,7 +10504,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("<div class='row' style='color:black;text-align:left;margin-top:-40px;font-size:17px; margin-left:50px;text-align:justify;'>रोग निवारक रहित इसका उद्देश्य रोग को नियंत्रित करना और उसको कम करता है। यदि ऐसे लक्षण प्रतीत होते हैं तो जितना सम्भाव हो, उतना लम्बा उपचार किया जा सकता है, भले ही रोगी तत्काल ठीक अनुभव न करें।</div>");
             body.Append("<div class='row' style='color:black;text-align:left;margin-top:2px;font-size:17px;text-align:justify;margin-left:5px'>प्रायः उपचार के दौरान गम्भीर तथा जोखिम की स्थिति उत्पन्न हो सकती है. जिसका विवरण निम्नलिखित है.</ div>");
 
-            body.Append("<h5 style = 'border:1px solid;text-align: justify ;width:670px;height:140px; padding:10px;margin-top:-2px'>");
+            body.Append("<h5 style = 'border:1px solid;text-align: justify ;width:670px;height:138px; padding:10px;margin-top:-2px'>");
             body.Append("<table style='width:95%;font-size:16px;text-align:left;border:0px solid #dcdcdc;'>");
             body.Append("<tr>");
             body.Append("<td style='height:15px; width:15px; border:1px solid black;'></td>");
@@ -10627,8 +10630,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
-            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-3%' />");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-4%' />");
             body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px;margin-top:-3%'> INFORMED CONSENT FOR CHEMOTHERAPY </h3></div>");
             body.Append("<table style='width:100%;font-size:16px;text-align:left;border:0px solid #dcdcdc;margin-top:-3px;'>");
             body.Append("<tr>");
@@ -10671,14 +10674,14 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("<td>&nbsp;</td>");
             body.Append("</tr>");
             body.Append("</table>");
-            body.Append("<div class='row' style='color:black;font-size:17px;margin-top:1%;'>I have explained the treatment, what it is likely to involve, its benefits and risks together with those of any available alternative treatments (including no treatment). In particular, I have explained:</div>");
-            body.Append("<div class='row' style='color:black;text-align:left;margin-top:2px;font-size:17px;'><b>• &nbsp;</b>That the aim of the procedure is</div>");
+            body.Append("<div class='row' style='color:black;font-size:17px;margin-top:1%;text-align: justify ;'>I have explained the treatment, what it is likely to involve, its benefits and risks together with those of any available alternative treatments (including no treatment). In particular, I have explained:</div>");
+            body.Append("<div class='row' style='color:black;text-align:left;margin-top:2px;font-size:17px;text-align: justify ;'><b>• &nbsp;</b>That the aim of the procedure is</div>");
+            body.Append("<h3 style='height:15px; width:15px; border:1px solid black; margin-left:14px;text-align: justify ;'></h3>");
+            body.Append("<div class='row' style='color:black;text-align:left;margin-top:-40px;font-size:17px;text-align: justify ; margin-left:50px'><label><b>Curative -</b> to give the best possible chance of being cured</label></div>");
             body.Append("<h3 style='height:15px; width:15px; border:1px solid black; margin-left:14px;'></h3>");
-            body.Append("<div class='row' style='color:black;text-align:left;margin-top:-40px;font-size:17px; margin-left:50px'><label><b>Curative -</b> to give the best possible chance of being cured</label></div>");
-            body.Append("<h3 style='height:15px; width:15px; border:1px solid black; margin-left:14px;'></h3>");
-            body.Append("<div class='row' style='color:black;text-align:left;margin-top:-40px;font-size:17px; margin-left:50px'><label><b>Non-Curative -</b> the aim is to control or shrink the disease especially if it is causing specific symptoms, to try and keep you as well as possible for as long as possible but not cure you</label></div>");
-            body.Append("<div class='row' style='color:black;text-align:left;margin-top:2px;font-size:17px;'><b>• &nbsp;</b>The serious or frequently occurring risks of the treatment.These are detailed in the information  </div>");
-            body.Append("<div class='row' style='color:black;text-align:left;margin-top:2px;font-size:17px;'><b>&nbsp;&nbsp;&nbsp;</b>provided(see below) and include(tick those that may apply)</div>");
+            body.Append("<div class='row' style='color:black;text-align:left;margin-top:-40px;font-size:17px;text-align: justify ; margin-left:50px'><label><b>Non-Curative -</b> the aim is to control or shrink the disease especially if it is causing specific symptoms, to try and keep you as well as possible for as long as possible but not cure you</label></div>");
+            body.Append("<div class='row' style='color:black;text-align:left;margin-top:2px;font-size:17px;text-align: justify ;'><b>• &nbsp;</b>The serious or frequently occurring risks of the treatment.These are detailed in the information  </div>");
+            body.Append("<div class='row' style='color:black;text-align:left;margin-top:2px;font-size:17px;text-align: justify ;'><b>&nbsp;&nbsp;&nbsp;</b>provided(see below) and include(tick those that may apply)</div>");
             body.Append("<h5 style = 'border:1px solid;margin-left:10px;text-align: justify ;width:670px;height:160px; padding:10px;margin-top:-2px'>");
             body.Append("<table style='width:95%;font-size:16px;text-align:left;border:0px solid #dcdcdc;'>");
             body.Append("<tr>");
@@ -10765,9 +10768,9 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("</table>");
             body.Append("</h5>");
 
-            body.Append("<div class='row' style='color:black;text-align:left; font-size:17px;margin-top:-10px'><b>Statement of patient/person with parental responsibility for patient:</b></div>");
-            body.Append("<div class='row' style='color:black;text-align:left; font-size:17px'><b>I understand</b> that there are benefits of this treatment if it is successful. I also understand that there is no guarantee that the treatment will help me. <b>I understand</b> that this treatment can have short term and long- term side effects.  <b>I have been </b>also explained that I could have side effects from my treatment that are not listed on this form. Each patient can respond differently to chemotherapy, and could have side effects that have not been reported by others.<b> I understand</b> that I may stop this treatment at any time. <b> I understand</b> that by signing this form I am consenting to receive the treatment recommended by my doctor and described on this form. <b> I understand</b> that I may need blood products as part of my treatment for which a separate consent will be obtained. I give permission for data held in my medical records to be used for research purposes. <b> I have had the chance </b>to ask questions about this treatment and my questions have been answered to my satisfaction.</div>");
-            body.Append("<div class='row' style='color:black;text-align:left; font-size:17px; margin-top:3px'><b>Females of reproductive age:</b></div>");
+            body.Append("<div class='row' style='color:black;text-align:left; font-size:17px;margin-top:-10px;text-align: justify ;'><b>Statement of patient/person with parental responsibility for patient:</b></div>");
+            body.Append("<div class='row' style='color:black;text-align:left; font-size:17px;text-align: justify ;'><b>I understand</b> that there are benefits of this treatment if it is successful. I also understand that there is no guarantee that the treatment will help me. <b>I understand</b> that this treatment can have short term and long- term side effects.  <b>I have been </b>also explained that I could have side effects from my treatment that are not listed on this form. Each patient can respond differently to chemotherapy, and could have side effects that have not been reported by others.<b> I understand</b> that I may stop this treatment at any time. <b> I understand</b> that by signing this form I am consenting to receive the treatment recommended by my doctor and described on this form. <b> I understand</b> that I may need blood products as part of my treatment for which a separate consent will be obtained. I give permission for data held in my medical records to be used for research purposes. <b> I have had the chance </b>to ask questions about this treatment and my questions have been answered to my satisfaction.</div>");
+            body.Append("<div class='row' style='color:black;text-align:left; font-size:17px; text-align: justify ;margin-top:3px'><b>Females of reproductive age:</b></div>");
 
             body.Append("<h3 style='height:15px; width:15px; border:1px solid black;margin-top:-1px'></h3>");
             body.Append("<div class='row' style='color:black;text-align:left;margin-top:-39px;font-size:17px;text-align: justify; margin-left:50px'><label><b>I confirm </b>that I am not pregnant</label></div>");
@@ -10816,14 +10819,13 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
 
             body.Append("</table>");
             body.Append("</div>");
-            
             return body.ToString();
         }
         public string IntraUterineDevicesConsentForm(string pname, string uhidno, string gender, string admitdate, string ipdno, string doctor, string Diagnosis, string PageIndex, string PageName, string PageOrientation)
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
 
             body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:250px;margin-right:150px;margin-top:-3%; width:300px'><u>CHANDAN HOSPITAL</u></h3></div>");
@@ -10902,7 +10904,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
             body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:100px;margin-right:100px; width:600px;margin-top:-10px'>CONSENT FOR RESTRAINTS</h3></div>");
             body.Append("<table style='width:100%; font-size:14px;margin-top:10px'>");
@@ -10957,14 +10959,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         }
         public string ConsentForRestraintsHindiForm(string pname, string uhidno, string gender, string admitdate, string ipdno, string doctor, string Diagnosis, string PageIndex, string PageName, string PageOrientation)
         {
-            PdfGenerator pdfConverter = new PdfGenerator();
-            string _result = string.Empty;
+
             StringBuilder body = new StringBuilder();
-            StringBuilder h = new StringBuilder();
-
-
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
             body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:100px;margin-right:100px; width:600px;margin-top:-10px'>प्रतिबंध के लिए सहमति</h3></div>");
             body.Append("<table style='width:100%; font-size:15px;margin-top:10px'>");
@@ -11024,7 +11022,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
             body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:100px;margin-right:100px; width:600px;margin-top:10px'>INFORMED CONSENT FOR LEAVE AGAINST MEDICAL ADVICE</h3></div>");
             body.Append("<div class='row' style='100%; margin-left:5px;font-size:14px'><b>Date:.........................</b></div>");
@@ -11142,7 +11140,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
             body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px;margin-top:10px'>चिकित्सीय परामर्श के खिलाफ छुट्टी लेने की अभिसूचित सहमति</h3></div>");
             body.Append("<div class='row' style='100%; margin-left:5px;font-size:14px'><b>दिनांक:.........................</b></div>");
@@ -11270,7 +11268,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
 
             body.Append("<div class='row'><h2 style='color:black;text-align:center;margin-left:250px;margin-right:150px;margin-top:-3%; width:300px'><u>CHANDAN HOSPITAL</u></h2></div>");
@@ -11298,7 +11296,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("<td>&nbsp;</td>");
             body.Append("</tr>");
             body.Append("<tr>");
-            body.Append("<td><b>Surgeon Name</b> </td>");
+            body.Append("<td><b>Doctor’s Name</b> </td>");
             body.Append("<td><b></b></td>");
              body.Append("<td></td>");
             body.Append("<td>&nbsp;</td>");
@@ -11321,9 +11319,9 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("</tr>");
             body.Append("</table>");
             body.Append("<div class='row' style='color:black;margin-left:20px;margin-right:20px;margin-top:10%;font-size:17px'>Other Investigation reports (X-ray, CT Scan, MRI, FNAC etc.)</div>");
-            body.Append("<div class='row' style='color:black;margin-left:20px;margin-right:20px;margin-top:15%;font-size:17px'>Clinical Diagnosis:</div>");
-            body.Append("<div class='row' style='color:black;margin-left:20px;margin-right:20px;font-size:17px;margin-top:8px'>Specimen to be sent to: </div>");
-            body.Append("<table style='width:60%;font-size:17px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;margin-left:20px;margin-right:20px ;margin-top:8px'>");
+            body.Append("<div class='row' style='color:black;margin-left:20px;margin-right:20px;margin-top:10%;font-size:17px'>Clinical Diagnosis:</div>");
+            body.Append("<div class='row' style='color:black;margin-left:20px;margin-right:20px;font-size:17px;margin-top:10%'>Specimen to be sent to: </div>");
+            body.Append("<table style='width:60%;font-size:17px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;margin-left:20px;margin-right:20px ;margin-top:8%'>");
             body.Append("<tr>");
             body.Append("<td>Histopathology</td>");
             body.Append("<td style='height:10px;width:25px; border:1px solid black'></td>");
@@ -11346,8 +11344,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
         StringBuilder body = new StringBuilder();
         body.Append("<div style='padding:20px;'>");
-        string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
-        body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
 
         body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:200px; width:500px'>REQUISITION FORM FOR TISSUE BIOPSY</h3></div>");
 
@@ -11431,9 +11429,9 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
-            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
-            body.Append("<h5 style = 'border:1px solid;margin-left:300px;margin-right:130px;text-align: justify ; margin-top:-70px; width:455px;height:50px; padding:10px;'>");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px; margin-top:-10px' />");
+            body.Append("<h5 style = 'border:1px solid;margin-left:300px;margin-right:130px;text-align: justify ; margin-top:-80px; width:455px;height:50px; padding:10px;'>");
             body.Append("<table style='width:100%;font-size:13px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px; '>");
             body.Append("<tr>");
             body.Append("<td><b>Patient Name</b> </td>");
@@ -11455,7 +11453,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("</h5>");
             body.Append("<div class='row'><h2 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px'>Wells Model for predicting DVT Probability</h2></div>");
 
-            body.Append("<table style='width:95%;font-size:16px;border-collapse:collapse;border:2px solid;margin-left:30px;margin-right:30px;margin-top:-10px;'>");
+            body.Append("<table style='width:95%;font-size:16px;border-collapse:collapse;border:2px solid;margin-left:30px;margin-right:30px;margin-top:-15px;'>");
             body.Append("<tr style='border: solid 2px;border-collapse: collapse;'>");
             body.Append("<th style='border: solid 2px;border-collapse: collapse;text-align:center;width:80%;'>CLINICAL FEATURES</th>");
             body.Append("<th colspan='2' style='border: solid 2px;border-collapse: collapse;text-align:center;width:30%;'>POINTS</th>");
@@ -11495,7 +11493,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%'><h5 style='height:20px;width:30px;border: solid 2px;text-align:center;margin-left:20px;margin-top:20px;'></h5></td>");
             body.Append("</tr>");
             body.Append("<tr style='border: solid 1px;border-collapse: collapse;'>");
-            body.Append("<td style='border: solid 1px;border-collapse: collapse;width:80%'>   Pitting edema confined to the symptomatic leg</ td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;width:80%'>Pitting edema confined to the symptomatic leg</ td>");
             body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%'><b>1</b></td>");
             body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%'><h5 style='height:20px;width:30px;border: solid 2px;text-align:center;margin-left:20px;margin-top:20px;'></h5></td>");
             body.Append("</tr>");
@@ -11521,9 +11519,9 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("<td colspan='3' style='border: solid 1px;border-collapse: collapse;'>TOTAL SCORE = </ td>");
             body.Append("</tr>");
             body.Append("</table>");
-            body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px'>Clinical probability simplified score</h3></div>");
+            body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px;margin-top:-5px'>Clinical probability simplified score</h3></div>");
 
-            body.Append("<table style='width:95%;font-size:16px;border-collapse:collapse;border:2px solid;margin-left:30px;margin-right:30px;margin-top:10px;'>");
+            body.Append("<table style='width:95%;font-size:16px;border-collapse:collapse;border:2px solid;margin-left:30px;margin-right:30px;margin-top:8px;'>");
             body.Append("<tr style='border: solid 1px;border-collapse: collapse;'>");
             body.Append("<td style='border: solid 1px;border-collapse: collapse;width:80%;'>DVT Likely</td>");
             body.Append("<td style='border: solid 1px;border-collapse: collapse;width:30%;text-align:center'>≥2 Points</td>");
@@ -11534,7 +11532,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             body.Append("</tr>");
             body.Append("</table>");
 
-            body.Append("<table style='width:95%;font-size:18px;margin-left:30px;margin-top:10px;'>");
+            body.Append("<table style='width:95%;font-size:18px;margin-left:30px;margin-top:5px;'>");
             body.Append("<tr>");
             body.Append("<td><b>Doctor name:</b></td>");
             body.Append("</tr>");
@@ -11554,7 +11552,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             body.Append("<div style='padding:10px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<div class='row'><h3><img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-4%'></h3></div>");
             body.Append("<div class='row'><h2 style='color:black;text-align:center;margin-left:250px;margin-right:150px;margin-top:-8%; width:300px'>CHANDAN HOSPITAL</h2></div>");
             body.Append("<div class='row'><h2 style='color:black;text-align:center;margin-left:150px;margin-right:100px; width:500px'> <u>EMPTY BLOOD BAG RETURN FORM</u> </h2></div>");
@@ -11730,7 +11728,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             StringBuilder body = new StringBuilder();
 
             body.Append("<div style='padding:10px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<div class='row'><h3><img src='" + imagePath + "' style='width:150px; height:80px;margin-top:-4%'></h3></div>");
             body.Append("<div class='row'><h4 style='color:black;text-align:center;margin-left:200px;margin-right:150px;margin-top:-4%; width:400px'>INFORMED CONSENT FOR BLOOD TRANSFUSION</h4></div>");
 
@@ -11816,7 +11814,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             StringBuilder body = new StringBuilder();
             //body.Append("<div style='padding:20px;'>");
-            string imagePath = HttpContext.Server.MapPath(@"/Content/image/chandn.jpeg");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
             body.Append("<div class='row'><h3><img src='" + imagePath + "' style='width:150px; height:80px;></h3></div>");
             body.Append("<div class='row'><h4 style='color:black;text-align:center;margin-left:200px;margin-right:150px;margin-top:-3%; width:400px'>रक्त आधान (ट्रांसफ्यूजन) के लिए अभिसूचित सहमतिप्रपत्र</h4></div>");
 
@@ -11918,5 +11916,257 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             return body.ToString();
         }
 
+        public string MorseFailRiskAssessmentToolForm(string pname, string uhidno, string gender, string admitdate, string ipdno, string doctor, string Diagnosis, string PageIndex, string PageName, string PageOrientation)
+        {
+            StringBuilder body = new StringBuilder();
+            body.Append("<h5 style='padding:20px;'>");
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            body.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
+
+            body.Append("<h5 style = 'border:1px solid;margin-left:300px;margin-right:130px;text-align: justify ; margin-top:-110px; width:455px;height:50px; padding:10px;'>");
+            body.Append("<table style='width:100%;font-size:13px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px; '>");
+            body.Append("<tr>");
+            body.Append("<td><b>Patient Name</b> </td>");
+            body.Append("<td><b>:</b></td>");
+            body.Append("<td>" + pname + "</td>");
+            body.Append("<td><b>Age/Gender</b></td>");
+            body.Append("<td><b>:</b></td>");
+            body.Append("<td>" + gender + "</td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td><b>UHID No</b></td>");
+            body.Append("<td><b>:</b></td>");
+            body.Append("<td>" + uhidno.ToString() + "</td>");
+            body.Append("<td><b>IPD No</b></td>");
+            body.Append("<td><b>:</b></td>");
+            body.Append("<td>" + ipdno.ToString() + "</td>");
+            body.Append("</tr>");
+            body.Append("</table>");
+            body.Append("</h5>");
+            body.Append("<div class='row'><h3 style='color:black;text-align:center;margin-left:150px;margin-right:150px; width:500px;margin-top:10px'> MORSE FALL RISK ASSESSMENT TOOL</h3></div>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;margin-top:-10px;'>");
+            body.Append("<tr style='border: solid 1px;border-collapse: collapse;'>");
+            body.Append("<th rowspan = '2' style='border: solid 1px;border-collapse: collapse;text-align:left;width:40%;height:20px;'>MORSE FALL RISK ASSESSMENT</th>");
+            body.Append("<td rowspan='2' style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px;'><b>SCORE</b></td>");
+            body.Append("<th colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>ADMIT DATE</th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>REVIEW DATE</th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>REVIEW DATE</th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>REVIEW DATE</th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>REVIEW DATE</th>");
+            body.Append("</tr>");
+            body.Append("<tr style='border: solid 1px;border-collapse: collapse;'>");
+            body.Append("<th colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:40px'></th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:40px'></th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:40px'></th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:40px'></th>");
+            body.Append("<th style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:40px'></th>");
+            body.Append("</tr>");
+
+            body.Append("<tr>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;'>");
+            body.Append("<tr>");
+            body.Append("<td rowspan='2' style='border: solid 1px;border-collapse: collapse;text-align:left;width:30%;height:20px'>HISTORY OF PREVIOUS FALLS</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>Yes</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'>25</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>No</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'>0</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("</tr>");
+            //body.Append("</table>");
+            //body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;'>");
+            body.Append("<tr>");
+            body.Append("<td rowspan='2' style='border: solid 1px;border-collapse: collapse;text-align:left;width:30%;height:20px'>SECONDARY DIAGNOSIS</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>Yes</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'>25</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>No</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'>0</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;'>");
+            body.Append("<tr>");
+            body.Append("<td rowspan='3' style='border: solid 1px;border-collapse: collapse;text-align:left;width:15%;height:35px'>AMBULATORY AID</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>NONE</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>0</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>CRUTCHES/CANE/WALKER</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>15</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>FURNITURE</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>25</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+
+            body.Append("<tr>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;'>");
+            body.Append("<tr>");
+            body.Append("<td rowspan='2' style='border: solid 1px;border-collapse: collapse;text-align:left;width:30%;height:20px'>IV OR IV ACCESS</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>No</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'>0</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;width:10%;height:20px'>Yes</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'>25</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;'>");
+            body.Append("<tr>");
+            body.Append("<td rowspan='3' style='border: solid 1px;border-collapse: collapse;text-align:center;width:15%;height:35px'>GAIT</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>NORMAL</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>0</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>WEAK</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>10</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>IMPAIRED</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>20</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;'>");
+            body.Append("<tr>");
+            body.Append("<td rowspan='2' style='border: solid 1px;border-collapse: collapse;text-align:center;width:15%;height:35px'>MENTAL <br/>STATUS</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>KNOWS OWN LIMITS</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>0</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;width:25%;height:35px'>OVERESTIMATES/FORGETS LIMITS</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'>15</td>");
+            body.Append("<td colspan='5'style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;'>");
+            body.Append("<tr>");
+            body.Append("<td  style='border: solid 1px;border-collapse: collapse;text-align:right;width:50%;height:35px'>TOTAL</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+
+            body.Append("<tr>");
+            body.Append("<td  style='border: solid 1px;border-collapse: collapse;text-align:right;width:50%;height:35px'>SIGNATURE</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+
+            body.Append("<tr>");
+            body.Append("<td  style='border: solid 1px;border-collapse: collapse;text-align:right;width:50%;height:35px'>CHL NUMBER</td>");
+            body.Append("<td colspan='5' style='border: solid 1px;border-collapse: collapse;text-align:center;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px ;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:center;height:35px;width:10%;'></td>");
+            body.Append("</tr>");
+            //body.Append("</table>");
+            //body.Append("</tr>");
+            body.Append("</table>");
+
+            body.Append("<table style='width:95%;font-size:14px;border-collapse:collapse;border:2px solid;margin-left:20px;margin-right:30px;margin-top:5%;'>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:25%'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:10%;'></td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:65%'></td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:25%'>HIGH RISK</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:10%'>>45</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:65%'>MOD. RISK + <br/>PATIENT ATTENDANT WATCH 24x7 | RESTRAINT | MOVE ONLY ON BED </td>");
+            body.Append("</tr>");
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:25%'>MODERATE RISK</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:10%'>25-45</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:65%'>LOW RISK SIDE + <br/>RAILS UP ALWAYS | PATIENT CHECK EVERY 20 MINS </td>");
+            body.Append("</tr>");
+
+            body.Append("<tr>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:25%'>LOW RISK</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:10%'>00-24</td>");
+            body.Append("<td style='border: solid 1px;border-collapse: collapse;text-align:left;height:20px;width:65%'>UNIVERSAL PRECAUTIONS</td>");
+            body.Append("</tr>");
+            body.Append("</table>");
+
+            body.Append("</h5>");
+            return body.ToString();
+        }
     }
 }

@@ -1,14 +1,15 @@
-﻿var _IPDNo = "";
+﻿
 $(document).ready(function () {
     CloseSidebar();
     GetRackInfo();
+    FillCurrentDate('txtFrom')
+    FillCurrentDate('txtTo')
     $("select").select2()
     $("#uploadFile").change(function () {
         readURL(this);
     });
 });
-function GetPatientInfo() {
-    Clear();
+function GetPatientInfo(logic) {
     if ($("#txtIPDNo").val() == '') {
         alert('Please Provide IPD No.');
         return
@@ -17,12 +18,12 @@ function GetPatientInfo() {
     var url = config.baseUrl + "/api/EMR/EMR_DocumentQueries";
     var objBO = {};
     objBO.IPDNo = $("#txtIPDNo").val();
-    objBO.from = '1900/01/01';
-    objBO.to = '1900/01/01';
+    objBO.from = $("#txtFrom").val();
+    objBO.to = $("#txtTo").val();
     objBO.Prm1 = '-';
     objBO.Prm2 = '-';
     objBO.login_id = '-';
-    objBO.Logic = "GetPatientInfo";
+    objBO.Logic = logic;
     $.ajax({
         method: "POST",
         url: url,
@@ -44,6 +45,7 @@ function GetPatientInfo() {
                         tbody += '<td>' + val.IPDNo + '</td>';
                         tbody += '<td>' + val.PatientName + '</td>';
                         tbody += '<td>' + val.AdmitDate + '</td>';
+                        tbody += '<td>' + val.uploadBy + '</td>';
                         tbody += '<td>' + val.DischargeDateTime + '</td>';
                         tbody += "<td><button onclick=ViewPatient(this) class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
                         tbody += '</tr>';
@@ -61,22 +63,11 @@ function GetPatientInfo() {
 function ViewPatient(elem) {
     var date = new Date();
     var info = JSON.parse($(elem).closest('tr').find('td:eq(0)').text());
-    _IPDNo = info.IPDNo;
     $("#txtPatientIPDNO").text(info.IPDNo);
     $("#txtPatientName").text(info.PatientName);
     $("#txtAdmitDate").text(info.AdmitDate);
     $("#txtDischargeDateTime").text(info.DischargeDateTime);
-    $("#ddlFileRack option").each(function () {
-        if ($(this).val() == info.RackId)
-            $("#ddlFileRack").prop('selectedIndex', '' + $(this).index() + '').change();
-    });
-    if (info.FilePath == null)
-        $("#btnUpload").prop('disabled', false);
-    else if (info.updateAllowFlag == 'Y')
-        $("#btnUpload").prop('disabled', false);
-    else
-        $("#btnUpload").prop('disabled', true);
-
+    debugger
     var FilePath = info.FilePath + "?v=" + date.getMilliseconds();
     $("#filePath").prop('src', FilePath);
 }
@@ -98,21 +89,21 @@ function readURL(input) {
     }
 }
 function UploadCaseSheet(elem) {
-    if (_IPDNo == '') {
-        alert('Please Select IPDNo');
+    if ($("#ddlFileRack option:selected").text() == 'Select') {
+        alert('Please Select File Rack.');
         return
     }
     $(elem).addClass('loading');
     var objBO = {};
     var url = config.baseUrl + "/api/EMR/UploadCaseSheet";
     objBO.IPDNo = $("#txtPatientIPDNO").text();
-    objBO.RackId ='-';
-    objBO.AdmitDate = $("#txtAdmitDate").text().substring(3,10);
+    objBO.RackId = $("#ddlFileRack option:selected").val();
     objBO.hasfile = ($('#imgFile').attr('src').length > 10) ? 'Y' : 'N';
     objBO.fileExtention = $('#uploadFile').val().split('.').pop();
     objBO.Base64String = $('#imgFile').attr('src');
+    objBO.AdmitDate = $("#txtAdmitDate").text().split('-')[2];
     objBO.login_id = Active.userId;
-    objBO.Logic = 'InsertCaseSheet';   
+    objBO.Logic = 'InsertCaseSheet';
     var UploadDocumentInfo = new XMLHttpRequest();
     var data = new FormData();
     data.append('obj', JSON.stringify(objBO));
@@ -137,51 +128,7 @@ function UploadCaseSheet(elem) {
     UploadDocumentInfo.open('POST', url, true);
     UploadDocumentInfo.send(data);
 }
-function UpdateRackByIPDNo() {
-    if (_IPDNo == '') {
-        alert('Please Select IPDNo');
-        return
-    }
-    if ($("#ddlFileRack option:selected").text() == 'Select') {
-        alert('Please Select File Rack.');
-        return
-    }
-    var url = config.baseUrl + "/api/EMR/EMR_InsertUpdateDocument";
-    var objBO = {};
-    objBO.IPDNo = _IPDNo;
-    objBO.RackId = $("#ddlFileRack option:selected").val();
-    objBO.Prm1 = '-';
-    objBO.Prm2 = '-';
-    objBO.login_id = '-';
-    objBO.Logic = "UpdateRackByIPDNo";
-    $.ajax({
-        method: "POST",
-        url: url,
-        data: JSON.stringify(objBO),
-        dataType: "json",
-        contentType: "application/json;charset=utf-8",
-        success: function (data) {
-            if (data.includes('Success')) {
-                alert(data);
-            }
-            else {
-                alert(data)
-            }
-        },
-        error: function (response) {
-            alert('Server Error...!');
-        }
-    });
-}
-function Clear() {
-    _IPDNo = "";
-    $("#txtPatientIPDNO").text('');
-    $("#txtPatientName").text('');
-    $("#txtAdmitDate").text('');
-    $("#txtDischargeDateTime").text('');
-    $("#ddlFileRack").prop('selectedIndex', '0').change();
-    $("#filePath").prop('src', '-');
-}
+
 //rack master
 var _rackId = "";
 function InsertRackInfo() {

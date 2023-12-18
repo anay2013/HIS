@@ -37,7 +37,7 @@ function ActiveDoctorsByDisplayId(DisplayId) {
                         $('#myMarquee').css('height', '60%');
                         $('#myMarquee').isNan;
                         DoctorDisplayScreen1(arrDoctorId[0]);
-                        setInterval(function () { DoctorDisplayScreen1(arrDoctorId[0]); }, 1000)
+                        //setInterval(function () { DoctorDisplayScreen1(arrDoctorId[0]); }, 1000)
                     }
                     if (arrDoctorId.length == 2) {
                         $('.DoctorDisplay:eq(1)').show();
@@ -84,8 +84,10 @@ function DoctorDisplayScreen1(doctorId) {
                     $('.DoctorInfo:eq(0)').find('degree').text(val.Degree2);
                     $('.DoctorInfo:eq(0)').find('designation').text(val.Designation);
                     $('.DoctorInfo:eq(0)').find('department').text(val.DeptName);
+                    $('.DoctorInfo:eq(0)').find('room-no').text('Room No : ' + val.RoomNo);
+                    $('.DoctorInfo:eq(0)').find('timing').text('Timing : ' + val.Timing);
                     $('.DoctorInfo:eq(0)').find('img').attr('src', val.VirtualPhotoPath);
-                });
+                }); 0
             }
             if (Object.keys(data.ResultSet).length > 0) {
                 var tbodyConsulting = "";
@@ -97,6 +99,7 @@ function DoctorDisplayScreen1(doctorId) {
                         tbodyConsulting += "<tr>"
                         tbodyConsulting += "<td class='text-center'>" + val.token_no + "</td>";
                         tbodyConsulting += "<td class='text-left'>" + val.patient_name + "</td>";
+                        tbodyConsulting += "<td class='text-left'>" + val.cr_date + "</td>";
                         tbodyConsulting += "<td class='text-center'>";
                         tbodyConsulting += "<span class='color-in-room'>Consulting</span>";
                         tbodyConsulting += "</span>"
@@ -108,6 +111,7 @@ function DoctorDisplayScreen1(doctorId) {
                         tbody += "<tr>"
                         tbody += "<td class='text-center'>" + val.token_no + "</td>";
                         tbody += "<td class='text-left'>" + val.patient_name + "</td>";
+                        tbody += "<td class='text-left'>" + val.cr_date + "</td>";
                         if (val.uStatus == 'Waiting')
                             tbody += "<td class='text-center'><span class='color-pending'>" + val.uStatus + "</span></td>";
                         else
@@ -176,6 +180,8 @@ function DoctorDisplayScreen2(doctorId) {
                     $('.DoctorInfo:eq(1)').find('degree').text(val.Degree2);
                     $('.DoctorInfo:eq(1)').find('designation').text(val.Designation);
                     $('.DoctorInfo:eq(1)').find('department').text(val.DeptName);
+                    $('.DoctorInfo:eq(1)').find('room-no').text('Room No : ' + val.RoomNo);
+                    $('.DoctorInfo:eq(1)').find('timing').text('Timing : ' + val.Timing);
                     $('.DoctorInfo:eq(1)').find('img').attr('src', val.VirtualPhotoPath);
                 });
             }
@@ -189,6 +195,7 @@ function DoctorDisplayScreen2(doctorId) {
                         tbodyConsulting += "<tr>"
                         tbodyConsulting += "<td class='text-center'>" + val.token_no + "</td>";
                         tbodyConsulting += "<td class='text-left'>" + val.patient_name + "</td>";
+                        tbodyConsulting += "<td class='text-left'>" + val.cr_date + "</td>";
                         tbodyConsulting += "<td class='text-center'>";
                         tbodyConsulting += "<span class='color-in-room'>Consulting</span>";
                         tbodyConsulting += "</span>"
@@ -200,6 +207,7 @@ function DoctorDisplayScreen2(doctorId) {
                         tbody += "<tr>"
                         tbody += "<td class='text-center'>" + val.token_no + "</td>";
                         tbody += "<td class='text-left'>" + val.patient_name + "</td>";
+                        tbody += "<td class='text-left'>" + val.cr_date + "</td>";
                         if (val.uStatus == 'Waiting')
                             tbody += "<td class='text-center'><span class='color-pending'>" + val.uStatus + "</span></td>";
                         else

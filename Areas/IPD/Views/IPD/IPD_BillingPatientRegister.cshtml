@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 
-<script src="~/Areas/IPD/JsModule/IPD/InPatientRegister.js"></script>
+<script src="~/Areas/IPD/JsModule/IPD/InPatientRegister.js?v1.1"></script>
 <style>
 
 
@@ -155,13 +155,20 @@
                     Floor Name
                     <select id="ddlFloor" class="form-control border-imp" style="width: 90px !important;"></select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     Panel Name
                     <select id="ddlPanel" class="form-control border-imp" style="width: 90px !important;"></select>
                 </div>
                 <div class="col-md-1">
                     <br />
-                    <button id="btnCurrentPatient" onclick="AdmittedPatientList('AdmittedPatientList')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
+                    <button id="btnCurrentPatient" onclick="AdmittedPatientList('AdmittedPatientList')" class="btn btn-warning">Active List</button>
+                </div>
+                <div class="col-md-2">
+                    Ipd Status
+                    <select id="ddlIpdStatus" class="form-control border-imp" style="width: 90px !important;">
+                        <option selected="selected" value="ALL">ALL</option>
+                        <option selected="selected" value="Out">Discharged</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
                     From Date
@@ -185,11 +192,11 @@
                                 <th>UHID</th>
                                 <th>IPD No</th>
                                 <th>Patient Name</th>
-                                <th>Age/Gender</th>
                                 <th>Admit Date</th>
-                                <th>Room FullName</th>
+                                <th>Discharge Date</th>
+                                <th>Room Name</th>
+                                <th>Doctor Name</th>
                                 <th>Panel Name</th>
-                                <th>Department Name</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

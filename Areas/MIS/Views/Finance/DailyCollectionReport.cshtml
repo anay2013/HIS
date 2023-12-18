@@ -51,16 +51,15 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label>From</label>
-                                    <input type="date" id="txtFrom" class="form-control" />
+                                    <input type="datetime-local" value="2023-12-16T15:05" id="txtFrom" class="form-control" />
                                 </div>
                                 <div class="col-md-">
                                     <label>To</label>
                                     <div class="flex">
-                                        <input type="date" id="txtTo" class="form-control" />
+                                        <input type="datetime-local" id="txtTo" class="form-control" />
                                         <button style="width:20%" id="btnSearch" class="btn btn-primary" onclick="DailyCollectionReport()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
                                         <button style="width:40%" id="btnSearch" class="btn btn-warning" onclick="PrintReport()"><i class="fa fa-sign-in">&nbsp;</i>Print Report</button>
                                         <button style="width:40%" id="btnSearch" class="btn btn-warning" onclick="DownloadExcel(this)"><i class="fa fa-file-excel-o">&nbsp;</i>Download</button>
-
                                     </div>
                                 </div>
                                 <div class="col-md-12" style="margin-top:10px">

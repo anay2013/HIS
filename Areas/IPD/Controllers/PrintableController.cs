@@ -1,6 +1,7 @@
 ﻿using HIS.Repository;
 using MediSoftTech_HIS.App_Start;
 using MediSoftTech_HIS.Areas.IPD.Repository;
+using MediSoftTech_HIS.Areas.Lab.Repository;
 using MediSoftTech_HIS.Repository;
 using System;
 using System.Collections.Generic;
@@ -696,8 +697,12 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "StaffAlloted.pdf");
         }
-
         public FileResult IPDBillSummary(string _IPDNo, string _ReceiptList, string _BillPrintType)
+        {
+            IPDBillPrint obj = new IPDBillPrint();
+            return  obj.PrintBill(_IPDNo, _ReceiptList, _BillPrintType);
+        }
+        public FileResult IPDBillSummary2(string _IPDNo, string _ReceiptList, string _BillPrintType)
         {
             _IPDNo = UtilityClass.decoding(_IPDNo);
             if (_ReceiptList == null)
@@ -734,6 +739,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             string BillDate = "";
             string ContactNo = "";
             string DischargeType = "";
+            string DischargeByName = "";
             string Address = "";
 
             foreach (DataRow dr in ds.Tables[0].Rows)
@@ -752,6 +758,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 BillNo = dr["BillNo"].ToString();
                 BillDate = dr["BillDate"].ToString();
                 DischargeType = dr["DischargeType"].ToString();
+                DischargeByName = dr["DischargeByName"].ToString();
                 ContactNo = dr["ContactNo"].ToString();
                 Address = dr["Address"].ToString();
             }
@@ -1219,18 +1226,20 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 b.Append("<div style='width:100%;float:left;margin-top:5px'>");
                 b.Append("<hr/>");
                 b.Append("<div style='width:60%;float:left'>");
-                b.Append("<label style='padding:2px 5px;'><b>Advance/Return Details</b></label>");
-                b.Append("<table border='1' style='width:100%;font-size:12px;border-collapse: collapse;margin-top:10px;'>");
-                b.Append("<tr>");
-                //b.Append("<th style='width:1%;text-align:left;padding-left:4px;'>S.No.</th>");
-                b.Append("<th style='text-align:center;padding-left:4px;'>Receipt No</th>");
-                b.Append("<th style='text-align:center;padding-left:4px;'>Receipt Date</th>");
-                b.Append("<th style='text-align:right;padding-right:4px;'>Amount</th>");
-                b.Append("<th style='text-align:center;padding-right:4px;'>Pay Mode</th>");
-                b.Append("</tr>");
+
                 int Count = 0;
                 if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
                 {
+                    b.Append("<label style='padding:2px 5px;'><b>Advance/Return Details</b></label>");
+                    b.Append("<table border='1' style='width:100%;font-size:12px;border-collapse: collapse;margin-top:10px;'>");
+
+                    b.Append("<tr>");
+                    //b.Append("<th style='width:1%;text-align:left;padding-left:4px;'>S.No.</th>");
+                    b.Append("<th style='text-align:center;padding-left:4px;'>Receipt No</th>");
+                    b.Append("<th style='text-align:center;padding-left:4px;'>Receipt Date</th>");
+                    b.Append("<th style='text-align:right;padding-right:4px;'>Amount</th>");
+                    b.Append("<th style='text-align:center;padding-right:4px;'>Pay Mode</th>");
+                    b.Append("</tr>");
                     foreach (DataRow dr in ds.Tables[3].Rows)
                     {
                         Count++;
@@ -1242,8 +1251,9 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                         b.Append("<td style='text-align:center;white-space: nowrap;padding-left:4px;'>" + dr["PayMode"].ToString() + "</td>");
                         b.Append("</tr>");
                     }
+                    b.Append("</table>");
                 }
-                b.Append("</table>");
+
                 b.Append("</div>");
                 b.Append("<div style='width:40%;float:right'>");
                 b.Append("<table style='font-size:12px;float:right' border='0' cellspacing='0'>");
@@ -1308,6 +1318,17 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
                 b.Append("</table>");
                 b.Append("</div>");
+                b.Append("</div>");
+
+                b.Append("<div style='width:100%;float:left;margin-top:60px;display:flex'>");
+                b.Append("<p style='width:48%;float:left,display:inline-block'>");
+                b.Append("<labe style='text-align:center;'>...............................................<br><b>Patient's/Attendent's Signature</b></label>");
+                b.Append("</p>");
+
+                b.Append("<p style='width:48%;float:right;text-align:right;display:inline-block'>");
+                b.Append("<labe style='float:right;text-align:center;'>............................................<br><b>Authorised Signature</b><br/>" + DischargeByName + "</label>");
+                b.Append("</p>");
+
                 b.Append("</div>");
             }
 

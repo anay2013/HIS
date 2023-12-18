@@ -6,9 +6,10 @@
 <link href="~/Content/css/MenuMaster.css?his-version-1.0" rel="stylesheet" />
 <script src="~/Areas/OPD/JsModule/OPDDashboard.js?1.0"></script>
 <style>
-    #TemplateMasterRight input,select{
-        border-radius:0 !important;
+    #TemplateMasterRight input, select {
+        border-radius: 0 !important;
     }
+
     div#skill .circle {
         position: relative;
         height: 22px;
@@ -97,9 +98,11 @@
         /*padding: 0 13px;*/
         border: 1px solid #000;
     }
+
     .bottom-tab {
         height: max-content;
     }
+
     .OPDPrintPreview-header {
         padding: 0 8px;
         margin-top: -17px;
@@ -270,16 +273,18 @@
         font-size: 15px;
     }
 
-   .fa-check-circle-o {
+    .fa-check-circle-o {
         margin-left: 3px;
     }
+
     .contentCopy {
         color: #b7510d;
         cursor: pointer;
-        padding:5px 0;
+        padding: 5px 0;
         font-size: 15px;
     }
-        .currentVisit {
+
+    .currentVisit {
         color: #b7510d;
         cursor: pointer;
         padding: 0 5px;
@@ -289,6 +294,7 @@
         .currentVisit:hover {
             color: #484343;
         }
+
     .copyVisit {
         color: #a99604;
         cursor: pointer;
@@ -299,6 +305,7 @@
         .copyVisit:hover {
             color: #484343;
         }
+
     .form-control {
         border: 1px solid #d8d1d1;
     }
@@ -365,11 +372,13 @@
         -moz-user-select: none; /* mozilla browsers */
         -ms-user-select: none; /* IE10+ */
     }
+
     textarea.form-control {
         font-size: 12px;
         line-height: 1.6em;
         padding: 8px 12px;
     }
+
     #LaboratoryRadiologyItems span, #VitalSignItems span, #PrescribedProcedureItems span {
         user-select: none;
         height: 14px;
@@ -422,7 +431,7 @@
         display: none;
         background: #e40000;
         color: #fff;
-        border-radius: 34px; 
+        border-radius: 34px;
         width: 10px;
         height: 10px;
         font-size: 7px;
@@ -493,8 +502,9 @@
             .select-editable select:focus, .select-editable input:focus {
                 outline: none;
             }
+
     .btnGroup button {
-        width: max-content;        
+        width: max-content;
     }
 
     .btnRound {
@@ -502,16 +512,15 @@
         border-right: 1px solid #069783 !important;
         width: 8% !important;
     }
-
 </style>
-<div id="page-content">   
+<div id="page-content">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="dash-header">
                     <table class="table" id="tblAdviceHeader">
                         <tr>
-                            <td rowspan="2"><img src="http://192.168.4.10/his/Images/FemaleDefault.png" width="50" class="img-humbnail" /></td>
+                            <td rowspan="2"><img src="#" width="50" class="img-humbnail" /></td>
                             <td><b>Patient Name</b></td>
                             <td><b>:</b></td>
                             <td class="text-red">NA</td>
@@ -545,7 +554,7 @@
                                     <button class="btn btn-primary btn-xs" style="margin-right:2%" id="btnOutApp" onclick="InOutMarking()">Out</button>
                                     <button class="btn btn-danger btn-xs" style="margin-right:2%" id="btnCloseApp" onclick="CloseAppointment()">Close</button>
 
-                                    <button class="btn btn-primary btn-xs btnRound"  id="btnSaveCounter"><div id='skill'><div class='circle'></div></div><span id="txtSubmitCounter"></span></button>
+                                    <button class="btn btn-primary btn-xs btnRound" id="btnSaveCounter"><div id='skill'><div class='circle'></div></div><span id="txtSubmitCounter"></span></button>
                                     <button class="btn btn-primary btn-xs" style="margin-right:2%" id="btnSaveApp" onclick="InsertItemsForPres()">Save</button>
                                     <button class="btn btn-warning btn-xs" id="btnNextFollowUp" data-target="#modalNextFollowUp" data-toggle="modal">Next Follow-Up Date</button>
                                 </div>
@@ -583,7 +592,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content" style="margin-top: 30%">
             <!-- Modal Header -->
-            <div class="modal-header bg-success">
+            <div class="modal-header bg-success" style="height: 28px;padding: 2px 5px;">
                 <h4 class="modal-title">
                     Next Follow-Up
                     <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
@@ -593,15 +602,15 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <input type="date" id="txtFollowUpDate" data-imp class="form-control" />
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <div class="form-group" style="display:flex">
                             <textarea class="form-control" id="txtFollowUpRemark" rows="1" placeholder="Follow-Up Remark"></textarea>
-                            <button id="btnSaveDoctorTemplate" style="margin-left: 6px;" class="btn btn-success">Save</button>
+                            <button id="btnFollowUpRemark" onclick="NextFollowUpVisit()" style="margin-left: 6px;" class="btn btn-success">Save</button>
                         </div>
                     </div>
                 </div>

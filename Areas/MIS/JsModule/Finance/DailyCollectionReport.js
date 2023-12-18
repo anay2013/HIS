@@ -1,10 +1,27 @@
 ﻿
 $(document).ready(function () {
-    FillCurrentDate("txtFrom");
-    FillCurrentDate("txtTo");
+    //$('#txtFrom').val(FillCurrentDateTime1())
+    //$('#txtTo').val(FillCurrentDateTime1())  
     CloseSidebar();
+    FillCurrentDateTime1();
 });
-
+function FillCurrentDateTime1() {
+    var today = '';
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var hour = date.getHours();
+    var Minute = date.getMinutes();
+    var Second = date.getSeconds();
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+    today = year + "-" + month + "-" + day + 'T' + hour + ':' + Minute + ':' + Second;
+    console.log(today)
+    $('#txtFrom').val(today)
+    $('#txtTo').val(today)
+    return today;
+}
 function DailyCollectionReport() {
     $('#tblDailyCollectionReport tbody').empty();
     var url = config.baseUrl + "/api/Finance/Financial_Queries";
@@ -72,7 +89,7 @@ function DailyCollectionReport() {
                         tbody += '<td class="text-right">' + val.NEFT + '</td>';
                         tbody += '<td class="text-right">' + val.Received + '</td>';
                         tbody += '<td class="text-right">' + val.OPCredit + '</td>';
-                        tbody += '<td>' + val.ByStaff + '</td>';                                         
+                        tbody += '<td>' + val.ByStaff + '</td>';
                         tbody += '</tr>';
                     });
                     //tbody += '<tr>';

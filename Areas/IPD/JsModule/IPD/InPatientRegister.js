@@ -61,7 +61,7 @@ function AdmittedPatientList(logic) {
     objBO.PanelId = $('#ddlPanel option:selected').val();
     objBO.from = $('#txtSearchFrom').val();
     objBO.to = $('#txtSearchTo').val();
-    objBO.Prm1 = '';
+    objBO.Prm1 = $('#ddlIpdStatus option:selected').val();
     objBO.Prm2 = '';
     objBO.login_id = Active.userId;
     objBO.Logic = logic;
@@ -71,19 +71,21 @@ function AdmittedPatientList(logic) {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {           
+        success: function (data) {
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
-                    var tbody = "";                   
-                    $.each(data.ResultSet.Table, function (key, val) {                        
-                        if (val.PaymentStatus =='Zero-Advance')
+                    var tbody = "";
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        if (val.PaymentStatus == 'Zero-Advance')
                             tbody += "<tr style='background:#ffb9b9'>";
                         else if (val.PaymentStatus == 'Below-Threshold')
                             tbody += "<tr style='background:#f2fba6'>";
+                        else if (val.IpdStatus == 'Out')
+                            tbody += "<tr style='background:#ffaeae'>";
                         else
                             tbody += "<tr>";
 
-                        if (_ActivePageName=='ipd_nursingpatientregister')
+                        if (_ActivePageName == 'ipd_nursingpatientregister')
                             tbody += "<td><button onclick=NursingGateway('" + val.IPDNo + "') class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
                         else if (_ActivePageName == 'ipd_billingpatientregister')
                             tbody += "<td><button onclick=BillingGateway('" + val.IPDNo + "') class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
@@ -91,13 +93,13 @@ function AdmittedPatientList(logic) {
                             tbody += "<td><button onclick=DoctorGateway('" + val.IPDNo + "') class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
 
                         tbody += "<td>" + val.UHID + "</td>";
-                        tbody += "<td>" + val.IPDNo+"</td>";
-                        tbody += "<td>" + val.patient_name+"</td>";
-                        tbody += "<td>" + val.ageInfo+"</td>";
-                        tbody += "<td>" + val.AdmitDate+"</td>";
-                        tbody += "<td>" + val.roomFullName+"</td>";
-                        tbody += "<td>" + val.PanelName+"</td>";
-                        tbody += "<td>" + val.DepartmentName+"</td>";
+                        tbody += "<td>" + val.IPDNo + "</td>";
+                        tbody += "<td>" + val.patient_name + "</td>";
+                        tbody += "<td>" + val.AdmitDate + "</td>";
+                        tbody += "<td>" + val.DischargeDate + "</td>";
+                        tbody += "<td>" + val.roomFullName + "</td>";
+                        tbody += "<td>" + val.DoctorName + "</td>";
+                        tbody += "<td>" + val.PanelName + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblServiceRegister tbody').append(tbody);

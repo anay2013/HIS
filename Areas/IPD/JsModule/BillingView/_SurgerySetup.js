@@ -25,6 +25,12 @@ $(document).ready(function () {
     });
     if (_DoctorList.length == 0)
         GetDoctor();
+
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('dtPicker').value = now.toISOString().slice(0, 16);
+
+
 });
 function GetDoctor() {
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
@@ -364,6 +370,7 @@ function ItemInsert() {
         objBooking.IPDNo = _IPDNo;
         objBooking.ipAddress = '-';
         objBooking.login_id = Active.userId;
+        objBooking.EntryDateTime = $('#dtPicker').val();
         objBooking.Logic = "Insert:SurgeryCharges";
         var MasterObject = {};
         MasterObject.objBooking = objBooking;

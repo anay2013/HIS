@@ -473,22 +473,22 @@ function ValidationMediInfo() {
     else {
         $('#txtSearchProduct').removeAttr('style');
     }
-    if (med_dose == 'Select') {
-        alert('Please Choose Dose..');
-        $('#txtFreqMaster').css('border-color', 'red').focus();
-        return false;
-    }
-    else {
-        $('#txtFreqMaster').removeAttr('style');
-    }
-    if (med_intake == 'Select') {
-        alert('Please Choose In Take..');
-        $('#txtIntake').css('border-color', 'red').focus();
-        return false;
-    }
-    else {
-        $('#txtIntake').removeAttr('style');
-    }
+    //if (med_dose == 'Select') {
+    //    alert('Please Choose Dose..');
+    //    $('#txtFreqMaster').css('border-color', 'red').focus();
+    //    return false;
+    //}
+    //else {
+    //    $('#txtFreqMaster').removeAttr('style');
+    //}
+    //if (med_intake == 'Select') {
+    //    alert('Please Choose In Take..');
+    //    $('#txtIntake').css('border-color', 'red').focus();
+    //    return false;
+    //}
+    //else {
+    //    $('#txtIntake').removeAttr('style');
+    //}
     //if (med_duration=='') {
     //	alert('Please Provide Duration..');
     //	$('#txtDuration').css('border-color', 'red');

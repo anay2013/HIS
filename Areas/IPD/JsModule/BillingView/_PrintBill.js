@@ -90,3 +90,7 @@ function BillPrint_IncludingPackagedItem() {
     var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=IncludingPackagedItem";
     window.open(url, '_blank');
 }
+function Receipt_IPDDischargeReport() {
+    var url = "../Print/IPDDischargeReport?_IPDNo=" + _IPDNo;
+    window.open(url, '_blank');
+}

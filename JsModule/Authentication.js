@@ -1,7 +1,7 @@
 ﻿    $(document).ready(function () {
     sessionStorage.setItem("_HISDebugPermission", "N");
-     if (window.location.pathname.toLowerCase() != '/' && window.location.pathname.toLowerCase() != '/admin/dashboard')
-        IsAuthorizedMenu();
+    if(window.location.pathname.toLowerCase() != '/' && window.location.pathname.toLowerCase() != '/admin/dashboard')
+    IsAuthorizedMenu();
 
    
     var Rolls = sessionStorage.getItem("Rolls");
@@ -52,7 +52,7 @@ function IsAuthorizedMenu() {
     var url = config.baseUrl + "/api/ApplicationResource/InsertDeleteAllotMenu";
     var objBO = {};
     objBO.SubMenuId = query()['mid'];
-    objBO.EmpCode = Active.userId;
+    objBO.EmpCode=Active.userId;
     objBO.Logic = 'IsAuthorizedMenu';
     $.ajax({
         method: "POST",
@@ -62,9 +62,9 @@ function IsAuthorizedMenu() {
         dataType: "JSON",
         success: function (data) {
             if (window.location.pathname.split('/').pop().toLowerCase() != data.toLowerCase().replace(/\s/g, '')) {
-               //sessionStorage.clear();
-               //localStorage.clear();
-               //window.location.href = config.rootUrl;
+               sessionStorage.clear();
+               localStorage.clear();
+               window.location.href = config.rootUrl;
             }
 
         },

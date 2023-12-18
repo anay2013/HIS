@@ -283,7 +283,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
             b.Append("<table style='font-size:13px;border:0px solid #dcdcdc;width:100%'>");
             b.Append("<tr>");
-            b.Append("<td style='text-align:left'>Print Date & Time :" + DateTime.Now.ToString("dd-mm-yyyy hh:mm") + "</td>");
+            b.Append("<td style='text-align:left'>Print Date & Time :" + DateTime.Now.ToString("dd-MM-yyyy hh:mm") + "</td>");
             b.Append("<td style='text-align:center'>Prepared By : " + preparedBy + "</td>");
             b.Append("<td style='text-align:right'>Printed By : " + ActiveUser + "</td>");
             b.Append("</tr>");

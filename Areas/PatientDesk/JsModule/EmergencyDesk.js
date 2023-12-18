@@ -40,6 +40,42 @@ $(document).ready(function () {
     OnLoadEmergencyDesk();
     GetEmergencyRequest('GetAllRequest');
 });
+function CloseRequest() {
+    if (_RequestId == '') {
+        alert('RequestId Not Found.')
+        return
+    }
+    if (confirm('Are you sure to Close?')) {
+        var url = config.baseUrl + "/api/Patient/AmbulanceAndEmergencyRequest";
+        var objBO = {};
+        objBO.RequestId = _RequestId;
+        objBO.DriverId = '-';
+        objBO.PickupDate = '1900/01/01';
+        objBO.PickupTime = '1900/01/01';
+        objBO.Prm1 = $('#ddlFinalStatus option:selected').text();
+        objBO.login_id = Active.userId;
+        objBO.Logic = "CloseRequest";
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    alert(data)
+                    $('#modalCloseRequest').modal('hide')
+                }
+                else {
+                    alert(data)
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
 function removeRow(elem) {
     $(elem).closest('tr').remove();
 }
@@ -164,7 +200,7 @@ function GetEmergencyRequest(logic) {
                         html += "<td colspan='2' style='font-size:10px' >" + val.TAT + "</th>";
                         html += "</tr>";
 
-              
+
                         html += "</table>";
                         html += "</div>";
                     });
@@ -289,7 +325,7 @@ function GetRequestByReqId(RequestId) {
                             debugger;
                             if ($(this).text() == val.AmbulanceName) {
                                 $('#ddlAmbulance').prop('selectedIndex', '' + $(this).index() + '').change();
-                            }                           
+                            }
                         });
                         $('#ddlDriver option').each(function () {
                             if ($(this).text() == val.DriverName) {
@@ -490,24 +526,24 @@ function CancelRequest() {
 }
 function InformToAmbulanceDriver() {
 
-        var url = config.baseUrl + "/api/Patient/InformToAmbulanceDriver";
-        var objBO = {};
-        objBO.RequestId = _RequestId;
-        objBO.login_id = Active.userId;
-        objBO.Logic = "GetDataToInformDriver";
-        $.ajax({
-            method: "POST",
-            url: url,
-            data: JSON.stringify(objBO),
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                alert(data);
-            },
-            error: function (response) {
-                alert('Server Error...!');
-            }
-        });
+    var url = config.baseUrl + "/api/Patient/InformToAmbulanceDriver";
+    var objBO = {};
+    objBO.RequestId = _RequestId;
+    objBO.login_id = Active.userId;
+    objBO.Logic = "GetDataToInformDriver";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            alert(data);
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
 }
 
 function SendTrackingLink(elem) {
@@ -571,7 +607,7 @@ function Validation() {
     var PickupTime = $('#txtPickupTime').val();
     var AmbulanceId = $('#ddlAmbulance option:selected').text();
     var AllotedDriverId = $('#ddlDriver option:selected').text();
-  
+
     if (PatientName == '') {
         alert('Please Provide Patient Name');
         $('#txtPatientName').css('border-color', 'red').focus();
@@ -580,4 +616,32 @@ function Validation() {
         $('#txtPatientName').removeAttr('style');
     }
     return true;
+}
+function DownloadExcel(elem) {
+    var url = config.baseUrl + "/api/Patient/AmbulanceAndEmergencyQueries";
+    var objBO = {};
+    objBO.RequestId = '-';
+    objBO.DriverId = '-';
+    objBO.from = $('#txtFrom').val();
+    objBO.to = $('#txtTo').val();
+    objBO.Prm1 = '-';
+    objBO.ReportType = 'Excel';
+    objBO.Prm2 = '-';
+    objBO.Logic = "BookingReport";
+    Global_DownloadExcel(url, objBO, "AmbulanceReport.xlsx", elem);
+}
+function Global_DownloadExcel(Url, objBO, fileName, elem) {
+    $(elem).addClass('loading');
+    var ajax = new XMLHttpRequest();
+    ajax.open("Post", Url, true);
+    ajax.responseType = "blob";
+    ajax.setRequestHeader("Content-type", "application/json")
+    ajax.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            var blob = new Blob([this.response], { type: "application/octet-stream" });
+            saveAs(blob, fileName); //refernce by ~/JsModule/FileSaver.min.js
+            $(elem).removeClass('loading');
+        }
+    };
+    ajax.send(JSON.stringify(objBO));
 }
