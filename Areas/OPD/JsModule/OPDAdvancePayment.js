@@ -77,7 +77,7 @@ function ReceiptInfo() {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {           
+        success: function (data) {
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table1).length) {
                     var tbody = '';
@@ -142,9 +142,13 @@ function OnLoadQueries() {
                     });
                 }
                 if (Object.keys(data.ResultSet.Table4).length) {
-                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option></option>')).change();
+                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option value="Select">Select</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table4, function (key, val) {
-                        $('#tblPaymentDetails tbody .MachineName').append($('<option></option>').val(val.machineId).html(val.machineName));
+                        if (val.usedFor == 'SwipeCard')
+                            $('#tblPaymentDetails tbody .MachineName:eq(0)').append($('<option></option>').val(val.machineId).html(val.machineName));
+
+                        if (val.usedFor == 'Online')
+                            $('#tblPaymentDetails tbody .MachineName:eq(1)').append($('<option></option>').val(val.machineId).html(val.machineName));
                     });
                 }
             }

@@ -72,7 +72,11 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px'>" + HospitalName + "</h1>");
                     b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;'>" + HospitalAddress + "<br/>Phone No : " + HospitalPhone + ", Email : " + HospitalEmail + "</h3>");
                     //b.Append("<h2 style='text-align:center;font-size:21px;'></h2>");
-                    b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Receipt</h3>");
+                    if (NetAmount < 0)
+                        b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Refund Receipt</h3>");
+                    else
+                        b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Receipt</h3>");
+
                     b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
                     b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
                     b.Append("<tr>");

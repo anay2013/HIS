@@ -394,9 +394,13 @@ function BookAppointmentQueries() {
                     });
                 }
                 if (Object.keys(data.ResultSet.Table9).length) {
-                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option></option>')).trigger('change.select2');
+                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option value="Select">Select</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table9, function (key, val) {
-                        $('#tblPaymentDetails tbody .MachineName').append($('<option></option>').val(val.machineId).html(val.machineName));
+                        if (val.usedFor == 'SwipeCard')
+                            $('#tblPaymentDetails tbody .MachineName:eq(0)').append($('<option></option>').val(val.machineId).html(val.machineName));
+
+                        if (val.usedFor == 'Online')
+                            $('#tblPaymentDetails tbody .MachineName:eq(1)').append($('<option></option>').val(val.machineId).html(val.machineName));
                     });
                 }
                 if (Object.keys(data.ResultSet.Table10).length) {

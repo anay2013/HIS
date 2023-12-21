@@ -10,7 +10,7 @@ $(document).ready(function () {
     });
 });
 function GetPatientInfo(logic) {
-    if ($("#txtIPDNo").val() == '') {
+    if ($("#txtIPDNo").val() == '' && logic == 'GetPatientInfo') {
         alert('Please Provide IPD No.');
         return
     }

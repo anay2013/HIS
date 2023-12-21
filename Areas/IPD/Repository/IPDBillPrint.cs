@@ -90,7 +90,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
         {
             if(pdfPage != null)
             {
-                pdfPage.CreateHeaderCanvas(210);
+                pdfPage.CreateHeaderCanvas(240);
                 string StrhtmlHeader = GetHeaderHTML1();
                 PdfHtml headerHtml = new PdfHtml(0, 0, StrhtmlHeader, null);
                 pdfPage.Header.Layout(headerHtml);
@@ -738,6 +738,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             b.Append("<td style='width:1%;'><b>:</b></td>");
             b.Append("<td style='width:29%;'>" + DischargeDate + "</td>");
             b.Append("</tr>");
+
             b.Append("</table>");
 
             return b.ToString();

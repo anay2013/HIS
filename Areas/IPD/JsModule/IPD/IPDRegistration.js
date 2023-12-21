@@ -1,14 +1,14 @@
 ﻿var _tnxid = "";
 var _IPOPNo = "";
 var _ReceiptNo = "";
-$(document).ready(function () {  
+$(document).ready(function () {
     TriggerEnter();
     $('select').select2();
     _vacantLogic = "IPDReg";
     OnLoadQueries();
     $('#ddlDept').on('change', function () {
         GetDoctorByDept()
-    }); 
+    });
     $('input[type=checkbox]').on('change', function () {
         isCheck = $(this).is(':checked');
         var val = $(this).val();
@@ -36,7 +36,7 @@ $(document).ready(function () {
             $('#tblPaymentDetails tbody').find('input[type=text]').val(0);
             $('#tblPaymentDetails tbody').find('tr').filter('.pay').first().find('td:eq(1)').find('input[type=text]').val(pay);
         }
-    }); 
+    });
     $('#tblPaymentDetails tbody').on('keyup', 'input[type=text]', function () {
         var netAmount = parseFloat($('#txtNetAmount').val());
         var cash = parseFloat($('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val());
@@ -57,7 +57,7 @@ $(document).ready(function () {
             $('#txtError').text('').removeAttr('style');
         }
     });
-      
+
     $('#txtSearchReferral').on('keyup', function (e) {
         var referral = $(this).val();
         ReferralSearch(referral);
@@ -112,7 +112,7 @@ function OnLoadQueries() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#ddlDept').append($('<option></option>').val(val.DeptId).html(val.DepartmentName));
                     });
-                }               
+                }
                 if (Object.keys(data.ResultSet.Table2).length) {
                     $('#ddlReferralSource').empty().append($('<option>Select</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table2, function (key, val) {
@@ -126,9 +126,13 @@ function OnLoadQueries() {
                     });
                 }
                 if (Object.keys(data.ResultSet.Table4).length) {
-                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option></option>')).trigger('change.select2');
+                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option value="Select">Select</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table4, function (key, val) {
-                        $('#tblPaymentDetails tbody .MachineName').append($('<option></option>').val(val.machineId).html(val.machineName));
+                        if (val.usedFor == 'SwipeCard')
+                            $('#tblPaymentDetails tbody .MachineName:eq(0)').append($('<option></option>').val(val.machineId).html(val.machineName));
+
+                        if (val.usedFor == 'Online')
+                            $('#tblPaymentDetails tbody .MachineName:eq(1)').append($('<option></option>').val(val.machineId).html(val.machineName));
                     });
                 }
                 if (Object.keys(data.ResultSet.Table6).length) {
@@ -162,8 +166,8 @@ function OnLoadQueries() {
         },
         complete: function (response) {
             $('#ddlDept').prop('selectedIndex', '0').trigger('change.select2');
-            $('#ddlReferralSource').val('RC1624').trigger('change.select2');           
-            $('#ddlPanel').val(1).trigger('change.select2');         
+            $('#ddlReferralSource').val('RC1624').trigger('change.select2');
+            $('#ddlPanel').val(1).trigger('change.select2');
         },
         error: function (response) {
             alert('Server Error...!');
@@ -325,7 +329,7 @@ function paymentCal(logic, val) {
         $('#txtPayable').val(netAmt);
     }
 }
-function PaymentAll() {}
+function PaymentAll() { }
 //IPD Save Registration Info
 function IPDRegistration() {
     if (confirm('Are you sure to IPD Registration?')) {
@@ -454,7 +458,7 @@ function IPDRegistration() {
         }
     }
 } function PrintReceipt() {
-    var url = config.documentServerUrl+"/IPD/Print/AdmissionAndDischargeReport?_IPDNo=" + _IPOPNo;
+    var url = config.documentServerUrl + "/IPD/Print/AdmissionAndDischargeReport?_IPDNo=" + _IPOPNo;
     window.open(url, '_blank');
 }
 function IPDRegisteredInfo(IPDNo) {
@@ -555,7 +559,7 @@ function PatientAdvance() {
     }
 }
 function PrintAdvanceReceipt() {
-    var url = config.documentServerUrl+ "/OPD/Print/AdvanceReceipt?ReceiptNo=" + _ReceiptNo + "&loginName=" + Active.userName;
+    var url = config.documentServerUrl + "/OPD/Print/AdvanceReceipt?ReceiptNo=" + _ReceiptNo + "&loginName=" + Active.userName;
     window.open(url, '_blank');
 }
 function ReferralSearch(referral) {
@@ -857,7 +861,7 @@ function ValidateRegistration() {
     else {
         $('#txtAttendantName').removeAttr('style');
     }
-    
+
     if (AttendantContactNo1 == '') {
         $('#txtAttendantContactNo1').css('border-color', 'red').focus();
         alert('Please Provide Attendant Contact No..');
