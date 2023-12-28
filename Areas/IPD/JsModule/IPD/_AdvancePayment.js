@@ -78,8 +78,10 @@ function ReceiptInfo() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('.advnc-amount-section #txtNetAmt').val(val.NetAmount.toFixed(2));
                         $('.advnc-amount-section #txtAdvanceAmt').val(val.AdvanceAmount.toFixed(2));
-                        $('.advnc-amount-section #txtBalanceAmt').val(val.BalanceAmount.toFixed(2));
+                        $('.advnc-amount-section #txtCoPay').val(val.CoPay.toFixed(2));
                         $('.advnc-amount-section #txtApprovalAmt').val(val.ApprovalAmount.toFixed(2));
+                        $('.advnc-amount-section #txtBalanceAmt').val(val.BalanceAmount.toFixed(2));
+                 
                     });
                 }
             }
@@ -117,7 +119,7 @@ function ReceiptInfo() {
     });
 }
 function PrintReceipt(receiptNo) {
-    var url = "/OPD/Print/AdvanceReceipt?ReceiptNo=" + receiptNo + "&loginName=" + Active.userName;
+    var url = config.documentServerUrl+"/OPD/Print/AdvanceReceipt?ReceiptNo=" + receiptNo + "&loginName=" + Active.userName;
     window.open(url, '_blank');
 }
 function OnLoadQueries() {
@@ -172,6 +174,16 @@ function PatientAdvance() {
             alert('IPD No Not Found.');
             return
         }
+        var swipeSelect = $('#tblPaymentDetails tbody').find('tr:eq(2).pay').find('td:eq(5)').find('select option:selected').text();
+        var onlineSelect = $('#tblPaymentDetails tbody').find('tr:eq(3).pay').find('td:eq(5)').find('select option:selected').text();
+        if (swipeSelect == 'Select') {
+            alert('Please Select Bank Machine for Swipe Card');
+            return
+        }
+        if (onlineSelect == 'Select') {
+            alert('Please Select Bank Machine NEFT/RTGS/Online');
+            return
+        }
         var url = config.baseUrl + "/api/IPDNursing/IPD_TakeAdvance";
         var objBooking = {};
         var objPayment = [];
@@ -180,9 +192,8 @@ function PatientAdvance() {
         $('#tblPaymentDetails tbody tr.pay').each(function () {
             var Amount = parseFloat($(this).find('td:eq(1)').find('input[type=text]').val());
             totalAmount += parseFloat($(this).find('td:eq(1)').find('input[type=text]').val());
-
-            if ($('input[name=Advance-type]:checked').data('adv') == 'AdvanceReturn')
-                Amount = -Amount;
+            if($('input[name=Advance-type]:checked').data('adv') == 'AdvanceReturn')
+            Amount = -Amount;
 
             objPayment.push({
                 'ReceiptNo': '-',
@@ -216,8 +227,8 @@ function PatientAdvance() {
         objBooking.IPDNo = _IPDNo;
         objBooking.hosp_id = Active.unitId;
         objBooking.IPOPType = 'IPD';
-        objBooking.ReceiptType = $('input[name=Advance-type]:checked').val();
-        objBooking.Prm1 = '-';
+        objBooking.ReceiptType ="Advance";
+        objBooking.Prm1 = $('input[name=Advance-type]:checked').val();
         objBooking.Prm2 = '-';
         objBooking.Remark = '-';
         objBooking.login_id = Active.userId;
@@ -237,7 +248,6 @@ function PatientAdvance() {
                     ReceiptInfo();
                 }
                 else {
-                    alert(data);
                 }
             },
             error: function (response) {

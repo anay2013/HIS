@@ -12,5 +12,9 @@ namespace MediSoftTech_HIS.Areas.Accounts.Controllers
         {
             return View();
         }
+        public ActionResult PayModeCorrection()
+        {
+            return View();
+        }
     }
 }

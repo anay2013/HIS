@@ -14,7 +14,7 @@
 	})
 	$('#tblTallyVoucher tbody').on('click', 'button[title=send]', function () {
         var VoucherNo = $(this).closest('tr').find('td:eq(4)').text();
-        if ($(this).closest('tr').find('td:eq(12)').text() == "N") {
+        if ($(this).closest('tr').find('td:eq(8)').text() == "N") {
             VoucherForSync(VoucherNo, $(this).closest('tr'));
         }
         else {
@@ -67,12 +67,8 @@ function VoucherDetail() {
              	htmldata += '<td>' + val.vch_date + '</td>';
 				htmldata += '<td>' + val.vch_type + '</td>';
 				htmldata += '<td>' + val.voucher_no + '</td>';
-				htmldata += '<td>' + val.billNo + '</td>';
-				htmldata += '<td>' + val.BillType + '</td>';
-				htmldata += '<td>' + val.Credit_Ledger + '</td>';
-				htmldata += '<td>' + val.Debit_Ledger + '</td>';
-				htmldata += '<td>' + val.amount + '</td>';
-                htmldata += '<td>' + val.narration + '</td>';
+            	htmldata += '<td>' + val.Credit_Ledger + '</td>';
+            	htmldata += '<td>' + val.amount + '</td>';
                 if (val.isTallySync == "N") {
                     htmldata += '<td>';
                     htmldata += '<button title="send" class="btn-flat btn-success">Send</button>&nbsp;';
@@ -109,18 +105,19 @@ function VoucherForSync(VoucherNo, elem) {
 		dataType: "JSON",
 		success: function (data) {
 			count = parseInt($('#txtRemain').text()) + 1;
-			$('#txtRemain').text(count);
+            $('#txtRemain').text(count);
+            alert(data);
 			if (data == 'Successfully Saved') {
-				$(elem).find('td:eq(13)').find('button[title=status]').removeAttr('class');
-				$(elem).find('td:eq(13)').find('button[title=status]').addClass('btn-primary');
-                $(elem).find('td:eq(13)').find('button[title=status]').html('<i class="fa fa-check"></i>');
-                $(elem).find('td:eq(12)').text("Y");
+				$(elem).find('td:eq(9)').find('button[title=status]').removeAttr('class');
+				$(elem).find('td:eq(9)').find('button[title=status]').addClass('btn-primary');
+                $(elem).find('td:eq(9)').find('button[title=status]').html('<i class="fa fa-check"></i>');
+                $(elem).find('td:eq(8)').text("Y");
 			}
 			else {
-				$(elem).find('td:eq(13)').find('button[title=status]').removeAttr('class');
-				$(elem).find('td:eq(13)').find('button[title=status]').addClass('btn-flat btn-danger');
-				$(elem).find('td:eq(13)').find('button[title=status]').html('<i class="fa fa-question-circle"></i>');
-                $(elem).find('td:eq(13)').find('button[title=status]').data('msg', data);
+				$(elem).find('td:eq(9)').find('button[title=status]').removeAttr('class');
+				$(elem).find('td:eq(9)').find('button[title=status]').addClass('btn-flat btn-danger');
+				$(elem).find('td:eq(9)').find('button[title=status]').html('<i class="fa fa-question-circle"></i>');
+                $(elem).find('td:eq(9)').find('button[title=status]').data('msg', data);
 			}
 		},
 		error: function (data) {

@@ -205,6 +205,17 @@ function PatientAdvance() {
             alert('IPD No Not Found.');
             return
         }
+
+        var swipeSelect = $('#tblPaymentDetails tbody').find('tr:eq(2).pay').find('td:eq(5)').find('select option:selected').text();
+        var onlineSelect = $('#tblPaymentDetails tbody').find('tr:eq(3).pay').find('td:eq(5)').find('select option:selected').text();
+        if (swipeSelect == 'Select') {
+            alert('Please Select Bank Machine for Swipe Card');
+            return
+        }
+        if (onlineSelect == 'Select') {
+            alert('Please Select Bank Machine NEFT/RTGS/Online');
+            return
+        }
         var url = config.baseUrl + "/api/IPDNursing/IPD_TakeAdvance";
         var objBooking = {};
         var objPayment = [];

@@ -1200,6 +1200,16 @@ function Opd_AppointmentBooking() {
 function Opd_AppointmentBooking1() {
     if (confirm('Are you sure to Book Appointment?')) {
         if (ValidateBooking()) {
+            var swipeSelect = $('#tblPaymentDetails tbody').find('tr:eq(2).pay').find('td:eq(5)').find('select option:selected').text();
+            var onlineSelect = $('#tblPaymentDetails tbody').find('tr:eq(3).pay').find('td:eq(5)').find('select option:selected').text();
+            if (swipeSelect == 'Select') {
+                alert('Please Select Bank Machine for Swipe Card');
+                return
+            }
+            if (onlineSelect == 'Select') {
+                alert('Please Select Bank Machine NEFT/RTGS/Online');
+                return
+            }
             var netAmount = parseFloat($('#txtPayable').val());
             var cash = parseFloat($('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val());
             var cheque = parseFloat($('#tblPaymentDetails tbody').find('tr:eq(1)').find('td:eq(1)').find('input[type=text]').val());

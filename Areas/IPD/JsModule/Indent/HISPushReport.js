@@ -51,6 +51,11 @@ function PushDataSummary(prm1) {
                         tbody += "<td class='text-right'>" + val.TotAmt + "</td>";
                         tbody += "<td class='text-right'>" + val.PushAmount + "</td>";
                         tbody += "<td class='text-right'>" + val.PendAmount + "</td>";
+                        if (val.TotAmt.toFixed(0) == val.TotalHISAmount.toFixed(0) )
+                            tbody += "<td class='text-right' style='background-color:LightGreen'>" + val.TotalHISAmount + "</td>";
+                        else
+                            tbody += "<td class='text-right'>" + val.TotalHISAmount + "</td>";
+
                         tbody += "</tr>";
                     });
                     $('#tblPushDataSummary tbody').append(tbody);
@@ -88,10 +93,11 @@ function HISPushPendency(logic) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         if (temp != val.ipop_no) {
                             tbody += "<tr style='background:#c9e7f9'>";
-                            tbody += "<td colspan='7'><b>IPOP No. : </b>" + val.ipop_no + ", <b>Patient Name : </b>" + val.pt_name + "</td>";
+                            tbody += "<td colspan='8'><b>IPOP No. : </b>" + val.ipop_no + ", <b>Patient Name : </b>" + val.pt_name + "</td>";
                             tbody += "</tr>";
                             temp = val.ipop_no;
                         }
+
                         tbody += "<tr>";
                         tbody += "<td>" + val.indent_no + "</td>";
                         tbody += "<td>" + val.sale_inv_no + "</td>";
@@ -100,6 +106,11 @@ function HISPushPendency(logic) {
                         tbody += "<td class='text-right'>" + val.discount + "</td>";
                         tbody += "<td class='text-right'>" + val.net + "</td>";
                         tbody += "<td><button data-saleinvno=" + val.sale_inv_no + " onclick=UpdateHISPushFlag(this) class='btn btn-warning btn-xs btntblCustom'><i class='fa fa-check-circle'>&nbsp;</i>Done</button></td>";
+                        if (val.IsImplant =="Implant")
+                            tbody += "<td class='text-center' style='background:lightyellow' >" + val.IsImplant + "</td>";
+                        else
+                            tbody += "<td class='text-center'></td>";
+
                         tbody += "</tr>";
                     });
                     $('#tblPendingDetails tbody').append(tbody);
@@ -115,7 +126,6 @@ function HISPushPendency(logic) {
     });
 }
 function UpdateHISPushFlag(elem) {
-    if (confirm('Are you sure?')) {
         var url = config.baseUrl + "/api/Pharmacy/Hospital_VerifyIPDBill";
         var objBO = {};
         objBO.IPDNo = '-';
@@ -145,5 +155,5 @@ function UpdateHISPushFlag(elem) {
                 alert('Server Error...!');
             }
         });
-    }
+    
 }

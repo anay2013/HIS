@@ -60,15 +60,19 @@
             <input type="text" id="txtNetAmt" class="form-control" />
         </div>
         <div class="col-md-3">
-            <label>Advance Amount</label>
+            <label>Advance </label>
             <input type="text" id="txtAdvanceAmt" class="form-control" />
         </div>
-        <div class="col-md-3">
-            <label>Approval Amount</label>
+        <div class="col-md-2">
+            <label>Co Pay</label>
+            <input type="text" id="txtCoPay" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label>Approval</label>
             <input type="text" id="txtApprovalAmt" class="form-control" />
         </div>
-        <div class="col-md-3">
-            <label>Balance Amount</label>
+        <div class="col-md-2">
+            <label>Balance</label>
             <input type="text" id="txtBalanceAmt" class="form-control" />
         </div>
 
@@ -78,6 +82,7 @@
         <label><input type="radio" checked name="Advance-type" value="Advance" data-adv="Advance" />&nbsp;Advance Amount</label>
         <label><input type="radio" name="Advance-type" value="Advance" data-adv="AdvanceReturn" />&nbsp;Advance Return</label>
         <label><input type="radio" name="Advance-type" value="FinalSettlement" data-adv="FinalSettlement" />&nbsp;Final Settlement</label>
+        <label><input type="radio" name="Advance-type" value="CoPay" data-adv="CoPay" />&nbsp;Co-Pay</label>
         <button class="btn btn-primary pull-right" id="btnGenerateBill" onclick="PatientAdvance()" style="margin:0px 10px;"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
     </div>
     <div class="col-md-12 PaymentInfo">

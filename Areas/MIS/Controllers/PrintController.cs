@@ -10,13 +10,14 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
 {
     public class PrintController : Controller
     {
-        public FileResult CollectionSummaryReport(string hosp_id, string from, string to, string loginId)
+        public FileResult CollectionSummaryReport(string hosp_id, string from, string to, string prm_1, string loginId)
         {
             PdfGenerator pdfConverter = new PdfGenerator();
             ipFinance obj = new ipFinance();
             obj.hosp_id = hosp_id;
-            obj.from = from;
-            obj.to = to;
+            obj.from = from.ToString();
+            obj.to = to.ToString();
+            obj.prm_1 = prm_1.ToString();
             obj.loginId = loginId;
             obj.Logic = "CollectionSummaryReportByUser";
             dataSet dsResult = APIProxy.CallWebApiMethod("Finance/Financial_Queries", obj);
@@ -27,25 +28,25 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
             StringBuilder f = new StringBuilder();
             int Count = 0;
             double p_Cash = 0;
-            double p_SwipeCard = 0;           
+            double p_SwipeCard = 0;
             double p_Cheque = 0;
-            double p_NEFT_RTGS = 0;            
+            double p_NEFT_RTGS = 0;
             double n_Cash = 0;
             double n_SwipeCard = 0;
-            double n_Cheque = 0;          
-            double n_NEFT_RTGS = 0;          
-            double f_cash = 0;          
-            double f_SwipeCard = 0;          
-            double f_Cheque = 0;          
-            double f_NEFT_RTGS = 0;          
-            double FinalTotal = 0;   
-            
+            double n_Cheque = 0;
+            double n_NEFT_RTGS = 0;
+            double f_cash = 0;
+            double f_SwipeCard = 0;
+            double f_Cheque = 0;
+            double f_NEFT_RTGS = 0;
+            double FinalTotal = 0;
+
             //b.Append("<div style='width:100%;float:left;margin-top:-12px;padding:8px'>");          
             b.Append("<div style='text-align:center;float:left;width:100%;'>");
-            b.Append("<h2 style='font-weight:bold;margin:0'>Chandan Hospital</h2>");                 
+            b.Append("<h2 style='font-weight:bold;margin:0'>Chandan Hospital</h2>");
             b.Append("<h3 style='font-weight:bold;margin:0'>Collection Summary Report</h3>");
-            b.Append("<h4 style='font-weight:bold;margin:0'>From : " +Convert.ToDateTime(from).ToString("MM/dd/yyyy") + ", To : "+ Convert.ToDateTime(to).ToString("MM/dd/yyyy") + "</h4>");
-            b.Append("</div>");        
+            b.Append("<h4 style='font-weight:bold;margin:0'>From : " + Convert.ToDateTime(from).ToString("MM/dd/yyyy") + ", To : " + Convert.ToDateTime(to).ToString("MM/dd/yyyy") + "</h4>");
+            b.Append("</div>");
             //b.Append("</div>");
             b.Append("<hr/>");
             //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -63,14 +64,10 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
             b.Append("<th colspan='4' class='text-center'>Collection</th>");
             b.Append("<th colspan='4' class='text-center'>Cancel/Refunds</th>");
             b.Append("<th colspan='4' class='text-center'>Net Collection</th>");
-            b.Append("<th></th>");       
+            b.Append("<th></th>");
             b.Append("</tr>");
-            b.Append("<tr>");          
+            b.Append("<tr>");
             b.Append("<th style='padding-left:4px;text-align:left'>User Name</th>");
-            b.Append("<th style='padding-right:4px;text-align:right'>Cash</th>");          
-            b.Append("<th style='padding-right:4px;text-align:right'>Swipe Card</th>");          
-            b.Append("<th style='padding-right:4px;text-align:right'>Cheque</th>");          
-            b.Append("<th style='padding-right:4px;text-align:right'>NEFT</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Cash</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Swipe Card</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Cheque</th>");
@@ -79,7 +76,11 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
             b.Append("<th style='padding-right:4px;text-align:right'>Swipe Card</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Cheque</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>NEFT</th>");
-            b.Append("<th style='padding-right:4px;text-align:right'>Total</th>");         
+            b.Append("<th style='padding-right:4px;text-align:right'>Cash</th>");
+            b.Append("<th style='padding-right:4px;text-align:right'>Swipe Card</th>");
+            b.Append("<th style='padding-right:4px;text-align:right'>Cheque</th>");
+            b.Append("<th style='padding-right:4px;text-align:right'>NEFT</th>");
+            b.Append("<th style='padding-right:4px;text-align:right'>Total</th>");
             b.Append("</tr>");
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -97,24 +98,24 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
                     f_SwipeCard += Convert.ToDouble(dr["f_SwipeCard"].ToString());
                     f_Cheque += Convert.ToDouble(dr["f_Cheque"].ToString());
                     f_NEFT_RTGS += Convert.ToDouble(dr["f_NEFT_RTGS"].ToString());
-                    FinalTotal+= Convert.ToDouble(dr["FinalTotal"].ToString());
+                    FinalTotal += Convert.ToDouble(dr["FinalTotal"].ToString());
 
                     Count++;
                     b.Append("<tr>");
                     b.Append("<td>" + dr["StaffName"].ToString() + "</td>");
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_Cash"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_SwipeCard"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_Cheque"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_NEFT_RTGS"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_Cash"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_SwipeCard"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_Cheque"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_NEFT_RTGS"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_cash"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_SwipeCard"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_Cheque"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_NEFT_RTGS"].ToString() + "</td>");                   
-                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["FinalTotal"].ToString() + "</td>");                   
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_Cash"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_SwipeCard"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_Cheque"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["p_NEFT_RTGS"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_Cash"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_SwipeCard"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_Cheque"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["n_NEFT_RTGS"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_cash"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_SwipeCard"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_Cheque"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["f_NEFT_RTGS"].ToString() + "</td>");
+                    b.Append("<td style='padding-right:4px;text-align:right'>" + dr["FinalTotal"].ToString() + "</td>");
                     b.Append("</tr>");
                 }
             }
@@ -151,13 +152,14 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
             //pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), f.ToString(), "CollectionSummaryReportByUser.pdf");
         }
-        public FileResult DailyCollectionReport(string hosp_id, string from, string to, string loginId)
+        public FileResult DailyCollectionReport(string hosp_id, string from, string to, string prm_1, string loginId)
         {
             PdfGenerator pdfConverter = new PdfGenerator();
             ipFinance obj = new ipFinance();
             obj.hosp_id = hosp_id;
-            obj.from = from;
-            obj.to = to;
+            obj.from = from.ToString();
+            obj.to = to.ToString();
+            obj.prm_1 = prm_1.ToString();
             obj.loginId = loginId;
             obj.Logic = "DailyCollectionReport";
             dataSet dsResult = APIProxy.CallWebApiMethod("Finance/Financial_Queries", obj);
@@ -193,6 +195,7 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
             b.Append("<th style='padding-right:4px;text-align:right'>Received</th>");
             b.Append("<th style='padding-right:4px;text-align:right'>Opd Credit</th>");
             b.Append("<th style='padding-left:4px;text-align:left'>User</th>");
+            b.Append("<th style='padding-left:4px;text-align:left'>Bill No</th>");
             b.Append("</tr>");
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -217,6 +220,7 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
                     b.Append("<td style='padding-right:4px;text-align:right'>" + dr["Received"].ToString() + "</td>");
                     b.Append("<td style='padding-right:4px;text-align:right'>" + dr["OPCredit"].ToString() + "</td>");
                     b.Append("<td>" + dr["ByStaff"].ToString() + "</td>");
+                    b.Append("<td>" + dr["bill_no"].ToString() + "</td>");
                     b.Append("</tr>");
                 }
             }

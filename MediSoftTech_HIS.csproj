@@ -141,6 +141,7 @@
     <Content Include="Areas\Accounts\JsModule\Master\CreateGroup.js" />
     <Content Include="Areas\Accounts\JsModule\Master\CreateLedger.js" />
     <Content Include="Areas\Accounts\JsModule\Payments\Collection.js" />
+    <Content Include="Areas\Accounts\JsModule\Payments\PayModeCorrection.js" />
     <Content Include="Areas\Accounts\JsModule\PharAmountTakeOver.js" />
     <Content Include="Areas\Accounts\JsModule\Tally\TallyTransfer.js" />
     <Content Include="Areas\Accounts\JsModule\VoucherEntry.js" />
@@ -292,6 +293,7 @@
     <Content Include="Areas\IPD\JsModule\DoctorView\_DoctorBillingView.js" />
     <Content Include="Areas\IPD\JsModule\DoctorView\_TestWiseReport.js" />
     <Content Include="Areas\IPD\JsModule\Indent\HISPushReport.js" />
+    <Content Include="Areas\IPD\JsModule\IPD\ClosingPending.js" />
     <Content Include="Areas\IPD\JsModule\IPD\HospitalDocuments.js" />
     <Content Include="Areas\IPD\JsModule\IPD\IPDAdvancePayment.js" />
     <Content Include="Areas\IPD\JsModule\IPD\IPDPatientRegister.js" />
@@ -438,6 +440,7 @@
     <Content Include="Areas\OPD\JsModule\BookAppointment.js" />
     <Content Include="Areas\OPD\JsModule\DoctorDisplay.js" />
     <Content Include="Areas\OPD\JsModule\DoctorDisplayView.js" />
+    <Content Include="Areas\OPD\JsModule\EditPatientDetail.js" />
     <Content Include="Areas\OPD\JsModule\OPDAdvancePayment.js" />
     <Content Include="Areas\OPD\JsModule\OPDDashboard.js" />
     <Content Include="Areas\OPD\JsModule\OPDRegister.js" />
@@ -2227,6 +2230,9 @@
     <Content Include="Areas\Lab\Views\Report\LabWorkBook.cshtml" />
     <Content Include="Areas\Lab\Views\Master\ConsentMaster.cshtml" />
     <Content Include="Areas\MIS\Views\Finance\BugAudit.cshtml" />
+    <Content Include="Areas\IPD\Views\IPD\ClosingPending.cshtml" />
+    <Content Include="Areas\OPD\Views\Appointment\EditPatientDetail.cshtml" />
+    <Content Include="Areas\Accounts\Views\Payments\PayModeCorrection.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

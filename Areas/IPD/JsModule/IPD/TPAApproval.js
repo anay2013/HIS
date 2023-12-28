@@ -23,7 +23,7 @@ function FloorAndPanelList() {
     objBO.Prm1 = '';
     objBO.Prm2 = '';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'FloorAndPanelList';
+    objBO.Logic = 'PanelListforTPApproval';
     $.ajax({
         method: "POST",
         url: url,

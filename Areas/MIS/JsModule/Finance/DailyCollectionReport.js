@@ -16,10 +16,10 @@ function FillCurrentDateTime1() {
     var Second = date.getSeconds();
     if (month < 10) month = "0" + month;
     if (day < 10) day = "0" + day;
-    today = year + "-" + month + "-" + day + 'T' + hour + ':' + Minute + ':' + Second;
+    today = year + "-" + month + "-" + day + 'T' + "00" + ':' + "00" + ':' + "01";
     console.log(today)
     $('#txtFrom').val(today)
-    $('#txtTo').val(today)
+    $('#txtTo').val(year + "-" + month + "-" + day + 'T' + "23" + ':' + "59" + ':' + "59")
     return today;
 }
 function DailyCollectionReport() {
@@ -29,7 +29,7 @@ function DailyCollectionReport() {
     objBO.hosp_id = Active.HospId;
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
-    objBO.prm_1 = '-';
+    objBO.prm_1 = $('#ddlUsers option:selected').val();
     objBO.prm_2 = '-';
     objBO.loginId = 'ALL';
     objBO.Logic = "DailyCollectionReport";
@@ -40,6 +40,7 @@ function DailyCollectionReport() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
+            console.log(data);
             var tbody = "";
             //var p_Cash = 0;
             //var p_SwipeCard = 0;
@@ -90,6 +91,7 @@ function DailyCollectionReport() {
                         tbody += '<td class="text-right">' + val.Received + '</td>';
                         tbody += '<td class="text-right">' + val.OPCredit + '</td>';
                         tbody += '<td>' + val.ByStaff + '</td>';
+                        tbody += '<td>' + val.bill_no + '</td>';
                         tbody += '</tr>';
                     });
                     //tbody += '<tr>';
@@ -109,6 +111,7 @@ function DailyCollectionReport() {
                     //tbody += '<th class="text-right" style="background:#ddd;font-size:12px;"><b>' + FinalTotal + '</b></th>';
                     //tbody += '</tr>';
                     $('#tblDailyCollectionReport tbody').append(tbody);
+
                 }
             }
         },
@@ -123,7 +126,7 @@ function DownloadExcel(elem) {
     objBO.hosp_id = Active.HospId;
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
-    objBO.prm_1 = '-';
+    objBO.prm_1 = $('#ddlUsers option:selected').val();
     objBO.prm_2 = '-';
     objBO.OutPutType = "Excel";
     objBO.loginId = 'ALL';
@@ -145,13 +148,48 @@ function Global_DownloadExcel(Url, objBO, fileName, elem) {
     };
     ajax.send(JSON.stringify(objBO));
 }
-
-
 function PrintReport() {
+    debugger
     var hosp_id = Active.HospId;
     var from = $('#txtFrom').val();
     var to = $('#txtTo').val();
+    var prm_1 = $('#ddlUsers option:selected').val();
     var loginId = 'ALL';
-    var url = "../Print/DailyCollectionReport?hosp_id=" + hosp_id + "&from=" + from + "&to=" + to + "&loginId=" + loginId;
+    var url = "../Print/DailyCollectionReport?hosp_id=" + hosp_id + "&from=" + from + "&to=" + to + "&prm_1=" + prm_1 + "&loginId=" + loginId;
     window.open(url, '_blank');
+}
+function GetUserList() {
+    var url = config.baseUrl + "/api/Finance/Financial_Queries";
+    debugger
+    var objBO = {};
+    objBO.hosp_id = Active.HospId;
+    objBO.from = $('#txtFrom').val();
+    objBO.to = $('#txtTo').val();
+    objBO.prm_1 = '-';
+    objBO.prm_2 = '-';
+    objBO.loginId = 'ALL';
+    objBO.Logic = "UserList";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $('#ddlUsers').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlUsers').append($('<option></option>').val(val.emp_code).html(val.emp_name));
+
+                    });
+                }
+            }
+
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
 }

@@ -50,6 +50,9 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
         {
             return View();
         }
-      
+        public ActionResult EditPatientDetail()
+        {
+            return View();
+        }
     }
 }

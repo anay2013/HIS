@@ -71,6 +71,8 @@ $(document).ready(function () {
             $(this).closest('tr').find('td:eq(9)').text('N'); $(this).closest('tr').find('td:eq(9)').removeAttr('class');
         }
     });
+
+    GetAllDepartment();
 });
 function uploadFile(autoTestId) {
     _autoTestId = autoTestId;
@@ -97,13 +99,14 @@ function LabReporting(logic) {
     $('#tblReport tbody').empty();
     $('#tblTestInfo tbody').empty();
     var url = config.baseUrl + "/api/sample/LabReporting_Queries";
+    debugger
     var objBO = {};
     objBO.LabCode = Active.HospId;
     objBO.IpOpType = $('#ddlIpOpType option:selected').text();
     objBO.ReportStatus = $('#ddlStatus option:selected').text();
     objBO.VisitNo = $('#txtInput').val();
     objBO.BarccodeNo = $('#txtInput').val();
-    objBO.SubCat = '-';
+    objBO.SubCat = $('#ddldepartment option:selected').val();
     objBO.TestCategory = '-';
     objBO.AutoTestId = 0;
     objBO.TestCode = '-';
@@ -117,6 +120,7 @@ function LabReporting(logic) {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
+            console.log(data);
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     var tbody = '';
@@ -142,6 +146,7 @@ function LabReporting(logic) {
                         tbody += "<td class='hide'>" + val.SubCatId + "</td>";
                         tbody += "<td>" + val.RegDate + "</td>";
                         tbody += "<td>" + val.VisitNo + "</td>";
+                        tbody += "<td>" + val.barcodeNo + "</td>";
                         tbody += "<td>" + val.testCategory + "</td>";
                         tbody += "<td style=width:1%><button class='btn btn-success btn-xs'><span class='fa fa-arrow-right'></button></td>";
                         tbody += "</tr>";
@@ -786,3 +791,43 @@ function PrintAll() {
     var url = config.rootUrl + "/lab/Print/PrintLabReport?visitNo=" + _VisitNo + "&SubCat=ALL&TestIds='-'&Logic=ByReportEditing";
     window.open(url, '_blank');
 }
+
+function GetAllDepartment() {
+    var url = config.baseUrl + "/api/sample/LabReporting_Queries";
+    var objBO = {};
+    objBO.LabCode = Active.HospId;
+    objBO.IpOpType = '-';
+    objBO.ReportStatus = '-';
+    objBO.VisitNo = '-';
+    objBO.BarccodeNo = '-';
+    objBO.SubCat = '-';
+    objBO.TestCategory = '-';
+    objBO.AutoTestId = 0;
+    objBO.TestCode = '-';
+    objBO.from = $('#txtFrom').val();
+    objBO.to = $('#txtTo').val();
+    objBO.Logic = 'LoadTestCategory';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    //$('#ddldepartment').append($('<option></option>').val('ALL').html('ALL')).select2();
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddldepartment').append($('<option></option>').val(val.SubCatID).html(val.SubCatName));
+                    });
+                }
+            }
+
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+

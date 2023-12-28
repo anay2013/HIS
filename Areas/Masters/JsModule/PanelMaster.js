@@ -153,7 +153,7 @@ function BindPanel(PanelId) {
                         htmldata += '<td>' + v.Contact_Person + '</td>';
                         htmldata += '<td>' + v.DateFrom + '</td>';
                         htmldata += '<td>' + v.DateTo + '</td>';
-                        htmldata += '<td>' + v.CreditLimit + '</td>';
+                        htmldata += '<td>' + v.PanelType + '</td>';
                         //htmldata += '<td><a class="btn btn-xs btn-warning" href = "javascript:void(0)">Service Offered</a ></td>'; 
                         htmldata += '</tr>';
                     });
@@ -218,7 +218,6 @@ function EditPanel(element) {
                     $("#ddlCurrency").val(data.ResultSet.Table[0].RateCurrencyCountryID);
                     $("#ddlAllowPartialPay").val(data.ResultSet.Table[0].IsAllowPartialPay);
                     $("#ddlCurrency").val(data.ResultSet.Table[0].Currency);
-
 
                     $("#btndaddupdate").text('Update');
                     $("#btndaddupdate").val('Update')

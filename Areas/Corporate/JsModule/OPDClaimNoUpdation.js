@@ -45,11 +45,11 @@ function PanelList() {
 }
 function AdmittedPatientList(logic) {
     $('#tblServiceRegister tbody').empty();
-    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
+    var url = config.baseUrl + "/api/Service/OPD_BillingQuerries";
     var objBO = {};
     objBO.hosp_id = '';
     objBO.UHID = '';
-    objBO.IPDNo = $('#txtIPDNo').val();
+    objBO.OpdNo = $('#txtIPDNo').val();
     objBO.DoctorId = '';
     objBO.Floor = '';
     objBO.PanelId = $('#ddlPanel option:selected').val();

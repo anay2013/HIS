@@ -487,9 +487,13 @@ function BookAppointmentQueries() {
                     });
                 }
                 if (Object.keys(data.ResultSet.Table9).length) {
-                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option></option>')).change();
+                    $('#tblPaymentDetails tbody .MachineName').empty().append($('<option value="Select">Select</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table9, function (key, val) {
-                        $('#tblPaymentDetails tbody .MachineName').append($('<option></option>').val(val.machineId).html(val.machineName));
+                        if (val.usedFor == 'SwipeCard')
+                            $('#tblPaymentDetails tbody .MachineName:eq(0)').append($('<option></option>').val(val.machineId).html(val.machineName));
+
+                        if (val.usedFor == 'Online')
+                            $('#tblPaymentDetails tbody .MachineName:eq(1)').append($('<option></option>').val(val.machineId).html(val.machineName));
                     });
                 }
                 if (Object.keys(data.ResultSet.Table10).length) {
@@ -511,8 +515,8 @@ function BookAppointmentQueries() {
         },
         complete: function (response) {
             $('#ddlPanel option').map(function () {
-                if ($(this).text() == 'CASH') {
-                    $('#ddlPanel').prop('selectedIndex', '' + $(this).index() + '').change();
+                if ($(this).val() == '1') {
+                    $('#ddlPanel').prop('selectedIndex', '' + $(this).index() + '').trigger('change.select2');
                 }
             });
             $('#ddlDept').prop('selectedIndex', '0').change();
@@ -963,6 +967,16 @@ function InsertPatientMaster() {
 function Opd_ServiceBooking() {
     if (confirm('Are you sure to Book this Service?')) {
         if (ValidateBooking()) {
+            var swipeSelect = $('#tblPaymentDetails tbody').find('tr:eq(2).pay').find('td:eq(5)').find('select option:selected').text();
+            var onlineSelect = $('#tblPaymentDetails tbody').find('tr:eq(3).pay').find('td:eq(5)').find('select option:selected').text();
+            if (swipeSelect == 'Select') {
+                alert('Please Select Bank Machine for Swipe Card');
+                return
+            }
+            if (onlineSelect == 'Select') {
+                alert('Please Select Bank Machine NEFT/RTGS/Online');
+                return
+            }
             var netAmount = parseFloat($('#txtPayable').val());
             var cash = parseFloat($('#tblPaymentDetails tbody').find('tr:eq(0)').find('td:eq(1)').find('input[type=text]').val());
             var cheque = parseFloat($('#tblPaymentDetails tbody').find('tr:eq(1)').find('td:eq(1)').find('input[type=text]').val());

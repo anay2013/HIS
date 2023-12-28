@@ -3,7 +3,7 @@
     ViewBag.Title = "HISPushReport";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/IPD/JsModule/Indent/HISPushReport.js"></script>
+<script src="~/Areas/IPD/JsModule/Indent/HISPushReport.js?ver=1.1"></script>
 <style>
 
     #txtSearchPending, #txtSearchSummary {
@@ -13,6 +13,7 @@
         margin-left: 2px;
         border-radius: 19px;
     }
+
     .btnCustom {
         height: 28px;
         border-radius: 0;
@@ -198,8 +199,9 @@
                         <div id="Pending" class="tab-pane fade in active" style="padding:5px">
                             <div class="section" style="height:80vh;overflow:auto">
                                 <label class="title">
-                                <button onclick="HISPushPendency('HIS-PushPendency')" class="btn btn-warning btn-xs">Get Pending</button>
-                                Pending Details </label>
+                                    <button onclick="HISPushPendency('HIS-PushPendency')" class="btn btn-warning btn-xs">Get Pending</button>
+                                    Pending Details
+                                </label>
                                 <table class="table table-bordered" id="tblPendingDetails">
                                     <thead>
                                         <tr>
@@ -210,6 +212,7 @@
                                             <th class="text-right">Discount</th>
                                             <th class="text-right">Net</th>
                                             <th style="width:1%">CMD</th>
+                                            <th class="text-center">Sale Type</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -249,6 +252,8 @@
                                                     <th class="text-right">Tot. Amt</th>
                                                     <th class="text-right">Push Amount</th>
                                                     <th class="text-right">Pend. Amount</th>
+                                                    <th class="text-right">HIS. Amount</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>

@@ -146,61 +146,88 @@
         border-radius: 2px;
         cursor: pointer;
     }
+
+    .navigation div[class*=col-md-2] {
+        width: 12%;
+        padding: 2px;
+    }
+
+    .navigation div[class*=col-md-4] {
+        width: 38%;
+        padding: 2px;
+    }
+
+    .navigation input {
+        padding: 3px;
+    }
 </style>
 <div id="page-content">
     <div class="container">
-        <div class="panel-body">
-            <div class="row" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
-                <div class="col-md-2">
-                    Floor Name
-                    <select id="ddlFloor" class="form-control border-imp" style="width: 90px !important;"></select>
+        <div class="ml15">
+            <div class="panel-body">
+                <div class="row navigation" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+
+                    <div class="col-md-2">
+                        IPD NO
+                        <div style="display:flex">
+                            <input type="text" id="txtIPDNo" class="form-control" />
+                            <button id="btnSearch" style="width:20%;height:27px" class="btn bg-blue bn" onclick="GetDataIPDNO()"><i class="fa fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        Floor Name
+                        <select id="ddlFloor" class="form-control border-imp"></select>
+                    </div>
+                    <div class="col-md-4">
+                        Panel Name
+                        <div style="display:flex">
+                            <div style="width:370px">
+                                <select id="ddlPanel" class="form-control border-imp"></select>
+                            </div>
+                            <button id="btnCurrentPatient" style="width:15%;height:27px" onclick="AdmittedPatientList('AdmittedPatientList')" class="btn btn-warning"><i class="fa fa fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+
+                        Ipd Status
+                        <select id="ddlIpdStatus" class="form-control border-imp">
+                            <option selected="selected" value="ALL">ALL</option>
+                            <option selected="selected" value="Out">Discharged</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        From Date
+                        <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                    </div>
+                    <div class="col-md-2">
+                        To Date
+                        <div style="display:flex">
+                            <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                            <button id="btnAllPatient" style="width:20%;height:27px" onclick="AdmittedPatientList('AdmittedPatientListBetweenDate')" class="btn btn-success"><i class="fa fa fa-search"></i></button>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="col-md-2">
-                    Panel Name
-                    <select id="ddlPanel" class="form-control border-imp" style="width: 90px !important;"></select>
-                </div>
-                <div class="col-md-1">
-                    <br />
-                    <button id="btnCurrentPatient" onclick="AdmittedPatientList('AdmittedPatientList')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
-                </div>
-                <div class="col-md-2">
-                    Ipd Status
-                    <select id="ddlIpdStatus" class="form-control border-imp" style="width: 90px !important;">
-                        <option selected="selected" value="ALL">ALL</option>
-                        <option selected="selected" value="Out">Discharged</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    From Date
-                    <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
-                </div>
-                <div class="col-md-2">
-                    To Date
-                    <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
-                </div>
-                <div class="col-md-1">
-                    <br />
-                    <button id="btnAllPatient" onclick="AdmittedPatientList('AdmittedPatientListBetweenDate')" class="btn btn-success"><i class="fa fa-search">&nbsp;</i>Search</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="scroll" style="height:600px">
-                    <table id="tblServiceRegister" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th style="width:1%">CMD</th>
-                                <th>UHID</th>
-                                <th>IPD No</th>
-                                <th>Patient Name</th>
-                                <th>Admit Date</th>
-                                <th>Discharge Date</th>
-                                <th>Room Name</th>
-                                <th>Doctor Name</th>
-                                <th>Panel Name</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="row">
+                    <div class="scroll" style="height:600px">
+                        <table id="tblServiceRegister" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:1%">CMD</th>
+                                    <th>UHID</th>
+                                    <th>IPD No</th>
+                                    <th>Patient Name</th>
+                                    <th>Admit Date</th>
+                                    <th>Discharge Date</th>
+                                    <th>Room Name</th>
+                                    <th>Doctor Name</th>
+                                    <th>Panel Name</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

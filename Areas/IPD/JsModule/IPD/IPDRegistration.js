@@ -138,7 +138,7 @@ function OnLoadQueries() {
                 if (Object.keys(data.ResultSet.Table6).length) {
                     $('#ddlPanel').empty().append($('<option>Select</option>')).trigger('change.select2');
                     $.each(data.ResultSet.Table6, function (key, val) {
-                        $('#ddlPanel').append($('<option data-iscredit=' + val.IsCredit + '></option>').val(val.PanelId).html(val.PanelName));
+                        $('#ddlPanel').append($('<option data-iscredit=' + val.IsCredit + '></option>').val(val.panelid).html(val.PanelName));
                     });
                 }
                 if (Object.keys(data.ResultSet.Table7).length) {
@@ -502,6 +502,16 @@ function PatientAdvance() {
     if (confirm('Are you sure?')) {
         if ($('#txtPrevIPDNo').text() == '') {
             alert('IPD No Not Found.');
+            return
+        }
+        var swipeSelect = $('#tblPaymentDetails tbody').find('tr:eq(2).pay').find('td:eq(5)').find('select option:selected').text();
+        var onlineSelect = $('#tblPaymentDetails tbody').find('tr:eq(3).pay').find('td:eq(5)').find('select option:selected').text();
+        if (swipeSelect == 'Select') {
+            alert('Please Select Bank Machine for Swipe Card');
+            return
+        }
+        if (onlineSelect == 'Select') {
+            alert('Please Select Bank Machine NEFT/RTGS/Online');
             return
         }
         var url = config.baseUrl + "/api/IPDNursing/IPD_TakeAdvance";

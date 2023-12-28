@@ -164,18 +164,7 @@
                                 <h4 class="text-white" style="font-size: 15px;">Report Editing</h4>
                             </div>
                             <div class="panel-body" style="height:85vh">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <select class="form-control" id="ddlIpOpType">
-                                            <option>ALL</option>
-                                            <option>IPD</option>
-                                            <option>OPD</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" id="txtSearch" onkeyup="searchTable('txtSearch','tblReport')" class="form-control" placeholder="Filter.." style="padding:7px" />
-                                    </div>
-                                </div>
+
                                 <div class="row" style="margin:5px 0">
                                     <div class="col-md-4" style="padding:0">
                                         <select class="form-control" id="ddlStatus">
@@ -193,6 +182,25 @@
                                         <button class="btn btn-warning" onclick="LabReporting('ALL:Report')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
                                     </div>
                                 </div>
+
+                                <div class="row" style="margin:5px 0">
+                                    <div class="col-md-4" style="padding:0">
+                                        <select class="form-control" id="ddlIpOpType" style="padding:7px">
+                                            <option>ALL</option>
+                                            <option>IPD</option>
+                                            <option>OPD</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" style="padding:0 3px">
+
+                                        <select class="form-control" id="ddldepartment" style="padding:7px">
+                                            <option>ALL</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-warning" onclick="LabReporting('ALL:Report')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    </div>
+                                </div>
                                 <div class="row" style="margin:5px 0">
                                     <div class="col-md-4" style="padding:0">
                                         <select class="form-control" id="ddlStatus" style="padding:7px">
@@ -204,7 +212,7 @@
                                         <input type="text" id="txtInput" class="form-control" placeholder="Input.." />
                                     </div>
                                     <div class="col-md-2">
-                                        <button class="btn btn-warning" onclick="LabReporting('ALL:Report')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                        <button class="btn btn-warning" onclick="LabReporting('ByVisitNoOrBarCode:Report')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
                                     </div>
                                 </div>
                                 <hr style="margin:5px 0" />
@@ -216,6 +224,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Visit No</th>
+                                                        <th>Barcode No</th>
                                                         <th>Depart Name</th>
                                                         <th>CMD</th>
                                                     </tr>
