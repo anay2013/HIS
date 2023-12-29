@@ -3,11 +3,21 @@ var isApp = '';
 var roundOff = 0;
 var _empDiscountInfo = {};
 var _otp;
+var _GenFrom="Hospital";
+var _online_app_no="-";
 $(document).ready(function () {
     // data = { "messages": [{ "messageId": "40089288737037212625", "status": { "description": "Message sent to next instance", "groupId": 1, "groupName": "PENDING", "id": 7, "name": "PENDING_ENROUTE" }, "to": "919670244590", "smsCount": 1 }] }
     TriggerEnter();
     CloseSidebar();
     isApp = window.location.href;
+    if (isApp.includes('?appno')) {
+        var appno = atob(query()["appno"]);
+        if (appno != '') {
+            GetBookingByAppNo(appno);
+            _GenFrom = 'Online-Phone';
+            _online_app_no = appno;
+        }
+    }
     $('.paymentSection').slideToggle('slow'); $('#PaymentDivision,.serviceInfo').toggleClass('itemHeight')
     BookAppointmentQueries();
     $('input[type=checkbox]').on('change', function () {
@@ -454,13 +464,12 @@ function GetDoctorByDept() {
             }
         },
         complete: function (resp) {
-            debugger
-            if (isApp.includes('?appno')) {
-                var appno = atob(query()["appno"]);
-                if (appno != '') {
-                    GetBookingByAppNo(appno);
-                }
-            }
+            //if (isApp.includes('?appno')) {
+            //    var appno = atob(query()["appno"]);
+            //    if (appno != '') {
+            //        GetBookingByAppNo(appno);
+            //    }
+            //}
         },
         error: function (response) {
             alert('Server Error...!');
@@ -1326,9 +1335,9 @@ function Opd_AppointmentBooking1() {
             objBooking.visitType = $('#ddlVisitType option:selected').text();
             objBooking.visitSource = ($('#ddlSource option:selected').text() == 'Select') ? '-' : $('#ddlSource option:selected').text();
             objBooking.visit_purpose = ($('#ddlVisitPurpose option:selected').text() == 'Select') ? '-' : $('#ddlVisitPurpose option:selected').text();
-            objBooking.GrossAmount = $('#txtGrossAmount').val();
-            objBooking.TaxAmount = $('#txtTotalTax').val();
-            objBooking.discount = $('#txtTDiscount').val();
+            objBooking.GrossAmount = $('#txtGrossAmount').val() || 0;
+            objBooking.TaxAmount = $('#txtTotalTax').val() || 0;
+            objBooking.discount = $('#txtTDiscount').val() || 0;
             objBooking.roundOff = roundOff.toFixed(2);
             objBooking.discount_remark = $('#txtDisResason').val();
             objBooking.discountType = ($('#ddlDiscountType option:selected').text() == 'Select') ? '-' : $('#ddlDiscountType option:selected').text();
@@ -1338,8 +1347,8 @@ function Opd_AppointmentBooking1() {
             objBooking.PanelId = $('#ddlPanel option:selected').val();
             objBooking.RateList_Id = '-';
             objBooking.IsConfirmed = true;
-            objBooking.GenFrom = 'Hospital';
-            objBooking.online_app_no = '-';
+            objBooking.GenFrom = _GenFrom;
+            objBooking.online_app_no = _online_app_no;
             objBooking.ipAddress = '-';
             objBooking.Logic = '-';
             MasterObject.objPatient = objPatient;
@@ -1370,6 +1379,7 @@ function Opd_AppointmentBooking1() {
                             _photo_url = null;
                             $('#liveCamera').hide();
                             $('#ImgCaptured').hide();
+                            _GenFrom = "Hospital";
 
                         }
                         else {
@@ -1776,8 +1786,7 @@ function VerifyEmpForDiscount() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         async: false,
-        success: function (data) {
-            console.log(data)
+        success: function (data) {         
             if (data.Msg.includes('Mobile No not Found')) {
                 alert("Mobile No not Found");
                 return

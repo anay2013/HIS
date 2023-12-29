@@ -69,5 +69,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         {
             return View();
         }
+
+        public ActionResult AllowBillCorrection()
+        {
+            return View();
+        }
     }
 }

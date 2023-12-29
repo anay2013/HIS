@@ -6,8 +6,6 @@ $(document).ready(function () {
     let canvas = document.querySelector("#canvas");
     $('#ImgCaptured').hide();
 
-    // $('#ImgCaptured').hide();
-
     $('#start-camera').on('click', async function () {
         let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         video.srcObject = stream;
@@ -332,6 +330,12 @@ function GetBookingByAppNo(appno) {
                     });
                 }
             }
+        },
+        complete: function (response) {
+            $('#ddlDoctor').prop('disabled', true).change();
+            $('#txtAppointmentOn').prop('disabled', true);
+            $('input[value=Availability]').prop('disabled', true).css('background','green');
+            $('#txtTime').prop('disabled', true);
         },
         error: function (response) {
             alert('Server Error...!');

@@ -358,17 +358,23 @@ function AddObservation() {
 function UpdateObservation() {
     var objBO = {};
     var url = config.baseUrl + "/api/Lab/mObservationInsertUpdate";
-
     if ($("#ddlValueType option:selected").val() == "0") {
         alert('Please select value type');
         $("#ddlValueType").focus();
         return false;
     }
-    if ($("#txtTestUnit").val() == "") {
-        alert('Please enter test unit');
-        $("#txtTestUnit").focus()
+
+    if ($("#ddlMathOptype option:selected").val() == "0") {
+        alert('Please select Formula type');
+        $("#ddlMathOptype").focus();
         return false;
     }
+    if ($("#txtMathOpValue").val() == "0") {
+        alert('Please enter value');
+        $("#txtMathOpValue").focus();
+        return false;
+    }
+
     if ($("#txtMethod").val() == "") {
         alert('Please enter method name');
         $("#txtMethod").focus();
@@ -386,7 +392,10 @@ function UpdateObservation() {
     objBO.interpretation = "-";
     objBO.decimalplace = $("#txtDecVal").val();
     objBO.valueType = $("#ddlValueType option:selected").val();
-    objBO.testunit = $("#txtTestUnit").val();
+    //objBO.testunit = $("#txtTestUnit").val();
+    objBO.testunit = '-';
+    objBO.MathOpType = $("#ddlMathOptype option:selected").val();
+    objBO.MathOpValue = $("#txtMathOpValue").val();
     if ($('#chkDelta').is(":checked")) {
         objBO.isdeltarequired = 1;
     }
@@ -410,6 +419,9 @@ function UpdateObservation() {
             if (data == 'success') {
                 alert('Observation updated successfully');
                 $("#myModal input:text,textarea").val('');
+                $("#ddlMathOptype").val('0').change();
+                $("#txtMathOpValue").val('');
+                $("#ddlValueType").val('0').change();
             }
             else {
                 alert(data);
@@ -561,6 +573,7 @@ function GetObservationDetails(testCode) {
 function EditObservationDetails(element) {
     var url = config.baseUrl + "/api/Lab/mObservationQueries";
     var objBO = {};
+    debugger
     var testcode = $(element).closest('tr').find('td:eq(0)').find('a').data('testcode');
     var observid = $(element).closest('tr').find('td:eq(0)').find('a').data('observationid');
     objBO.prm_1 = observid;
@@ -575,17 +588,19 @@ function EditObservationDetails(element) {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-
+            console.log(data);
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $("#txtMethod").val('');
                     $("#txtDecVal").val('');
                     $("#txtMethod").val(data.ResultSet.Table[0].method_name);
                     $("#txtDecVal").val(data.ResultSet.Table[0].decimalPlace);
-                    $("#ddlValueType").val(data.ResultSet.Table[0].rValType);
+                    $("#ddlValueType").val(data.ResultSet.Table[0].rValType).change();
                     $("#txtTestUnit").val(data.ResultSet.Table[0].rTestUnit);
                     $("#txtMethod1").val(data.ResultSet.Table[0].method_name);
                     $("#txtTestUnit1").val(data.ResultSet.Table[0].rTestUnit);
+                    $("#ddlMathOptype").val(data.ResultSet.Table[0].MathOpType).change();
+                    $("#txtMathOpValue").val(data.ResultSet.Table[0].MathOpValue);
                     $("#hidupdobservationid").val(objBO.prm_1);//observationId
                     $("#hidupdobservationname").val(data.ResultSet.Table[0].ObservationName);
                     $("#hidupdDefaultVal").val(data.ResultSet.Table[0].default_value);

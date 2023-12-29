@@ -27,7 +27,7 @@ $(document).ready(function () {
                     $(this).find('.delRow').remove();
 
                 $(this).removeAttr('style');
-                var content = '';
+                var content = '';             
                 if ($(this).find('select').length > 0)
                     content = $(this).find('label').text() + ' ' + $(this).find('select option:selected').text();
                 else if ($(this).find('label').length > 0)
@@ -48,7 +48,7 @@ $(document).ready(function () {
         if ($('#PrescribedMedicine .MedicineTemplate tbody tr').length == 0)
             $('.OPDPrintPreview #PrescribedMedicine').hide();
     });
-    $('.MedicineTemplate tbody').on('click', 'td', function (e) {
+    $('.MedicineTemplate tbody').on('click', 'td', function (e) {      
         if ($(this).find('label.editable').length === 1)
             return
         //$('.MedicineTemplate tbody td').each(function () {
@@ -60,7 +60,7 @@ $(document).ready(function () {
         //var content = $(this).not('.delRow').text();
         //$(this).html('<remove class="delRow">X</remove><input type="text" value="' + content + '"/>');
         //$('input:text').select();
-        $(this).closest('tr').find('td').each(function () {
+        $(this).closest('tr').find('td').each(function () {          
             var indx = $(this).index();
             $(this).find('.delRow').remove();
             var content = $(this).text();
@@ -70,9 +70,9 @@ $(document).ready(function () {
             if (indx == 1)
                 var data = "<label class='editable' onkeyup=Dose(this) contenteditable='true'>" + content + "</label>";
             if (indx == 4)
-                var data = "<label class='editable' onkeyup=InTake(this) contenteditable='true'>" + content + "</label>";
+                var data = "<label class='editable' onkeyup=InTake(this) contenteditable='true'>" + content + "</label>";          
             if (indx == 5)
-                var data = "<label class='editable' onkeyup=Route(this) contenteditable='true'>" + content + "</label>";
+                var data = "<label class='editable' onkeyup=Route(this) contenteditable='true'>" + content + "</label>";   
 
             if ($(this).index() == 0)
                 $(this).html('<remove class="delRow">X</remove>' + data);

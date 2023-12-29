@@ -89,14 +89,14 @@ function IPDSalebyIPDNo() {
                             tbody += "<td>" + val.ItemId + "</td>";
                             tbody += "<td>" + val.ItemName + "</td>";
                             tbody += "<td class='text-right'>" + val.ItemCount + "</td>";
-                            tbody += "<td><a class='billrecpt' href=" + config.documentServerUrl+"/IPD/Print/SalesBill?InvoiceNo=" + val.sale_inv_no + "' target='_blank'>" + val.sale_inv_no + "</a></td>";
+                            tbody += "<td><a class='billrecpt' href=" + config.documentServerUrl + "/IPD/Print/SalesBill?InvoiceNo=" + val.sale_inv_no + "' target='_blank'>" + val.sale_inv_no + "</a></td>";
                             tbody += "<td class='text-right'>" + val.saleCount + "</td>";
                             tbody += "<td class='text-right'>" + val.Total + "</td>";
                             tbody += "<td class='text-right'>" + val.discount + "</td>";
                             tbody += "<td class='text-right'>" + val.amount + "</td>";
                             tbody += "<td>" + val.pay_mode + "</td>";
                             tbody += "<td>" + val.card_no + "</td>";
-                            if (val.his_push_flag=="N")
+                            if (val.his_push_flag == "N")
                                 tbody += "<td><input type='checkbox'/></td>";
                             else
                                 tbody += "<td></td>";

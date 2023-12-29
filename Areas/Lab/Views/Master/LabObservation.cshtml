@@ -209,8 +209,17 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Test Unit</label>
-                        <input type="text" id="txtTestUnit" class="form-control" />
+                        @*<label>Test Unit</label>*@
+
+                        <select id="ddlMathOptype" class="form-control" style="width:80px">
+                            <option value="0">Select Formula type</option>
+                            <option value="Multiply">Multiply</option>
+                            <option value="division">Division</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="txtMathOpValue" class="form-control" style="width:70px" onkeyup="numericdecimal(this);" />
                     </div>
 
                     <div class="form-group">

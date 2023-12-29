@@ -50,7 +50,6 @@
         $(this).addClass('slot-selected');
     });
 
-
     $('#btnReschedule').on('click', function () {
         if (confirm('Are you sure to Reschedule?')) {
             RescheduleBooking();
@@ -387,7 +386,7 @@ function Receipt(tnxid) {
 }
 function Confirm(appno) {
     var url = "BookAppointment?appno=" + btoa(appno);
-    window.open(url, '_blank');
+    window.open(url, '_blank',);
 }
 function ValidateReschedule() {
     var NewAppTime = $('#txtNewAppointmentTime').text().length;

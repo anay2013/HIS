@@ -283,7 +283,9 @@
     <Content Include="Areas\EDP\Views\EDP\RoomCharges.cshtml" />
     <Content Include="Areas\EDP\Views\web.config" />
     <Content Include="Areas\EMR\JsModule\CaseSheet.js" />
+    <Content Include="Areas\IPD\JsModule\CQI\CQIEntry.js" />
     <Content Include="Areas\IPD\JsModule\DoctorView\_TemplateMaster.js" />
+    <Content Include="Areas\IPD\JsModule\IPD\AllowBillCorrection.js" />
     <Content Include="Areas\IPD\JsModule\IPD\ApprovalCorrection.js" />
     <Content Include="Areas\IPD\JsModule\BillingView\_BillingCategoryUpdate.js" />
     <Content Include="Areas\IPD\JsModule\BillingView\_BillingClearance.js" />
@@ -458,6 +460,7 @@
     <Content Include="Areas\OPD\JsModule\VaccinationSchedule.js" />
     <Content Include="Areas\OPD\JsModule\ViewConsultation.js" />
     <Content Include="Areas\OPD\JsModule\VitalEntry.js" />
+    <Content Include="Areas\OPD\JsModule\_LabReport.js" />
     <Content Include="Areas\OPD\Views\Appointment\bookAppointment.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\DoctorDisplay.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\DoctorDisplayView.cshtml" />
@@ -1836,6 +1839,7 @@
     <Compile Include="Areas\EDP\EDPAreaRegistration.cs" />
     <Compile Include="Areas\EMR\Controllers\DocumentController.cs" />
     <Compile Include="Areas\EMR\EMRAreaRegistration.cs" />
+    <Compile Include="Areas\IPD\Controllers\CQIController.cs" />
     <Compile Include="Areas\IPD\Controllers\FeedBackController.cs" />
     <Compile Include="Areas\IPD\Controllers\IndentController.cs" />
     <Compile Include="Areas\IPD\Controllers\IPDController.cs" />
@@ -2233,6 +2237,9 @@
     <Content Include="Areas\IPD\Views\IPD\ClosingPending.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\EditPatientDetail.cshtml" />
     <Content Include="Areas\Accounts\Views\Payments\PayModeCorrection.cshtml" />
+    <Content Include="Areas\OPD\Views\Shared\_LabReport.cshtml" />
+    <Content Include="Areas\IPD\Views\CQI\CQIEntry.cshtml" />
+    <Content Include="Areas\IPD\Views\IPD\AllowBillCorrection.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -2459,7 +2466,6 @@
     <Folder Include="Areas\MIS\Views\Shared\" />
     <Folder Include="Areas\OPD\Models\" />
     <Folder Include="Areas\OPD\Views\Print\" />
-    <Folder Include="Areas\OPD\Views\Shared\" />
     <Folder Include="Areas\OT\Models\" />
     <Folder Include="Areas\PatientDesk\Models\" />
     <Folder Include="Areas\PatientDesk\Views\Shared\" />

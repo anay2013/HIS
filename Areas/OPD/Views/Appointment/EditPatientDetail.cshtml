@@ -9,7 +9,6 @@
         border-width: 2px;
         border-image: url(/images/loading.gif) 60;
     }
-
     .mendatInfo div[class*=col-md] {
         padding: 0 3px;
     }
@@ -99,7 +98,7 @@
                             <div class="panel-body">
                                 <div class="col-md-4 search-section">
                                     <div class="flex">
-                                        <input type="text" id="txtUHIDNo"  class="form-control text-uppercase" placeholder="UHID No." />
+                                        <input type="text" id="txtUHIDNo" value="CH/19/030649" class="form-control text-uppercase" placeholder="UHID No." />
                                         <input type="button" id="btnSearch" class="btn-success btn-flat" onclick="GetPatient()" value="Search" />
                                     </div>
                                 </div>
@@ -204,7 +203,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12 text-center">
-                                                <button class="btn btn-success" onclick="Opd_EditPatientDetails(this)" style="margin:10px"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                                                <button class="btn btn-success" onclick="UploadPatient()" style="margin:10px"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
                                             </div>
                                         </div>
                                     </div>

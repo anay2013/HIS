@@ -1,6 +1,7 @@
 ﻿using HiQPdf;
 using HISWebApi.Models;
 using MediSoftTech_HIS.App_Start;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -97,52 +98,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             string _result = string.Empty;
             string temp = "-";
             StringBuilder b = new StringBuilder();
-            // b.Append("<div style='float:left;width:100%;margin-left:-1px;'>");
-            //Left Block Start 
-            // b.Append("<div style='float:left;width:26%;height:67%;border-right:1px solid #000'>");
-            b.Append("<div style='float:left;width:26%;height:600px;z-index:9999;'>");
-            if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
-            {
-                //Vital Sign
-                b.Append("<div style='width:95%;margin-top:0px;font-size:13px;'>");
-                b.Append("<p style='text-align:left;margin:0'><b>Vital Sign :</b></p>");
-                b.Append("<table style='width:99%;font-size:11px;line-height:8px;margin-left:3px;'>");
-                foreach (DataRow dr in ds.Tables[3].Rows)
-                {
-                    b.Append("<tr>");
-                    b.Append("<td>Weight</td>");
-                    b.Append("<td>:</td>");
-                    b.Append("<td>" + dr["WT"].ToString() + " kg</td>");
-                    b.Append("</tr>");
-                    b.Append("<tr>");
-                    b.Append("<td>Temprature</td>");
-                    b.Append("<td>:</td>");
-                    b.Append("<td>" + dr["Temprarture"].ToString() + " °C</td>");
-                    b.Append("</tr>");
-                    b.Append("<tr>");
-                    b.Append("<td>Pulse</td>");
-                    b.Append("<td>:</td>");
-                    b.Append("<td>" + dr["Pulse"].ToString() + " °C</td>");
-                    b.Append("</tr>");
-                    b.Append("<tr>");
-                    b.Append("<td>B/P</td>");
-                    b.Append("<td>:</td>");
-                    b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString() + " Mm/Hg</td>");
-                    b.Append("</tr>");
-                    b.Append("<tr>");
-                    b.Append("<td>SPO2</td>");
-                    b.Append("<td>:</td>");
-                    b.Append("<td>" + dr["SPO2"].ToString() + "</td>");
-                    b.Append("</tr>");
-                    b.Append("<tr>");
-                    b.Append("<td>Height</td>");
-                    b.Append("<td>:</td>");
-                    b.Append("<td>" + dr["HT"].ToString() + " cm</td>");
-                    b.Append("</tr>");
-                }
-                b.Append("</table>");
-                b.Append("</div>");
-            }
+
             //Declaration For Template Items
             var T00001 = string.Empty;
             var T00002 = string.Empty;
@@ -202,6 +158,85 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                     }
                 }
             }
+            // b.Append("<div style='float:left;width:100%;margin-left:-1px;'>");
+            //Left Block Start 
+            // b.Append("<div style='float:left;width:26%;height:67%;border-right:1px solid #000'>");
+            b.Append("<div style='float:left;width:26%;height:600px;z-index:9999;'>");
+            if (!string.IsNullOrEmpty(T00006))
+            {
+                //Allergies Begin
+                b.Append("<div style='width:95%;font-size:13px;margin-left:3px;'>");
+                b.Append("<p style='text-align:left;margin:0'><b>Allergies :</b></p>");
+                b.Append("<span style='font-size:15px;'>" + T00006.TrimEnd(',') + "</span>");
+                b.Append("</div>");
+                //Allergies End
+            }
+            if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
+            {
+                int VitalCount = 0;
+                //Vital Sign
+               
+                foreach (DataRow dr in ds.Tables[3].Rows)
+                {
+                    if (Convert.ToDecimal(dr["WT"]) > 0 || Convert.ToDecimal(dr["Temprarture"]) > 0 || Convert.ToDecimal(dr["Pulse"]) > 0 || Convert.ToDecimal(dr["BP_Sys"]) > 0 || Convert.ToDecimal(dr["SPO2"]) > 0 || Convert.ToDecimal(dr["HT"]) > 0)
+                    {
+                        b.Append("<div style='width:95%;margin-top:5px;font-size:13px;margin-left:3px;'>");
+                        b.Append("<p style='text-align:left;margin:0'><b>Vital Sign :</b></p>");
+                        b.Append("<table style='width:99%;font-size:11px;line-height:8px;margin-left:3px;'>");
+                    }
+
+                    if (Convert.ToDecimal(dr["WT"]) > 0)
+                    {
+                        b.Append("<tr>");
+                        b.Append("<td>Weight</td>");
+                        b.Append("<td>:</td>");
+                        b.Append("<td>" + dr["WT"].ToString() + " kg</td>");
+                        b.Append("</tr>");
+                    }
+                    if (Convert.ToDecimal(dr["Temprarture"]) > 0)
+                    {
+                        b.Append("<tr>");
+                        b.Append("<td>Temprature</td>");
+                        b.Append("<td>:</td>");
+                        b.Append("<td>" + dr["Temprarture"].ToString() + " °C</td>");
+                        b.Append("</tr>");
+                    }
+                    if (Convert.ToDecimal(dr["Pulse"]) > 0)
+                    {
+                        b.Append("<tr>");
+                        b.Append("<td>Pulse</td>");
+                        b.Append("<td>:</td>");
+                        b.Append("<td>" + dr["Pulse"].ToString() + " °C</td>");
+                        b.Append("</tr>");
+                    }
+                    if (Convert.ToDecimal(dr["BP_Sys"]) > 0)
+                    {
+                        b.Append("<tr>");
+                        b.Append("<td>B/P</td>");
+                        b.Append("<td>:</td>");
+                        b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString() + " Mm/Hg</td>");
+                        b.Append("</tr>");
+                    }
+                    if (Convert.ToDecimal(dr["SPO2"]) > 0)
+                    {
+                        b.Append("<tr>");
+                        b.Append("<td>SPO2</td>");
+                        b.Append("<td>:</td>");
+                        b.Append("<td>" + dr["SPO2"].ToString() + "</td>");
+                        b.Append("</tr>");
+                    }
+                    if (Convert.ToDecimal(dr["HT"]) > 0)
+                    {
+                        b.Append("<tr>");
+                        b.Append("<td>Height</td>");
+                        b.Append("<td>:</td>");
+                        b.Append("<td>" + dr["HT"].ToString() + " cm</td>");
+                        b.Append("</tr>");
+                    }
+                }
+                b.Append("</table>");
+                b.Append("</div>");
+            }
             if (ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
             {
                 var count = 0;
@@ -222,16 +257,6 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 }
                 //  b.Append("</table>");
             }
-            if (!string.IsNullOrEmpty(T00009))
-            {
-                //Investigation
-                b.Append("<div style='width:95%;margin:5px;font-size:13px;'>");
-                b.Append("<p style='text-align:left;margin:-2px'><b>Investigation :</b></p>");
-                b.Append("<table style='width:99%;font-size:11px;line-height:12px;margin-left:3px;'>");
-                b.Append(T00009);
-                b.Append("</table>");
-                b.Append("</div>");
-            }
             if (!string.IsNullOrEmpty(T00010))
             {
                 //Procedure
@@ -242,21 +267,29 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 b.Append("</table>");
                 b.Append("</div>");
             }
+            if (!string.IsNullOrEmpty(T00009))
+            {
+                //Investigation
+                b.Append("<div style='width:95%;margin:5px;font-size:13px;'>");
+                b.Append("<p style='text-align:left;margin:-2px'><b>Investigation :</b></p>");
+                b.Append("<table style='width:99%;font-size:11px;line-height:12px;margin-left:3px;'>");
+                b.Append(T00009);
+                b.Append("</table>");
+                b.Append("</div>");
+            }
+
             b.Append("<div style='width:95%;margin:0 5px;font-size:12px;position:relative;bottom:0;'>");
 
             if (ds.Tables.Count > 0 && ds.Tables[4].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[4].Rows)
                 {
-                    if (dr["NextFollowUpDate"].ToString() != "-")
-                    {
+                    if (dr["IsFollowUp"].ToString() != "-")
                         NextFollowUpDate = dr["NextFollowUpDate"].ToString();
-                        b.Append("<p style='text-align:center;margin:0;'><b>Next Follow Up : </b> " + NextFollowUpDate + "<hr style='width:90%;text-align:center;'/></p>");
-                    }
                     else
-                    {
-                        b.Append("<p style='text-align:center;margin:0;'><b>Note</b><hr style='width:90%;text-align:center;'/></p>");
-                    }
+                        NextFollowUpDate = "-";
+
+                    b.Append("<p style='text-align:center;margin:0;'><b>Note</b><hr style='width:90%;text-align:center;'/></p>");
                     b.Append("<div style='width:100%;font-size:15px;line-height:8px;margin-top:-10px;'>");
                     b.Append(dr["content"].ToString());
                     b.Append("</div>");
@@ -267,32 +300,32 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             //Right Block Start
             // b.Append("<div style='float:left;width:1%;border-left: 1px solid #000;height:650px;margin:-8px'></div>");
             b.Append("<div style='float:right;width:72%;height:600px;'>");
-            if (!string.IsNullOrEmpty(T00001))
-            {
-                //Provisional Diagnosis Begin
-                b.Append("<div style='width:95%;font-size:13px;'>");
-                b.Append("<p style='text-align:left;margin:0'><b>Provisional Diagnosis :</b></p>");
-                b.Append("<span style='font-size:15px;'>" + T00001.TrimEnd(',') + "</span>");
-                b.Append("</div>");
-                //Provisional Diagnosis End	
-            }
             if (!string.IsNullOrEmpty(T00002))
             {
                 //Chief Complaint Begin
-                b.Append("<div style='width:95%;font-size:13px;'><br>");
+                b.Append("<div style='width:95%;font-size:13px;'>");
                 b.Append("<p style='text-align:left;margin:0'><b>Chief Complaint :</b></p>");
                 b.Append("<span style='font-size:15px;'>" + T00002.TrimEnd(',') + "</span>");
                 b.Append("</div>");
                 //Chief Complaint End
             }
-            if (!string.IsNullOrEmpty(T00003))
+            if (!string.IsNullOrEmpty(T00007))
             {
-                //Sign & Symptoms Begin
+                //History Begin
                 b.Append("<div style='width:95%;font-size:13px;'><br>");
-                b.Append("<p style='text-align:left;margin:0'><b>Sign & Symptoms :</b></p>");
-                b.Append("<span style='font-size:15px;'>" + T00003.TrimEnd(',') + "</span>");
+                b.Append("<p style='text-align:left;margin:0'><b>Past Medication :</b></p>");
+                b.Append("<span style='font-size:15px;'>" + T00007.TrimEnd(',') + "</span>");
                 b.Append("</div>");
-                //Sign & Symptoms End
+                //History End
+            }
+            if (!string.IsNullOrEmpty(T00001))
+            {
+                //Provisional Diagnosis Begin
+                b.Append("<div style='width:95%;font-size:13px;'><br>");
+                b.Append("<p style='text-align:left;margin:0'><b>Provisional Diagnosis :</b></p>");
+                b.Append("<span style='font-size:15px;'>" + T00001.TrimEnd(',') + "</span>");
+                b.Append("</div>");
+                //Provisional Diagnosis End	
             }
             if (!string.IsNullOrEmpty(tbody))
             {
@@ -324,6 +357,17 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 //b.Append("</div>");
                 //Medicine End
             }
+            if (NextFollowUpDate != "-")
+            {
+                //NextFollowUpDate Begin
+                b.Append("<div style='width:95%;font-size:13px;'><br>");
+                b.Append("<p style='text-align:left;margin:0'><b>Next Follow Up Date And Remark :</b></p>");
+                b.Append("<span style='font-size:15px;'>" + NextFollowUpDate + "</span>");
+                b.Append("</div>");
+                //NextFollowUpDate End
+
+                //b.Append("<p style='text-align:center;margin:0;'><b>Next Follow Up : </b> " + NextFollowUpDate + "<hr style='width:90%;text-align:center;'/></p>");
+            }
             if (!string.IsNullOrEmpty(T00005))
             {
 
@@ -334,15 +378,16 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 b.Append("</div>");
                 //Doctor Notes End
             }
-            if (!string.IsNullOrEmpty(T00006))
+            if (!string.IsNullOrEmpty(T00003))
             {
-                //Allergies Begin
+                //Sign & Symptoms Begin
                 b.Append("<div style='width:95%;font-size:13px;'><br>");
-                b.Append("<p style='text-align:left;margin:0'><b>Allergies :</b></p>");
-                b.Append("<span style='font-size:15px;'>" + T00006.TrimEnd(',') + "</span>");
+                b.Append("<p style='text-align:left;margin:0'><b>Sign & Symptoms :</b></p>");
+                b.Append("<span style='font-size:15px;'>" + T00003.TrimEnd(',') + "</span>");
                 b.Append("</div>");
-                //Allergies End
+                //Sign & Symptoms End
             }
+
             if (!string.IsNullOrEmpty(T00015))
             {
                 //History Begin
@@ -352,15 +397,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                 b.Append("</div>");
                 //History End
             }
-            if (!string.IsNullOrEmpty(T00007))
-            {
-                //History Begin
-                b.Append("<div style='width:95%;font-size:13px;'><br>");
-                b.Append("<p style='text-align:left;margin:0'><b>Past Medication :</b></p>");
-                b.Append("<span style='font-size:15px;'>" + T00007.TrimEnd(',') + "</span>");
-                b.Append("</div>");
-                //History End
-            }
+
             if (!string.IsNullOrEmpty(T00008))
             {
                 //History Begin
