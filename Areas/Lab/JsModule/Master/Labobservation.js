@@ -392,8 +392,7 @@ function UpdateObservation() {
     objBO.interpretation = "-";
     objBO.decimalplace = $("#txtDecVal").val();
     objBO.valueType = $("#ddlValueType option:selected").val();
-    //objBO.testunit = $("#txtTestUnit").val();
-    objBO.testunit = '-';
+    objBO.testunit = $("#txtTestUnit").val();
     objBO.MathOpType = $("#ddlMathOptype option:selected").val();
     objBO.MathOpValue = $("#txtMathOpValue").val();
     if ($('#chkDelta').is(":checked")) {
@@ -538,24 +537,34 @@ function GetObservationDetails(testCode) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (k, v) {
-                        if (temp != v.HeaderName) {
-                            htmldata += '<tr style="background:#fbf6bd">';
-                            htmldata += '<td colspan="8">' + v.HeaderName + '</td>';
+
+                        if (v.IsGroup == "Y") {
+                            htmldata += '<tr style="background:#fbf6bd" data-autoid=' + v.AutoId + '>';
+                            htmldata += '<td></td>'
+                            htmldata += '<td>' + v.seqNo + '</td>'
+                            htmldata += '<td colspan="6">' + v.ObservationName + '</td>';
                             htmldata += '</tr>';
-                            temp = v.HeaderName;
                         }
-                        htmldata += '<tr data-autoid=' + v.AutoId + '>';
-                        htmldata += '<td><a href = "javascript:void(0)" id = "btnDelete' + k + '" data-testcode="' + v.testcode + '" data-observationid="' + v.ObservationId + '"  onclick = "selectRow(this);EditObservationDetails(this)"><i class="fa fa-edit fa-lg text-blue"></i></a ></td>';
-                        htmldata += '<td>' + v.seqNo + '</td>';
-                        htmldata += '<td>' + v.ObservationName + '</td>';
+                        else {
+                            //if (temp != v.HeaderName) {
+                            //    htmldata += '<tr style="background:#fbf6bd">';
+                            //    htmldata += '<td colspan="8">' + v.HeaderName + '</td>';
+                            //    htmldata += '</tr>';
+                            //    temp = v.HeaderName;
+                            //}
+                            htmldata += '<tr data-autoid=' + v.AutoId + '>';
+                            htmldata += '<td><a href = "javascript:void(0)" id = "btnDelete' + k + '" data-testcode="' + v.testcode + '" data-observationid="' + v.ObservationId + '"  onclick = "selectRow(this);EditObservationDetails(this)"><i class="fa fa-edit fa-lg text-blue"></i></a ></td>';
+                            htmldata += '<td>' + v.seqNo + '</td>';
+                            htmldata += '<td>' + v.ObservationName + '</td>';
 
-                        htmldata += (v.IsBold == 0) ? "<td><input type='checkbox' style='margin:0 3px 0;' onchange=StyleFlag(" + v.AutoId + ",'IsBold') />" : "<td><input onchange=StyleFlag(" + v.AutoId + ",'IsBold') type='checkbox' checked style='margin:0 3px 0;' /></td>";
-                        htmldata += (v.IsItalic == 0) ? "<td><input type='checkbox' style='margin:0 3px 0;' onchange=StyleFlag(" + v.AutoId + ",'Italic') />" : "<td><input onchange=StyleFlag(" + v.AutoId + ",'Italic') type='checkbox' checked style='margin:0 3px 0;' /></td>";
-                        htmldata += (v.IsResultMandatory == 0) ? "<td><input type='checkbox' style='margin:0 3px 0;' onchange=StyleFlag(" + v.AutoId + ",'IsResultMandatory') />" : "<td><input onchange=StyleFlag(" + v.AutoId + ",'IsResultMandatory') type='checkbox' checked style='margin:0 3px 0;' /></td>";
+                            htmldata += (v.IsBold == 0) ? "<td><input type='checkbox' style='margin:0 3px 0;' onchange=StyleFlag(" + v.AutoId + ",'IsBold') />" : "<td><input onchange=StyleFlag(" + v.AutoId + ",'IsBold') type='checkbox' checked style='margin:0 3px 0;' /></td>";
+                            htmldata += (v.IsItalic == 0) ? "<td><input type='checkbox' style='margin:0 3px 0;' onchange=StyleFlag(" + v.AutoId + ",'Italic') />" : "<td><input onchange=StyleFlag(" + v.AutoId + ",'Italic') type='checkbox' checked style='margin:0 3px 0;' /></td>";
+                            htmldata += (v.IsResultMandatory == 0) ? "<td><input type='checkbox' style='margin:0 3px 0;' onchange=StyleFlag(" + v.AutoId + ",'IsResultMandatory') />" : "<td><input onchange=StyleFlag(" + v.AutoId + ",'IsResultMandatory') type='checkbox' checked style='margin:0 3px 0;' /></td>";
 
-                        htmldata += '<td><button style="height:15px;line-height:9px;" type="button" class="btn btn-warning btn-xs" data-autoid=' + v.obsAutoId + ' id="btnUpdateInterpretation#' + k + '" onclick="ViewInterpretationModal(this)"><i class="fa fa-plus"></i> Interpretation</button></td>';
-                        htmldata += '<td><a href = "javascript:void(0)" id = "btnDelete' + k + '" data-testcode="' + v.testcode + '" data-observationid="' + v.ObservationId + '"  onclick = "selectRow(this);DeleteObservation(this)"><i class="fa fa-trash fa-lg text-red"></i></a ></td>';
-                        htmldata += '</tr>';
+                            htmldata += '<td><button style="height:15px;line-height:9px;" type="button" class="btn btn-warning btn-xs" data-autoid=' + v.obsAutoId + ' id="btnUpdateInterpretation#' + k + '" onclick="ViewInterpretationModal(this)"><i class="fa fa-plus"></i> Interpretation</button></td>';
+                            htmldata += '<td><a href = "javascript:void(0)" id = "btnDelete' + k + '" data-testcode="' + v.testcode + '" data-observationid="' + v.ObservationId + '"  onclick = "selectRow(this);DeleteObservation(this)"><i class="fa fa-trash fa-lg text-red"></i></a ></td>';
+                            htmldata += '</tr>';
+                        }
                     });
                     $("#tblObservationDetails tbody").append(htmldata);
                 }

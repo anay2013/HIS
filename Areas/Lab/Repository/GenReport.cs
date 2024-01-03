@@ -211,7 +211,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     {
                         if (dr.r_type != "Text")
                         {
-                            b.Append("<table border='0' style='width:100%;font-size:15px; border-collapse: collapse;margin-top:-10px;'>");
+                            b.Append("<table border='0' style='font-family:Arial;width:100%;font-size:14px;border-collapse:collapse;margin-top:-10px;'>");
                             b.Append("<tr>");
                             b.Append("<th style='width:35%;text-align:left;padding-left:4px;'>Test Name</th>");
                             b.Append("<th style='width:18%;text-align:left;padding-right:4px;'>Result</th>");
@@ -235,18 +235,24 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         ObsSeqNo = y.Field<Int64>("ObsSeqNo"),
                         sample_type = y.Field<string>("sample_type"),
                         HeaderName = y.Field<string>("HeaderName"),
+                        IsGroup = y.Field<string>("IsGroup"),
                         method_name = y.Field<string>("method_name"),
                         test_comment = y.Field<string>("test_comment")
 
-                    }).ToList();
+                    }).OrderBy(y => y.ObsSeqNo).ToList();
                     if(ObsCount==1)
                     {
                         foreach (var obj1 in ObsDetail)
                         {
+                            //For Spacing
                             b.Append("<tr>");
-                            b.Append("<td style='width:35%;text-align:left;padding-left:4px;'><b>" + obj1.ObservationName + "</b>, <span style='font-size:12px'>" + dr.samp_type + "</span>" + "</td>");
+                            b.Append("<td style='height:3px;' colspan='6'></td>");
+                            b.Append("</tr>");
+
+                            b.Append("<tr>");
+                            b.Append("<td style='width:35%;text-align:left;padding-left:4px;'>" + obj1.ObservationName + ", <span style='font-size:12px'>" + dr.samp_type + "</span>" + "</td>");
                             if (obj1.ab_flag == "L" || obj1.ab_flag == "H")
-                                b.Append("<td style='width:18%;text-align:left;padding-left:4px;'><b>" + obj1.reading + "</b></td>");
+                                b.Append("<td style='width:18%;text-align:left;padding-left:4px;'>" + obj1.reading + "</td>");
                             else
                                 b.Append("<td style='width:18%;text-align:left;padding-left:4px;'>" + obj1.reading + "</td>");
                             b.Append("<td style='width:2%;text-align:left;padding-left:4px;font-size:12px;margin-right:5px'>" + obj1.ab_flag + "</td>");
@@ -257,7 +263,15 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             if (!string.IsNullOrEmpty(obj1.test_comment))
                             {
                                 b.Append("<tr>");
+                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("</tr>");
+
+                                b.Append("<tr>");
                                 b.Append("<td colspan='6'>" + obj1.test_comment + "</td>");
+                                b.Append("</tr>");
+
+                                b.Append("<tr>");
+                                b.Append("<td style='height:8px;' colspan='6'></td>");
                                 b.Append("</tr>");
                             }
                             //Code To Add Pdf as Image after conversion
@@ -272,10 +286,21 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             if (!string.IsNullOrEmpty(dr.Interpretation))
                             {
                                 b.Append("<tr>");
+                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("</tr>");
+
+                                b.Append("<tr>");
                                 b.Append("<td colspan='6'><b style='font-size:12px'>Test Interpretation : </b></td>");
                                 b.Append("</tr>");
                                 b.Append("<tr>");
+                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("</tr>");
+                                b.Append("<tr>");
                                 b.Append("<td style='font-size:12px !important' colspan='6'>" + dr.Interpretation + "</td>");
+                                b.Append("</tr>");
+
+                                b.Append("<tr>");
+                                b.Append("<td style='height:8px;' colspan='6'></td>");
                                 b.Append("</tr>");
                             }
                         }
@@ -290,30 +315,45 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         b.Append("</tr>");
                         foreach (var obj1 in ObsDetail)
                         {
-                            if (temp != obj1.HeaderName)
+                            if(obj1.IsGroup == "Y")
                             {
                                 b.Append("<tr>");
-                                b.Append("<td colspan='6' style='font-size:14px;text-decoration:underline;padding-left:4px;'><b>" + obj1.HeaderName + "</b></td>");
+                                b.Append("<td colspan='6' style='font-size:14px;text-decoration:underline;padding-left:4px;'><b>" + obj1.ObservationName + "</b></td>");
                                 b.Append("</tr>");
-                                temp = obj1.HeaderName;
                             }
-                            b.Append("<tr>");
-                            b.Append("<td style='width:35%;text-align:left;padding-left:4px;'>" + obj1.ObservationName + "</td>");
-                            if (obj1.ab_flag == "L" || obj1.ab_flag == "H")
-                                b.Append("<td style='width:18%;text-align:left;padding-left:4px;'><b>" + obj1.reading + "</b></td>");
                             else
-                                b.Append("<td style='width:18%;text-align:left;padding-left:4px;'>" + obj1.reading + "</td>");
-
-                            b.Append("<td style='width:2%;text-align:left;padding-left:4px;font-size:12px;margin-right:5px'>" + obj1.ab_flag + "</td>");
-                            b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.result_unit + "</td>");
-                            b.Append("<td style='width:25%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.RefRange + "</td>");
-                            b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:11px'>" + obj1.method_name + "</td>");
-                            b.Append("</tr>");
-                            if (!string.IsNullOrEmpty(obj1.test_comment))
                             {
+                                //For Spacing
                                 b.Append("<tr>");
-                                b.Append("<td colspan='6'>" + obj1.test_comment + "</td>");
+                                b.Append("<td style='height:3px;' colspan='6'></td>");
                                 b.Append("</tr>");
+
+                                b.Append("<tr>");
+                                b.Append("<td style='width:35%;text-align:left;padding-left:4px;'>" + obj1.ObservationName + "</td>");
+                                if (obj1.ab_flag == "L" || obj1.ab_flag == "H")
+                                    b.Append("<td style='width:18%;text-align:left;padding-left:4px;'><b>" + obj1.reading + "</b></td>");
+                                else
+                                    b.Append("<td style='width:18%;text-align:left;padding-left:4px;'>" + obj1.reading + "</td>");
+
+                                b.Append("<td style='width:2%;text-align:left;padding-left:4px;font-size:12px;margin-right:5px'>" + obj1.ab_flag + "</td>");
+                                b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.result_unit + "</td>");
+                                b.Append("<td style='width:25%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.RefRange + "</td>");
+                                b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:11px'>" + obj1.method_name + "</td>");
+                                b.Append("</tr>");
+                                if (!string.IsNullOrEmpty(obj1.test_comment))
+                                {
+                                    b.Append("<tr>");
+                                    b.Append("<td style='height:8px;' colspan='6'></td>");
+                                    b.Append("</tr>");
+
+                                    b.Append("<tr>");
+                                    b.Append("<td colspan='6'>" + obj1.test_comment + "</td>");
+                                    b.Append("</tr>");
+
+                                    b.Append("<tr>");
+                                    b.Append("<td style='height:8px;' colspan='6'></td>");
+                                    b.Append("</tr>");
+                                }
                             }
                         }
                         
@@ -338,6 +378,10 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                                 b.Append("<tr>");
                                 b.Append("<td style='font-size:12px !important' colspan='6'>" + dr.Interpretation + "</td>");
                                 b.Append("</tr>");
+
+                                b.Append("<tr>");
+                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("</tr>");
                             }
                             b.Append("<tr>");
                             b.Append("<td colspan='6'><hr/></td>");
@@ -346,9 +390,9 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     }
                     if (dr.r_type == "Text")
                     {
-                        b.Append("<tr>");
-                        b.Append("<td colspan='6' style='text-align:left;padding-left:4px;'>" + dr.TestName + "</td>");
-                        b.Append("</tr>");
+                        //b.Append("<tr>");
+                        //b.Append("<td colspan='6' style='text-align:left;padding-left:4px;'>" + dr.TestName + "</td>");
+                        //b.Append("</tr>");
 
                         b.Append("<tr>");
                         b.Append("<td colspan='6' style='text-align:left;padding-left:4px;'>" + dr.report_content + "</td>");
@@ -362,75 +406,82 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
         }
         private string GetHeaderHTML(string DepartmentName, DataSet ds,string IsNABL)
         {
-            _PrintWithHeader = "Y";
+            _PrintWithHeader = "N";
             StringBuilder h = new StringBuilder();
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    h.Append("<table style='width:1200px;height:190px; font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
-                    h.Append("<tr>");
-
-                    h.Append("<td style='width:20%'>");
-                    if(_PrintWithHeader == "Y")
+                    if (_PrintWithHeader == "N")
                     {
-                        string ChandanLogo = System.Web.HttpContext.Current.Server.MapPath(@"/images/ChandanLogo.jpg");
-                        h.Append("<img src=" + ChandanLogo + " style='width:180px;height:100px' />");
-                    }
-                    h.Append("</td>");
 
-                    h.Append("<td style='width:55%'>");
-                    h.Append("<div style='text-align:left;width:auto;float:left;width:100%;'>");
-                    h.Append("<h2 style='font-weight:bold;margin:0'>" + dr["Hospital_Name"].ToString() + "</h2>");
-                    h.Append("<span style='text-align:left;'>" + dr["Full_Address"].ToString() + "</span><br/>");
-                    h.Append("<span style='text-align:left;'><b>Landline No : </b>" + dr["LandlineNo"].ToString() + "</span><br/>");
-                    //b.Append("<span style='text-align:left;'><b>Email ID : </b>" + dr["EmailID"].ToString() + "</span><br/>");
-                    h.Append("<span style='text-align:left;'><b>CIN No: " + dr["cin_no"].ToString() + "</b></span><br/>");
-                    h.Append("</div>");
-                    h.Append("</td>");
-                    h.Append("<td style='width:10%;text-align:left'>");
-                    if (_IsNABL == "Y")
-                    {
-                        string NABLLogo = System.Web.HttpContext.Current.Server.MapPath(@"/images/NABL.jpg");
-                        h.Append("<img src=" + NABLLogo + " style='width:120px;height:120px' />");
-                    }
-                    h.Append("</td>");
+                        h.Append("<table style='width:1200px;height:190px; font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
+                        h.Append("<tr>");
+                        h.Append("<td style='width:20%'>");
+                        h.Append("</td>");
 
-                    h.Append("<td style='width:15%'>");
-                    if (_PrintWithHeader == "Y")
-                    {
-                        string YearCompleted = System.Web.HttpContext.Current.Server.MapPath(@"/images/sinceYear.jpg");
-                        h.Append("<img src=" + YearCompleted + " style='width:120px;height:120px' />");
+                        h.Append("<td style='width:55%'>");
+                        h.Append("<div style='text-align:left;width:auto;float:left;width:100%;'>");
+                        h.Append("<h2 style='font-weight:bold;margin:0'></h2>");
+                        h.Append("<span style='text-align:left;'></span><br/>");
+                        h.Append("<span style='text-align:left;'></span><br/>");
+                        h.Append("<span style='text-align:left;'></span><br/>");
+                        h.Append("</div>");
+                        h.Append("</td>");
+                        h.Append("<td style='width:10%;text-align:left'>");
+                        if (_IsNABL == "Y")
+                        {
+                            string NABLLogo = System.Web.HttpContext.Current.Server.MapPath(@"/images/NABL.jpg");
+                            h.Append("<img src=" + NABLLogo + " style='width:80px;height:80px' />");
+                        }
+                        h.Append("</td>");
+                        h.Append("<td style='width:15%'>");
+                        h.Append("</td>");
+                        h.Append("</tr>");
+                        h.Append("</table>");
                     }
-                    h.Append("</td>");
-          
-                    h.Append("</table>");
+                    else
+                    {
+                        h.Append("<table style='width:1200px;height:190px; font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
+
+                        h.Append("<tr>");
+                        h.Append("<td style='width:20%'>");
+                        if (_PrintWithHeader == "Y")
+                        {
+                            string ChandanLogo = System.Web.HttpContext.Current.Server.MapPath(@"/images/ChandanLogo.jpg");
+                            h.Append("<img src=" + ChandanLogo + " style='width:180px;height:100px' />");
+                        }
+                        h.Append("</td>");
+
+                        h.Append("<td style='width:55%'>");
+                        h.Append("<div style='text-align:left;width:auto;float:left;width:100%;'>");
+                        h.Append("<h2 style='font-weight:bold;margin:0'>" + dr["Hospital_Name"].ToString() + "</h2>");
+                        h.Append("<span style='text-align:left;'>" + dr["Full_Address"].ToString() + "</span><br/>");
+                        h.Append("<span style='text-align:left;'><b>Landline No : </b>" + dr["LandlineNo"].ToString() + "</span><br/>");
+                        //b.Append("<span style='text-align:left;'><b>Email ID : </b>" + dr["EmailID"].ToString() + "</span><br/>");
+                        h.Append("<span style='text-align:left;'><b>CIN No: " + dr["cin_no"].ToString() + "</b></span><br/>");
+                        h.Append("</div>");
+                        h.Append("</td>");
+                        h.Append("<td style='width:10%;text-align:left'>");
+                        if (_IsNABL == "Y")
+                        {
+                            string NABLLogo = System.Web.HttpContext.Current.Server.MapPath(@"/images/NABL.jpg");
+                            h.Append("<img src=" + NABLLogo + " style='width:120px;height:120px' />");
+                        }
+                        h.Append("</td>");
+                        h.Append("<td style='width:15%'>");
+                        if (_PrintWithHeader == "Y")
+                        {
+                            string YearCompleted = System.Web.HttpContext.Current.Server.MapPath(@"/images/sinceYear.jpg");
+                            h.Append("<img src=" + YearCompleted + " style='width:120px;height:120px' />");
+                        }
+                        h.Append("</td>");
+                        h.Append("</tr>");
+                        h.Append("</table>");
+
+                    }
                     h.Append("<hr/>");
 
-                    /*
-
-                    h.Append("<div style='width:1200px;height:160px; font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
-                    string chandanLogo = "~/images/NABL.jpg"; // HttpContext.Server.MapPath(@"/Content/logo/logo.png");
-                    h.Append("<div style='text-align:left;width:32%;float:left'>");
-                    h.Append("<img src=" + chandanLogo + " style='width:180px;margin-top:5px;' />");
-                    h.Append("</div>");
-                    h.Append("<div style='text-align:left;width:auto;float:left;width:43%;'>");
-                    h.Append("<h2 style='font-weight:bold;margin:0'>" + dr["Hospital_Name"].ToString() + "</h2>");
-                    h.Append("<span style='text-align:left;'>" + dr["Full_Address"].ToString() + "</span><br/>");
-                    h.Append("<span style='text-align:left;'><b>Landline No : </b>" + dr["LandlineNo"].ToString() + "</span><br/>");
-                    //b.Append("<span style='text-align:left;'><b>Email ID : </b>" + dr["EmailID"].ToString() + "</span><br/>");
-                    h.Append("<span style='text-align:left;'><b>CIN No: " + dr["cin_no"].ToString() + "</b></span><br/>");
-                    h.Append("</div>");
-                    h.Append("<div style='text-align:left;width:25%;float:left'>");
-                    if(_IsNABL == "Y")
-                    {
-                        string NABLLogo = System.Web.HttpContext.Current.Server.MapPath(@"/images/NABL.jpg");
-                        h.Append("<img src=" + NABLLogo + " style='width:120px;height:120px' />");
-                    }
-                    h.Append("</div>");
-                    h.Append("</div>");
-                    h.Append("<hr/>");
-                    */
                 }
             }
             if (ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
@@ -483,7 +534,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     h.Append("<td colspan='4'>&nbsp;</td>");
                     h.Append("<td><b>Status</b></td>");
                     h.Append("<td><b>:</b></td>");
-                    h.Append("<td>" + dr["VisitNo"].ToString() + "</td>");
+                    h.Append("<td>" + dr["ReportStatus"].ToString() + "</td>");
                     h.Append("</tr>");
                     h.Append("</table>");
                 }

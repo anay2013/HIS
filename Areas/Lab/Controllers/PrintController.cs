@@ -8,6 +8,10 @@ using System.Text;
 using System.Web.Mvc;
 using HiQPdf;
 using MediSoftTech_HIS.Areas.Lab.Repository;
+using HISWebApi.LISService;
+using System.Net.Http;
+using System.IO;
+using System.Net;
 
 namespace MediSoftTech_HIS.Areas.Lab.Controllers
 {
@@ -266,5 +270,16 @@ namespace MediSoftTech_HIS.Areas.Lab.Controllers
             return rep.PrintWorkSheet(visitNo, SubCat, TestIds, Logic);
 
         }
+        public FileStreamResult PrintLabReportFromLIS(string visitNo)
+        {
+            var LISresult = "";
+            LISProxy.SaleServiceSoapClient saleServiceSoapClient = new LISProxy.SaleServiceSoapClient();
+            LISresult = "" + saleServiceSoapClient.chandanHosp_PatientLabResult_pdf(visitNo) + "";
+            byte[] bytes = Convert.FromBase64String(LISresult);
+            var dataStream = new MemoryStream(bytes);
+            Response.AppendHeader("content-disposition", "inline; filename=file.pdf");
+            return new FileStreamResult(dataStream, "application/pdf");
+        }
+        
     }
 }

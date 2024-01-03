@@ -1,4 +1,4 @@
-﻿
+﻿var _DispatchNo = "";
 $(document).ready(function () {
     GetDispatchLabInfo();
     FillCurrentDate('txtFrom');
@@ -124,12 +124,13 @@ function GetDispatchInfoToReceive() {
         }
     });
 }
-function GetPatientDispatch(DispatchNo) {   
+function GetPatientDispatch(DispatchNo) {  
+    _DispatchNo = DispatchNo;
     var url = config.baseUrl + "/api/Lab/SampleLabReceivingQueries";
     var objBO = {}
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
-    objBO.DispatchNo = DispatchNo;
+    objBO.DispatchNo = _DispatchNo;
     objBO.Logic = "GetPatientInDispatch";
     $.ajax({
         method: "POST",
@@ -145,12 +146,18 @@ function GetPatientDispatch(DispatchNo) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;
-                        tbody += "<tr>";
-                        tbody += "<td>" + count + "</td>";
-                        tbody += "<td>" + val.VisitNo + "</td>";
-                        tbody += "<td>" + val.barcodeNo + "</td>";
-                        tbody += "<td>" + val.patient_name + "</td>";
-                        tbody += "<td>" + val.TestDeetail + "</td>";
+                        if (val.PC==0)
+                            tbody += "<tr style='background-color:lightGreen'>";
+                        else
+                            tbody += "<tr>";
+
+                        tbody += "<td style='width:5%;'>" + count + "</td>";
+                        tbody += "<td style='width:20%;'>" + val.VisitNo + "</td>";
+                        tbody += "<td style='width:10%;'>" + val.barcodeNo + "</td>";
+                        tbody += "<td style='width:20%;'>" + val.patient_name + "</td>";
+                        tbody += "<td style='width:35%;'>" + val.TestDeetail + "</td>";
+                        tbody += "<td style='width:5%;'>" + val.TC + "</td>";
+                        tbody += "<td style='width:5%;'>" + val.PC + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblPatientDetail tbody').append(tbody);
@@ -160,6 +167,40 @@ function GetPatientDispatch(DispatchNo) {
             else {
                 alert('No Data Found')
             }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function PushHospitalDataToLIS() {
+
+    var VisitNos = "";
+    $('#tblPatientDetail tbody tr').each(function () {
+        if ($(this).find('td:eq(6)').text()!="0")
+        VisitNos = VisitNos + $(this).find('td:eq(1)').text();
+    });
+    if (VisitNos.length < 5) {
+        alert("No Pendency Found all Sent");
+        return;
+    }
+
+
+    var url = config.baseUrl + "/api/Lab/PushHospitalDataToLIS";
+    var objBO = {}
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.VisitNo = VisitNos;
+    objBO.Logic = "GetOutSourceRecord";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            alert(data);
+            GetPatientDispatch(_DispatchNo);
         },
         error: function (response) {
             alert('Server Error...!');

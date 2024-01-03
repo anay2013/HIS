@@ -73,6 +73,8 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -353,7 +355,7 @@
     <Content Include="Areas\IPD\Views\Indent\PharSalesRegister.cshtml" />
     <Content Include="Areas\IPD\Views\web.config" />
     <Content Include="Areas\Lab\JsModule\LabDoctorSignature.js" />
-    <Content Include="Areas\Lab\JsModule\Labobservation.js" />
+    <Content Include="Areas\Lab\JsModule\Labobservation_OLD.js" />
     <Content Include="Areas\Lab\JsModule\LabReceive.js" />
     <Content Include="Areas\Lab\JsModule\LabRegister.js" />
     <Content Include="Areas\Lab\JsModule\LabTemplate.js" />
@@ -375,6 +377,7 @@
     <Content Include="Areas\Lab\JsModule\ReportEditing.js" />
     <Content Include="Areas\Lab\JsModule\Report\InvestigationReport.js" />
     <Content Include="Areas\Lab\JsModule\Report\LabWorkBook.js" />
+    <Content Include="Areas\Lab\JsModule\Report\TextReportEditing.js" />
     <Content Include="Areas\Lab\JsModule\SampleCollection.js" />
     <Content Include="Areas\Lab\JsModule\SampleDispatch.js" />
     <Content Include="Areas\Lab\JsModule\SampleDispatchNew.js" />
@@ -653,6 +656,83 @@
     <Content Include="bin\System.Web.Webpages.dll" />
     <Content Include="bin\System.Web.Webpages.Razor.dll" />
     <Content Include="bin\WebGrease.dll" />
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.ChandanHospital_BookingDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.chandanHosp_PatientLabResult_pdfResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetApprovalDoctorListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetApprovalDoctorSignatureResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetCenterWiseSaleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetItemListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetPartyWiseSaleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetPatientAuthorizationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetPro_BussinessResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetPro_Bussiness_TargetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetReportHeaderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetTATSummaryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.GetUnitWiseTotalSalesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.HelloWorldResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.HimHealthBookingDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.Insert_GetPro_Bussiness_TargetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.Insert_PatientRequestResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.PettyCashRecordsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.PushOutsourceDataToLISResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.ReportSaveResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.SHABookingDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.UPHealthBookingDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LISProxy\MediSoftTech_HIS.LISProxy.UPHealth_CancelTestResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Areas\Lab\Views\Radiology\TaxReportEditing.cshtml" />
+    <None Include="Connected Services\LISProxy\configuration91.svcinfo" />
+    <None Include="Connected Services\LISProxy\configuration.svcinfo" />
+    <None Include="Connected Services\LISProxy\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\LISProxy\SaleService1.disco" />
     <Content Include="Content\ckeditor\adapters\jquery.js" />
     <Content Include="Content\ckeditor\build-config.js" />
     <Content Include="Content\ckeditor\ckeditor.js" />
@@ -1852,6 +1932,7 @@
     <Compile Include="Areas\IPOPAudit\IPOPAuditAreaRegistration.cs" />
     <Compile Include="Areas\IPOPAudit\Controllers\IPOPAuditController.cs" />
     <Compile Include="Areas\Lab\Controllers\MasterController.cs" />
+    <Compile Include="Areas\Lab\Controllers\RadiologyController.cs" />
     <Compile Include="Areas\Lab\Controllers\ReportController.cs" />
     <Compile Include="Areas\Lab\Repository\PDFMerge.cs" />
     <Compile Include="Areas\Lab\Controllers\PrintController.cs" />
@@ -1915,6 +1996,11 @@
     <Compile Include="Areas\Warehouse\Controllers\StockController.cs" />
     <Compile Include="Areas\Warehouse\Controllers\TransferController.cs" />
     <Compile Include="Areas\Warehouse\WarehouseAreaRegistration.cs" />
+    <Compile Include="Connected Services\LISProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2240,6 +2326,7 @@
     <Content Include="Areas\OPD\Views\Shared\_LabReport.cshtml" />
     <Content Include="Areas\IPD\Views\CQI\CQIEntry.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\AllowBillCorrection.cshtml" />
+    <None Include="Connected Services\LISProxy\SaleService1.wsdl" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -2499,6 +2586,9 @@
       <Project>{7f7d3b59-645b-46e2-a83f-49998c9fba15}</Project>
       <Name>HISWebApi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\LISProxy\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -144,12 +144,17 @@
                 </div>
                 <div class="panel-body" style="border: 1px solid #fff6e7;">
                     <div class="col-sm-12 form-group" style="display:flex">
+
                         <button style="width:5%;" type="button" class="btn btn-xs btn-primary" onclick="GetHeader()">Group</button>
+
                         <label style="width:13%;">
                             <input type="radio" name="ObsType" onchange="BindObservation('Investigation');" value="Investigation" checked />&nbsp;Investigation
                         </label>
                         <label style="width:18%;">
                             <input type="radio" name="ObsType" onchange="BindObservation('AddOn-Observation');" value="AddOn-Observation" />&nbsp;Add-On Observation
+                        </label>
+                        <label style="width:13%;">
+                            <input type="radio" name="ObsType" onchange="BindObservation('GroupItem');" value="Group Item"  />&nbsp;Group Item
                         </label>
                         <div style="width:315px">
                             <select id="ddlobservation" class="form-control border-imp"></select>
@@ -187,9 +192,9 @@
 
                     <button type="submit" id="btnAddDefaultValue" class="btn btn-xs btn-warning" onclick="ViewDefaultValues()">Add Default Value</button>
 
-                    <div class="form-group" style="margin-left:5px">
+                    <div class="form-group">
                         <label>Method Name</label>
-                        <input type="text" id="txtMethod" class="form-control" />
+                        <input type="text" id="txtMethod" class="form-control" style="width:70px" />
                     </div>
                     <div class="form-group">
                         <label>Decimal Value</label>
@@ -202,16 +207,19 @@
                     </div>
 
                     <div class="form-group">
-                        <select id="ddlValueType" class="form-control">
+                        <label>Test Unit</label>
+                        <input type="text" id="txtTestUnit" class="form-control" style="width:70px" />
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlValueType" class="form-control" style="width:120px">
                             <option value="0">Select Value Type</option>
-                            <option value="Numeric" selected="selected">Numeric</option>
+                            <option value="Numeric">Numeric</option>
                             <option value="Text">Text</option>
+                            <option value="Value">Value</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        @*<label>Test Unit</label>*@
-
-                        <select id="ddlMathOptype" class="form-control" style="width:80px">
+                        <select id="ddlMathOptype" class="form-control" style="width:90px">
                             <option value="0">Select Formula type</option>
                             <option value="Multiply">Multiply</option>
                             <option value="division">Division</option>

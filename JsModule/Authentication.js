@@ -1,6 +1,6 @@
 ﻿    $(document).ready(function () {
     sessionStorage.setItem("_HISDebugPermission", "N");
-    if(window.location.pathname.toLowerCase() != '/' && window.location.pathname.toLowerCase() != '/admin/dashboard')
+    if (window.location.pathname.toLowerCase() != '/' && window.location.pathname.toLowerCase() != '/admin/dashboard' && window.location.pathname.toLowerCase() != '/admin/login')
     IsAuthorizedMenu();
 
    

@@ -82,7 +82,7 @@ function ReportInfo() {
         contentType: "application/json;charset=utf-8",
         success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
-                if(Object.keys(data.ResultSet.Table).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
                     ReportList(data, objBO.Logic);
                 }
             }
@@ -108,7 +108,7 @@ function ReportInfoBySearchKey() {
     objBO.to = $('#txtTo').val();
     objBO.Prm1 = $('#txtSeachValue').val();
     objBO.Prm2 = $('#ddlSeachBy option:selected').val();
-    objBO.Logic ='ByInputId';
+    objBO.Logic = 'ByInputId';
     $.ajax({
         method: "POST",
         url: url,
@@ -118,7 +118,7 @@ function ReportInfoBySearchKey() {
         success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
-                    ReportList(data,"TestWiseReport");
+                    ReportList(data, "TestWiseReport");
                 }
             }
             else {
@@ -130,7 +130,7 @@ function ReportInfoBySearchKey() {
         }
     });
 }
-function ReportList(data,Logic) {
+function ReportList(data, Logic) {
     var tbody = "";
     var visitNo = "";
     var testCategory = "";
@@ -144,7 +144,8 @@ function ReportList(data,Logic) {
             tbody += "<td>" + val.ageInfo + "</td>";
             tbody += "<td>" + val.DoctorName + "</td>";
             tbody += "<td>" + val.ref_name + "</td>";
-            tbody += "<td><input type='checkbox' name='pgroup'/>&nbsp;Select All&nbsp;&nbsp;<button onclick=Print(this) class='btn btn-success btnPrint btn-xs'>Print</button></td>";
+            tbody += "<td><input type='checkbox' name='pgroup'/>&nbsp;Select All&nbsp;&nbsp;<button onclick=PrintInHouse(this) class='btn btn-success btnPrint btn-xs'>Print In-House</button>&nbsp;&nbsp;<button onclick=PrintOutSource(this) class='btn btn-warning btnPrint btn-xs'>Print Out Source</button></td>";
+            tbody += "<td></td>";
             tbody += "</tr>";
             visitNo = val.VisitNo;
         }
@@ -158,6 +159,7 @@ function ReportList(data,Logic) {
             tbody += "<label>" + val.TApprCount + '/' + val.TCount + "</label>";
             tbody += "</div>";
             tbody += "</td>";
+            tbody += "<td>" + val.IsLocalTest + "</td>";
             tbody += "</tr>";
         }
         else {
@@ -171,10 +173,11 @@ function ReportList(data,Logic) {
                 tbody += "<label>" + val.TApprCount + '/' + val.TCount + "</label>";
                 tbody += "</div>";
                 tbody += "</td>";
+                tbody += "<td>" + val.IsLocalTest + "</td>";
                 tbody += "</tr>";
                 testCategory = val.TestCat2;
             }
-            tbody += "<tr>";
+            tbody += "<tr class=" + val.IsLocalTest + ">";
             tbody += "<td colspan='7'></td>";
             tbody += "<td>";
             tbody += "<div class='testGroup'>";
@@ -182,29 +185,55 @@ function ReportList(data,Logic) {
             tbody += "<label class=" + val.RepStatus + ">" + val.TestName + "</label>";
             tbody += "</div>";
             tbody += "</td>";
+            tbody += "<td>" + val.IsLocalTest + "</td>";
             tbody += "</tr>";
         }
     });
     $("#tblReport tbody").append(tbody);
 }
 
-function Print(elem) {
+function PrintInHouse(elem) {
     var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
-    var SubCat ='ALL';
+    var SubCat = 'ALL';
     var TestIds = [];
     if ($('input[name=reportBy]:checked').val() == 'TestWiseReport') {
         TestIds = [];
-        $("#tblReport tbody tr:not(.g,.pt) input:checkbox:checked").each(function () {
+        $("#tblReport tbody tr:not(.g,.pt).In-House input:checkbox:checked").each(function () {
             TestIds.push($(this).data('ids'));
         });
     }
     if ($('input[name=reportBy]:checked').val() == 'TestCategoryWise') {
         TestIds = [];
-        $("#tblReport tbody tr:not(.pt) input:checkbox:checked").each(function () {
+        $("#tblReport tbody tr:not(.pt).In-House input:checkbox:checked").each(function () {
             TestIds.push($(this).data('ids'));
         });
     }
     var Logic = 'ByFinalPrint';
-    var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Logic=" + Logic;
+    var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Source=In-House&Logic=" + Logic;
+    window.open(url, '_blank');
+}
+function  PrintOutSource(elem) {
+    var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
+    var url = config.rootUrl + "/Lab/Print/PrintLabReportFromLIS?visitNo=" + visitNo;
+    window.open(url, '_blank');
+}
+function PrintOutSourceOld(elem) {
+    var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
+    var SubCat = 'ALL';
+    var TestIds = [];
+    if ($('input[name=reportBy]:checked').val() == 'TestWiseReport') {
+        TestIds = [];
+        $("#tblReport tbody tr:not(.g,.pt).Out-Source input:checkbox:checked").each(function () {
+            TestIds.push($(this).data('ids'));
+        });
+    }
+    if ($('input[name=reportBy]:checked').val() == 'TestCategoryWise') {
+        TestIds = [];
+        $("#tblReport tbody tr:not(.pt).Out-Source input:checkbox:checked").each(function () {
+            TestIds.push($(this).data('ids'));
+        });
+    }
+    var Logic = 'ByITDose';
+    var url = "http://chandan.online:8080/Chandan/Design/Lab/labreportnew_NhmUk.aspx?RoleId=9OYR9kUytIsLilKZieD5xg==&CentreID=9OYR9kUytIsLilKZieD5xg==&EmployeeID=9OYR9kUytIsLilKZieD5xg==&TestID=19918810,%20&DB=9OYR9kUytIsLilKZieD5xg==&LoginName=9OYR9kUytIsLilKZieD5xg==&IsPrev=1&PHead=1&testid=19918810%2c+&Mobile=1";
     window.open(url, '_blank');
 }

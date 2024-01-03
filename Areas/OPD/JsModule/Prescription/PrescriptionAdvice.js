@@ -173,7 +173,10 @@ $(document).ready(function () {
         $(this).prev('span').remove();
         $(this).remove();
     });
-    $('.OPDPrintPreview .prescribedItem').on('click', 'span', function () {
+    $('.OPDPrintPreview .prescribedItem').on('click', 'span', function (e) {
+        if ($(this).hasClass('fromtxt') || $(this).attr('id') == 'fromtxt')
+            return
+
         var itemid = $(this).attr('id');
         var itemName = $(this).text();
         $(this).replaceWith('<input type="text" value="' + itemName + '"/>');
@@ -551,7 +554,7 @@ function InsertPrescAdvice() {
         }
     });
 }
-function CopyVisitsInfo(OldAppNo) {   
+function CopyVisitsInfo(OldAppNo) {
     if (confirm('Are you sure to copy Prescription in current Appointment?\nNote : It will delete all Prescription in current Appointment.')) {
         var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
         var objBO = {};

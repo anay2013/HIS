@@ -219,10 +219,10 @@ function Onload() {
                     });
                 }
                 if (Object.keys(data.ResultSet.Table1).length > 0) {
-                    $("#ddlobservation").append($("<option></option>").val("0").html("Please Select"));
+                    $("#ddlobservation").append($("<option></option>").val("0").html("Please Select")).select2();
                     $("#ddlobservation").prop('selectedIndex', '0');
                     $.each(data.ResultSet.Table1, function (key, value) {
-                        $("#ddlobservation").append($("<option></option>").val(value.ObservationId).html(value.ObservationName)).select2();;
+                        $("#ddlobservation").append($("<option></option>").val(value.ObservationId).html(value.ObservationName));
                     });
                 }
                 if (Object.keys(data.ResultSet.Table2).length > 0) {
@@ -420,9 +420,9 @@ function BindObservation() {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $("#ddlobservation").empty();
-                    $("#ddlobservation").append($("<option selected></option>").val("0").html("Please Select"));
+                    $("#ddlobservation").append($("<option selected></option>").val("0").html("Please Select")).select2();
                     $.each(data.ResultSet.Table, function (key, value) {
-                        $("#ddlobservation").append($("<option></option>").val(value.ObservationId).html(value.ObservationName)).select2();
+                        $("#ddlobservation").append($("<option></option>").val(value.ObservationId).html(value.ObservationName));
                     });
                 }
             }
@@ -514,11 +514,10 @@ function GetObservationDetails(testCode) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (k, v) {
-                        if (temp != v.HeaderName) {
+                        if (v.IsGroup == "Y") {
                             htmldata += '<tr style="background:#fbf6bd">';
                             htmldata += '<td colspan="8">' + v.HeaderName + '</td>';
                             htmldata += '</tr>';
-                            temp = v.HeaderName;
                         }
                         htmldata += '<tr>';
                         htmldata += '<td><a href = "javascript:void(0)" id = "btnDelete' + k + '" data-testcode="' + v.testcode + '" data-observationid="' + v.ObservationId + '"  onclick = "selectRow(this);EditObservationDetails(this)"><i class="fa fa-edit fa-lg text-blue"></i></a ></td>';
@@ -666,7 +665,6 @@ function validationInvestigationObservation() {
     }
     return true;
 }
-
 function AddObservationInfo() {
     if (validationObservationInfo()) {
         var objBO = {};
@@ -830,7 +828,6 @@ function validationObservationInfo() {
     }
     return true;
 }
-
 function ViewInterpretationModal(element) {
     var testcode = $(element).closest('tr').find('td:eq(0)').find('a').data('testcode');
     var observationid = $(element).closest('tr').find('td:eq(0)').find('a').data('observationid');
@@ -844,7 +841,6 @@ function ViewInterpretationModal(element) {
         $('#myModalInterpretation').modal('hide');
     }
 }
-
 function UpdateInterpretation() {
 
     var objBO = {};
@@ -1206,9 +1202,6 @@ function DeleteTestComment() {
         }
     });
 }
-
-
-
 function ViewDefaultValues() {
     $("#myDefaultValueModal").modal('show');
     var observationid = $("#tblObservationDetails tbody").find('tr.select-row').find('td:eq(0)').find('a').data('observationid');

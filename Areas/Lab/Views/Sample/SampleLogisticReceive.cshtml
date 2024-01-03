@@ -106,7 +106,7 @@
             <div class="panel-heading" style="background-color:#026cbd; color:white; padding: 1px;margin-left: 26px;">
                 <h4 class="text-left" style="margin: 4px 2px;">Logistic Receive in Lab</h4>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="ml15">
                     <div class="">
                         <div class="panel">
@@ -161,7 +161,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="ml15">
                     <div class="">
                         <div class="panel">
@@ -175,18 +175,20 @@
                                         </div>
                                     </div>*@
                                     <div class="col-md-2">
-                                        <button class="btn btn-warning" style="margin-left:429px; height: 30px;"><span class="fa fa-sign-in"></span>&nbsp;Receive</button>
+                                        <button class="btn btn-warning" style="margin-left:429px; height: 30px;" onclick="PushHospitalDataToLIS();"><span class="fa fa-sign-in"></span>&nbsp;Receive</button>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="scroll" style="height:511px;  display:block; border:1px solid #00a65a; overflow:auto;padding-bottom:7px;">
                                             <table class="table table-bordered" id="tblPatientDetail">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width:1%;">S.No</th>
-                                                        <th style="width: 5%;">Visit No</th>
-                                                        <th style="width: 3%;">BarCode</th>
-                                                        <th style="width: 8%;">Patient Name</th>
-                                                        <th style="width: 9%;">Test Detail</th>
+                                                        <th style="width:5%;">S.No</th>
+                                                        <th style="width: 20%;">Visit No</th>
+                                                        <th style="width: 10%;">BarCode</th>
+                                                        <th style="width: 20%;">Patient Name</th>
+                                                        <th style="width: 35%;">Test Detail</th>
+                                                        <th style="width: 5%;">TC</th>
+                                                        <th style="width: 5%;">PC</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
