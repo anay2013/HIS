@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "AuditSaleVoucher";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Accounts/JsModule/AuditSaleVoucher.js"></script>
+<style>
+
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+
+    #tblSaleVoucher thead th {
+        color: #fff;
+        background: #2478a9;
+        font-size: 12px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+
+    #tblSaleVoucher tbody td {
+        font-size: 14px;
+        font-weight: bold;
+        padding-right: 10px;
+        text-align: center;
+    }
+
+    .row.colnospace [class*='col-'] {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+
+    .nav-tabs a {
+        background: #e8e8e8;
+    }
+
+    .tab-pane {
+        padding: 2px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .navigation div[class*=col-md-3] {
+        width: 25%;
+        /*//padding: 2px;*/
+    }
+
+    /*.navigation div[class*=col-md-3] {
+        width: 38%;
+       padding: 2px;
+    }*/
+
+    .navigation input {
+        padding: 1px;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 32px;
+        /*margin-top: 11%;*/
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5>Audit Sale Voucher</h5>
+                </div>
+                <div class="panel-body">
+
+                    <div class="row navigation" style="margin-left: -2px;">
+                        <div class="col-md-3">
+                            From
+                            <input type="date" id="txtfromdate" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            To
+                            <input type="date" id="txttodate" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <div style="display:flex">
+                                <button id="btnGet" style="width:25%;height: 28px; margin-left:8px;margin-top:7%" class="btn btn-warning bn" onclick="GetDataAllBind()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                <button id="btnExecl" style="width:25%; height: 28px;margin-left:8px;margin-top:7%" class="btn btn-success bn" onclick="DownloadExcelAuditSale()"><i class="fa fa-file-excel-o">&nbsp;</i>Excel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row colnospace">
+                        <div class="scroll" style="margin-bottom: 5px;overflow:auto;border: 1px solid #2478a9;margin-left:18px;  margin-right:18px;">
+                            <table id="tblSaleVoucher" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">-</th>
+                                        <th colspan="4">IPD Sales</th>
+                                        <th colspan="2">OPD Sales</th>
+                                        <th colspan="6">-</th>
+
+                                    </tr>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Total Sales</th>
+
+                                        <th>Cash Sales</th>
+                                        <th>Credit Sales</th>
+                                        <th>Receivable</th>
+                                        <th>Copay</th>
+
+                                        <th>Cash Sales</th>
+                                        <th>CreditSales</th>
+
+                                        <th>Cash</th>
+                                        <th>Neft Amount</th>
+                                        <th>Swipe Card Amt</th>
+                                        <th>Vch Amount</th>
+                                        <th>Audit Total Sales1</th>
+                                        <th>Audit Total Sales2</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

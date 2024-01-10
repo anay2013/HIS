@@ -11,6 +11,13 @@ $(document).ready(function () {
     });
 
     $(document).on('click', function (e) {
+        var btnMediTemp = $('#btnMediTemp');
+        if ($(btnMediTemp).is(e.target)) {
+            //if ($('.MedicineTemplate tbody tr').length>0)
+            //$('.MedicineTemplate tbody').empty();
+            return
+        }
+
         var imgRx = $('#imgRx');
         if ($(imgRx).is(e.target)) {
             if (confirm('Are you sure to delete all Medicine?')) {
@@ -82,26 +89,15 @@ $(document).ready(function () {
         $(this).find('.editable').focus();
     });
     $(document).find('.MedicineTemplate thead').on('click', '.addmedNewRow', function () {
-        var tbody = "";
-        tbody += "<tr data-itemid='newId'>";
-        tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><label class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med1' onkeyup=Dose(this) class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med2' class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='display: flex;'><label id='med3' class='editable' contenteditable='true'></label>";
-        tbody += "<select class='editable'>";
-        tbody += "<option>Day</option>";
-        tbody += "<option>Week</option>";
-        tbody += "<option>Month</option>";
-        tbody += "</select>";
-        tbody += "</td>";
-        tbody += "<td style='padding:2px;'><label id='med4' onkeyup=InTake(this) class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med5' onkeyup=Route(this) class='editable' contenteditable='true'></label></td>";
-        tbody += "<td style='padding:2px;'><label id='med6' class='editable' contenteditable='true'></label></td>";
-        tbody += "</tr>";
-        $('.MedicineTemplate tbody').append(tbody);
-        $('.MedicineTemplate tbody tr:last').find('td:first label:first').trigger('click');
+        AddNewRow()
     });
     $('.MedicineTemplate tbody').on('keydown', 'label', function (e) {
+        if ($(this).closest('td').index() == 6) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                AddNewRow();
+            }
+        }
         if ($('input[id=IsDB]').is(':checked') && $(this).closest('td').index() == 0) {
             var val = $(this).text();
             if (val.length > 2)
@@ -115,6 +111,7 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     $(this).text(ui.item.value.split('~')[0])
+                    $(this).closest('td').next('td').find('label').focus();
                     return false;
                 }
             });
@@ -224,13 +221,19 @@ $(document).ready(function () {
     });
 
     $('#btnMediTemp').on('click', function () {
-        $('#btnSaveMediTempInfo').hide();
-        $('#btnPresMediItem').show();
-        $('#TemplateMasterLeft').hide();
-        $('#MedicineTemplate').show();
-        $('#MedicineTemplateForDB').hide();
-        $('#TemplateMasterRight').switchClass('col-md-8', 'col-md-12');
-        $('#modalPresMediTemplate').modal('show');
+        if ($('.MedicineTemplate tbody tr').length > 0) {
+            $('.MedicineTemplate tbody').empty();
+        }
+        $('.OPDPrintPreview #PrescribedMedicine').toggle();
+
+        AddNewRow();
+        //$('#btnSaveMediTempInfo').hide();
+        //$('#btnPresMediItem').show();
+        //$('#TemplateMasterLeft').hide();
+        //$('#MedicineTemplate').show();
+        //$('#MedicineTemplateForDB').hide();
+        //$('#TemplateMasterRight').switchClass('col-md-8', 'col-md-12');
+        //$('#modalPresMediTemplate').modal('show');
     })
     $('#btnCPOEMediTemp').on('click', function () {
         $('#btnSaveMediTempInfo').show();
@@ -241,8 +244,28 @@ $(document).ready(function () {
         $('#TemplateMasterRight').switchClass('col-md-12', 'col-md-8');
         $('#modalPresMediTemplate').modal('show');
     });
-
+    $('#accordion').find('.panel:eq(2)').find('a[href=#ChiefComplaint]').trigger('click');
 });
+function AddNewRow() {
+    var tbody = "";
+    tbody += "<tr data-itemid='newId'>";
+    tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><label class='editable' contenteditable='true'></label></td>";
+    tbody += "<td style='padding:2px;'><label id='med1' onkeyup=Dose(this) class='editable' contenteditable='true'></label></td>";
+    tbody += "<td style='padding:2px;'><label id='med2' class='editable' contenteditable='true'></label></td>";
+    tbody += "<td style='display: flex;'><label id='med3' class='editable' contenteditable='true'></label>";
+    tbody += "<select class='editable'>";
+    tbody += "<option>Day</option>";
+    tbody += "<option>Week</option>";
+    tbody += "<option>Month</option>";
+    tbody += "</select>";
+    tbody += "</td>";
+    tbody += "<td style='padding:2px;'><label id='med4' onkeyup=InTake(this) class='editable' contenteditable='true'></label></td>";
+    tbody += "<td style='padding:2px;'><label id='med5' onkeyup=Route(this) class='editable' contenteditable='true'></label></td>";
+    tbody += "<td style='padding:2px;'><label id='med6' class='editable' contenteditable='true'></label></td>";
+    tbody += "</tr>";
+    $('.MedicineTemplate tbody').append(tbody);
+    $('#PrescribedMedicine .MedicineTemplate tbody').find('tr:last td:first label:first').focus();
+}
 function expandMedicine() {
     $('.prescribedItem:eq(6)').toggleClass('expandMedicine');
     $('.MedicineTemplate').toggleClass('expandMedicine-divContainer');

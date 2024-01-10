@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
-
+    sessionStorage.setItem("_HISDebugPermission", "N");
+    if (window.location.pathname.toLowerCase() != '/' && window.location.pathname.toLowerCase() != '/admin/dashboard' && window.location.pathname.toLowerCase() != '/admin/login')
+        IsAuthorizedMenu();
     var Rolls = sessionStorage.getItem("Rolls");
     if (Rolls == null && Active.userId != null) {
         GetRoleAndUnitList();
@@ -24,7 +26,7 @@
         $('body').removeClass('closed-sidebar');
         $('#page-content').hide();
         if (history.pushState) {
-            var newurl = window.location.protocol + "//" + window.location.host + '?=jgkjngkrngkrnr48474jjknjrbjrknrbknkbn';
+            var newurl = window.location.protocol + "//" + window.location.host + '?mid=jgkjngkrngkrnr48474jjknjrbjrknrbknkbn';
             window.history.pushState({ path: newurl }, '', newurl);
         }
     });
@@ -44,10 +46,35 @@
         });
     });
 });
-//User Login
+function IsAuthorizedMenu() {
+    var url = config.baseUrl + "/api/ApplicationResource/InsertDeleteAllotMenu";
+    var objBO = {};
+    objBO.SubMenuId = query()['mid'];
+    objBO.EmpCode = Active.userId;
+    objBO.Logic = 'IsAuthorizedMenu';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: 'application/json;charset=utf-8',
+        dataType: "JSON",
+        success: function (data) {
+            if (window.location.pathname.split('/').pop().toLowerCase() != data.toLowerCase().replace(/\s/g, '')) {
+                sessionStorage.clear();
+                localStorage.clear();
+                window.location.href = config.rootUrl;
+            }
+
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function Authentication() {
     if (Validation()) {
         $('#btnLogin').append("<i class='fa fa fa-spinner fa-spin ml5'></i>").addClass('disabled');
+        //var url = config.baseUrl + "/api/Utility/SendWhatsAppSms";
         var url = config.baseUrl + "/api/ApplicationResource/AuthenticationQueries";
         var objBO = {};
         objBO.LoginId = $('#txtUserID').val();
@@ -61,7 +88,7 @@ function Authentication() {
             dataType: "JSON",
             success: function (data) {
                 stopLoading();
-                console.log(data);
+
                 if (data.Msg == 'Success') {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('input').val('');
@@ -71,7 +98,6 @@ function Authentication() {
                         sessionStorage.setItem('ServerTodayDate', val.ServerTodayDate);
                         window.location.href = config.rootUrl + "/Admin/Dashboard";
                         //alert(val.emp_code);
-
                     });
                 }
                 else {
@@ -108,7 +134,7 @@ function GetRoleAndUnitList() {
             if (data != '') {
                 sessionStorage.setItem("Rolls", "Loaded");
                 sessionStorage.setItem("RoleAndUnit", JSON.stringify(data));
-                debugger;
+
                 if (data != null && data.ResultSet.Table2 != null && data.ResultSet.Table2.length > 0) {
                     $.each(data.ResultSet.Table2, function (key, val) {
                         sessionStorage.removeItem('UnitId');
@@ -132,12 +158,27 @@ function GetRoleAndUnitList() {
         }
     });
 }
+function disableLoading() {
+    $(document).on({
+        ajaxStart: function () {
+            $('#LineLoader').hide();
+        },
+        ajaxStop: function () {
+            mendatory();
+            $('#LineLoader').hide();
+        }
+    });
+}
 function LoadRoleAndUnitFromLocallyStored() {
     // always get data from localy stored so that avoid server trip
     var data = JSON.parse(sessionStorage.getItem("RoleAndUnit"));
     if (data != null && data.ResultSet.Table != null) {
         $('#dashnav-btn .dashboard-buttons').append('<input type="text" id="txtSearchRoleDash" autocomplete="off" class="form-control" style="width: 97%" placeholder="Search Roles....." />');
         $.each(data.ResultSet.Table, function (key, val) {
+            if (val.role_name.includes('IT Department'))
+                sessionStorage.setItem("_HISDebugPermission", "Y");
+
+
             $("<a href ='#' data-roleid=" + val.role_id + " data-role='" + val.role_name + "' class='btn vertical-button hover-blue-alt role' title =''>" +
                 "<span class='glyph-icon icon-separator-vertical pad0A medium'>" +
                 "<i class='glyph-icon icon-dashboard opacity-80 font-size-20'></i>" +
@@ -180,13 +221,13 @@ function GetSubMenuByRoleAndLoginId(RoleId) {
     });
 }
 function LoadSubMenuFromLocallyStored() {
-    debugger;
+
     var data = JSON.parse(sessionStorage.getItem("SubMenu"));
     if (data != null) {
         $("#sidebar-menu").empty();
         $.each(data, function (key, val) {
             var sm = $.map(val.SubMenu, function (n) {
-                var li = "<li><a href='" + config.rootUrl + '/' + n.SubMenuLink + "' data-smid=" + n.SubMenuId + " title='Content boxes'><span>" + n.SubMenuName + "</span></a></li>";
+                var li = "<li><a href='" + config.rootUrl + '/' + n.SubMenuLink + "?mid=" + n.SubMenuId + "' data-smid=" + n.SubMenuId + " title='Content boxes'><span>" + n.SubMenuName + "</span></a></li>";
                 list = li.replace(/,/g, "");
                 return list;
             });
@@ -200,7 +241,7 @@ function LoadSubMenuFromLocallyStored() {
 }
 //Validation
 function Validation() {
-  
+
     var UserID = $('#txtUserID').val();
     var Password = $('#txtPassword').val();
 

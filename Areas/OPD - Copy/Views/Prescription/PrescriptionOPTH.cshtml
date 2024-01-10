@@ -1073,7 +1073,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div id="divPres">
-                                        <div class="category"><span class="title">Previous Prescription</span><button data-target="#modalOtherServices" data-toggle="modal" class="btn btn-warning btn-xs pull-right"><i class="fa fa-plus"></i></button> </div>
+                                        <div class="category"><span class="title">Previous Prescription</span><button data-target="#modalLabReport" data-toggle="modal" class="btn btn-warning btn-xs pull-right"><i class="fa fa-copy">&nbsp;</i>Lab Report</button></div>
                                         <div class="section" style="min-height:502px;max-height:502px;">
                                             <div class="" style="min-height:335px;max-height:335px;">
                                                 <div class="">
@@ -1976,6 +1976,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalLabReport" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:1325px">
+        <div class="modal-content" style="margin-top:1%;">
+            <!-- Modal Header -->
+            <div class="modal-header bg-success" style="background: #007792;color:#fff;padding: 1px 10px;">
+                <h4 class="modal-title">
+                    Lab Report
+                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+                </h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @Html.Partial("_LabReport")
             </div>
         </div>
     </div>

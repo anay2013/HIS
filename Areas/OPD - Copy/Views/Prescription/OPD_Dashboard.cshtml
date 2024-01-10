@@ -6,10 +6,9 @@
 <link href="~/Content/css/MenuMaster.css?his-version-1.0" rel="stylesheet" />
 <script src="~/Areas/OPD/JsModule/OPDDashboard.js?1.0"></script>
 <style>
-    #TemplateMasterRight input, select {
-        border-radius: 0 !important;
+    #TemplateMasterRight input,select{
+        border-radius:0 !important;
     }
-
     div#skill .circle {
         position: relative;
         height: 22px;
@@ -98,11 +97,9 @@
         /*padding: 0 13px;*/
         border: 1px solid #000;
     }
-
     .bottom-tab {
         height: max-content;
     }
-
     .OPDPrintPreview-header {
         padding: 0 8px;
         margin-top: -17px;
@@ -273,18 +270,16 @@
         font-size: 15px;
     }
 
-    .fa-check-circle-o {
+   .fa-check-circle-o {
         margin-left: 3px;
     }
-
     .contentCopy {
         color: #b7510d;
         cursor: pointer;
-        padding: 5px 0;
+        padding:5px 0;
         font-size: 15px;
     }
-
-    .currentVisit {
+        .currentVisit {
         color: #b7510d;
         cursor: pointer;
         padding: 0 5px;
@@ -294,7 +289,6 @@
         .currentVisit:hover {
             color: #484343;
         }
-
     .copyVisit {
         color: #a99604;
         cursor: pointer;
@@ -305,7 +299,6 @@
         .copyVisit:hover {
             color: #484343;
         }
-
     .form-control {
         border: 1px solid #d8d1d1;
     }
@@ -372,13 +365,11 @@
         -moz-user-select: none; /* mozilla browsers */
         -ms-user-select: none; /* IE10+ */
     }
-
     textarea.form-control {
         font-size: 12px;
         line-height: 1.6em;
         padding: 8px 12px;
     }
-
     #LaboratoryRadiologyItems span, #VitalSignItems span, #PrescribedProcedureItems span {
         user-select: none;
         height: 14px;
@@ -431,7 +422,7 @@
         display: none;
         background: #e40000;
         color: #fff;
-        border-radius: 34px;
+        border-radius: 34px; 
         width: 10px;
         height: 10px;
         font-size: 7px;
@@ -502,9 +493,8 @@
             .select-editable select:focus, .select-editable input:focus {
                 outline: none;
             }
-
     .btnGroup button {
-        width: max-content;
+        width: max-content;        
     }
 
     .btnRound {
@@ -512,8 +502,9 @@
         border-right: 1px solid #069783 !important;
         width: 8% !important;
     }
+
 </style>
-<div id="page-content">
+<div id="page-content">   
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -554,7 +545,7 @@
                                     <button class="btn btn-primary btn-xs" style="margin-right:2%" id="btnOutApp" onclick="InOutMarking()">Out</button>
                                     <button class="btn btn-danger btn-xs" style="margin-right:2%" id="btnCloseApp" onclick="CloseAppointment()">Close</button>
 
-                                    <button class="btn btn-primary btn-xs btnRound" id="btnSaveCounter"><div id='skill'><div class='circle'></div></div><span id="txtSubmitCounter"></span></button>
+                                    <button class="btn btn-primary btn-xs btnRound"  id="btnSaveCounter"><div id='skill'><div class='circle'></div></div><span id="txtSubmitCounter"></span></button>
                                     <button class="btn btn-primary btn-xs" style="margin-right:2%" id="btnSaveApp" onclick="InsertItemsForPres()">Save</button>
                                     <button class="btn btn-warning btn-xs" id="btnNextFollowUp" data-target="#modalNextFollowUp" data-toggle="modal">Next Follow-Up Date</button>
                                 </div>
@@ -576,8 +567,7 @@
                     <button onclick="loadBody('_GyneeHistory')"><i class="fa fa-child"></i>Gynee History</button>
                     <button onclick="loadBody('_DiabiaticChart')"><i class="fa fa-area-chart"></i>Diabiatic Chart</button>
                     <button onclick="loadBody('_FinalICDDiagnosis')"><i class="fa fa-medkit"></i>Final ICD Diagnosis</button>
-                    <button onclick="loadBody('_ViewLabReportOPD')"><i class="fa fa-medkit"></i>View Lab Report OPD</button>
-                    <button onclick="loadBody('_ViewLabReportIPD')"><i class="fa fa-medkit"></i>View Lab Report IPD</button>
+                    <button onclick="loadBody('_LabReport')"><i class="fa fa-medkit"></i>View Lab Report</button>                 
                     @*<button onclick="loadBody('_FollowUp')">Follow Up</button>*@
                     <button onclick="loadBody('_ViewUplaodDocument')"><i class="fa fa-medkit"></i>View Uplaod Document</button>
                 </div>

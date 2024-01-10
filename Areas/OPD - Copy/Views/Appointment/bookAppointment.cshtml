@@ -1,9 +1,11 @@
 ﻿
 @{
+    /**/
+
     ViewBag.Title = "bookAppointment";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/OPD/JsModule/BookAppointment.js?his-version-1.0"></script>
+<script src="~/Areas/OPD/JsModule/BookAppointment.js"></script>
 <style>
     .paymentSection span:nth-child(4) {
         border: 1px solid #97d2ff;
@@ -195,11 +197,13 @@
         /* width: 25px; */
         white-space: nowrap;
     }
-    .lock{
-        pointer-events:none;
-        opacity:0.5;
+
+    .lock {
+        pointer-events: none;
+        opacity: 0.5;
     }
-    .employeeDiscount {      
+
+    .employeeDiscount {
         border: 1px solid #d5d2d2;
         margin: 13px 10px 11px 10px;
         border-radius: 3px;
@@ -263,7 +267,7 @@
                                                     <div class="form-group flex">
                                                         <span style="width:27%">Doctor</span>
                                                         <span style="width:3%">:</span>
-                                                        <div style="width:58%">
+                                                        <div style="width:58%" class="doctor">
                                                             <select id="ddlDoctor" class="form-control border-imp">
                                                                 <option>Select</option>
                                                             </select>

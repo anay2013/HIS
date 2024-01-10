@@ -13,9 +13,11 @@ $(document).ready(function () {
     $('#tblBillingInfo thead').on('change', 'input', function () {
         var val = parseFloat($(this).val()) || 0;
         $(this).parents('table').find('tbody').find('input').val(val);
+        CalculateDiscount();
     }).on('keyup', 'input', function () {
         var val = parseFloat($(this).val()) || 0;
         $(this).parents('table').find('tbody').find('input').val(val);
+        CalculateDiscount();
     });
     $('#tblItemsInfo thead').on('change', 'input[type=number]', function () {
         var val = parseFloat($(this).val()) || 0;
@@ -124,26 +126,26 @@ function GetDoctor() {
     });
 }
 function CalculateDiscount(elem) {
-    //RestrictMaxVal($(elem));
-    //var totalAdlDiscount = 0;
-    //$('#tblBillingInfo tbody tr').each(function () {
-    //    var grossAmt = parseFloat($(this).find('td').eq(4).text());
-    //    var panelDiscount = parseFloat($(this).find('td').eq(5).text());
-    //    var adlPerc = parseFloat($(this).find('td').eq(6).find('input').val());
-    //    var adlDiscount = (grossAmt - panelDiscount) * adlPerc / 100;
-    //    $(this).find('td').eq(7).text(adlDiscount.toFixed(0));
-    //    var netAmount = grossAmt - (panelDiscount + adlDiscount);
-    //    $(this).find('td').eq(8).text(netAmount.toFixed(0));
-    //    totalAdlDiscount += adlDiscount;
-    //});
-    //$('#txtAdlDiscount').val(totalAdlDiscount.toFixed(0));
-    //var totalDiscount = parseFloat($('#txtPDiscount').val()) + totalAdlDiscount;
-    //var netAmount = parseFloat($('#txtGrossAmt').val()) - totalDiscount;
-    //var netAmount = parseFloat($('#txtGrossAmt').val()) - totalDiscount;
-    //var balanceAmount = netAmount - parseFloat($('#txtAdvanceAmt').val());
-    //$('#txtDiscount').val(totalDiscount.toFixed(0));
-    //$('#txtNetAmt').val(netAmount.toFixed(0));
-    //$('#txtBalanceAmt').val(balanceAmount.toFixed(0));
+    RestrictMaxVal($(elem));
+    var totalAdlDiscount = 0;
+    $('#tblBillingInfo tbody tr').each(function () {
+        var grossAmt = parseFloat($(this).find('td').eq(4).text());
+        var panelDiscount = parseFloat($(this).find('td').eq(5).text());
+        var adlPerc = parseFloat($(this).find('td').eq(6).find('input').val());
+        var adlDiscount = (grossAmt - panelDiscount) * adlPerc / 100;
+        $(this).find('td').eq(7).text(adlDiscount.toFixed(0));
+        var netAmount = grossAmt - (panelDiscount + adlDiscount);
+        $(this).find('td').eq(8).text(netAmount.toFixed(0));
+        totalAdlDiscount += adlDiscount;
+    });
+    $('#txtAdlDiscount').val(totalAdlDiscount.toFixed(0));
+    var totalDiscount = parseFloat($('#txtPDiscount').val()) + totalAdlDiscount;
+    var netAmount = parseFloat($('#txtGrossAmt').val()) - totalDiscount;
+    var netAmount = parseFloat($('#txtGrossAmt').val()) - totalDiscount;
+    var balanceAmount = netAmount - parseFloat($('#txtAdvanceAmt').val());
+    $('#txtDiscount').val(totalDiscount.toFixed(0));
+    $('#txtNetAmt').val(netAmount.toFixed(0));
+    $('#txtBalanceAmt').val(balanceAmount.toFixed(0));
 }
 function CalculateItem(val, elem, logic) {
     var _qty = 0; var _Rate = 0; var _panelDisPerc = 0; var _panelDis = 0; var _adlDisPerc = 0; var _adlDis = 0; var _netAmount = 0;
@@ -307,15 +309,14 @@ function SummarisedBilling() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
-            if (Object.keys(data.ResultSet).length) {       
+            if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#txtGrossAmt').val(val.GrossAmount);
                         $('#txtPDiscount').val(val.panel_discount);
                         $('#txtAdlDiscount').val(val.adl_discount);
                         $('#txtDiscount').val(val.Discount);
-                        $('#txtTax').val(val.Tax);
+                        $('#txtDiscount').val(val.Tax);
                         $('#txtNetAmt').val(val.NetAmount);
                         $('#txtAdvanceAmt').val(val.AdvanceAmount);
                         $('#txtBalanceAmt').val(val.BalanceAmount);
@@ -341,7 +342,6 @@ function SummarisedBilling() {
                         tbody += "<button onclick=Calculation() class='btn btn-primary btn-xs btnAdlDis'>Calculate</button>";
                         tbody += "</td>";
                         tbody += "<td class='text-right'>" + val.adl_discount.toFixed(2) + "</td>";
-                        tbody += "<td class='text-right'>" + val.Tax.toFixed(2) + "</td>";
                         tbody += "<td class='text-right'>" + val.NetAmount.toFixed(2) + "</td>";
                         tbody += "<td><button onclick=selectRow(this);ItemsInfo('" + val.CatID + "') style='height: 15px;line-height:0;' class='btn btn-warning btn-xs'><i class='fa fa-eye'>&nbsp;</i>View</button></td>";
                         tbody += "</tr>";

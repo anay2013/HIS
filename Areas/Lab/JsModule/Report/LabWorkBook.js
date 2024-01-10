@@ -17,17 +17,58 @@
                 $(this).find('input:checkbox').prop('checked', $(pt1).is(':checked'));
             })
         }
+   
         //if ($(this).parents('div').hasClass('testCategory'))
         //    $(this).closest('tr.g').nextUntil('tr.g').css
     });
+    LoadTestCategory();
 });
+function LoadTestCategory() {
+    $("#ddlDepartment").append($("<option></option>").val("ALL").html("ALL")).select2();
+    var url = config.baseUrl + "/api/Lab/Lab_ReportPrintingQueries";
+    var objBO = {};
+    objBO.PanelId = '-';
+    objBO.DoctorId = '-';
+    objBO.VisitNo = '-';
+    objBO.TestCategory = $('#ddlDepartment option:selected').val();
+    objBO.TestIds = '-';
+    objBO.from = $('#txtFrom').val();
+    objBO.to = $('#txtTo').val();
+    objBO.Prm1 = '-';
+    objBO.Prm2 = '-';
+    objBO.Logic = "LoadTestCategory";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, value) {
+                        $("#ddlDepartment").append($("<option></option>").val(value.SubCatID).html(value.SubCatName));
+                    });
+                }
+            }
+            else {
+                alert('No Data Found')
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+
+
 function GetTestBySubCategory() {
     $("#ddlTest").append($("<option></option>").val("ALL").html("ALL"));
     var url = config.baseUrl + "/api/Lab/Lab_ReportPrintingQueries";
     var objBO = {};
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
-    objBO.SubCatId = $('#ddlCategory option:selected').val();
+    objBO.SubCatId = $('#ddlDepartment option:selected').val();
     objBO.Logic = "GetTestBySubCatId";
     $.ajax({
         method: "POST",
@@ -59,7 +100,7 @@ function ReportInfo() {
     objBO.PanelId = '-';
     objBO.DoctorId = '-';
     objBO.VisitNo = '-';
-    objBO.TestCategory = '-';
+    objBO.TestCategory = $('#ddlDepartment option:selected').val();
     objBO.TestIds = '-';
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();

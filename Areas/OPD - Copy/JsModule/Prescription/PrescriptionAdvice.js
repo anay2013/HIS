@@ -173,7 +173,10 @@ $(document).ready(function () {
         $(this).prev('span').remove();
         $(this).remove();
     });
-    $('.OPDPrintPreview .prescribedItem').on('click', 'span', function () {
+    $('.OPDPrintPreview .prescribedItem').on('click', 'span', function (e) {
+        if ($(this).hasClass('fromtxt') || $(this).attr('id') == 'fromtxt')
+            return
+
         var itemid = $(this).attr('id');
         var itemName = $(this).text();
         $(this).replaceWith('<input type="text" value="' + itemName + '"/>');

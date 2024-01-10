@@ -1193,7 +1193,7 @@ function SetSeqOfObservation() {
         $("#tblObservationDetails tbody tr[data-autoid]").each(function () {
             SeqInfo.push({
                 'AutoId': $(this).data('autoid'),
-                'SeqNo': $(this).find('td:eq(1)').text()
+                'SeqNo': $(this).index() + 1
             })
         });
         objBO.investcode = '-';
@@ -1325,8 +1325,6 @@ function DeleteTestComment() {
         }
     });
 }
-
-
 
 function ViewDefaultValues() {
     $("#myDefaultValueModal").modal('show');

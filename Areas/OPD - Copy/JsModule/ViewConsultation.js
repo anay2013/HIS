@@ -128,7 +128,7 @@ function ViewConsultation() {
                         tbody += "<td>" + total + "</td>";
                         tbody += "<td>" + val.app_no + "</td>";
                         tbody += "<td style='display:none'>" + val.DoctorId + "</td>";
-                        tbody += "<td>" + val.patient_name + "</td>";
+                        tbody += "<td>" + val.patient_name + "</td>";                    
                         tbody += "<td>" + val.AppDate + "</td>";
                         tbody += "<td>" + val.DoctorName + "</td>";
                         tbody += "<td style='background:#fff;'>";
@@ -153,7 +153,7 @@ function ViewConsultation() {
                         tbody1 += "<tr>";
                         tbody1 += "<td>" + total + "</td>";
                         tbody1 += "<td>" + val.app_no + "</td>";
-                        tbody1 += "<td>" + val.patient_name + "</td>";
+                        tbody1 += "<td>" + val.patient_name + "</td>";                    
                         tbody1 += "<td>" + val.AppDate + "</td>";
                         tbody1 += "<td>" + val.DoctorName + "</td>";
                         tbody1 += "<td style='background:#fff;'>";
@@ -178,7 +178,7 @@ function ViewConsultation() {
                         tbody2 += "<tr>";
                         tbody2 += "<td>" + total + "</td>";
                         tbody2 += "<td>" + val.app_no + "</td>";
-                        tbody2 += "<td>" + val.patient_name + "</td>";
+                        tbody2 += "<td>" + val.patient_name + "</td>";                    
                         tbody2 += "<td>" + val.AppDate + "</td>";
                         tbody2 += "<td>" + val.DoctorName + "</td>";
                         tbody2 += "<td style='background:#fff;'>";

@@ -631,8 +631,7 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#PrescribedMedicine" class="collapsed" aria-expanded="false">
                                 <span class="circle"><i class="fa fa-plus-circle"></i></span>Prescribed Medicine
                             </a>
-                            <span id="btnMediTemp" class="btn-rx pull-right"><img src="~/Content/logo/rx.png" style="width:12px;" />+</span>&nbsp;&nbsp;
-                            <span id="btnInitMediTemp" onclick=" $('.OPDPrintPreview #PrescribedMedicine').toggle();" class="btn-rx pull-right">>></span>
+                            <span class="btn-rx pull-right"><img src="~/Content/logo/rx.png" id="btnMediTemp" style="width:12px;" />+</span>&nbsp;&nbsp;
                         </h4>
                     </div>
                     <div id="PrescribedMedicine" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
@@ -782,27 +781,29 @@
                             <div class="row">
                                 <div class="col-md-3 OPDPrintPreview-body-left">
                                     <br />
+                                    <div class="prescribedItem" id="AllergiesItems">
+                                        <TemplateGroup id="T00006">Allergies : </TemplateGroup><br />
+                                    </div>
                                     <div class="prescribedItem" id="VitalSignItems" style="display:block">
                                         <TemplateGroup id="VitalSign"><b>Vital Sign :</b> </TemplateGroup><br />
-                                    </div>
-                                    <div class="prescribedItem" id="LaboratoryRadiologyItems">
-                                        <TemplateGroup id="T00009"><b>Investigation : </b></TemplateGroup><br />
                                     </div>
                                     <div class="prescribedItem" id="PrescribedProcedureItems">
                                         <TemplateGroup id="T00010"><b>Procedure : </b></TemplateGroup><br />
                                     </div>
-
+                                    <div class="prescribedItem" id="LaboratoryRadiologyItems">
+                                        <TemplateGroup id="T00009"><b>Investigation : </b></TemplateGroup><br />
+                                    </div>
                                 </div>
                                 <div class="col-md-9 OPDPrintPreview-body-right">
                                     <br />
-                                    <div class="prescribedItem" id="ProvisionalDiagnosisItems">
-                                        <TemplateGroup id="T00001">Provisional Diagnosis : </TemplateGroup><br />
-                                    </div>
                                     <div class="prescribedItem" id="ChiefComplaintItems">
                                         <TemplateGroup id="T00002">Chief Complaint : </TemplateGroup><br />
                                     </div>
-                                    <div class="prescribedItem" id="SignSymptomsItems">
-                                        <TemplateGroup id="T00003">Sign Symptoms : </TemplateGroup><br />
+                                    <div class="prescribedItem" id="PastMedicationItems">
+                                        <TemplateGroup id="T00007">Past Medication : </TemplateGroup><br />
+                                    </div>
+                                    <div class="prescribedItem" id="ProvisionalDiagnosisItems">
+                                        <TemplateGroup id="T00001">Provisional Diagnosis : </TemplateGroup><br />
                                     </div>
                                     <div class="prescribedItem" id="PrescribedMedicine" style="border: 1px solid #ddd;padding:5px">
 
@@ -826,23 +827,20 @@
                                             <tbody></tbody>
                                         </table>
                                     </div>
-                                    <div class="prescribedItem" id="VaccinationStatusItems">
-                                        <TemplateGroup id="T00004">Vaccination Status : </TemplateGroup><br />
-                                    </div>
                                     <div class="prescribedItem" id="DoctorNotesItems">
                                         <TemplateGroup id="T00005">Doctor Notes : </TemplateGroup><br />
                                     </div>
-                                    <div class="prescribedItem" id="AllergiesItems">
-                                        <TemplateGroup id="T00006">Allergies : </TemplateGroup><br />
-                                    </div>
-                                    <div class="prescribedItem" id="HistoryItems">
-                                        <TemplateGroup id="T00015">History : </TemplateGroup><br />
-                                    </div>
-                                    <div class="prescribedItem" id="PastMedicationItems">
-                                        <TemplateGroup id="T00007">Past Medication : </TemplateGroup><br />
+                                    <div class="prescribedItem" id="SignSymptomsItems">
+                                        <TemplateGroup id="T00003">Sign Symptoms : </TemplateGroup><br />
                                     </div>
                                     <div class="prescribedItem" id="DoctorAdviceItems">
                                         <TemplateGroup id="T00008">Doctor Advice : </TemplateGroup><br />
+                                    </div>
+                                    <div class="prescribedItem" id="VaccinationStatusItems">
+                                        <TemplateGroup id="T00004">Vaccination Status : </TemplateGroup><br />
+                                    </div>
+                                    <div class="prescribedItem" id="HistoryItems">
+                                        <TemplateGroup id="T00015">History : </TemplateGroup><br />
                                     </div>
                                     <div class="OPDPrintPreview-body-right-doctor">
                                         <div class="doctorName" id="doctorName"></div>

@@ -25,7 +25,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             obj.LabCode = "-";
             obj.IpOpType = "-";
             obj.ReportStatus = "-";
-            obj.SubCat = SubCat;
+            obj.SubCat = TestIds;
             obj.VisitNo = visitNo;
             obj.BarccodeNo = "-";
             obj.TestCategory = "-";

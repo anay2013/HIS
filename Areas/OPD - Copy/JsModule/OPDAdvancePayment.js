@@ -139,7 +139,7 @@ function OnLoadQueries() {
                     $('#tblPaymentDetails tbody .BankName').empty().append($('<option></option>')).change();
                     $.each(data.ResultSet.Table3, function (key, val) {
                         $('#tblPaymentDetails tbody .BankName').append($('<option></option>').val(val.BankId).html(val.BankName));
-                    });
+                    }); 
                 }
                 if (Object.keys(data.ResultSet.Table4).length) {
                     $('#tblPaymentDetails tbody .MachineName').empty().append($('<option value="Select">Select</option>')).trigger('change.select2');

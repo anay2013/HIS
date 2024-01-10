@@ -59,7 +59,6 @@ function GetPatient() {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table1).length) {
                     $.each(data.ResultSet.Table1, function (key, val) {
-
                         $('#ddlTitle').val(val.Title).change();
                         $('#txtFirstName').val(val.FirstName);
                         $('#txtLastName').val(val.LastName);
@@ -266,6 +265,7 @@ function GetCountry() {
         }
     });
 }
+
 function Opd_EditPatientDetails(elem) {
     if (_UHID == '') {
         alert('UHID Not Found');
@@ -391,4 +391,38 @@ function readURL(input) {
         var formData = new FormData();
         var files = $('#uploadFile').get(0).files;
     }
+}
+function UploadPatient() {
+    var url = config.baseUrl + "/api/Prescription/UploadPatientExternalDocument";
+    var objBO = {};
+    objBO.fileExtention = $('input[type=file]').val().split('.').pop().toLowerCase();
+    objBO.fileType = 'application/pdf';
+    objBO.UHID = 'CH/19/030649';
+    objBO.TemplateType = 'OPD';
+    objBO.hasfile = 'Y';
+    objBO.TemplateName = 'testing';
+    objBO.caseType = 'pdf';
+    objBO.DoctorId = 'DR00033';
+    objBO.app_no = 'AP-2324-000090';
+    objBO.Base64String = $('#imgFile').attr('src');
+    objBO.Logic = 'UploadPatientExternalDoc';
+    var UploadDocumentInfo = new XMLHttpRequest();
+    var data = new FormData();
+    data.append('obj', JSON.stringify(objBO));
+    data.append('ImageByte', objBO.Base64String);
+    UploadDocumentInfo.onreadystatechange = function () {
+        if (UploadDocumentInfo.status) {
+            if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {
+                var json = JSON.parse(UploadDocumentInfo.responseText);
+                if (json.includes('Success')) {
+                    alert('Successfully Uploaded..!');
+                }
+                else {
+                    alert(json);
+                }
+            }
+        }
+    }
+    UploadDocumentInfo.open('POST', url, true);
+    UploadDocumentInfo.send(data);
 }

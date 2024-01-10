@@ -24,5 +24,10 @@ namespace MediSoftTech_HIS.Areas.Masters.Controllers
         {
             return View();
         }
+
+        public ActionResult DisplayMaster()
+        {
+            return View();
+        }
     }
 }

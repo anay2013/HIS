@@ -260,8 +260,8 @@ function RowSequence(tables) {
             stop: function (e, ui) {
                 ui.item.removeClass("selected");
                 $(this).find("tr").each(function (index) {
-                    if (index > 0) {
-                        $(this).find("td").eq(1).html(index);
+                    if (index >-1) {
+                        $(this).find("td").eq(1).html(index+1);
                     }
                 });
             }

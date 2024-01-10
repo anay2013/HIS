@@ -1,0 +1,183 @@
+﻿<script src="~/Areas/OPD/JsModule/_LabReport.js"></script>
+<style>
+    input[type=text] {
+        height: 18px;
+    }
+    .btnPrint {
+        margin-top: -8px;
+    }
+
+    .Approved {
+        color: #2e932e;
+    }
+
+    .Partial {
+        color: #bb970f;
+    }
+
+    .ApprovedGroup {
+        background: #d9f7d9 !important;
+    }
+
+    .PartialGroup {
+        background: #ecedb7 !important;
+    }
+
+    table td {
+        border: none !important;
+    }
+
+    table {
+        border: none !important;
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+    .testCategory {
+        padding: 0px 3px;
+        background: #ffebeb;
+        border-radius: 3px;
+        width: max-content;
+        height: 19px;
+        border: 1px solid #c5c5c5;
+        margin: 2px 0px 2px 0px;
+        display: flex;
+        line-height: 19px;
+    }
+        /*.btnPrint{
+        height: 19px;
+        margin-top: -6px;
+        line-height: 0;
+    }*/
+        .testCategory input[type=checkbox] {
+            margin: 0
+        }
+
+        .testCategory label:nth-child(2) {
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            padding: 0 3px;
+            margin: 0 5px;
+            width: 105px;
+            cursor: pointer;
+        }
+
+            .testCategory label:nth-child(2):hover {
+                color: #1e6c24;
+            }
+
+    .testGroup {
+        border-radius: 3px;
+        width: max-content;
+        height: 16px;
+        margin: -7px 0px 7px 0px;
+    }
+
+        .testGroup label {
+            border-left: 1px solid #ddd;
+            padding: 0 3px;
+            margin: 0 5px;
+            width: max-content;
+            cursor: pointer;
+        }
+
+            .testGroup label:hover {
+                color: #1e6c24;
+            }
+
+    .row.colnospace [class*='col-'] {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+        .flex input[type=file] {
+            width: 166px;
+        }
+
+    .colnospace .col-md-2 {
+        width: 13%;
+    }
+
+    .Vital-title {
+        padding-bottom: 5px;
+        border: 1px solid #404040;
+        text-align: center;
+        color: #000;
+        font-family: Verdana, Arial, sans-serif;
+        font-weight: bold;
+    }
+
+    .Vital-body {
+        margin-top: 2px;
+        border: 1px solid #404040;
+        font-family: Verdana, Arial, sans-serif;
+    }
+
+    .btn-flat {
+        border-radius: 2px;
+        border: none;
+        padding: 0;
+    }
+
+    #tblVitalSign thead th {
+        background: #0076d0;
+        color: #fff;
+    }
+
+    .panel-body {
+        background: url(http://192.168.4.10/HIS/Images/patter.jpg);
+    }
+</style>
+<div style="padding:0 2px">
+    <div class="Vital-title">
+        <span>Lab Report</span>
+    </div>
+    <div class="Vital-body">
+        <div class="panel">  
+            <div class="panel-body">
+                <div class="row colnospace" style="background-color:#bddeff;margin-bottom:2px;height:62px;padding:5px;border-radius: 2px;">
+                    <div class="col-md-2">
+                        IPOP Type
+                        <select id="ddlIPOPType" class="form-control">
+                            <option>OPD</option>
+                            <option>IPD</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        Department
+                        <select id="ddlDepartment" class="form-control"></select>
+                    </div>
+                    <div class="col-md-4">
+                        Select<br />
+                        <label><input type="radio" name="reportBy" checked value="OPD-IPD:TestCategoryWise" />&nbsp;Department</label>
+                        <label><input type="radio" name="reportBy" value="OPD-IPD:TestWiseReport" />&nbsp;Test Wise</label>
+                        <button id="btnSearch2" onclick="ReportInfo()" style="width: 24%;height: 26px;margin-left: 10px;" class="btn btn-success pull-right"><i class="fa fa-search">&nbsp;</i>Search</button>
+                    </div>
+                </div>
+                <div class="row colnospace">
+                    <div class="scroll" style="height:400px;overflow:auto;border:1px solid #2478a9">
+                        <table id="tblReport" class="table table-bordered" style="font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th>UHID</th>
+                                    <th>Visit No</th>
+                                    <th>Date</th>
+                                    <th>Patient Name</th>
+                                    <th>Age Info</th>
+                                    <th>Doctor Name</th>
+                                    <th>Referral Name</th>
+                                    <th>Department/Test</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

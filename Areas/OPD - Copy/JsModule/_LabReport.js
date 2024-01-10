@@ -1,7 +1,4 @@
-﻿$(document).ready(function () {
-    FillCurrentDate("txtFrom");
-    FillCurrentDate("txtTo");
-    CloseSidebar();
+﻿$(document).ready(function () { 
     $("#tblReport tbody").on('change', 'input:checkbox', function () {
         if ($(this).closest('tr').hasClass('pt')) {
             $(this).parents('table').find('tbody').find('input:checkbox').not($(this)).prop('checked', false);
@@ -22,17 +19,16 @@
     LoadTestCategory();
 });
 function LoadTestCategory() {
-
     $("#ddlDepartment").append($("<option></option>").val("ALL").html("ALL")).select2();
     var url = config.baseUrl + "/api/Lab/Lab_ReportPrintingQueries";
     var objBO = {};
     objBO.PanelId = '-';
     objBO.DoctorId = '-';
     objBO.VisitNo = '-';
-    objBO.TestCategory = $('#ddlDepartment option:selected').val();
+    objBO.TestCategory = '-';
     objBO.TestIds = '-';
-    objBO.from = $('#txtFrom').val();
-    objBO.to = $('#txtTo').val();
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
     objBO.Prm1 = '-';
     objBO.Prm2 = '-';
     objBO.Logic = "LoadTestCategory";
@@ -43,6 +39,7 @@ function LoadTestCategory() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
+            console.log(data)
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, value) {
@@ -66,12 +63,12 @@ function ReportInfo() {
     var objBO = {};
     objBO.PanelId = '-';
     objBO.DoctorId = '-';
-    objBO.VisitNo = '-';
+    objBO.VisitNo = ($('#txtHeaderUHID').text() == '') ? $('#tblAdviceHeader tbody tr:eq(1)').find('td:eq(5)').text() : $('#txtHeaderUHID').text();
     objBO.TestCategory = $('#ddlDepartment option:selected').val();
     objBO.TestIds = '-';
-    objBO.from = $('#txtFrom').val();
-    objBO.to = $('#txtTo').val();
-    objBO.Prm1 = '-';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = $('#ddlIPOPType option:selected').text();
     objBO.Prm2 = '-';
     objBO.Logic = $('input[name=reportBy]:checked').val();
     $.ajax({
@@ -84,41 +81,6 @@ function ReportInfo() {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     ReportList(data, objBO.Logic);
-                }
-            }
-            else {
-                alert('No Data Found')
-            }
-        },
-        error: function (response) {
-            alert('Server Error...!');
-        }
-    });
-}
-function ReportInfoBySearchKey() {
-    $("#tblReport tbody").empty();
-    var url = config.baseUrl + "/api/Lab/Lab_ReportPrintingQueries";
-    var objBO = {};
-    objBO.PanelId = '-';
-    objBO.DoctorId = '-';
-    objBO.VisitNo = '-';
-    objBO.TestCategory = '-';
-    objBO.TestIds = '-';
-    objBO.from = $('#txtFrom').val();
-    objBO.to = $('#txtTo').val();
-    objBO.Prm1 = $('#txtSeachValue').val();
-    objBO.Prm2 = $('#ddlSeachBy option:selected').val();
-    objBO.Logic = 'ByInputId';
-    $.ajax({
-        method: "POST",
-        url: url,
-        data: JSON.stringify(objBO),
-        dataType: "json",
-        contentType: "application/json;charset=utf-8",
-        success: function (data) {
-            if (Object.keys(data.ResultSet).length > 0) {
-                if (Object.keys(data.ResultSet.Table).length > 0) {
-                    ReportList(data, "TestWiseReport");
                 }
             }
             else {
@@ -144,12 +106,11 @@ function ReportList(data, Logic) {
             tbody += "<td>" + val.ageInfo + "</td>";
             tbody += "<td>" + val.DoctorName + "</td>";
             tbody += "<td>" + val.ref_name + "</td>";
-            tbody += "<td><input type='checkbox' name='pgroup'/>&nbsp;Select All&nbsp;&nbsp;<button onclick=PrintInHouse(this) class='btn btn-success btnPrint btn-xs'>Print In-House</button>&nbsp;&nbsp;<button onclick=PrintOutSource(this) class='btn btn-warning btnPrint btn-xs'>Print Out Source</button></td>";
-            tbody += "<td></td>";
+            tbody += "<td><input type='checkbox' name='pgroup'/>&nbsp;Select All&nbsp;&nbsp;<button onclick=Print(this) class='btn btn-success btnPrint btn-xs'>Print</button></td>";
             tbody += "</tr>";
             visitNo = val.VisitNo;
         }
-        if (Logic == 'TestCategoryWise') {
+        if (Logic == 'OPD-IPD:TestCategoryWise') {
             tbody += "<tr>";
             tbody += "<td colspan='7'></td>";
             tbody += "<td>";
@@ -159,7 +120,6 @@ function ReportList(data, Logic) {
             tbody += "<label>" + val.TApprCount + '/' + val.TCount + "</label>";
             tbody += "</div>";
             tbody += "</td>";
-            tbody += "<td>" + val.IsLocalTest + "</td>";
             tbody += "</tr>";
         }
         else {
@@ -173,11 +133,10 @@ function ReportList(data, Logic) {
                 tbody += "<label>" + val.TApprCount + '/' + val.TCount + "</label>";
                 tbody += "</div>";
                 tbody += "</td>";
-                tbody += "<td>" + val.IsLocalTest + "</td>";
                 tbody += "</tr>";
                 testCategory = val.TestCat2;
             }
-            tbody += "<tr class=" + val.IsLocalTest + ">";
+            tbody += "<tr>";
             tbody += "<td colspan='7'></td>";
             tbody += "<td>";
             tbody += "<div class='testGroup'>";
@@ -185,54 +144,29 @@ function ReportList(data, Logic) {
             tbody += "<label class=" + val.RepStatus + ">" + val.TestName + "</label>";
             tbody += "</div>";
             tbody += "</td>";
-            tbody += "<td>" + val.IsLocalTest + "</td>";
             tbody += "</tr>";
         }
     });
     $("#tblReport tbody").append(tbody);
 }
 
-function PrintInHouse(elem) {
+function Print(elem) {
     var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
     var SubCat = 'ALL';
     var TestIds = [];
-    if ($('input[name=reportBy]:checked').val() == 'TestWiseReport') {
+    if ($('input[name=reportBy]:checked').val() == 'OPD-IPD:TestWiseReport') {
         TestIds = [];
-        $("#tblReport tbody tr:not(.g,.pt).In-House input:checkbox:checked").each(function () {
+        $("#tblReport tbody tr:not(.g,.pt) input:checkbox:checked").each(function () {
             TestIds.push($(this).data('ids'));
         });
     }
-    if ($('input[name=reportBy]:checked').val() == 'TestCategoryWise') {
+    if ($('input[name=reportBy]:checked').val() == 'OPD-IPD:TestCategoryWise') {
         TestIds = [];
-        $("#tblReport tbody tr:not(.pt).In-House input:checkbox:checked").each(function () {
+        $("#tblReport tbody tr:not(.pt) input:checkbox:checked").each(function () {
             TestIds.push($(this).data('ids'));
         });
     }
     var Logic = 'ByFinalPrint';
-    var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Source=In-House&Logic=" + Logic;
-    window.open(url, '_blank');
-}
-//function  PrintOutSource(elem) {
-//    var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
-//    var url = config.rootUrl + "/Lab/Print/PrintLabReportFromLIS?visitNo=" + visitNo;
-//    window.open(url, '_blank');
-//}
-function PrintOutSource(elem) {
-    var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
-    var TestIds = [];
-    if ($('input[name=reportBy]:checked').val() == 'TestWiseReport') {
-        TestIds = [];
-        $("#tblReport tbody tr:not(.g,.pt).In-House input:checkbox:checked").each(function () {
-            TestIds.push($(this).data('ids'));
-        });
-    }
-    if ($('input[name=reportBy]:checked').val() == 'TestCategoryWise') {
-        TestIds = [];
-        $("#tblReport tbody tr:not(.pt).In-House input:checkbox:checked").each(function () {
-            TestIds.push($(this).data('ids'));
-        });
-    }
-    var Logic = 'ByITDose';
-    var url = config.rootUrl + "/Lab/Print/DownloadLISReport?VisitNo=" + visitNo + "&TestIds=" + TestIds;
+    var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Logic=" + Logic;
     window.open(url, '_blank');
 }

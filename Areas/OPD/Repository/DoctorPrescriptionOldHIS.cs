@@ -11,19 +11,19 @@ using System.Web.Mvc;
 
 namespace MediSoftTech_HIS.Areas.OPD.Repository
 {
-    public class DoctorPrescription
+    public class DoctorPrescriptionOldHIS
     {
         dataSet dsResult = new dataSet();
         string _Deptname = string.Empty;
         string _IsNABL = string.Empty;
         string _PrintWithHeader = "N";
         string NextFollowUpDate = "-";
-        List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
+        List<ipPageCounter1> pgCounterList = new List<ipPageCounter1>();
         public FileResult PrintPriscription(string app_no)
         {
             AppointmentQueries obj = new AppointmentQueries();
             obj.AppointmentId = app_no;
-            obj.Logic = "OPD:Prescription";
+            obj.Logic = "OPD-OldHIS:Prescription";
             dsResult = APIProxy.CallWebApiMethod("Appointment/Opd_AppointmentQueries", obj);
             DataSet ds = dsResult.ResultSet;
             PdfDocument repDocument = new PdfDocument();
@@ -331,7 +331,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             {
                 //Medicine Begin
                 b.Append("<div style='width:95%;'>");
-                string rx = HttpContext.Current.Server.MapPath("~/Content/logo/rx.png");
+                string rx = HttpContext.Current.Server.MapPath("/Content/logo/rx.png");
                 b.Append("<p style='text-align:left;margin:0'><img src=" + rx + " style='width:15px;margin-bottom:-7px;' /></p>");
                 b.Append("<table style='width:100%;float:left;font-size:11px;margin:10px 0;text-align:left;border-collapse: collapse;border:1px solid #000;'>");
                 b.Append("<tr>");
@@ -503,7 +503,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             return f.ToString();
         }
     }
-    public class ipPageCounter
+    public class ipPageCounter1
     {
         public string DeptName { get; set; }
         public int PageIndex { get; set; }

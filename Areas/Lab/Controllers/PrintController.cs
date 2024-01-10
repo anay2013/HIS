@@ -268,7 +268,6 @@ namespace MediSoftTech_HIS.Areas.Lab.Controllers
         {
             WorkSheet rep = new WorkSheet();
             return rep.PrintWorkSheet(visitNo, SubCat, TestIds, Logic);
-
         }
         public FileStreamResult PrintLabReportFromLIS(string visitNo)
         {
@@ -280,6 +279,34 @@ namespace MediSoftTech_HIS.Areas.Lab.Controllers
             Response.AppendHeader("content-disposition", "inline; filename=file.pdf");
             return new FileStreamResult(dataStream, "application/pdf");
         }
-        
+        public FileStreamResult DownloadLISReport(string VisitNo, string TestIds)
+        {
+                TestIds = "20287349,20287350,20287351";
+                System.Net.WebClient Client = new System.Net.WebClient();
+                string Url = string.Empty;
+                Url = "http://192.168.4.200/Chandan/Design/Lab/labreportnew.aspx?IsPrev=0&PHead=0&testid=" + TestIds + "&Mobile=0";
+                var bytes = Client.DownloadData(Url);
+                var dataStream = new MemoryStream(bytes);
+                Response.AppendHeader("content-disposition", "inline; filename=OutSource.pdf");
+                return new FileStreamResult(dataStream, "application/pdf");
+         
+        }
+        //public string SaveReport(out string virtualPath, string VisitNo, byte[] pdfByte)
+        //{
+        //    string result = string.Empty;
+        //    string Month = System.DateTime.Now.ToString("MM-yyyy");
+        //    string directory = "I:\\Hosppital\\LISOutSource\\" + Month + "\\";
+        //    string Path = directory + VisitNo + ".pdf";
+        //    try
+        //    {
+        //        if (!Directory.Exists(directory))
+        //            Directory.CreateDirectory(directory);
+        //     System.IO.File.WriteAllBytes(Path, pdfByte);
+        //        result = "Success";
+        //        virtualPath = "https://exprohelp.com/Document/Diagnostic/" + Month + "/" + VisitNo + ".pdf";
+        //    }
+        //    catch (Exception ex) { result = ex.Message; virtualPath = ""; }
+        //    return virtualPath;
+        //}
     }
 }

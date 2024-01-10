@@ -125,7 +125,7 @@ function ViewConsultation() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         total++;
                         tbody += "<tr>";
-                        tbody += "<td>" + total + "</td>";
+                        tbody += "<td>" + val.token_no + "</td>";
                         tbody += "<td>" + val.app_no + "</td>";
                         tbody += "<td style='display:none'>" + val.DoctorId + "</td>";
                         tbody += "<td>" + val.patient_name + "</td>";                    
@@ -151,7 +151,7 @@ function ViewConsultation() {
                     $.each(data.ResultSet.Table1, function (key, val) {
                         total++;
                         tbody1 += "<tr>";
-                        tbody1 += "<td>" + total + "</td>";
+                        tbody1 += "<td>" + val.token_no  + "</td>";
                         tbody1 += "<td>" + val.app_no + "</td>";
                         tbody1 += "<td>" + val.patient_name + "</td>";                    
                         tbody1 += "<td>" + val.AppDate + "</td>";
@@ -176,7 +176,7 @@ function ViewConsultation() {
                     $.each(data.ResultSet.Table2, function (key, val) {
                         total++;
                         tbody2 += "<tr>";
-                        tbody2 += "<td>" + total + "</td>";
+                        tbody2 += "<td>" + val.token_no + "</td>";
                         tbody2 += "<td>" + val.app_no + "</td>";
                         tbody2 += "<td>" + val.patient_name + "</td>";                    
                         tbody2 += "<td>" + val.AppDate + "</td>";

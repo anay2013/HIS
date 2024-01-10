@@ -174,8 +174,9 @@ $(document).ready(function () {
         }
     });
     $('#tblReferral tbody').on('click', 'button', function () {
-        var referral = $(this).closest('tr').find('td:eq(2)').text();
-        $('#ddlReferral').append($('<option></option>').val(referral).html(referral));
+        var referral = $(this).closest('tr').find('td:eq(1)').text();
+        var referralName = $(this).closest('tr').find('td:eq(2)').text();
+        $('#ddlReferral').append($('<option></option>').val(referral).html(referralName));
         $('#ddlReferral').val(referral).change();
         $('#modalReferral').modal('hide');
         $('#modalReferral input[type=text]').val('');
@@ -520,7 +521,7 @@ function BookAppointmentQueries() {
                 }
             });
             $('#ddlDept').prop('selectedIndex', '0').change();
-            $('#ddlReferral').val('RC1624').change();
+            $('#ddlReferral').val('RC1459').change();
         },
         error: function (response) {
             alert('Server Error...!');

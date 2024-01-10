@@ -2503,7 +2503,7 @@ function GetSpecInfo() {
                             $('#txtNearLeftEyeSph').val(val.left_Sph)
                             $('#txtNearLeftEyeVA').val(val.left_VA)
                             $('#txtNearRightEyeSph').val(val.right_Sph)
-                            $('#txtNearRightEyeVA').val(val.right_VA)
+                            $('#txtNearRightEyeVA').val(val.right_VA)                         
                         }
                     });
                 }

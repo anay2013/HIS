@@ -3,7 +3,7 @@
     ViewBag.Title = "PatientInOut";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/Lab/JsModule/PatientInOut.js"></script>
+<script src="~/Areas/Lab/JsModule/PatientInOut.js?ver=1.2"></script>
 
 <style>
     .pat-group {
@@ -111,7 +111,8 @@
                                             <select id="ddlStatus" class="form-control bn">
                                                 <option value="ALL">ALL</option>
                                                 <option value="Pending">Pending</option>
-                                                <option value="Closed">Closed</option>
+                                                <option value="Closed">In</option>
+                                                <option value="Closed">Out</option>
                                             </select>
                                         </div>
                                     </div>

@@ -77,7 +77,8 @@ function PatientInfoForInOut() {
                         tbody += "<td>" + val.ageInfo + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td>" + val.Dept + "</td>";
-                        if (val.InFlag == null)
+
+                        if(val.InFlag == null)
                             tbody += "<td><button data-logic='LabPatientIn' onclick=InOutMarking(this) class='btn btn-warning btn-xs'><i class='fa fa-sign-in'>&nbsp;</i>In</button></td>";
                         else
                             tbody += "<td>" + val.InFlag + "</td>";
@@ -87,6 +88,7 @@ function PatientInfoForInOut() {
                         else
                             tbody += "<td>" + val.OutFlag + "</td>";
 
+                        tbody += "<td style='display:none'>" + val.AutoTestId + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblPatientInfo tbody').append(tbody);
@@ -111,7 +113,7 @@ function InOutMarking(elem) {
     objBO.DoctorId = Active.doctorId;
     objBO.BookingNo = $(elem).closest('tr').find('td:eq(1)').text();
     objBO.inputDate = '1900/01/01';
-    objBO.Prm1 = $(elem).closest('tr').find('td:eq(5)').text();
+    objBO.Prm1 = $(elem).closest('tr').find('td:eq(8)').text();
     objBO.LoginId = Active.userId;
     objBO.Logic = $(elem).data('logic');
     $.ajax({

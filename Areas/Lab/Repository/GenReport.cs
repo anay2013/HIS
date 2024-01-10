@@ -77,7 +77,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 if(LastRow == dept.First().RowNo)
                 {
                     StringBuilder seo = new StringBuilder();
-                    seo.Append("<table style='width:100%;text-align:right;font-family:calibri;text-align:center;border: 1px solid black;'>");
+                    seo.Append("<br/><table style='width:100%;text-align:right;font-family:calibri;text-align:center;border: 1px solid black;'>");
                     seo.Append("<tr>");
                     seo.Append("<td colspan='6' style='text-align:center;padding-left:4px;font-size:18px'><b>*** End Of Report ***</b></td>");
                     seo.Append("</tr>");
@@ -215,10 +215,9 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             b.Append("<tr>");
                             b.Append("<th style='width:35%;text-align:left;padding-left:4px;'>Test Name</th>");
                             b.Append("<th style='width:18%;text-align:left;padding-right:4px;'>Result</th>");
-                            b.Append("<th style='width:2%;text-align:left;padding-right:4px;'></th>");
-                            b.Append("<th style='width:10%;text-align:left;padding-right:4px;'>Unit</th>");
+                            b.Append("<th style='width:2%;text-align:center;padding-right:4px;'>Status</th>");
                             b.Append("<th style='width:25%;text-align:left;padding-right:4px;'>Bio. Ref. Interval</th>");
-                            b.Append("<th style='width:10%;text-align:left;padding-right:4px;'>Method</th>");
+                            b.Append("<th style='width:20%;text-align:left;padding-right:4px;'>Method</th>");
                             b.Append("</tr>");
                         }
                         tempCatName = dr.r_type;
@@ -246,32 +245,31 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         {
                             //For Spacing
                             b.Append("<tr>");
-                            b.Append("<td style='height:3px;' colspan='6'></td>");
+                            b.Append("<td style='height:3px;' colspan='5'></td>");
                             b.Append("</tr>");
 
-                            b.Append("<tr>");
+                            b.Append("<tr style='vertical-align:top'>");
                             b.Append("<td style='width:35%;text-align:left;padding-left:4px;'>" + obj1.ObservationName + ", <span style='font-size:12px'>" + dr.samp_type + "</span>" + "</td>");
                             if (obj1.ab_flag == "L" || obj1.ab_flag == "H")
                                 b.Append("<td style='width:18%;text-align:left;padding-left:4px;'>" + obj1.reading + "</td>");
                             else
                                 b.Append("<td style='width:18%;text-align:left;padding-left:4px;'>" + obj1.reading + "</td>");
-                            b.Append("<td style='width:2%;text-align:left;padding-left:4px;font-size:12px;margin-right:5px'>" + obj1.ab_flag + "</td>");
-                            b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.result_unit + "</td>");
+                            b.Append("<td style='width:2%;text-align:center;padding-left:4px;font-size:12px;margin-right:5px'>" + obj1.ab_flag + "</td>");
                             b.Append("<td style='width:25%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.RefRange + "</td>");
-                            b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:11px'>" + obj1.method_name + "</td>");
+                            b.Append("<td style='width:20%;text-align:left;padding-left:4px;font-size:11px'>" + obj1.method_name + "</td>");
                             b.Append("</tr>");
                             if (!string.IsNullOrEmpty(obj1.test_comment))
                             {
                                 b.Append("<tr>");
-                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("<td style='height:8px;' colspan='5'></td>");
+                                b.Append("</tr>");
+
+                                b.Append("<tr style='vertical-align:top'>");
+                                b.Append("<td colspan='5'>" + obj1.test_comment + "</td>");
                                 b.Append("</tr>");
 
                                 b.Append("<tr>");
-                                b.Append("<td colspan='6'>" + obj1.test_comment + "</td>");
-                                b.Append("</tr>");
-
-                                b.Append("<tr>");
-                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("<td style='height:8px;' colspan='5'></td>");
                                 b.Append("</tr>");
                             }
                             //Code To Add Pdf as Image after conversion
@@ -279,28 +277,28 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             {
                                 PDFUtility pdfUtility = new PDFUtility();
                                 string ImagePageList = pdfUtility.ConvertPdfToImageTags(dr.AddedReportPath);
-                                b.Append("<tr>");
-                                b.Append("<td colspan='6'><br/>" + ImagePageList + "</td>");
+                                b.Append("<tr style='vertical-align:top'>");
+                                b.Append("<td colspan='5'>" + ImagePageList + "</td>");
                                 b.Append("</tr>");
                             }
                             if (!string.IsNullOrEmpty(dr.Interpretation))
                             {
                                 b.Append("<tr>");
-                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("<td style='height:8px;' colspan='5'></td>");
                                 b.Append("</tr>");
 
                                 b.Append("<tr>");
-                                b.Append("<td colspan='6'><b style='font-size:12px'>Test Interpretation : </b></td>");
+                                b.Append("<td colspan='5'><b style='font-size:12px'>Test Interpretation : </b></td>");
                                 b.Append("</tr>");
                                 b.Append("<tr>");
-                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("<td style='height:8px;' colspan='5'></td>");
                                 b.Append("</tr>");
-                                b.Append("<tr>");
-                                b.Append("<td style='font-size:12px !important' colspan='6'>" + dr.Interpretation + "</td>");
+                                b.Append("<tr style='vertical-align:top'>");
+                                b.Append("<td style='font-size:12px !important' colspan='5'>" + dr.Interpretation + "</td>");
                                 b.Append("</tr>");
 
                                 b.Append("<tr>");
-                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("<td style='height:8px;' colspan='5'></td>");
                                 b.Append("</tr>");
                             }
                         }
@@ -308,27 +306,32 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     else
                     {
                         b.Append("<tr>");
-                        b.Append("<td colspan='6' style='padding-left:10px;line-height:10px'></td>");
+                        b.Append("<td colspan='5' style='padding-left:10px;line-height:10px'></td>");
                         b.Append("</tr>");
-                        b.Append("<tr>");
-                        b.Append("<td colspan='6' style='background:#ddd;text-align:left;padding-left:4px;'><b>" + dr.TestName + " </b>, <span style='font-size:11px'>" + dr.samp_type + "</span>" + "</td>");
-                        b.Append("</tr>");
+                        if(dr.r_type!= "Text")
+                        {
+                            b.Append("<tr>");
+                            b.Append("<td colspan='5' style='background:#ddd;text-align:left;padding-left:4px;'><b>" + dr.TestName + " </b>, <span style='font-size:11px'>" + dr.samp_type + "</span>" + "</td>");
+                            b.Append("</tr>");
+                        }
+
                         foreach (var obj1 in ObsDetail)
                         {
-                            if(obj1.IsGroup == "Y")
+                            //For Spacing
+                            b.Append("<tr>");
+                            b.Append("<td style='height:5px;' colspan='5'></td>");
+                            b.Append("</tr>");
+
+                            if (obj1.IsGroup == "Y")
                             {
                                 b.Append("<tr>");
-                                b.Append("<td colspan='6' style='font-size:14px;text-decoration:underline;padding-left:4px;'><b>" + obj1.ObservationName + "</b></td>");
+                                b.Append("<td colspan='5' style='font-size:14px;padding-left:4px;'><b>" + obj1.ObservationName + "</b></td>");
                                 b.Append("</tr>");
                             }
                             else
                             {
-                                //For Spacing
-                                b.Append("<tr>");
-                                b.Append("<td style='height:3px;' colspan='6'></td>");
-                                b.Append("</tr>");
-
-                                b.Append("<tr>");
+                        
+                                b.Append("<tr style='vertical-align:top'>");
                                 b.Append("<td style='width:35%;text-align:left;padding-left:4px;'>" + obj1.ObservationName + "</td>");
                                 if (obj1.ab_flag == "L" || obj1.ab_flag == "H")
                                     b.Append("<td style='width:18%;text-align:left;padding-left:4px;'><b>" + obj1.reading + "</b></td>");
@@ -336,22 +339,21 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                                     b.Append("<td style='width:18%;text-align:left;padding-left:4px;'>" + obj1.reading + "</td>");
 
                                 b.Append("<td style='width:2%;text-align:left;padding-left:4px;font-size:12px;margin-right:5px'>" + obj1.ab_flag + "</td>");
-                                b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.result_unit + "</td>");
                                 b.Append("<td style='width:25%;text-align:left;padding-left:4px;font-size:12px'>" + obj1.RefRange + "</td>");
-                                b.Append("<td style='width:10%;text-align:left;padding-left:4px;font-size:11px'>" + obj1.method_name + "</td>");
+                                b.Append("<td style='width:20%;text-align:left;padding-left:4px;font-size:11px'>" + obj1.method_name + "</td>");
                                 b.Append("</tr>");
                                 if (!string.IsNullOrEmpty(obj1.test_comment))
                                 {
                                     b.Append("<tr>");
-                                    b.Append("<td style='height:8px;' colspan='6'></td>");
+                                    b.Append("<td style='height:8px;' colspan='5'></td>");
+                                    b.Append("</tr>");
+
+                                    b.Append("<tr style='vertical-align:top'>");
+                                    b.Append("<td colspan='5'>" + obj1.test_comment + "</td>");
                                     b.Append("</tr>");
 
                                     b.Append("<tr>");
-                                    b.Append("<td colspan='6'>" + obj1.test_comment + "</td>");
-                                    b.Append("</tr>");
-
-                                    b.Append("<tr>");
-                                    b.Append("<td style='height:8px;' colspan='6'></td>");
+                                    b.Append("<td style='height:8px;' colspan='5'></td>");
                                     b.Append("</tr>");
                                 }
                             }
@@ -363,7 +365,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             PDFUtility pdfUtility = new PDFUtility();
                             string ImagePageList = pdfUtility.ConvertPdfToImageTags(dr.AddedReportPath);
                             b.Append("<tr>");
-                            b.Append("<td colspan='6'><br/>" + ImagePageList + "</td>");
+                            b.Append("<td colspan='5'><br/>" + ImagePageList + "</td>");
                             b.Append("</tr>");
                         }
 
@@ -372,30 +374,34 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             if (!string.IsNullOrEmpty(dr.Interpretation))
                             {
                                 b.Append("<tr>");
-                                b.Append("<td colspan='6'><b style='font-size:12px'>Test Interpretation : </b></td>");
+                                b.Append("<td style='height:8px;' colspan='5'></td>");
                                 b.Append("</tr>");
 
                                 b.Append("<tr>");
-                                b.Append("<td style='font-size:12px !important' colspan='6'>" + dr.Interpretation + "</td>");
+                                b.Append("<td colspan='5'><b style='font-size:12px'>Test Interpretation : </b></td>");
+                                b.Append("</tr>");
+
+                                b.Append("<tr style='vertical-align:top'>");
+                                b.Append("<td style='font-size:12px !important' colspan='5'>" + dr.Interpretation + "</td>");
                                 b.Append("</tr>");
 
                                 b.Append("<tr>");
-                                b.Append("<td style='height:8px;' colspan='6'></td>");
+                                b.Append("<td style='height:8px;' colspan='5'></td>");
                                 b.Append("</tr>");
                             }
                             b.Append("<tr>");
-                            b.Append("<td colspan='6'><hr/></td>");
+                            b.Append("<td colspan='5'><hr/></td>");
                             b.Append("</tr>");
                         }
                     }
                     if (dr.r_type == "Text")
                     {
                         //b.Append("<tr>");
-                        //b.Append("<td colspan='6' style='text-align:left;padding-left:4px;'>" + dr.TestName + "</td>");
+                        //b.Append("<td colspan='5' style='text-align:left;padding-left:4px;'>" + dr.TestName + "</td>");
                         //b.Append("</tr>");
 
-                        b.Append("<tr>");
-                        b.Append("<td colspan='6' style='text-align:left;padding-left:4px;'>" + dr.report_content + "</td>");
+                        b.Append("<tr style='vertical-align:top'>");
+                        b.Append("<td colspan='5' style='text-align:left;padding-left:4px;'>" + dr.report_content + "</td>");
                         b.Append("</tr>");
                     }
                 }

@@ -137,6 +137,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Accounts\JsModule\AuditSaleVoucher.js" />
     <Content Include="Areas\Accounts\JsModule\CreditControl\AgingReportPanelWise.js" />
     <Content Include="Areas\Accounts\JsModule\CreditControl\OverALLReceivable.js" />
     <Content Include="Areas\Accounts\JsModule\ledgerBook.js" />
@@ -285,6 +286,7 @@
     <Content Include="Areas\EDP\Views\EDP\RoomCharges.cshtml" />
     <Content Include="Areas\EDP\Views\web.config" />
     <Content Include="Areas\EMR\JsModule\CaseSheet.js" />
+    <Content Include="Areas\IPD\JsModule\BillingView\_BillingInfo - Copy.js" />
     <Content Include="Areas\IPD\JsModule\CQI\CQIEntry.js" />
     <Content Include="Areas\IPD\JsModule\DoctorView\_TemplateMaster.js" />
     <Content Include="Areas\IPD\JsModule\IPD\AllowBillCorrection.js" />
@@ -417,6 +419,7 @@
     <Content Include="Areas\Masters\JsModule\AreaEmpLink.js" />
     <Content Include="Areas\Masters\JsModule\AreaQuestLink.js" />
     <Content Include="Areas\Masters\JsModule\CareMasters.js" />
+    <Content Include="Areas\Masters\JsModule\DisplayMaster.js" />
     <Content Include="Areas\Masters\JsModule\ListRoomAndBed.js" />
     <Content Include="Areas\Masters\JsModule\QuestMaster.js" />
     <Content Include="Areas\Masters\JsModule\RoomAndBed.js" />
@@ -467,6 +470,7 @@
     <Content Include="Areas\OPD\Views\Appointment\bookAppointment.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\DoctorDisplay.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\DoctorDisplayView.cshtml" />
+    <Content Include="Areas\OPD\Views\Appointment\EditPatientDetail.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\OPDAdvancePayment.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\OPDRegister.cshtml" />
     <Content Include="Areas\OPD\Views\Appointment\OPD_ViewConsultation.cshtml" />
@@ -483,6 +487,7 @@
     <Content Include="Areas\OPD\Views\Service\RefundServices.cshtml" />
     <Content Include="Areas\OPD\Views\Service\ServiceBooking.cshtml" />
     <Content Include="Areas\OPD\Views\Service\ServiceRegister.cshtml" />
+    <Content Include="Areas\OPD\Views\Shared\_LabReport.cshtml" />
     <Content Include="Areas\OPD\Views\web.config" />
     <Content Include="Areas\PatientDesk\JsModule\AmbStatus.js" />
     <Content Include="Areas\PatientDesk\JsModule\EmergencyDesk.js" />
@@ -726,6 +731,10 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Areas\Lab\Views\Radiology\TaxReportEditing.cshtml" />
+    <Content Include="Areas\OPD\Views\Shared\_ViewTestReport.cshtml" />
+    <Content Include="Areas\IPD\Views\BillingView\_BillingInfo - Copy.cshtml" />
+    <Content Include="Areas\Masters\Views\RoomAndBed\DisplayMaster.cshtml" />
+    <Content Include="Areas\Accounts\Views\Ledger\AuditSaleVoucher.cshtml" />
     <None Include="Connected Services\LISProxy\configuration91.svcinfo" />
     <None Include="Connected Services\LISProxy\configuration.svcinfo" />
     <None Include="Connected Services\LISProxy\Reference.svcmap">
@@ -1967,6 +1976,7 @@
     <Compile Include="Areas\OPD\Controllers\ServiceController.cs" />
     <Compile Include="Areas\OPD\OPDAreaRegistration.cs" />
     <Compile Include="Areas\OPD\Repository\DoctorPrescription.cs" />
+    <Compile Include="Areas\OPD\Repository\DoctorPrescriptionOldHIS.cs" />
     <Compile Include="Areas\OT\Controllers\OTController.cs" />
     <Compile Include="Areas\OT\OTAreaRegistration.cs" />
     <Compile Include="Areas\PatientDesk\Controllers\PatientController.cs" />
@@ -2321,9 +2331,7 @@
     <Content Include="Areas\Lab\Views\Master\ConsentMaster.cshtml" />
     <Content Include="Areas\MIS\Views\Finance\BugAudit.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\ClosingPending.cshtml" />
-    <Content Include="Areas\OPD\Views\Appointment\EditPatientDetail.cshtml" />
     <Content Include="Areas\Accounts\Views\Payments\PayModeCorrection.cshtml" />
-    <Content Include="Areas\OPD\Views\Shared\_LabReport.cshtml" />
     <Content Include="Areas\IPD\Views\CQI\CQIEntry.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\AllowBillCorrection.cshtml" />
     <None Include="Connected Services\LISProxy\SaleService1.wsdl" />

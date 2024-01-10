@@ -43,7 +43,7 @@ namespace MediSoftTech_HIS
                             string base64String = Convert.ToBase64String(m.ToArray());
                             base64String=regex.Replace(base64String, string.Empty);
                             string srcstr ="data:image/png;base64,"+ base64String + "";
-                            ImageTagsList = ImageTagsList + "<img src='"+ srcstr + "' style='width:700px;'/>";
+                            ImageTagsList = ImageTagsList + "<img src='"+ srcstr + "' style='width:700px;'/><br/>";
                         }
                     }
                 }

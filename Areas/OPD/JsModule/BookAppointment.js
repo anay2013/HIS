@@ -190,8 +190,9 @@ $(document).ready(function () {
         }
     });
     $('#tblReferral tbody').on('click', 'button', function () {
-        var referral = $(this).closest('tr').find('td:eq(2)').text();
-        $('#ddlReferral').append($('<option></option>').val(referral).html(referral));
+        var referral = $(this).closest('tr').find('td:eq(1)').text();
+        var referralName = $(this).closest('tr').find('td:eq(1)').text();
+        $('#ddlReferral').append($('<option></option>').val(referral).html(referralName));
         $('#ddlReferral').val(referral).trigger('change.select2');
         $('#modalReferral').modal('hide');
         $('#modalReferral input[type=text]').val('');
@@ -431,8 +432,8 @@ function BookAppointmentQueries() {
                 }
             });
             $('#ddlDept').prop('selectedIndex', '0').trigger('change.select2');
-            $('#ddlReferral').val('RC1624').trigger('change.select2');
-            $('.selection').find('#select2-ddlReferral-container').text('SELF');
+            $('#ddlReferral').val('RC1459').trigger('change.select2');
+            $('.selection').find('#select2-ddlReferral-container').text('CHANDAN HOSPITAL');
             //$('#ddlCountry').val(14).trigger('change.select2');
             //GetStateByCountry(14, 'Y');
         },
@@ -1726,7 +1727,7 @@ function Clear() {
     $('#BasicInformation').find('select:not(#ddlCountry)').prop('selectedIndex', '0').trigger('change.select2');
     $('#ddlCountry').val(14).trigger('change.select2');
     GetStateByCountry(14, 'Y');
-    $('#ddlReferral').val('RC0008').trigger('change.select2');
+    $('#ddlReferral').val('RC1459').trigger('change.select2');
     $('#AnonymousInformation  #ddlPatientType').val(1).trigger('change.select2');
     $('#AnonymousInformation #ddlPanel').val(1).trigger('change.select2');
     $('#AnonymousInformation #ddlSource').prop('selectedIndex', '0').trigger('change.select2');
