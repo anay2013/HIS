@@ -121,7 +121,6 @@ $(document).ready(function () {
         var ItemID = $('#txtItemID').val();
         var IsCash = $('#txtIsCash').val();
 
-
         if (ValidateProduct()) {
             var ids = $('#tblProduct tbody').find('tr').filter(function () {
                 if ($(this).find('td').eq(0).text() == ItemID) return true;

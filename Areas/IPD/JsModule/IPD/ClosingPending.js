@@ -8,23 +8,21 @@ $(document).ready(function () {
     GetAllDataBindPanel();
 });
 function DownloadExcelClosing() {
-    $('#tblClosingPending tbody').empty();
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
-    debugger
     var objBO = {};
     objBO.hosp_id = '-';
     objBO.UHID = '-';
     objBO.IPDNo = $('#txtIPDNo').val();
     objBO.Floor = '-';
-    objBO.PanelId = '-';
+    objBO.PanelId = $('#ddlPanel option:selected').val();
     objBO.from = $('#txtfromdate').val();
     objBO.to = $('#txttodate').val();
     objBO.Prm1 = '-';
     objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = logic;
+    objBO.Logic = 'ClosingPending:BetweenDate';
     objBO.OutPutType = 'Excel';
-    Global_DownloadExcel(url, objBO, logic + ".xlsx");
+    Global_DownloadExcel(url, objBO, "BillRegister" + ".xlsx");
 }
 function GetDataAllClosingPending() {
     logic = 'ClosingPending:BetweenDate';
@@ -58,7 +56,7 @@ function GetDataAllClosingPending() {
 
                         if (temp != val.PanelName) {
                             tbody += "<tr style='background:#CCC'>";
-                            tbody += "<td colspan='15' style='font-size:13px;'><b>" + val.PanelName + "</b></td>";
+                            tbody += "<td colspan='16' style='font-size:13px;'><b>" + val.PanelName + "</b></td>";
                             tbody += "</tr>";
                             temp = val.PanelName
                         }
@@ -72,6 +70,7 @@ function GetDataAllClosingPending() {
                             tbody += "<tr>";
                         }
                         //tbody += "<tr>";
+                        tbody += "<td>" + val.UHID + "</td>";
                         tbody += "<td>" + val.IPDNo + "</td>";
                         tbody += "<td>" + val.AdmitDate + "</td>";
                         tbody += "<td>" + val.DischargeDate + "</td>";

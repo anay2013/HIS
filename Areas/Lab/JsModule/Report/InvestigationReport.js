@@ -193,6 +193,7 @@ function ReportList(data, Logic) {
 }
 
 function PrintInHouse(elem) {
+    debugger;
     var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
     var SubCat = 'ALL';
     var TestIds = [];

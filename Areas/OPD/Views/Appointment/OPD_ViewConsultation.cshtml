@@ -226,135 +226,117 @@
 </style>
 <div id="page-content">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="ml15">
-                    <div class="">
-                        <div class="panel">
-                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
-                                <h4 class="text-white">Consultation View</h4>
+
+            <div class="panel-body">
+                <div class="row navigation" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                    <div class="col-md-2">
+                        IPD NO
+                        <select id="ddlSearchKey" class="form-control border-imp" style="width: 90px !important;">
+                            <option value="UHID">UHID</option>
+                            <option value="MobileNo" selected="selected">Mobile No</option>
+                            <option value="AppointmentNo">Appointment No</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        Search
+                        <input type="text" id="txtSearchValue" class="form-control text-uppercase" placeholder="Search Input" />
+
+                    </div>
+                    <div class="col-md-1">
+                        Status
+                        <select class="form-control" id="ddlStatus">
+                            <option>Pending</option>
+                            <option>Closed</option>
+                            <option>Done</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        Doctor Name
+                        <select class="form-control" id="ddlDoctor">
+                            <option value="Prompt">Select Doctor</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        From Date
+                        <input type="date" id="txtFromAppDate" class="form-control" placeholder="from : dd-mm-yyyy" />
+                    </div>
+                    <div class="col-md-2">
+                        To Date
+                        <div style="display:flex">
+                            <input type="date" id="txtToAppDate" class="form-control" placeholder="to : dd-mm-yyyy" />
+                            <input type="button" id="btnSearchByDate" onclick="ViewConsultation()" class="btn-success btn-flat" value="Search" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="Vital-body" style="padding:0 5px;margin-top:10px">
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <div id="divEmergency">
+                                <span class="category">Emergency Appointment Patient List</span>
+                                <div style="max-height:106px;overflow:auto;margin-bottom:5px;border: 1px solid #009688;">
+                                    <table class="table table-bordered" id="tblEmergencyAppList">
+                                        <thead>
+                                            <tr>
+                                                <th>Token</th>
+                                                <th style="width: 112px;">UHID</th>
+                                                <th style="width:112px;display:none">App. No.</th>
+                                                <th>Name</th>
+                                                <th>Date</th>
+                                                <th>Doctor</th>
+                                                <th style="width:13%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="panel-body">
-                                <div class="col-md-4 search-section">
-                                    <div class="flex">
-                                        <span style="width:50%">
-                                            <select id="ddlSearchKey" class="form-control border-imp" style="width: 90px !important;">
-                                                <option value="UHID">UHID</option>
-                                                <option value="MobileNo" selected="selected">Mobile No</option>
-                                                <option value="AppointmentNo">Appointment No</option>
-                                            </select>
-                                        </span>
-                                        <input type="text" id="txtSearchValue" class="form-control text-uppercase" placeholder="Search Input" />
-                                        @*<input type="button" id="btnSearchByOption" class="btn-success btn-flat" value="Search" />*@
-                                    </div>
+                            <div id="divOther">
+                                <span class="category">Other Appointment Patient List</span>
+                                <div style="max-height:250px;overflow:auto;margin-bottom:5px;border: 1px solid #009688;">
+                                    <table class="table table-bordered" id="tblOtherAppList">
+                                        <thead>
+                                            <tr>
+                                                <th>Token</th>
+                                                <th style="width: 112px;">UHID</th>
+                                                <th style="width:112px;display:none">App. No.</th>
+                                                <th>Name</th>
+                                                <th>Date</th>
+                                                <th>Doctor</th>
+                                                <th style="width:13%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
-                                <div class="col-md-7 search-section" style="background:#ddd;margin-left:2px">
-                                    <div class="flex">
-                                        <select class="form-control" id="ddlStatus">
-                                            <option>Pending</option>
-                                            <option>Closed</option>
-                                            <option>Done</option>
-                                        </select>
-                                        <select class="form-control" id="ddlDoctor">
-                                            <option value="Prompt">Select Doctor</option>
-                                        </select>
-                                        <input type="date" id="txtFromAppDate" class="form-control" placeholder="from : dd-mm-yyyy" />
-                                        <input type="date" id="txtToAppDate" class="form-control" placeholder="to : dd-mm-yyyy" />
-                                        <input type="button" id="btnSearchByDate" onclick="ViewConsultation()" class="btn-success btn-flat" value="Search" />
-                                    </div>
-                                </div>
-                                <hr />
-                                @*<div class="Vital-title" style="margin-top:2px;">
-                                        <div class="row" style="margin-top: 5px">
-                                            <div class="col-md-2"></div>
-                                            <div class="col-md-2">
-                                                <button class="note" style="background:#e60000"><i class="fa fa-ambulance"></i></button>
-                                                <b class="pull-left" contenteditable="true">Emergency</b>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <button class="note" style="background:#f59200"><i class="fa fa-clock-o"></i></button>
-                                                <b class="pull-left">Pending Temp Status</b>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <button class="note" style="background:#0b40d6"><i class="fa fa-eye"></i></button>
-                                                <b class="pull-left">Viewed &amp; IN</b>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <button class="note" style="background:green"><i class="fa fa-angle-double-right"></i></button>
-                                                <b class="pull-left">Refer</b>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <button class="note" style="background:#464646"><i class="fa fa-adn"></i></button>
-                                                <b class="pull-left">Absent</b>
-                                            </div>
-                                        </div>
-                                    </div>*@
-                                <div class="Vital-body" style="padding:0 5px;margin-top:10px">
-                                    <div class="row form-group">
-                                        <div class="col-md-6">
-                                            <div id="divEmergency">
-                                                <span class="category">Emergency Appointment Patient List</span>
-                                                <div style="max-height:106px;overflow:auto;margin-bottom:5px;border: 1px solid #009688;">
-                                                    <table class="table table-bordered" id="tblEmergencyAppList">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No.</th>
-                                                                <th style="width: 112px;">App. No.</th>
-                                                                <th>Name</th>                                                            
-                                                                <th>Date</th>
-                                                                <th>Doctor</th>
-                                                                <th style="width:13%">Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div id="divOther">
-                                                <span class="category">Other Appointment Patient List</span>
-                                                <div style="max-height:250px;overflow:auto;margin-bottom:5px;border: 1px solid #009688;">
-                                                    <table class="table table-bordered" id="tblOtherAppList">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No.</th>
-                                                                <th style="width: 112px;">App. No.</th>
-                                                                <th>Name</th>                                                            
-                                                                <th>Date</th>
-                                                                <th>Doctor</th>
-                                                                <th style="width:13%">Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <span class="category">Done Appointment Patient List</span>
-                                            <div style="max-height:400px;overflow:auto">
-                                                <table class="table table-bordered" id="tblDoneAppointment">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No.</th>
-                                                            <th style="width: 112px;">App. No.</th>
-                                                            <th>Name</th>                                                            
-                                                            <th>Date</th>
-                                                            <th>Doctor</th>
-                                                            <th style="width:9%">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="category">Done Appointment Patient List</span>
+                            <div style="max-height:400px;overflow:auto">
+                                <table class="table table-bordered" id="tblDoneAppointment">
+                                    <thead>
+                                        <tr>
+                                            <th>Token</th>
+                                            <th style="width: 112px;">UHID</th>
+                                            <th style="width:112px;display:none">App. No.</th>
+                                            <th>Name</th>
+                                            <th>Date</th>
+                                            <th>Doctor</th>
+                                            <th style="width:9%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
     </div>
 </div>
+
+
+
 

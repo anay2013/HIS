@@ -190,7 +190,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                         b.Append("<tr>");
                         b.Append("<td>Weight</td>");
                         b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["WT"].ToString() + " kg</td>");
+                        b.Append("<td>" + dr["WT"].ToString() + " Kg</td>");
                         b.Append("</tr>");
                     }
                     if (Convert.ToDecimal(dr["Temprarture"]) > 0)
@@ -198,7 +198,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                         b.Append("<tr>");
                         b.Append("<td>Temprature</td>");
                         b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["Temprarture"].ToString() + " °C</td>");
+                        b.Append("<td>" + dr["Temprarture"].ToString() + "</td>");
                         b.Append("</tr>");
                     }
                     if (Convert.ToDecimal(dr["Pulse"]) > 0)
@@ -206,15 +206,15 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                         b.Append("<tr>");
                         b.Append("<td>Pulse</td>");
                         b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["Pulse"].ToString() + " °C</td>");
+                        b.Append("<td>" + dr["Pulse"].ToString() + "</td>");
                         b.Append("</tr>");
                     }
-                    if (Convert.ToDecimal(dr["BP_Sys"]) > 0)
+                    if (dr["BP_Sys"].ToString().Length>0 || dr["BP_Dys"].ToString().Length > 0)
                     {
                         b.Append("<tr>");
                         b.Append("<td>B/P</td>");
-                        b.Append("<td>:</td>");
-                        b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString() + " Mm/Hg</td>");
+                        b.Append("<td>:</td>"); 
+                        b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString()+ "/" +dr["BP_Dys"].ToString() + " Mm/Hg</td>");
                         b.Append("</tr>");
                     }
                     if (Convert.ToDecimal(dr["SPO2"]) > 0)

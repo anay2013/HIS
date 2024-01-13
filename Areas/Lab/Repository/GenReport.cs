@@ -123,6 +123,24 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     SetFooter(lastpdfPage, "FixAtLastPage", t.DeptName, false);
                 }
             }
+            //Out Source Report merging
+            if (dsResult.ResultSet.Tables.Count>5)
+            {
+                if (dsResult.ResultSet.Tables[5].Rows.Count > 0)
+                {
+                    string LisTestIds = dsResult.ResultSet.Tables[5].Rows[0]["LisTestIds"].ToString();
+                    if (LisTestIds.Length > 2)
+                    {
+                        System.Net.WebClient Client = new System.Net.WebClient();
+                        string Url = string.Empty;
+                        Url = "http://192.168.0.21/Chandan/Design/Lab/labreportnew.aspx?IsPrev=0&testid=" + LisTestIds + "&phead=2";
+                        //Url = "http://192.168.4.200/Chandan/Design/Lab/labreportnew.aspx?IsPrev=0&PHead=2&testid=" + LisTestIds + "&Mobile=0";
+                        var bytes = Client.DownloadData(Url);
+                        PdfDocument OutSourceDoc = PdfDocument.FromStream(new MemoryStream(bytes));
+                        repDocument.AddDocument(OutSourceDoc);
+                    }
+                }
+            }
             byte[] pdfdata = repDocument.WriteToMemory();
             FileResult fileResult = new FileContentResult(pdfdata, "application/pdf");
             return fileResult;
