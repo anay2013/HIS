@@ -163,48 +163,60 @@ function PatientForAdvice() {
                 var TemplateId = "";
                 $.each(data.ResultSet.Table1, function (key, val) {
                     if (val.TemplateId == 'T00001') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#ProvisionalDiagnosisItems').append(item).show();
+                        $('#ProvisionalDiagnosisItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=ProvisionalDiagnosisItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00002') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#ChiefComplaintItems').append(item).show();
+                        $('#ChiefComplaintItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=ChiefComplaintItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00003') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#SignSymptomsItems').append(item).show();
+                        $('#SignSymptomsItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=SignSymptomsItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00004') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#VaccinationStatusItems').append(item).show();
+                        $('#VaccinationStatusItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=VaccinationStatusItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00005') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#DoctorNotesItems').append(item).show();
+                        $('#DoctorNotesItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=DoctorNotesItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00006') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#AllergiesItems').append(item).show();
+                        $('#AllergiesItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=AllergiesItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00007') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#PastMedicationItems').append(item).show();
+                        $('#PastMedicationItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=PastMedicationItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00008') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#DoctorAdviceItems').append(item).show();
+                        $('#DoctorAdviceItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=DoctorAdviceItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00009') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#LaboratoryRadiologyItems').append(item).show();
+                        if (val.TemplateId != val.ItemId) {
+                            var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
+                            $('#LaboratoryRadiologyItems').append(item).show();
+                        }
+                        else {
+                            $('#LaboratoryRadiologyItems').append('<p>' + val.ItemName + '</p>').show();
+                            $('textarea[data-id=LaboratoryRadiologyItems]').text(val.ItemName.replace(/<br>/g, '\n'));
+                        }
                     }
                     if (val.TemplateId == 'T00010') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#PrescribedProcedureItems').append(item).show();
+                        if (val.TemplateId != val.ItemId) {
+                            var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
+                            $('#PrescribedProcedureItems').append(item).show();
+                        }
+                        else {
+                            $('#PrescribedProcedureItems').append('<p>' + val.ItemName + '</p>').show();
+                            $('textarea[data-id=PrescribedProcedureItems]').text(val.ItemName.replace(/<br>/g, '\n'));
+                        }
                     }
                     if (val.TemplateId == 'T00015') {
-                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                        $('#HistoryItems').append(item).show();
+                        $('#HistoryItems').append('<p>' + val.ItemName + '</p>').show();
+                        $('textarea[data-id=HistoryItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                 });
 
@@ -253,7 +265,7 @@ function PatientForAdvice() {
                     tbody1 += "<td><i class='fa fa-copy IPDDisList'></i></td>";
                     tbody1 += "</tr>";
                 });
-                $('#tblIPDDischargeSummary tbody').append(tbody1);              
+                $('#tblIPDDischargeSummary tbody').append(tbody1);
             }
             else {
                 alert('No Record Found..');
@@ -278,7 +290,7 @@ function OldHisData() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            if (Object.keys(data.ResultSet).length > 0) {              
+            if (Object.keys(data.ResultSet).length > 0) {
                 $('#tblOldHISData tbody').empty();
                 var tbodyOldHIS = "";
                 $.each(data.ResultSet.Table, function (key, val) {

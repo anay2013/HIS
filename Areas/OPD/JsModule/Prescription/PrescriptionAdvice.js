@@ -1,4 +1,4 @@
-﻿var currentRemark = null;
+﻿
 $(document).ready(function () {
     $('.OPDPrintPreview .prescribedItem').on('focus', 'input:text', function (e) {
         $(this).select();
@@ -23,7 +23,7 @@ $(document).ready(function () {
     $('.panel-body').on('click', 'a.fa-pencil', function () {
         var templateId = $(this).data('templateid');
         var itemName = $(this).data('itemname');
-        var itemDesc = $(this).data('desc');
+        var itemDesc = ($(this).data('desc') == null) ? itemName : $(this).data('desc');
         var itemid = $(this).data('itemid');
         var fav = $(this).data('fav');
         if (fav == true) {
@@ -39,7 +39,7 @@ $(document).ready(function () {
         });
         $('#hiddenDoctorTempItemId').text(itemid);
         $('#txtDoctorItemName').val(itemName);
-        $('#txtDoctorTempDescription').val(itemDesc);
+        $('#txtDoctorTempDescription').val(itemDesc.replace(/<br>/g, '\n'));
         $('#btnSaveDoctorTemplate').switchClass('btn-success', 'btn-warning');
         $('#btnSaveDoctorTemplate').text('Update');
         $('#modalTemplate').modal('show');
@@ -115,40 +115,53 @@ $(document).ready(function () {
         var PrevTemplateId = template.replace('List', 'Items');//get id of related Template from Prev Side
         var itemId = $(this).data('itemid');//get item id on check
         var listName = $(this).closest('li').parents('ul').attr('id');
-        var itemName = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label input:checkbox').data('desc') : $(this).closest('li').find('label').text();//get item name on check
-        var list = "";
-        list += " <span id='" + itemId + "'>," + itemName + "</span><close class='remove'>X</close>";//create item list
-        $('#' + PrevTemplateId).show();//show related template on prev side [default all template hide in prev side]
-        if (this.checked)//on check
-        {
-            $('#' + PrevTemplateId).append(list);//add item to prev side template group
-        }
-        else//on un-check
-        {
-            $('#' + PrevTemplateId + ' span').each(function ()//on uncheck remove particular items from prev template group
+        if ($.inArray(template, listArr) > -1) {
+            var itemName1 = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label input:checkbox').data('desc') : $(this).closest('li').find('label').text();//get item name on check
+            var list = "";
+            list += " <span id='" + itemId + "'>," + itemName1 + "</span><close class='remove'>X</close>";//create item list
+            $('#' + PrevTemplateId).show();//show related template on prev side [default all template hide in prev side]
+            if (this.checked)//on check
             {
-                if ($(this).text() == itemName) {
-                    $(this).remove();
-                }
-            });
-        }
-    });
-    $('.OPDPrintPreview .prescribedItem').on('click', 'span', function (e) {
-        currentRemark = null;
-        if ($(this).hasClass('fromtxt') || $(this).attr('id') == 'fromtxt') {
-            currentRemark = (this);
-            var unq = $(this).parents('div.prescribedItem').attr('id');
-            var val = $(this).html().replace(/<br>/g, '\n');
-            $('textarea[data-id=' + unq + ']').val(val);
-            $('.panel-title a[href=#' + unq.replace('Items', '') + ']').trigger('click');
+                if ($('#' + PrevTemplateId).is('p'))
+                    $(list).insertBefore($('#' + PrevTemplateId + ' p'));//add item to prev side template group
+                else
+                    $('#' + PrevTemplateId).append(list);
+            }
+            else//on un-check
+            {
+                $('#' + PrevTemplateId + ' span').each(function ()//on uncheck remove particular items from prev template group
+                {
+                    if ($(this).text() == itemName1) {
+                        $(this).remove();
+                    }
+                });
+            }
             return
         }
 
-        var itemid = $(this).attr('id');
-        var itemName = $(this).text();
-        $(this).replaceWith('<input type="text" value="' + itemName + '"/>');
-        $('input:text').focus();
+        var itemName = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label input:checkbox').data('desc') : $(this).closest('li').find('label').html();//get item name on check       
+        $('#' + PrevTemplateId).show();//show related template on prev side [default all template hide in prev side]
+        if (this.checked)//on check
+        {
+            var data = $('textarea[data-id=' + PrevTemplateId + ']').val();//add item to prev side template group
+            $('textarea[data-id=' + PrevTemplateId + ']').val(data + ', ' + itemName.replace(/<br>/g, '\n'));//add item to prev side template group
+        }
+        FillPreview(PrevTemplateId);
     });
+    //$('.OPDPrintPreview .prescribedItem').on('click', 'span', function (e) {      
+    //    if ($(this).hasClass('fromtxt') || $(this).attr('id') == 'fromtxt') {           
+    //        var unq = $(this).parents('div.prescribedItem').attr('id');
+    //        var val = $(this).html().replace(/<br>/g, '\n');
+    //        $('textarea[data-id=' + unq + ']').val(val);
+    //        $('.panel-title a[href=#' + unq.replace('Items', '') + ']').trigger('click');
+    //        return
+    //    }
+
+    //    var itemid = $(this).attr('id');
+    //    var itemName = $(this).text();
+    //    $(this).replaceWith('<input type="text" value="' + itemName + '"/>');
+    //    $('input:text').focus();
+    //});
     //Add Items from textarea to prev     
     $('.panel-body').on('keyup', 'textarea', function (e) {
         if ($(this).data('id') != '') {
@@ -160,15 +173,8 @@ $(document).ready(function () {
             var PrevTemplateId = template.replace('List', 'Items');//get id of related Template from Prev Side		
             var itemName = $(this).val();//get item name on check	
         }
-        var list = "";
-        list = " <span id='fromtxt' class='fromtxt'>," + itemName.replace(/\n/g, '<br/>') + "</span><close class='remove'>x</close>";
-        if (currentRemark != null)
-            $('#' + PrevTemplateId).find(currentRemark).html(itemName.replace(/\n/g, '<br/>'));
-        else {
-            $('#' + PrevTemplateId + ' span[class=fromtxt]').remove();
-            $('#' + PrevTemplateId + '').append(list);
-        }
-        $('#' + PrevTemplateId).show();
+        //$('#' + PrevTemplateId).append(itemName.replace(/\n/g, '<br/>'));                    
+        FillPreview(PrevTemplateId);
         //$(this).val('');
         //if (e.keyCode === 13)//on press enter
         //{
@@ -179,7 +185,6 @@ $(document).ready(function () {
         //    $(this).val('');
         //}
     });
-
     //Edit Item Inline
     $('.OPDPrintPreview .prescribedItem').on('mouseover', 'span', function () {
         $('.remove').hide();
@@ -218,7 +223,8 @@ $(document).ready(function () {
         var template = $(this).parents('.prescribedItem').attr('id');//get template id
         var templateId = template.replace('Items', 'List');//get UL id of template list
         $(this).siblings('span').remove();//remove all this template group items
-        $(this).closest('.prescribedItem').hide();//hide this template group of prev side
+        $('textarea[data-id=' + template + ']').val('');
+        $(this).closest('.prescribedItem').find('p,span,close').remove();//hide this template group of prev side
         $('.panel-body #' + templateId).find('input:checkbox').prop('checked', false);//uncheck all related items from template side
     });
     $('#PatientVisits #tblPatientVisits tbody').on('click', '.currentVisit', function () {
@@ -245,6 +251,15 @@ $(document).ready(function () {
     });
     navigateControl();
 });
+function FillPreview(PrevTemplateId) {
+    var data = $('textarea[data-id=' + PrevTemplateId + ']').val();
+
+    if ($('#' + PrevTemplateId).find('p').length == 0)
+        $('#' + PrevTemplateId).append('</p>');
+
+    $('#' + PrevTemplateId).find('p').html(data.replace(/\n/g, '<br/>'));
+    $('#' + PrevTemplateId).show();
+}
 function DischargeReportContent(ipdNo) {
     $('#tblDischargeReportContent tbody').empty();
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
@@ -738,6 +753,7 @@ function AdvicePreviewOldHIS(appno) {
     }, 200);
 }
 function AdvicePreview(appno) {
+    InsertItemsForPres();
     $('#PresPreview').attr('src', config.rootUrl + '/loading.html');
     setTimeout(function () {
         var url = config.rootUrl + "/opd/print/AdvicePreview?app_no=" + appno;
@@ -745,6 +761,7 @@ function AdvicePreview(appno) {
     }, 200);
 }
 function PresPreview() {
+    InsertItemsForPres();
     $('#PresPreview').attr('src', config.rootUrl + '/loading.html');
     setTimeout(function () {
         var url = config.rootUrl + "/opd/print/AdvicePreview?app_no=" + Active.AppId;

@@ -46,6 +46,16 @@ function InsertPresItems() {
     var objItems = [];
     var objMedicine = [];
     var objBO = {};
+    $('.prescribedItem:not(templategroup[id=VitalSign]) p').each(function () {
+        if ($(this).parents('.prescribedItem').attr('id') != 'VitalSignItems') {
+            objItems.push({
+                'TemplateId': $(this).parents('.prescribedItem').find('templategroup').attr('id'),
+                'ItemId': $(this).parents('.prescribedItem').find('templategroup').attr('id'),
+                'ItemName': $(this).html().trim(),
+                'Remark': '-',
+            });
+        }
+    })
     $('.prescribedItem:not(templategroup[id=VitalSign]) span').each(function () {
         if ($(this).parents('.prescribedItem').attr('id') != 'VitalSignItems') {
             objItems.push({
@@ -56,7 +66,6 @@ function InsertPresItems() {
             });
         }
     })
-
     $('#PrescribedMedicine .MedicineTemplate tbody tr').each(function () {
         if ($(this).find('td:eq(0)').text().length > 3) {
             objMedicine.push({
@@ -105,16 +114,26 @@ function InsertMedicineItems() {
     var objItems = [];
     var objMedicine = [];
     var objBO = {};
+    $('.prescribedItem:not(templategroup[id=VitalSign]) p').each(function () {
+        if ($(this).parents('.prescribedItem').attr('id') != 'VitalSignItems') {
+            objItems.push({
+                'TemplateId': $(this).parents('.prescribedItem').find('templategroup').attr('id'),
+                'ItemId': $(this).parents('.prescribedItem').find('templategroup').attr('id'),
+                'ItemName': $(this).html().trim(),
+                'Remark': '-'
+            });
+        }
+    });
     $('.prescribedItem:not(templategroup[id=VitalSign]) span').each(function () {
         if ($(this).parents('.prescribedItem').attr('id') != 'VitalSignItems') {
             objItems.push({
                 'TemplateId': $(this).parents('.prescribedItem').find('templategroup').attr('id'),
                 'ItemId': $(this).attr('id'),
                 'ItemName': $(this).html().trim().replace(',', ''),
-                'Remark': '-'
+                'Remark': '-',
             });
         }
-    });
+    })
     $('#PrescribedMedicine .MedicineTemplate tbody tr').each(function () {
         if ($(this).find('td:eq(0)').text().length > 3) {
             objMedicine.push({

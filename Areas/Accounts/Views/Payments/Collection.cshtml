@@ -42,37 +42,31 @@
     <div class="container">
         <div class="panel-body">
             <div class="row colnospace" style="background-color:#bddeff;padding: 7px;margin-bottom:5px">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <button id="btnCurrentPatient" onclick="InitiateClose('Initiate')" class="btn btn-success"><i class="fa fa-openid">&nbsp;</i>Open</button>&nbsp;&nbsp;&nbsp;&nbsp;
                     <button id="btnExcel" onclick="InitiateClose('CloseWorking')" class="btn btn-danger"><i class="fa fa-close">&nbsp;</i>Close</button>
                 </div>
                 <div class="col-md-3">
                     <label style="display:flex;margin: 0;align-items:baseline;white-space:pre;pointer-events:none">Shift Id : <input type="text" id="txtShiftId" class="form-control" /></label>
                 </div>
+                <div class="col-md-4">
+                    <label style="display:flex;margin: 0;align-items:baseline;white-space:pre;pointer-events:none">Employee Name : <input type="text" id="txtName" class="form-control" /></label>
+</div>
             </div>
             <div class="row colnospace">
-                <div class="scroll" style="margin-bottom: 5px;height:75px;overflow:auto;border: 1px solid #2478a9;">
+                <div class="scroll" style="margin-bottom: 5px;height:170px;overflow:auto;border: 1px solid #2478a9;">
                     <table id="tblHOTOInfo" class="table table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="5">Working</th>
-                                <th colspan="2">Received/Transfer</th>
-                                <th>-</th>
-                                <th colspan="2">In-Transit</th>
-                            </tr>
-                            <tr>
-                                <th>Cash</th>
-                                <th>Cash</th>
-                                <th>Swipe</th>
-                                <th>Cheque</th>
-                                <th>RTGS</th>
-                                <th>Total</th>
-                                <th>Transfer</th>
-                                <th>Received</th>
-                                <th>Balance</th>
-                                <th>Transfer</th>
-                                <th>Received</th>
-
+                                <th style='width:30%;text-align:left'>Ledger Name</th>
+                                <th style='width:8%;text-align:center'>Work</th>
+                                <th style='width:8%;text-align:center'>Received (Other)</th>
+                                <th style='width:8%;text-align:center'>Pending Receive</th>
+                                <th style='width:8%;text-align:center'>Total Received</th>
+                                <th style='width:8%;text-align:center'>Transfer</th>
+                                <th style='width:8%;text-align:center'>Transfer Not Received</th>
+                                <th style='width:8%;text-align:center'>Transfer Received</th>
+                                <th style='width:8%;text-align:center'>Balance</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -87,12 +81,13 @@
 
                     <div class="tab-content" style="background: #fff;">
                         <div id="Transfer" class="tab-pane fade in active">
-                            <div class="scroll" style="margin-bottom: 5px;height:55vh;overflow:hidden;width:50%">
+                            <div class="scroll" style="margin-bottom: 5px;height:55vh;overflow:hidden;width:70%">
                                 <table id="tblTransfer" class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th style="width:1%"><input type="checkbox" onchange="" checked /></th>
-                                            <th>Pay Mode</th>
+                                            <th>Ledger Name</th>
+                                            <th class="text-center">Count</th>
                                             <th class="text-right">Received</th>
                                             <th style="width:20%" class="text-right">Transfer</th>
                                         </tr>

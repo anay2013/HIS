@@ -263,7 +263,9 @@ function SearchByKey() {
                         else {
                             tbody += "<button style='margin-right:10px;' data-app_no=" + val.app_no + " class='Cancelled btn-danger btn-flat disabled'>Cancel</button>";
                         }
+
                         tbody += "<button style='margin-right:10px;' class='btn-success btn-flat " + val.IsConfirmed + "' onclick=Confirm('" + val.app_no + "')>Confirm</button>";
+
                         tbody += "<button id='btnPrint' class='btn-info btn-flat " + val.IsTnxId + "' onclick=Receipt('" + val.TnxId + "')>Print</button>";
                         tbody += "</td>";
                         tbody += "</tr>";
@@ -350,6 +352,7 @@ function SearchByDate() {
                         tbody += "<button style='margin-right:10px;' class='btn-success btn-flat " + val.IsConfirmed + "' onclick=Confirm('" + val.app_no + "')>Confirm</button>";
                         tbody += "<button id='btnPrint' class='btn-info btn-flat " + val.IsTnxId + "' onclick=Receipt('" + val.TnxId + "')>Print</button>";
                         tbody += "</td>";
+                        tbody += "<td>" + val.AppEntryBy + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblOPDRegister tbody').append(tbody);

@@ -79,27 +79,28 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<td>:</td>");
                     b.Append("<td><b>" + dr["RoomNo"].ToString() + "</b></td>");
                     b.Append("<td>&nbsp;</td>");
-                    b.Append("<td></td>");
-                    b.Append("<td></td>");
-                    b.Append("<td></td>");
+                    b.Append("<td>Appointment No</td>");
+                    b.Append("<td>:</td>");
+                    b.Append("<td>" + dr["app_no"].ToString() + "</td>");
                     b.Append("</tr>");
+
                     b.Append("<tr>");
                     b.Append("<td>Token No</td>");
                     b.Append("<td></td>");
                     b.Append("<td>" + dr["token_no"].ToString() + "</td>");
                     b.Append("<td>&nbsp;</td>");
-                    b.Append("<td>Appointment No</td>");
+                    b.Append("<td>Appointment Time</td>");
                     b.Append("<td>:</td>");
-                    b.Append("<td>" + dr["app_no"].ToString() + "</td>");
+                    b.Append("<td>" + dr["AppointmentDate"].ToString() + "</td>");
                     b.Append("</tr>");
                     b.Append("<tr>");
                     b.Append("<td>UHID No.</td>");
                     b.Append("<td><b>:</b></td>");
                     b.Append("<td>" + dr["UHID"].ToString() + "</td>");
                     b.Append("<td>&nbsp;</td>");
-                    b.Append("<td>Date & Time</td>");
+                    b.Append("<td>Booking Time</td>");
                     b.Append("<td><b>:</b></td>");
-                    b.Append("<td>" + dr["AppDate"].ToString() + "</td>");
+                    b.Append("<td>" + dr["EntryDateTime"].ToString() + "</td>");
                     b.Append("</tr>");
                     b.Append("<tr>");
                     b.Append("<td>Name</td>");
@@ -148,7 +149,6 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<td><b>:</b></td>");
                     b.Append("<td style='text-transform:uppercase'>" + dr["ref_name"].ToString() + "</td>");
                     b.Append("</tr>");
-
 
                     b.Append("</table>");
                     CancelAgainstNo = dr["visitType"].ToString();
@@ -588,6 +588,11 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             DoctorPrescription pr = new DoctorPrescription();
             return pr.PrintPriscription(app_no);
         }
+        public FileResult AdvicePreviewOldHIS(string app_no)
+        {
+            DoctorPrescriptionOldHIS pr = new DoctorPrescriptionOldHIS();
+            return pr.PrintPriscription(app_no);
+        }
         public FileResult AdvicePreview2(string app_no)
         {
             PdfGenerator pdfConverter = new PdfGenerator();
@@ -984,27 +989,6 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             var AppNo = string.Empty;
             string NextFollowUpDate = string.Empty;
             b.Append("<div style='height:110px;border-bottom:1px solid #000'></div>");          
-            //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            //{
-            //    foreach (DataRow dr in ds.Tables[0].Rows)
-            //    {
-            //        b.Append("<div style='font-family:sans-serif;font-size:85%;border:1px solid #000;'>");
-            //        b.Append("<span style='-webkit-transform: rotate(-90deg);position:fixed;font-size:11px;left:-86px;top:28%;width:23%'>Powered By : " + dr["Hospital_Name"].ToString() + ".</span>");
-            //        b.Append("<div style='width:100%;float:left;margin-top:-12px;padding:8px'>");
-            //        string headerImageFile = HttpContext.Server.MapPath(@"~/Content/logo/logo.png");
-            //        b.Append("<div style='text-align:left;width:30%;float:left'>");
-            //        b.Append("<img src=" + headerImageFile + " style='width:170px;margin-top:18px;' />");
-            //        b.Append("</div>");
-            //        b.Append("<div style='text-align:left;width:70%;float:right;'>");
-            //        b.Append("<h3 style='font-weight:bold;margin-bottom:-2px'>" + dr["Hospital_Name"].ToString() + "</h3>");
-            //        b.Append("<span style='text-align:left;'>" + dr["Full_Address"].ToString() + "</span><br/>");
-            //        b.Append("<span style='text-align:left;'>" + dr["ContactInfo"].ToString() + "</span><br/>");
-            //        b.Append("<span style='text-align:left;'><b>Website : " + dr["Website"].ToString() + ", GSTIN : " + dr["gst_no"].ToString() + "</b></span>");
-            //        b.Append("</div>");
-            //        b.Append("</div>");
-            //        b.Append("<hr/>");
-            //    }
-            //}
             if (ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[1].Rows)
@@ -1043,9 +1027,9 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<td><b>:</b></td>");
                     b.Append("<td>" + dr["mobile_no"].ToString() + "</td>");
                     b.Append("<td>&nbsp;</td>");
-                    b.Append("<td><b>Valid To</b></td>");
+                    b.Append("<td><b>Valid Till</b></td>");
                     b.Append("<td><b>:</b></td>");
-                    b.Append("<td>" + dr["AppDate"].ToString() + "</td>");
+                    b.Append("<td>" + dr["validTill"].ToString() + "</td>");
                     b.Append("</tr>");
                     b.Append("<tr>");
                     b.Append("<td><b>Panel</b></td>");

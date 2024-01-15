@@ -331,7 +331,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             {
                 //Medicine Begin
                 b.Append("<div style='width:95%;'>");
-                string rx = HttpContext.Current.Server.MapPath("/Content/logo/rx.png");
+                string rx = HttpContext.Current.Server.MapPath("~/Content/logo/rx.png");
                 b.Append("<p style='text-align:left;margin:0'><img src=" + rx + " style='width:15px;margin-bottom:-7px;' /></p>");
                 b.Append("<table style='width:100%;float:left;font-size:11px;margin:10px 0;text-align:left;border-collapse: collapse;border:1px solid #000;'>");
                 b.Append("<tr>");

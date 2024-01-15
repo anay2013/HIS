@@ -1,4 +1,5 @@
-﻿$(document).ready(function () { 
+﻿$(document).ready(function () {
+    Active.doctorId = 'DR00033';
     GetTemplateMaster();
     $('#btnSaveDoctorTemplate').on('click', function () {
         var val = $(this).text();
@@ -41,11 +42,12 @@ function InsertTemplateInfo() {
         objBO.TemplateId = $('#ddlDoctorTemplate option:selected').val();
         objBO.ItemId = '-';
         objBO.ItemName = $('#txtDoctorItemName').val();
-        objBO.prm_1 = ($('#txtDoctorTempDescription').val().trim() == '') ? $('#txtDoctorItemName').val() : $('#txtDoctorTempDescription').val();
+        objBO.prm_1 = ($('#txtDoctorTempDescription').val().trim() == '') ? $('#txtDoctorItemName').val() : $('#txtDoctorTempDescription').val().replace(/\n/g, '<br>');
         var fav = $('input[name=IsFavourite]').is(':checked');
         objBO.IsFavourite = (fav == true) ? 1 : 0;
         objBO.login_id = Active.userId;
         objBO.Logic = 'InsertTemplateInfo';
+        console.log(objBO.prm_1)
         $.ajax({
             method: "POST",
             url: url,
@@ -78,11 +80,12 @@ function UpdateTemplateInfo() {
         objBO.TemplateId = $('#ddlDoctorTemplate option:selected').val();
         objBO.ItemId = $('#hiddenDoctorTempItemId').text();
         objBO.ItemName = $('#txtDoctorItemName').val();
-        objBO.prm_1 = ($('#txtDoctorTempDescription').val().trim() == '') ? $('#txtDoctorItemName').val() : $('#txtDoctorTempDescription').val();
+        objBO.prm_1 = ($('#txtDoctorTempDescription').val().trim() == '') ? $('#txtDoctorItemName').val() : $('#txtDoctorTempDescription').val().replace(/\n/g, '<br>');
         var fav = $('input[name=IsFavourite]').is(':checked');
         objBO.IsFavourite = (fav == true) ? 1 : 0;
         objBO.login_id = Active.userId;
         objBO.Logic = 'UpdateTemplateInfo';
+        console.log(objBO.prm_1)
         $.ajax({
             method: "POST",
             url: url,

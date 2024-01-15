@@ -499,7 +499,7 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#LaboratoryRadiologyAdvicePackages" class="collapsed" aria-expanded="false">
                                 <span class="circle"><i class="fa fa-plus-circle"></i></span>Laboratory & Radiology Advice & Packages
                             </a>
-                            <span class="circle-add pull-right" id="T00009"><i class="fa fa-edit"></i></span>
+                            @*<span class="circle-add pull-right" id="T00009"><i class="fa fa-edit"></i></span>*@
                         </h4>
                     </div>
                     <div id="LaboratoryRadiologyAdvicePackages" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
@@ -513,11 +513,11 @@
                                         <button class="btn btn-success" onclick="FilteredTemplate('HospitalList','T00009','LaboratoryRadiologyList')"><i class="fa fa-medkit"></i></button>
                                     </div>
                                     <ul class="ListItems" id="LaboratoryRadiologyList" style="height:300px"></ul>
-                                    <div class="bottom-box">
+                                    @*<div class="bottom-box">
                                         <input type="text" class="form-control" placeholder="Write Other Investigation" />
-                                    </div>
+                                    </div>*@
                                     <div class="bottom-box">
-                                        <textarea class="form-control" data-id="LaboratoryRadiologyItems" placeholder="Enter Laboratory & Radiology Remarks" rows="4"></textarea>
+                                        <textarea class="form-control" data-id="LaboratoryRadiologyItems" placeholder="Write Other Investigation" rows="5"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -545,7 +545,7 @@
                                     </div>
                                     <ul class="ListItems" id="DoctorNotesList" style="height:300px"></ul>
                                     <div class="bottom-box">
-                                        <textarea class="form-control" data-id="DoctorNotesItems" id="txtDoctorNotes" placeholder="Reamrk" rows="4"></textarea>
+                                        <textarea class="form-control" data-id="DoctorNotesItems" id="txtDoctorNotes" placeholder="Remark" rows="4"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -603,7 +603,7 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#PrescribedProcedure" class="collapsed" aria-expanded="false">
                                 <span class="circle"><i class="fa fa-plus-circle"></i></span>Prescribed Procedure
                             </a>
-                            <span class="circle-add pull-right"><i class="fa fa-edit"></i></span>
+                            @*<span class="circle-add pull-right"><i class="fa fa-edit"></i></span>*@
                         </h4>
                     </div>
                     <div id="PrescribedProcedure" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
@@ -664,10 +664,11 @@
                 </ul>
             </div>
             <div class="row">
-                <div class="col-md-12 bottom-tab">
+                <div class="col-md-12 bottom-tab" style="height: 200px;overflow:auto">
                     <ul class="nav nav-tabs" style="margin:0">
-                        <li class="active"><a data-toggle="tab" href="#PatientVisits">Patient Visits</a></li>
-                        <li><a data-toggle="tab" href="#menu1">IPD Discharge Summary</a></li>
+                        <li class="active" style="width:25%"><a data-toggle="tab" style="padding:3px 0px !important" href="#PatientVisits">Patient Visits</a></li>
+                        <li style="width:50%"><a data-toggle="tab" style="padding:3px 4px !important" href="#menu1">IPD Discharge Summary</a></li>
+                        <li style="width:25%"><a data-toggle="tab" onclick="OldHisData()" style="padding:3px 4px !important" href="#menu2">Old HIS Data</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="PatientVisits" class="tab-pane fade in active">
@@ -676,6 +677,9 @@
                         </div>
                         <div id="menu1" class="tab-pane fade">
                             <table id="tblIPDDischargeSummary" style="margin-top:10px" class="table table-bordered"><tbody></tbody></table>
+                        </div>
+                        <div id="menu2" class="tab-pane fade">
+                            <table id="tblOldHISData" style="margin-top:10px" class="table table-bordered"><tbody></tbody></table>
                         </div>
                     </div>
                 </div>
@@ -880,7 +884,7 @@
                             <select id="ddlDoctorTemplate" class="form-control" data-imp></select>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-8 form-group">
                         <div class="form-group" style="display:flex">
                             <input type="text" id="txtDoctorItemName" style="width:65%;margin-right: 10px;" data-imp class="form-control text-uppercase" placeholder="Item Name" />
                             <span data-categoryid style="display:none"></span>
@@ -888,7 +892,12 @@
                             <label>
                                 <input type="checkbox" value="1" name="IsFavourite" />&nbsp;Favourite
                             </label>
-                            <button id="btnSaveDoctorTemplate" style="margin-left: 6px;" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="margin-top:10px">
+                        <div class="form-group">
+                            <textarea id="txtDoctorTempDescription" class="form-control" placeholder="Description"></textarea>
+                            <button id="btnSaveDoctorTemplate" style="margin: 6px;" class="btn btn-success pull-right">Submit</button>
                         </div>
                     </div>
                 </div>

@@ -253,7 +253,43 @@ function PatientForAdvice() {
                     tbody1 += "<td><i class='fa fa-copy IPDDisList'></i></td>";
                     tbody1 += "</tr>";
                 });
-                $('#tblIPDDischargeSummary tbody').append(tbody1);
+                $('#tblIPDDischargeSummary tbody').append(tbody1);              
+            }
+            else {
+                alert('No Record Found..');
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        },
+    });
+}
+function OldHisData() {
+    var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
+    var objBO = {};
+    objBO.UHID = $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(5)').text();
+    objBO.AppointmentId = $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(9)').text();
+    objBO.DoctorId = 'DR00033';
+    objBO.Logic = 'OLDHISData';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {              
+                $('#tblOldHISData tbody').empty();
+                var tbodyOldHIS = "";
+                $.each(data.ResultSet.Table, function (key, val) {
+                    tbodyOldHIS += "<tr>";
+                    tbodyOldHIS += (Active.AppId == val.app_no) ? '<td>-' : "<td><i class='fa fa-copy copyVisit'></i>";
+                    tbodyOldHIS += "<td>" + val.app_no + "</td>";
+                    tbodyOldHIS += "<td>" + val.PatientVisits + "</td>";
+                    tbodyOldHIS += "<td><i class='fa fa-print currentVisitOldHIS'></i></td>";
+                    tbodyOldHIS += "</tr>";
+                });
+                $('#tblOldHISData tbody').append(tbodyOldHIS);
             }
             else {
                 alert('No Record Found..');

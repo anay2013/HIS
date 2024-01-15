@@ -16,7 +16,7 @@ $(document).ready(function () {
             //if ($('.MedicineTemplate tbody tr').length>0)
             //$('.MedicineTemplate tbody').empty();
             return
-        }
+        }            
 
         var imgRx = $('#imgRx');
         if ($(imgRx).is(e.target)) {
@@ -34,7 +34,7 @@ $(document).ready(function () {
                     $(this).find('.delRow').remove();
 
                 $(this).removeAttr('style');
-                var content = '';
+                var content = '';             
                 if ($(this).find('select').length > 0)
                     content = $(this).find('label').text() + ' ' + $(this).find('select option:selected').text();
                 else if ($(this).find('label').length > 0)
@@ -55,7 +55,7 @@ $(document).ready(function () {
         if ($('#PrescribedMedicine .MedicineTemplate tbody tr').length == 0)
             $('.OPDPrintPreview #PrescribedMedicine').hide();
     });
-    $('.MedicineTemplate tbody').on('click', 'td', function (e) {
+    $('.MedicineTemplate tbody').on('click', 'td', function (e) {             
         if ($(this).find('label.editable').length === 1)
             return
         //$('.MedicineTemplate tbody td').each(function () {
@@ -67,7 +67,7 @@ $(document).ready(function () {
         //var content = $(this).not('.delRow').text();
         //$(this).html('<remove class="delRow">X</remove><input type="text" value="' + content + '"/>');
         //$('input:text').select();
-        $(this).closest('tr').find('td').each(function () {
+        $(this).closest('tr').find('td').each(function () {          
             var indx = $(this).index();
             $(this).find('.delRow').remove();
             var content = $(this).text();
@@ -77,9 +77,9 @@ $(document).ready(function () {
             if (indx == 1)
                 var data = "<label class='editable' onkeyup=Dose(this) contenteditable='true'>" + content + "</label>";
             if (indx == 4)
-                var data = "<label class='editable' onkeyup=InTake(this) contenteditable='true'>" + content + "</label>";
+                var data = "<label class='editable' onkeyup=InTake(this) contenteditable='true'>" + content + "</label>";          
             if (indx == 5)
-                var data = "<label class='editable' onkeyup=Route(this) contenteditable='true'>" + content + "</label>";
+                var data = "<label class='editable' onkeyup=Route(this) contenteditable='true'>" + content + "</label>";   
 
             if ($(this).index() == 0)
                 $(this).html('<remove class="delRow">X</remove>' + data);
@@ -89,13 +89,13 @@ $(document).ready(function () {
         $(this).find('.editable').focus();
     });
     $(document).find('.MedicineTemplate thead').on('click', '.addmedNewRow', function () {
-        AddNewRow()
+        AddNewRow() 
     });
     $('.MedicineTemplate tbody').on('keydown', 'label', function (e) {
         if ($(this).closest('td').index() == 6) {
-            if (e.keyCode == 13) {
+            if (e.keyCode == 13) {                
                 e.preventDefault();
-                AddNewRow();
+                AddNewRow();                 
             }
         }
         if ($('input[id=IsDB]').is(':checked') && $(this).closest('td').index() == 0) {
@@ -106,7 +106,7 @@ $(document).ready(function () {
             $(this).autocomplete({
                 source: dataVal,
                 focus: function (event, ui) {
-                    $(this).text(ui.item.value.split('~')[0])
+                    $(this).text(ui.item.value.split('~')[0])                    
                     return false;
                 },
                 select: function (event, ui) {
@@ -221,10 +221,10 @@ $(document).ready(function () {
     });
 
     $('#btnMediTemp').on('click', function () {
-        if ($('.MedicineTemplate tbody tr').length > 0) {
+        if ($('.MedicineTemplate tbody tr').length >0) {
             $('.MedicineTemplate tbody').empty();
         }
-        $('.OPDPrintPreview #PrescribedMedicine').toggle();
+            $('.OPDPrintPreview #PrescribedMedicine').toggle();
 
         AddNewRow();
         //$('#btnSaveMediTempInfo').hide();
@@ -246,25 +246,25 @@ $(document).ready(function () {
     });
     $('#accordion').find('.panel:eq(2)').find('a[href=#ChiefComplaint]').trigger('click');
 });
-function AddNewRow() {
-    var tbody = "";
-    tbody += "<tr data-itemid='newId'>";
-    tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><label class='editable' contenteditable='true'></label></td>";
-    tbody += "<td style='padding:2px;'><label id='med1' onkeyup=Dose(this) class='editable' contenteditable='true'></label></td>";
-    tbody += "<td style='padding:2px;'><label id='med2' class='editable' contenteditable='true'></label></td>";
-    tbody += "<td style='display: flex;'><label id='med3' class='editable' contenteditable='true'></label>";
-    tbody += "<select class='editable'>";
-    tbody += "<option>Day</option>";
-    tbody += "<option>Week</option>";
-    tbody += "<option>Month</option>";
-    tbody += "</select>";
-    tbody += "</td>";
-    tbody += "<td style='padding:2px;'><label id='med4' onkeyup=InTake(this) class='editable' contenteditable='true'></label></td>";
-    tbody += "<td style='padding:2px;'><label id='med5' onkeyup=Route(this) class='editable' contenteditable='true'></label></td>";
-    tbody += "<td style='padding:2px;'><label id='med6' class='editable' contenteditable='true'></label></td>";
-    tbody += "</tr>";
+function AddNewRow() {  
+        var tbody = "";
+        tbody += "<tr data-itemid='newId'>";
+        tbody += "<td style='padding:2px;'><remove class='delRow'>X</remove><label class='editable' contenteditable='true'></label></td>";
+        tbody += "<td style='padding:2px;'><label id='med1' onkeyup=Dose(this) class='editable' contenteditable='true'></label></td>";
+        tbody += "<td style='padding:2px;'><label id='med2' class='editable' contenteditable='true'></label></td>";
+        tbody += "<td style='display: flex;'><label id='med3' class='editable' contenteditable='true'></label>";
+        tbody += "<select class='editable'>";
+        tbody += "<option>Day</option>";
+        tbody += "<option>Week</option>";
+        tbody += "<option>Month</option>";
+        tbody += "</select>";
+        tbody += "</td>";
+        tbody += "<td style='padding:2px;'><label id='med4' onkeyup=InTake(this) class='editable' contenteditable='true'></label></td>";
+        tbody += "<td style='padding:2px;'><label id='med5' onkeyup=Route(this) class='editable' contenteditable='true'></label></td>";
+        tbody += "<td style='padding:2px;'><label id='med6' class='editable' contenteditable='true'></label></td>";
+        tbody += "</tr>";
     $('.MedicineTemplate tbody').append(tbody);
-    $('#PrescribedMedicine .MedicineTemplate tbody').find('tr:last td:first label:first').focus();
+    $('#PrescribedMedicine .MedicineTemplate tbody').find('tr:last td:first label:first').focus();   
 }
 function expandMedicine() {
     $('.prescribedItem:eq(6)').toggleClass('expandMedicine');

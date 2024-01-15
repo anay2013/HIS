@@ -11,19 +11,19 @@ using System.Web.Mvc;
 
 namespace MediSoftTech_HIS.Areas.OPD.Repository
 {
-    public class DoctorPrescription
+    public class DoctorPrescriptionOldHIS
     {
         dataSet dsResult = new dataSet();
         string _Deptname = string.Empty;
         string _IsNABL = string.Empty;
         string _PrintWithHeader = "N";
         string NextFollowUpDate = "-";
-        List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
+        List<ipPageCounter1> pgCounterList = new List<ipPageCounter1>();
         public FileResult PrintPriscription(string app_no)
         {
             AppointmentQueries obj = new AppointmentQueries();
             obj.AppointmentId = app_no;
-            obj.Logic = "OPD:Prescription";
+            obj.Logic = "OPD-OldHIS:Prescription";
             dsResult = APIProxy.CallWebApiMethod("Appointment/Opd_AppointmentQueries", obj);
             DataSet ds = dsResult.ResultSet;
             PdfDocument repDocument = new PdfDocument();
@@ -190,7 +190,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                         b.Append("<tr>");
                         b.Append("<td>Weight</td>");
                         b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["WT"].ToString() + " Kg</td>");
+                        b.Append("<td>" + dr["WT"].ToString() + " kg</td>");
                         b.Append("</tr>");
                     }
                     if (Convert.ToDecimal(dr["Temprarture"]) > 0)
@@ -198,7 +198,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                         b.Append("<tr>");
                         b.Append("<td>Temprature</td>");
                         b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["Temprarture"].ToString() + "</td>");
+                        b.Append("<td>" + dr["Temprarture"].ToString() + " °C</td>");
                         b.Append("</tr>");
                     }
                     if (Convert.ToDecimal(dr["Pulse"]) > 0)
@@ -206,15 +206,15 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                         b.Append("<tr>");
                         b.Append("<td>Pulse</td>");
                         b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["Pulse"].ToString() + "</td>");
+                        b.Append("<td>" + dr["Pulse"].ToString() + " °C</td>");
                         b.Append("</tr>");
                     }
-                    if (dr["BP_Sys"].ToString().Length>0 || dr["BP_Dys"].ToString().Length > 0)
+                    if (Convert.ToDecimal(dr["BP_Sys"]) > 0)
                     {
                         b.Append("<tr>");
                         b.Append("<td>B/P</td>");
-                        b.Append("<td>:</td>"); 
-                        b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString()+ "/" +dr["BP_Dys"].ToString() + " Mm/Hg</td>");
+                        b.Append("<td>:</td>");
+                        b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString() + " Mm/Hg</td>");
                         b.Append("</tr>");
                     }
                     if (Convert.ToDecimal(dr["SPO2"]) > 0)
@@ -453,9 +453,9 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                     b.Append("<td><b>:</b></td>");
                     b.Append("<td>" + dr["mobile_no"].ToString() + "</td>");
                     b.Append("<td>&nbsp;</td>");
-                    b.Append("<td><b>Valid Till</b></td>");
+                    b.Append("<td><b>Valid To</b></td>");
                     b.Append("<td><b>:</b></td>");
-                    b.Append("<td>" + dr["validTill"].ToString() + "</td>");
+                    b.Append("<td>" + dr["AppDate"].ToString() + "</td>");
                     b.Append("</tr>");
                     b.Append("<tr>");
                     b.Append("<td><b>Panel</b></td>");
@@ -503,7 +503,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             return f.ToString();
         }
     }
-    public class ipPageCounter
+    public class ipPageCounter1
     {
         public string DeptName { get; set; }
         public int PageIndex { get; set; }

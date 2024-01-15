@@ -1,9 +1,6 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')
-    GetStatus();
-    OnLoadInfo()
     $('#btnGetEmployee').on('click', function () {
         var empName = $('#txtEmpName').val();
         GetEmpDetails(empName);
@@ -23,12 +20,21 @@ $(document).ready(function () {
             });
         }
     });
+   
+    GetStatus();
+
 });
 function GetEmpDetails(empName) {
-    var url = config.baseUrl + "/api/ApplicationResource/MenuQueries";
+    var url = config.baseUrl + "/api/Account/HIS_HOTO_Queries";
     var objBO = {};
-    objBO.Prm1 = empName,
-        objBO.Logic = 'GetEmployee'
+    objBO.hosp_id = Active.HospId;
+    objBO.shiftID = '-';
+    objBO.from = '2023-09-26';
+    objBO.to = '2023-09-26';
+    objBO.Prm1 = '-';
+    objBO.Prm2 = '-';
+    objBO.LoginId = Active.userId;
+    objBO.Logic = 'ActiveShiftIds';
     $.ajax({
         method: "POST",
         url: url,
@@ -51,6 +57,7 @@ function GetEmpDetails(empName) {
 }
 function OnLoadInfo() {
     $('#tblTransfer tbody').empty();
+    $('#tblHOTOInfo tbody').empty();
     var url = config.baseUrl + "/api/Account/HIS_HOTO_Queries";
     var objBO = {};
     objBO.hosp_id = Active.HospId;
@@ -69,46 +76,47 @@ function OnLoadInfo() {
         contentType: "application/json;charset=utf-8",
         success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
+                var tbody = "";
                 if (Object.keys(data.ResultSet.Table).length > 0) {
-                    var tbody = "<tr>";
-                    var total = 0;
-                    $.each(data.ResultSet.Table, function (key, val) {
-                        total += (val.Cash + val.SwipeCard + val.Cheque + val.NEFT_RTGS_Online)
-                        tbody += "<td>" + val.Cash + "</td>";
-                        tbody += "<td>" + val.SwipeCard + "</td>";
-                        tbody += "<td>" + val.Cheque + "</td>";
-                        tbody += "<td>" + val.NEFT_RTGS_Online + "</td>";
-                        tbody += "<td>" + total + "</td>";
+                   $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr>";
+                        tbody += "<td style='width:30%;text-align:left'>" + val.LedgerName + "</td>";
+                        tbody += "<td style='width:8%;text-align:center'>" + val.Work + "</td>";
+                        tbody += "<td style='width:8%;text-align:center'>" + val.Received + "</td>";
+                        tbody += "<td style='width:8%;text-align:center'>" + val.NeedToBeReceive + "</td>";
+                        tbody += "<td style='width:8%;text-align:center'>" + val.Total + "</td>";
+                        tbody += "<td style='width:8%;text-align:center'>" + val.Trf + "</td>";
+                        tbody += "<td style='width:14%;text-align:center'>" + val.TrfNotRcvd + "</td>";
+                        tbody += "<td style='width:8%;text-align:center'>" + val.TrfRcvd + "</td>";
+                        tbody += "<td style='width:8%;text-align:center'>" + val.Balance + "</td>";
+                        tbody += "</tr>";
                     });
-                    $.each(data.ResultSet.Table1, function (key, val) {
-                        tbody += "<td>" + val.Trf + "</td>";
-                        tbody += "<td>" + val.Received + "</td>";
-                        tbody += "<td>" + ((total + val.Received) - val.Trf) + "</td>";
-                        tbody += "<td>" + val.Trf_InTran + "</td>";
-                        tbody += "<td>" + val.Rec_InTran + "</td>";
-                    });
-                    tbody += "</tr>";
+            
                 }
                 $('#tblHOTOInfo tbody').append(tbody);
             }
             if (Object.keys(data.ResultSet).length > 0) {
-                if (Object.keys(data.ResultSet.Table2).length > 0) {
+                if (Object.keys(data.ResultSet.Table1).length > 0) {
                     var tbody1 = "";
                     var WorkAmount = 0;
                     var Balance = 0;
-                    $.each(data.ResultSet.Table2, function (key, val) {
+                    var TRcptCount = 0;
+                    $.each(data.ResultSet.Table1, function (key, val) {
                         WorkAmount += val.Received;
                         Balance += val.Received;
-
+                        TRcptCount += val.RcptCount;
                         tbody1 += "<tr>";
                         tbody1 += "<td><input type='checkbox' checked/></td>";
-                        tbody1 += "<td>" + val.PayMode + "</td>";
+                        tbody1 += "<td style='display:none'>" + val.LedgerId + "</td>";
+                        tbody1 += "<td>" + val.LedgerName + "</td>";
+                        tbody1 += "<td class='text-center'>" + val.RcptCount + "</td>";
                         tbody1 += "<td class='text-right'>" + val.Received + "</td>";
                         tbody1 += "<td class='text-right'><input data-bal=" + val.Received + " onkeyup=totalCal(this) style='width:90%' type='text' class='text-right' value=" + val.Received + " /></td>";
                         tbody1 += "</tr>";
                     });
                     tbody1 += "<tr style='background:#ddd;font-size:12px;' class='total'>";
                     tbody1 += "<td colspan='2'><b class='text-right'>Total</b></td>";
+                    tbody1 += "<td class='text-center'><b>" + TRcptCount + "</b></td>";
                     tbody1 += "<td class='text-right'><b>" + WorkAmount + "</b></td>";
                     tbody1 += "<td class='text-right'><b>" + Balance + "</b></td>";
                     tbody1 += "</tr>";
@@ -157,7 +165,7 @@ function PendingReceipt() {
                             temp = val.TransferBy
                         }
                         tbody += "<tr data-group='" + val.TransferBy + "'>";
-                        tbody += "<td>" + val.PayMode + "</td>";
+                        tbody += "<td>" + val.LedgerName + "</td>";
                         tbody += "<td>" + val.TnxType + "</td>";
                         tbody += "<td class='text-right'>" + val.Amount + "</td>";
                         tbody += "<td><button class='btn btn-success btn-xs ind'>Receive</button></td>";
@@ -200,13 +208,17 @@ function GetStatus() {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#txtShiftId').val(val.shiftID);
+                        $('#txtName').val(val.emp_name);
                     });
                 }
             }
         },
         error: function (response) {
             alert('Server Error...!');
+        }, complete: function (rs) {
+            OnLoadInfo();
         }
+        
     });
 }
 function InitiateClose(logic) {
@@ -256,11 +268,11 @@ function Transfer() {
         var url = config.baseUrl + "/api/Account/HOTO_InsertModifyCollection";
         var objBO = [];
         $('#tblTransfer tbody tr:not(.total)').each(function () {
-            if (parseFloat($(this).find('td:eq(3) input').val()) > 0) {
+            if (parseFloat($(this).find('td:eq(5) input').val()) > 0) {
                 objBO.push({
                     'AutoId': 0,
-                    'PayMode': $(this).find('td:eq(1)').text(),
-                    'Amount': $(this).find('td:eq(3) input').val(),
+                    'LedgerId': $(this).find('td:eq(1)').text(),
+                    'Amount': $(this).find('td:eq(5) input').val(),
                     'hosp_id': Active.HospId,
                     'tnxBy': Active.userId,
                     'tnxTo': $('#ddlEmployee option:selected').val(),

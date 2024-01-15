@@ -1,4 +1,4 @@
-﻿
+﻿var currentRemark = null;
 $(document).ready(function () {
     $('.OPDPrintPreview .prescribedItem').on('focus', 'input:text', function (e) {
         $(this).select();
@@ -23,6 +23,7 @@ $(document).ready(function () {
     $('.panel-body').on('click', 'a.fa-pencil', function () {
         var templateId = $(this).data('templateid');
         var itemName = $(this).data('itemname');
+        var itemDesc = $(this).data('desc');
         var itemid = $(this).data('itemid');
         var fav = $(this).data('fav');
         if (fav == true) {
@@ -38,11 +39,13 @@ $(document).ready(function () {
         });
         $('#hiddenDoctorTempItemId').text(itemid);
         $('#txtDoctorItemName').val(itemName);
+        $('#txtDoctorTempDescription').val(itemDesc);
         $('#btnSaveDoctorTemplate').switchClass('btn-success', 'btn-warning');
-        $('#btnSaveDoctorTemplate i').switchClass('fa-plus', 'fa-edit');
+        $('#btnSaveDoctorTemplate').text('Update');
         $('#modalTemplate').modal('show');
     });
     $('.panel-title a').on('click', function () {
+        currentRemark = null;
         $('.panel-title a').find('span.circle').removeClass('circle-open');
         $(this).find('span.circle').addClass('circle-open');
         $('.panel-title a').find('span.circle i').removeClass('circle-open fa-minus-circle');
@@ -72,6 +75,10 @@ $(document).ready(function () {
     $('#PatientVisits #tblPatientVisits tbody').on('click', '.copyVisit', function () {
         var appno = $(this).closest('tr').find('td:eq(1)').text();
         CopyVisitsInfo(appno)
+    });
+    $('#tblOldHISData tbody').on('click', '.copyVisit', function () {
+        var appno = $(this).closest('tr').find('td:eq(1)').text();
+        CopyVisitsInfoOldHIS(appno)
     });
     $('.panel-body').on('click', 'a.fa-heart', function () {
         var templateId = $(this).data('templateid');
@@ -103,10 +110,12 @@ $(document).ready(function () {
 
     //select Checkbox Item from Template To Prev
     $('.panel-body').on('change', 'input:checkbox', function () {
+        var listArr = ['LaboratoryRadiologyList', 'PrescribedProcedureList'];
         var template = $(this).parents('ul').attr('id');//get parent UL id on template item check
         var PrevTemplateId = template.replace('List', 'Items');//get id of related Template from Prev Side
         var itemId = $(this).data('itemid');//get item id on check
-        var itemName = $(this).closest('li').find('label').text();//get item name on check
+        var listName = $(this).closest('li').parents('ul').attr('id');
+        var itemName = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label input:checkbox').data('desc') : $(this).closest('li').find('label').text();//get item name on check
         var list = "";
         list += " <span id='" + itemId + "'>," + itemName + "</span><close class='remove'>X</close>";//create item list
         $('#' + PrevTemplateId).show();//show related template on prev side [default all template hide in prev side]
@@ -124,7 +133,22 @@ $(document).ready(function () {
             });
         }
     });
+    $('.OPDPrintPreview .prescribedItem').on('click', 'span', function (e) {
+        currentRemark = null;
+        if ($(this).hasClass('fromtxt') || $(this).attr('id') == 'fromtxt') {
+            currentRemark = (this);
+            var unq = $(this).parents('div.prescribedItem').attr('id');
+            var val = $(this).html().replace(/<br>/g, '\n');
+            $('textarea[data-id=' + unq + ']').val(val);
+            $('.panel-title a[href=#' + unq.replace('Items', '') + ']').trigger('click');
+            return
+        }
 
+        var itemid = $(this).attr('id');
+        var itemName = $(this).text();
+        $(this).replaceWith('<input type="text" value="' + itemName + '"/>');
+        $('input:text').focus();
+    });
     //Add Items from textarea to prev     
     $('.panel-body').on('keyup', 'textarea', function (e) {
         if ($(this).data('id') != '') {
@@ -138,8 +162,12 @@ $(document).ready(function () {
         }
         var list = "";
         list = " <span id='fromtxt' class='fromtxt'>," + itemName.replace(/\n/g, '<br/>') + "</span><close class='remove'>x</close>";
-        $('#' + PrevTemplateId + ' span[class=fromtxt]').remove();
-        $('#' + PrevTemplateId + '').append(list);
+        if (currentRemark != null)
+            $('#' + PrevTemplateId).find(currentRemark).html(itemName.replace(/\n/g, '<br/>'));
+        else {
+            $('#' + PrevTemplateId + ' span[class=fromtxt]').remove();
+            $('#' + PrevTemplateId + '').append(list);
+        }
         $('#' + PrevTemplateId).show();
         //$(this).val('');
         //if (e.keyCode === 13)//on press enter
@@ -173,15 +201,6 @@ $(document).ready(function () {
         $(this).prev('span').remove();
         $(this).remove();
     });
-    $('.OPDPrintPreview .prescribedItem').on('click', 'span', function (e) {
-        if ($(this).hasClass('fromtxt') || $(this).attr('id') == 'fromtxt')
-            return
-
-        var itemid = $(this).attr('id');
-        var itemName = $(this).text();
-        $(this).replaceWith('<input type="text" value="' + itemName + '"/>');
-        $('input:text').focus();
-    });
     $('.OPDPrintPreview .prescribedItem').on('blur', 'input:text', function () {
         var itemName = $(this).val();
         $(this).replaceWith("<span id='fromtext'>" + itemName + "</span>");
@@ -206,6 +225,15 @@ $(document).ready(function () {
         $('#PresPreview').attr('src', 'https://media.tenor.com/guhB4PpjrmUAAAAM/loading-loading-gif.gif');
         var appno = $(this).closest('tr').find('td:eq(1)').text();
         AdvicePreview(appno);
+        $('.nav-tabs li').removeClass('active')
+        $('.tab-content div[id="PatientVisits1"]').removeClass('active in')
+        $('a[href="#menu11"]').closest('li').addClass('active');
+        $('.tab-content div[id="menu11"]').addClass('active in')
+    });
+    $('#tblOldHISData tbody').on('click', '.currentVisitOldHIS', function () {
+        $('#PresPreview').attr('src', 'https://media.tenor.com/guhB4PpjrmUAAAAM/loading-loading-gif.gif');
+        var appno = $(this).closest('tr').find('td:eq(1)').text();
+        AdvicePreviewOldHIS(appno);
         $('.nav-tabs li').removeClass('active')
         $('.tab-content div[id="PatientVisits1"]').removeClass('active in')
         $('a[href="#menu11"]').closest('li').addClass('active');
@@ -292,7 +320,7 @@ function GetVitalSign() {
                 tbody += "<span>Weight :" + val.WT + " kg</span>";
                 tbody += "<span>Temperature : " + val.Temprarture + " °C</span>";
                 tbody += "<span>Pulse : " + val.Pulse + " p-m</span>";
-                tbody += "<span>B/P : " + val.BP_ys + '/' + val.BP_Dys + " mm/Hg</span>";
+                tbody += "<span>B/P : " + val.BP_Sys + '/' + val.BP_Dys + " mm/Hg</span>";
                 tbody += "<span>SPO2 : " + val.SPO2 + "</span>";
                 tbody += "<span>Height : " + val.HT + " CM</span>";
             });
@@ -362,7 +390,7 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "' data-desc='" + val.ItemDescription + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
@@ -372,7 +400,7 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table1, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
@@ -382,7 +410,7 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table2, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
@@ -392,7 +420,7 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table3, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
@@ -402,7 +430,7 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table4, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
@@ -412,7 +440,7 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table8, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
@@ -431,7 +459,7 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table10, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
@@ -499,17 +527,19 @@ function FilteredTemplate(FilterType, TemplateId, ul) {
             var li = "";
             $.each(data.ResultSet.Table, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid=" + val.ItemId + "/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid=" + val.ItemId + "/>&nbsp;" + val.ItemName + "</label></a>";
                 if (FilterType == 'HospitalList') {
                     li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 }
                 else if (FilterType == 'FavouriteList') {
-                    li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                    li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 }
                 else {
-                    li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-trash'></a>";
-                    li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-pencil' style='color:#1483a5'></a>";
-                    li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                    li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-trash'></a>";
+                    if (ul != 'LaboratoryRadiologyList' && ul != 'PrescribedProcedureList')
+                        li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-pencil' style='color:#1483a5'></a>";
+
+                    li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 }
                 li += "</li>";
             });
@@ -577,12 +607,47 @@ function CopyVisitsInfo(OldAppNo) {
             contentType: "application/json;charset=utf-8",
             success: function (data) {
                 if (data.includes('Success')) {
-                    alert(data);
-                    PatientHeaderInfo();
+                    window.location.reload();
                 }
                 else {
                     alert(data);
-                    PatientHeaderInfo();
+                    window.location.reload();
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function CopyVisitsInfoOldHIS(OldAppNo) {
+    if (confirm('Are you sure to copy Prescription in current Appointment?\nNote : It will delete all Prescription in current Appointment.')) {
+        var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
+        var objBO = {};
+        objBO.UHID = OldAppNo;
+        objBO.app_no = Active.AppId;
+        objBO.DoctorId = '-';
+        objBO.DeptId = '-';
+        objBO.DoctorId_Trf = '-';
+        objBO.caseType = '-';
+        objBO.consultType = '-';
+        objBO.doctor_diagnosis = '-';
+        objBO.doctor_remark = '-';
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'CopyVisitsInfoOldHIS';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    window.location.reload();
+                }
+                else {
+                    alert(data);
+                    window.location.reload();
                 }
             },
             error: function (response) {
@@ -664,6 +729,13 @@ function DeleteTemplateInfo(TemplateId, ItemId) {
             alert('Server Error...!');
         }
     });
+}
+function AdvicePreviewOldHIS(appno) {
+    $('#PresPreview').attr('src', config.rootUrl + '/loading.html');
+    setTimeout(function () {
+        var url = config.rootUrl + "/opd/print/AdvicePreviewOldHIS?app_no=" + appno;
+        $('#PresPreview').attr('src', url);
+    }, 200);
 }
 function AdvicePreview(appno) {
     $('#PresPreview').attr('src', config.rootUrl + '/loading.html');

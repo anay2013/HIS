@@ -8,45 +8,45 @@ $(document).ready(function () {
     $('select').select2();
     GetDoctorList();
     $('#tblDoneAppointment tbody').on('click', '#btnView', function () {
-        var AppId = $(this).closest('tr').find('td:eq(1)').text();
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
         window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnCall', function () {
-        var AppId = $(this).closest('tr').find('td:eq(1)').text();
-        var DoctorId = $(this).closest('tr').find('td:eq(2)').text();
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
         selectRow($(this));
         _AppId = AppId;
         _doctorId = DoctorId;
         InOutMarking('DoctorRoom_CALL', '');
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnView', function () {
-        var AppId = $(this).closest('tr').find('td:eq(1)').text();
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
         window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
     });
     $('#tblOtherAppList tbody').on('click', '#btnView', function () {
-        var AppId = $(this).closest('tr').find('td:eq(1)').text();
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
         window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
     });
     $('#tblOtherAppList tbody').on('click', '#btnCall', function () {
-        var AppId = $(this).closest('tr').find('td:eq(1)').text();
-        var DoctorId = $(this).closest('tr').find('td:eq(2)').text();
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
         selectRow($(this));
         _AppId = AppId;
         _doctorId = DoctorId;
         InOutMarking('DoctorRoom_CALL', '');
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnIn', function () {
-        var AppId = $(this).closest('tr').find('td:eq(1)').text();
-        var DoctorId = $(this).closest('tr').find('td:eq(2)').text();
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         _AppId = AppId;
@@ -54,8 +54,8 @@ $(document).ready(function () {
         InOutMarking('DoctorRoom_IN', dashboard);
     });
     $('#tblOtherAppList tbody').on('click', '#btnIn', function () {
-        var AppId = $(this).closest('tr').find('td:eq(1)').text();
-        var DoctorId = $(this).closest('tr').find('td:eq(2)').text();
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         _AppId = AppId;
@@ -101,6 +101,7 @@ function ViewConsultation() {
     $('#tblDoneAppointment tbody').empty();
     $('#divEmergency').hide();
     $('#divOther').hide();
+
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentSearch";
     var objBO = {};
     objBO.SearchValue = $('#txtSearchValue').val();
@@ -125,8 +126,9 @@ function ViewConsultation() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         total++;
                         tbody += "<tr>";
-                        tbody += "<td>" + total + "</td>";
-                        tbody += "<td>" + val.app_no + "</td>";
+                        tbody += "<td>" + val.token_no + "</td>";
+                        tbody += "<td>" + val.UHID + "</td>";
+                        tbody += "<td style='display:none'>" + val.app_no + "</td>";
                         tbody += "<td style='display:none'>" + val.DoctorId + "</td>";
                         tbody += "<td>" + val.patient_name + "</td>";                    
                         tbody += "<td>" + val.AppDate + "</td>";
@@ -151,8 +153,9 @@ function ViewConsultation() {
                     $.each(data.ResultSet.Table1, function (key, val) {
                         total++;
                         tbody1 += "<tr>";
-                        tbody1 += "<td>" + total + "</td>";
-                        tbody1 += "<td>" + val.app_no + "</td>";
+                        tbody1 += "<td>" + val.token_no  + "</td>";
+                        tbody1 += "<td>" + val.UHID + "</td>";
+                        tbody1 += "<td style='display:none'>" + val.app_no + "</td>";
                         tbody1 += "<td>" + val.patient_name + "</td>";                    
                         tbody1 += "<td>" + val.AppDate + "</td>";
                         tbody1 += "<td>" + val.DoctorName + "</td>";
@@ -176,8 +179,9 @@ function ViewConsultation() {
                     $.each(data.ResultSet.Table2, function (key, val) {
                         total++;
                         tbody2 += "<tr>";
-                        tbody2 += "<td>" + total + "</td>";
-                        tbody2 += "<td>" + val.app_no + "</td>";
+                        tbody2 += "<td>" + val.token_no + "</td>";
+                        tbody2 += "<td>" + val.UHID + "</td>";
+                        tbody2 += "<td style='display:none'>" + val.app_no + "</td>";
                         tbody2 += "<td>" + val.patient_name + "</td>";                    
                         tbody2 += "<td>" + val.AppDate + "</td>";
                         tbody2 += "<td>" + val.DoctorName + "</td>";
