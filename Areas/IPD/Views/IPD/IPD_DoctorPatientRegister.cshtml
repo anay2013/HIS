@@ -6,8 +6,6 @@
 
 <script src="~/Areas/IPD/JsModule/IPD/InPatientRegister.js?v1.1"></script>
 <style>
-
-
     .row-green {
         background: #378a45;
         color: #fff;
@@ -148,7 +146,7 @@
     }
 
     .navigation div[class*=col-md-2] {
-        width: 12%;
+        width: 10%;
         padding: 2px;
     }
 
@@ -171,36 +169,46 @@
                         IPD NO
                         <div style="display:flex">
                             <input type="text" id="txtIPDNo" class="form-control" />
-                            <button id="btnSearch" style="width:20%;height:27px" class="btn bg-blue bn" onclick="GetDataIPDNO()"><i class="fa fa fa-search"></i></button>
+                            <button id="btnSearch" style="width:20%;height:27px" class="btn bg-blue bn" onclick="AdmittedPatientList('PatientInfoByIPDNo')"><i class="fa fa fa-search"></i></button>
                         </div>
                     </div>
                     <div class="col-md-2">
                         Floor Name
                         <select id="ddlFloor" class="form-control border-imp"></select>
                     </div>
-                    <div class="col-md-4">
-                        Panel Name
+                    <div class="col-md-2">
+                        Ward Name
+                        <select id="ddlWard" class="form-control border-imp"></select>
+                    </div>
+                    <div class="col-md-2" style="width:21%">
+                        Panel Name &nbsp;&nbsp; <span id="tCount" style="font-weight:bold;color:black"></span>
                         <div style="display:flex">
                             <div style="width:370px">
                                 <select id="ddlPanel" class="form-control border-imp"></select>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="width:19%">
+                        Doctor
+                        <div style="display:flex">
+                            <div style="width:370px">
+                                <select id="ddlDoctor" class="form-control border-imp"></select>
+                            </div>
                             <button id="btnCurrentPatient" style="width:15%;height:27px" onclick="AdmittedPatientList('AdmittedPatientList')" class="btn btn-warning"><i class="fa fa fa-search"></i></button>
                         </div>
                     </div>
-
                     <div class="col-md-2">
-
                         Ipd Status
                         <select id="ddlIpdStatus" class="form-control border-imp">
                             <option selected="selected" value="ALL">ALL</option>
                             <option selected="selected" value="Out">Discharged</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" style="width:10%">
                         From Date
                         <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" style="width:10%">
                         To Date
                         <div style="display:flex">
                             <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
@@ -223,11 +231,49 @@
                                     <th>Room Name</th>
                                     <th>Doctor Name</th>
                                     <th>Panel Name</th>
+                                    <th>View</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalPatientInfo" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-top:10%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;">
+                <h5 class="text-white">Patient Info</h5>
+                <span data-dismiss="modal" class="btn-close">x</span>
+            </div>
+            <div class="modal-body" style="height:360px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="tblPatientInfo" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Admission Type</th>
+                                    <th>Room Type</th>
+                                    <th>room Full Name</th>
+                                    <th>Room Billing Category</th>
+                                    <th>MLC Type</th>
+                                    <th>Ref Name</th>
+                                    <th>Patient Type</th>
+                                    <th>Policy No</th>
+                                    <th>Source Name</th>
+                                    <th>Discharge Date</th>
+                                    <th>Discharge By</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <p class="text-center">
+                        <button class="btn btn-warning btnRC" onclick="Receipt_IPDDischargeReport()" id="btnPrintBill"><i class="fa fa-print">&nbsp;</i>Discharge Summary</button>
+                    </p>
                 </div>
             </div>
         </div>

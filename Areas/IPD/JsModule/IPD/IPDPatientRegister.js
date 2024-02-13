@@ -153,8 +153,7 @@ function PatientRegister(logic) {
                         tbody += "<td>" + val.patient_name + "</td>";
                         tbody += "<td>" + val.DoctorName + "</td>";
                         tbody += "<td>" + val.RoomName + "</td>";
-                        //tbody += "<td>" + val.RoomBillingCategory + "</td>";
-                        tbody += "<td>" + val.RoomTypeRequest + "</td>";
+                        tbody += "<td>" + val.emp_name + "</td>";
                         tbody += "<td>" + val.AdmitDate + "</td>";
                         tbody += "<td>" + val.Attendant + "</td>";
                         tbody += "<td>" + val.PanelName + "</td>";

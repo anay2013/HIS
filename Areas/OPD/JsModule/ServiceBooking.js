@@ -283,6 +283,28 @@ $(document).ready(function () {
         $('#ItemList').hide();
     });
     $('#tblItemInfo tbody').on('keyup', 'input:text', function () {
+        if ($(this).attr('id') == 'qty') {
+            var QtyVal = parseFloat($(this).val());
+            if (parseFloat($(this).val()) < 1)
+                $(this).val(1)
+
+            $(this).closest('tr').find('td:eq(6)').find('input:text').val(0)
+            $(this).closest('tr').find('td:eq(7)').find('input:text').val(0)
+
+            var prate = parseFloat($(this).closest('tr').find('td:eq(2)').text());
+            var pdis = parseFloat($(this).closest('tr').find('td:eq(3)').text());
+            //$(this).closest('tr').find('td:eq(4)').text(prate * QtyVal);
+
+            $(this).closest('tr').find('td:eq(8)').text(pdis);
+            $(this).closest('tr').find('td:eq(9)').text(prate * QtyVal);
+            // $(this).closest('tr').find('td:eq(7)').find('input:text').trigger('keyup');
+            //var elem = $(this).closest('tr').find('td:eq(7)').find('input:text')[0];
+            //var tag = $(elem).data('tag');            
+            //ItemWiseDiscount(elem, tag);
+            totalCal()
+            return
+        }
+
         var elem = $(this);
         var tag = $(this).data('tag');
         ItemWiseDiscount(elem, tag);
@@ -341,6 +363,40 @@ $(document).ready(function () {
     //	$(this).replaceWith("<span class='pover'>" + val + "</span>");
     //});		
 });
+function checkAmount() {
+    if ($('#txtUHID').val() == 'New') {
+        alert('Please Provide UHID');
+        $('#txtUHID').focus();
+        return;
+    }
+    if ($('#ddlPanel option:selected').val() == '000') {
+        alert('Please Select Panel');
+        return;
+    }
+    var url = config.baseUrl + "/api/Corporate/PanelQuerie";
+    var objBO = {};
+    objBO.PanelId = $('#ddlPanel option:selected').val();
+    objBO.UHID = $('#txtUHID').val();
+    objBO.from = '1900/01/01';
+    objBO.ReportType = '';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'GetAmountForBooking';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var Balance = data.ResultSet.Table[0].Balance;
+            $('#amountInfo span:last').text(Balance);
+            $('#amountInfo').toggleClass('grid');
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function ReferralSearch(referral) {
     var url = config.baseUrl + "/api/Appointment/Referral_Search";
     var objBO = {};
@@ -966,6 +1022,7 @@ function InsertPatientMaster() {
     }
 }
 function Opd_ServiceBooking() {
+
     if (confirm('Are you sure to Book this Service?')) {
         if (ValidateBooking()) {
             var swipeSelect = $('#tblPaymentDetails tbody').find('tr:eq(2).pay').find('td:eq(5)').find('select option:selected').text();
@@ -1045,21 +1102,21 @@ function Opd_ServiceBooking() {
             objPatient.Logic = 'ItdoseNewEntry';
             $('#tblItemInfo tbody tr').each(function () {
                 objRateList.push({
-                    'RateListId': $(this).find('td:eq(11)').text(),
+                    'RateListId': $(this).find('td:eq(12)').text(),
                     'ItemId': $(this).find('td:eq(0)').text(),
                     'RateListName': $(this).find('td:eq(1)').text(),
-                    'ItemSection': $(this).find('td:eq(12)').text(),
-                    'IsPackage': $(this).find('td:eq(13)').text(),
+                    'ItemSection': $(this).find('td:eq(13)').text(),
+                    'IsPackage': $(this).find('td:eq(14)').text(),
                     'panel_discount': $(this).find('td:eq(3)').text(),
                     'panel_rate': $(this).find('td:eq(2)').text(),
-                    'qty': '1',
-                    'adl_disc_perc': $(this).find('td:eq(5)').find('input:text').val(),
-                    'adl_disc_amount': $(this).find('td:eq(6)').find('input:text').val(),
-                    'net_amount': $(this).find('td:eq(8)').text(),
-                    'IsUrgent': ($(this).find('td:eq(10)').find('input:checkbox').is(':checked')) ? 'Y' : 'N',
+                    'qty': $(this).find('td:eq(5)').find('input:text').val(),
+                    'adl_disc_perc': $(this).find('td:eq(6)').find('input:text').val(),
+                    'adl_disc_amount': $(this).find('td:eq(7)').find('input:text').val(),
+                    'net_amount': $(this).find('td:eq(9)').text(),
+                    'IsUrgent': ($(this).find('td:eq(11)').find('input:checkbox').is(':checked')) ? 'Y' : 'N',
                     'Remark': '-',
-                    'TaxRate': $(this).find('td:eq(14)').text(),
-                    'TaxAmt': $(this).find('td:eq(16)').text()
+                    'TaxRate': $(this).find('td:eq(15)').text(),
+                    'TaxAmt': $(this).find('td:eq(17)').text()
                 });
             });
             $('#tblPaymentDetails tbody tr.pay').each(function () {
@@ -1126,6 +1183,10 @@ function Opd_ServiceBooking() {
             MasterObject.objBooking = objBooking;
             MasterObject.objRateList = objRateList;
             MasterObject.objPayment = objPayment;
+
+            $('#btnFinalSubmit').prop('disabled', true);
+
+
             $.ajax({
                 method: "POST",
                 url: url,
@@ -1423,6 +1484,7 @@ function Clear() {
     $('input[name=PaymentMode]:not(.cash)').prop('checked', false).change();
     FillCurrentDate("txtAppointmentOn");
     $('#txtUHID').val('New');
+    $('#btnFinalSubmit').prop('disabled', false);
 }
 function query() {
     var vars = [], hash;
@@ -1486,7 +1548,7 @@ function ServiceRates(ItemId, cptCode) {
     var url = config.baseUrl + "/api/Service/Opd_ServiceRates";
     var objBO = {};
     objBO.hosp_id = 'CH01';
-    objBO.UHID = '-';
+    objBO.UHID = $('#txtUHID').val();
     objBO.DoctorId = $('#ddlDoctor option:selected').val();
     objBO.PanelId = $('#ddlPanel option:selected').val();
     objBO.ItemId = ItemId;
@@ -1501,26 +1563,34 @@ function ServiceRates(ItemId, cptCode) {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
+            console.log(data)
             $('#tblItemInfoNull').slideUp();
             $('#tblItemInfo tbody').empty();
             var tbody = '';
             itemIds = [];
             $.each(data.ResultSet.Table, function (key, val) {
-                tbody += "<tr>";
+                tbody += (val.IsRateEditable == 1) ? "<tr class='RateEditable'>" : "<tr>";
                 tbody += "<td style='width: 10%;padding:1px'>" + val.ItemId + "</td>";
                 tbody += "<td style='width: 30%;padding: 1px;'><span class='pover'>" + val.ItemName + "</span></td>";
                 tbody += "<td style='width:8%;'>" + val.panel_rate + "</td>";
                 tbody += "<td style='width:8%;'>" + val.panel_discount + "</td>";
 
-                if (val.isZeroRateAllowed == 1) {
-                    tbody += "<td contenteditable='true' style='border: 1px solid #65bbff;width:8%'>" + val.panel_net + "</td>";
+                if (val.IsRateEditable == 1) {
+                    tbody += "<td contenteditable='true' onkeyup=ResetRate(this) style='border: 1px solid #65bbff;width:8%'>" + val.panel_net + "</td>";
                 }
                 else {
                     tbody += "<td style='width:8%;'>" + val.panel_net + "</td>";
                 }
-
-                tbody += "<td style='width:9%;'><input type='text' value='0' style='width:100%' maxlength='5' data-tag='ByPercentage'></td>";
-                tbody += "<td style='width:8%;'><input type='text' value='0' style='width:100%' maxlength='5' data-tag='ByAmt'></td>";
+                var isblocked = (val.ItemSection == 'Diagnostic') ? 'pointer-events:none;opacity:0.5;width:100%' : 'padding-left:1px;width:100%';
+                tbody += "<td style='width:9%;'><input style=" + isblocked + " type='text' value='1' maxlength='5' id='qty' data-tag='ByQty'></td>";
+                if (val.IsRateEditable == 1) {
+                    tbody += "<td style='width:9%;'><input type='text' value='0' disabled style='width:100%' maxlength='5' data-tag='ByPercentage'></td>";
+                    tbody += "<td style='width:8%;'><input type='text' value='0' disabled style='width:100%' maxlength='5' data-tag='ByAmt'></td>";
+                }
+                else {
+                    tbody += "<td style='width:9%;'><input type='text' value='0' style='width:100%' maxlength='5' data-tag='ByPercentage'></td>";
+                    tbody += "<td style='width:8%;'><input type='text' value='0' style='width:100%' maxlength='5' data-tag='ByAmt'></td>";
+                }
                 tbody += "<td style='width:8%;'>" + val.panel_discount + "</td>";
                 tbody += "<td style='width:8%;'>" + val.panel_net + "</td>";
                 tbody += "<td style='text-align:center;padding:2px;width:2%'><button class='btn-danger'>x</button></td>";
@@ -1574,28 +1644,37 @@ function ServiceRates(ItemId, cptCode) {
         }
     });
 }
+function ResetRate(elem) {
+    $(elem).closest('tr').find('td:eq(2)').text($(elem).text());
+    $(elem).closest('tr').find('td:eq(5)').find('input:text').val(1);
+    $(elem).closest('tr').find('td:eq(6)').find('input:text').val(0);
+    $(elem).closest('tr').find('td:eq(7)').find('input:text').val(0);
+    $(elem).closest('tr').find('td:eq(9)').text($(elem).text());
+    $(elem).closest('tr').find('td:eq(5)').find('input:text').trigger('keyup');
+    totalCal()
+}
 function ItemWiseDiscount(elem, dislogic) {
     $('#txtPayable').val(0);
     $('#txtADiscount').val(0);
     $('#txtDiscountByAmt').val(0);
     $('#txtDiscountByPer').val(0);
     if (dislogic == 'ByPercentage') {
-        var disPercent = parseFloat($(elem).closest('tr').find('td:eq(5)').find('input:text').val());
+        var disPercent = parseFloat($(elem).closest('tr').find('td:eq(6)').find('input:text').val());
         let panelRate = parseFloat($(elem).closest('tr').find('td:eq(4)').text());
-        const TRate = $(elem).closest('tr').find('td:eq(2)').text();
+        let qty = parseFloat($(elem).closest('tr').find('td:eq(5)').find('input:text').val());
         const PDis = $(elem).closest('tr').find('td:eq(3)').text();
-        const TaxRate = parseFloat($(elem).closest('tr').find('td:eq(14)').text());
-        const TaxAboveAmount = parseFloat($(elem).closest('tr').find('td:eq(15)').text());
-        const prate = (panelRate == '') ? 0 : panelRate;
+        const TaxRate = parseFloat($(elem).closest('tr').find('td:eq(15)').text());
+        const TaxAboveAmount = parseFloat($(elem).closest('tr').find('td:eq(16)').text());
+        const prate = (panelRate == '') ? 0 : panelRate * qty;
         var dis = (disPercent == '') ? 0 : disPercent;
         if (dis > 100) {
-            $(elem).closest('tr').find('td:eq(5)').find('input:text').val(0).keyup();
+            $(elem).closest('tr').find('td:eq(6)').find('input:text').val(0).keyup();
             //alert('Discount can not be greater than 100%');
             return
         }
         const disAmt = parseFloat(prate) * parseFloat(dis) / 100;
         var TDis = parseFloat(PDis) + parseFloat(disAmt);
-        var NetAmount = parseFloat(TRate) - parseFloat(TDis);
+        var NetAmount = parseFloat(prate) - parseFloat(TDis);
         var tax = 0;
         if (TaxRate > 0 && (NetAmount > TaxAboveAmount)) {
             tax = (NetAmount * TaxRate) / 100;
@@ -1603,29 +1682,29 @@ function ItemWiseDiscount(elem, dislogic) {
         else {
             tax = 0;
         }
-        $(elem).closest('tr').find('td:eq(6)').find('input:text').val(disAmt.toFixed(2));
-        $(elem).closest('tr').find('td:eq(7)').text(TDis.toFixed(2));
-        $(elem).closest('tr').find('td:eq(8)').text(NetAmount.toFixed(2));
-        $(elem).closest('tr').find('td:eq(16)').text(tax);
+        $(elem).closest('tr').find('td:eq(7)').find('input:text').val(disAmt.toFixed(2));
+        $(elem).closest('tr').find('td:eq(8)').text(TDis.toFixed(2));
+        $(elem).closest('tr').find('td:eq(9)').text(NetAmount.toFixed(2));
+        $(elem).closest('tr').find('td:eq(17)').text(tax);
     }
     else {
-        var disAmount = parseFloat($(elem).closest('tr').find('td:eq(6)').find('input:text').val());
+        var disAmount = parseFloat($(elem).closest('tr').find('td:eq(7)').find('input:text').val());
         let panelRate = parseFloat($(elem).closest('tr').find('td:eq(4)').text());
-        const TRate = $(elem).closest('tr').find('td:eq(2)').text();
+        let qty = parseFloat($(elem).closest('tr').find('td:eq(5)').find('input:text').val());
         const PDis = $(elem).closest('tr').find('td:eq(3)').text();
-        const TaxRate = parseFloat($(elem).closest('tr').find('td:eq(14)').text());
-        const TaxAboveAmount = parseFloat($(elem).closest('tr').find('td:eq(15)').text());
-        const prate = (isNaN(panelRate)) ? 0 : panelRate;
+        const TaxRate = parseFloat($(elem).closest('tr').find('td:eq(15)').text());
+        const TaxAboveAmount = parseFloat($(elem).closest('tr').find('td:eq(16)').text());
+        const prate = (isNaN(panelRate)) ? 0 : panelRate * qty;
         const disAmt = (disAmount == '') ? 0 : disAmount;
         if (parseFloat(disAmt) > parseFloat(prate)) {
-            $(elem).closest('tr').find('td:eq(6)').find('input:text').val(0).keyup();
+            $(elem).closest('tr').find('td:eq(7)').find('input:text').val(0).keyup();
             //alert('Discount Amount can not be greater than Personal Rate');
             return
         }
-
+        debugger
         const disPerc = parseFloat(disAmt) * 100 / parseFloat(prate);
         const TDis = parseFloat(PDis) + parseFloat(disAmt);
-        const NetAmount = parseFloat(TRate) - parseFloat(TDis);
+        const NetAmount = parseFloat(prate) - parseFloat(TDis);
         var tax = 0;
         if (TaxRate > 0 && (NetAmount > TaxAboveAmount)) {
             tax = (NetAmount * TaxRate) / 100;
@@ -1634,19 +1713,31 @@ function ItemWiseDiscount(elem, dislogic) {
             tax = 0;
         }
 
-        $(elem).closest('tr').find('td:eq(5)').find('input:text').val((isNaN(disPerc)) ? 0 : disPerc);
-        $(elem).closest('tr').find('td:eq(7)').text(TDis.toFixed(2));
-        $(elem).closest('tr').find('td:eq(8)').text(NetAmount.toFixed(2));
-        $(elem).closest('tr').find('td:eq(16)').text(tax);
+        $(elem).closest('tr').find('td:eq(6)').find('input:text').val((isNaN(disPerc)) ? 0 : disPerc);
+        $(elem).closest('tr').find('td:eq(8)').text(TDis.toFixed(2));
+        $(elem).closest('tr').find('td:eq(9)').text(NetAmount.toFixed(2));
+        $(elem).closest('tr').find('td:eq(17)').text(tax);
     }
     totalCal();
 }
 function OverAllDiscount(dislogic) {
     var TPRate = 0;
     var TDisc = 0;
-    $('#tblItemInfo tbody tr').each(function () {
-        TPRate += parseFloat($(this).closest('tr').find('td:eq(4)').text());
+    $('#tblItemInfo tbody tr:not(.RateEditable)').each(function () {
+        TPRate += parseFloat($(this).closest('tr').find('td:eq(4)').text()) * parseFloat($(this).closest('tr').find('td:eq(5)').find('input:text').val());
     });
+    if (parseFloat($('#txtDiscountByAmt').val()) > TPRate) {
+        alert('Discount Amount should not be greater then Total Amount of Item');
+        $('#tblItemInfo tbody tr').each(function () {
+            $(this).closest('tr').find('td:eq(5)').find('input:text').val(1);
+            $(this).closest('tr').find('td:eq(6)').find('input:text').val(0);
+            $(this).closest('tr').find('td:eq(7)').find('input:text').val(0);
+            $(this).closest('tr').find('td:eq(5)').find('input:text').trigger('keyup');
+            $('#txtDiscountByAmt').val(0);
+            totalCal()
+        });
+        return
+    }
     if (dislogic == 'ByPercent') {
         $('#txtDiscountByAmt').val(0);
         var discountByPer = parseInt(($('#txtDiscountByPer').val() == '') ? 0 : $('#txtDiscountByPer').val());
@@ -1658,6 +1749,7 @@ function OverAllDiscount(dislogic) {
         TDisc = (TPRate * discountByPer / 100)
     }
     else {
+
         $('#txtDiscountByPer').val(0);
         var grossAmount = parseFloat($('#txtGrossAmount').val());
         TDisc = parseInt(($('#txtDiscountByAmt').val() == '') ? 0 : $('#txtDiscountByAmt').val());
@@ -1667,22 +1759,22 @@ function OverAllDiscount(dislogic) {
             return
         }
     }
-    $('#tblItemInfo tbody tr').each(function () {
-        var perc_hold = parseFloat($(this).closest('tr').find('td:eq(4)').text()) * 100 / TPRate;
+    $('#tblItemInfo tbody tr:not(.RateEditable)').each(function () {
+        var perc_hold = parseFloat($(this).closest('tr').find('td:eq(4)').text()) * parseFloat($(this).closest('tr').find('td:eq(5)').find('input:text').val()) * 100 / TPRate;
         var adl_disc = (TDisc * perc_hold / 100)
-        $(this).find('td:eq(6)').find('input:text').val(adl_disc.toFixed(2));
-        var TRate = parseFloat($(this).closest('tr').find('td:eq(2)').text());
+        $(this).find('td:eq(7)').find('input:text').val(adl_disc.toFixed(2));
+        var TRate = parseFloat($(this).closest('tr').find('td:eq(4)').text()) * parseFloat($(this).closest('tr').find('td:eq(5)').find('input:text').val());
         var PDis = parseFloat($(this).closest('tr').find('td:eq(3)').text());
-        var PRate = parseFloat($(this).closest('tr').find('td:eq(4)').text());
+        var PRate = parseFloat($(this).closest('tr').find('td:eq(4)').text()) * parseFloat($(this).closest('tr').find('td:eq(5)').find('input:text').val());
         var disPerc = parseFloat(adl_disc) * 100 / parseFloat(PRate);
-        $(this).find('td:eq(5)').find('input:text').val(disPerc.toFixed(2));
+        $(this).find('td:eq(6)').find('input:text').val(disPerc.toFixed(2));
         var TDis = parseFloat(PDis) + parseFloat(adl_disc);
         var NetAmount = parseFloat(TRate) - parseFloat(TDis);
-        $(this).find('td:eq(5)').find('input:text').val(disPerc.toFixed(2));
-        $(this).find('td:eq(7)').text(TDis.toFixed(2));
-        $(this).find('td:eq(8)').text(NetAmount.toFixed(2));
-        const TaxRate = parseFloat($(this).find('td:eq(14)').text());
-        const TaxAboveAmount = parseFloat($(this).find('td:eq(15)').text());
+        $(this).find('td:eq(6)').find('input:text').val(disPerc.toFixed(2));
+        $(this).find('td:eq(8)').text(TDis.toFixed(2));
+        $(this).find('td:eq(9)').text(NetAmount.toFixed(2));
+        const TaxRate = parseFloat($(this).find('td:eq(15)').text());
+        const TaxAboveAmount = parseFloat($(this).find('td:eq(16)').text());
         var tax = 0;
         if (TaxRate > 0 && (NetAmount > TaxAboveAmount)) {
             tax = (NetAmount * TaxRate) / 100;
@@ -1690,30 +1782,31 @@ function OverAllDiscount(dislogic) {
         else {
             tax = 0;
         }
-        $(this).find('td:eq(16)').text(tax);
+        $(this).find('td:eq(17)').text(tax);
     });
     totalCal();
 }
 function totalCal() {
     var TRate = 0;
     var PDis = 0;
+    var TDis = 0;
     var AdlDisc = 0;
     var netAmt = 0;
     var totalTax = 0;
+    var Qty = 0;
 
     $('#tblItemInfo tbody tr').each(function () {
-        TRate += parseFloat($(this).closest('tr').find('td:eq(2)').text());
-        totalTax += parseFloat($(this).closest('tr').find('td:eq(16)').text());
-        PDis += parseFloat($(this).closest('tr').find('td:eq(3)').text());
-        netAmt += parseFloat($(this).closest('tr').find('td:eq(8)').text());
-        AdlDisc += parseFloat($(this).closest('tr').find('td:eq(6)').find('input:text').val());
-
+        TRate += parseFloat($(this).closest('tr').find('td:eq(4)').text()) * parseFloat($(this).closest('tr').find('td:eq(5)').find('input:text').val());
+        totalTax += parseFloat($(this).closest('tr').find('td:eq(17)').text());
+        PDis += parseFloat($(this).closest('tr').find('td:eq(8)').text());
+        TDis += parseFloat($(this).closest('tr').find('td:eq(8)').text());
+        netAmt += parseFloat($(this).closest('tr').find('td:eq(9)').text());
+        AdlDisc += parseFloat($(this).closest('tr').find('td:eq(7)').find('input:text').val());
     });
     $('#txtGrossAmount').val(TRate);
-    $('#txtPDiscount').val(PDis);
-    $('#txtTDiscount').val(PDis + AdlDisc);
+    $('#txtTDiscount').val(TDis.toFixed(2));
     $('#txtADiscount').val(AdlDisc);
-    $('#txtNetAmount').val(netAmt);
+    $('#txtNetAmount').val(netAmt.toFixed(2));
     $('.employeeDiscount').addClass('lock');
     if (netAmt > 0)
         $('.employeeDiscount').removeClass('lock');

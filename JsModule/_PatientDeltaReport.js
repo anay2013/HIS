@@ -1,6 +1,4 @@
-﻿var _deltaIPOPNo = "2324-000076";
-var _deltaVisitNo = "IW-2324-00000037";
-$(document).ready(function () {
+﻿$(document).ready(function () {
     GetSubCat();
 });
 function GetSubCat() {
@@ -10,7 +8,7 @@ function GetSubCat() {
     objBO.LabCode = Active.HospId;
     objBO.IpOpType = '-';
     objBO.ReportStatus = '-';
-    objBO.VisitNo = _deltaVisitNo;
+    objBO.VisitNo = _IPDNo;
     objBO.BarccodeNo = '-';
     objBO.SubCat = '-';
     objBO.TestCategory = '-';
@@ -18,7 +16,7 @@ function GetSubCat() {
     objBO.TestCode = '-';
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
-    objBO.Logic = 'SubCatForDeltaReport';
+    objBO.Logic = 'IPD:SubCatForDeltaReport';
     $.ajax({
         method: "POST",
         url: url,
@@ -47,7 +45,7 @@ function PatientDeltaReport() {
     objBO.LabCode = Active.HospId;
     objBO.IpOpType = '-';
     objBO.ReportStatus = '-';
-    objBO.VisitNo = _deltaIPOPNo;
+    objBO.VisitNo = _IPDNo;
     objBO.BarccodeNo = '-';
     objBO.SubCat = $('#ddlSubCat option:selected').val();
     objBO.TestCategory = '-';
@@ -108,9 +106,15 @@ function PatientDeltaReport() {
                         tbody1 += "<tr>";
                         tbody1 += "<td>" + val.rowNo + "</td>";
                         tbody1 += "<td>" + val.RegDate.split('T')[0] + "</td>";
-                        tbody1 += "<td>" + val.read_1 + "</td>";
-                        tbody1 += "<td>" + val.min_value + "</td>";
-                        tbody1 += "<td>" + val.max_value + "</td>";
+                        if (val.ab_flag!='N')
+                            tbody1 += "<td style='font-weight:bold' >" + val.read_1 + "</td>";
+                        else
+                            tbody1 += "<td>" + val.read_1 + "</td>";
+                        if (val.ab_flag != 'N')
+                            tbody1 += "<td>" + val.ab_flag + "</td>";
+                        else
+                            tbody1 += "<td></td>";
+
                         tbody1 += "<td>" + val.ref_range + "</td>";
                         tbody1 += "</tr>";
                     });

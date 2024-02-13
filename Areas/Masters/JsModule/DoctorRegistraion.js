@@ -593,6 +593,8 @@ function EditDoctor(DoctorId) {
             var htmlMem = '';
             if (Object.keys(data.ResultSet.Table).length > 0) {
                 $.each(data.ResultSet.Table, function (key, val) {
+                    $('input[id=IsViewSelfPatient]').prop('checked', (val.IsViewSelfPatient == 'Y') ? true : false);
+
                     $('#profileUpload').css('visibility', 'visible');
                     if (val.VirtualPhotoPath != null)
                         $('#imgdoctors').prop('src', val.VirtualPhotoPath);
@@ -802,6 +804,32 @@ function DeleteProfileDetails(autoId) {
             }
         });
     }
+}
+function IsViewSelfPatient() {
+    if (_doctorId == '') {
+        alert('DoctorId Not Available.')
+        return
+    }
+    var url = config.baseUrl + "/api/master/mInsertUpdateDoctor";
+    var objBO = {};
+    objBO.doctorId = _doctorId;
+    objBO.TagName = '-';
+    objBO.Description = '-';
+    objBO.login_id = Active.userId;
+    objBO.Logic = "IsViewSelfPatient";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
 }
 function InsertDoctorFeatures(TagName) {
     if (_doctorId == '') {

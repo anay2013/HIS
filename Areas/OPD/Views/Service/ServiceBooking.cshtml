@@ -1,13 +1,39 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "ServiceBooking";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 <style>
+    #amountInfo {
+        border-top: none !important;
+        border: 1px solid #ebebeb;
+        z-index: 1000;
+        display: none;
+        background: #ffffff;
+        border-radius: 3px;
+        position: absolute;
+        right: 73%;
+        top: -10%;
+        width: 147px;
+    }
+
+        #amountInfo span:first-child {
+            color: #fff;
+            background: #06a08b;
+        }
+
+        #amountInfo span:last-child {
+            padding: 1px;
+        }
+
+    .grid {
+        display: grid !important;
+    }
+
     .lock {
         pointer-events: none;
         opacity: 0.5;
     }
+
     .employeeDiscount {
         border: 1px solid #d5d2d2;
         margin: 13px 10px 11px 10px;
@@ -16,12 +42,14 @@
         background: #f6fbff;
         width: 97%;
     }
-    .employeeDiscount .title {
-        margin: -8px 0px 15px 3px;
-        background: #b4dcfb;
-        width: 99%;
-        padding: 4px 5px;
-    }
+
+        .employeeDiscount .title {
+            margin: -8px 0px 15px 3px;
+            background: #b4dcfb;
+            width: 99%;
+            padding: 4px 5px;
+        }
+
     .paymentSection span:nth-child(4) {
         border: 1px solid #97d2ff;
         width: 22%;
@@ -45,9 +73,11 @@
         .paymentSection span:nth-child(4) span:nth-last-child(2) {
             color: #802a00;
         }
-    .itemHeight{
-        height:9vh !important;
+
+    .itemHeight {
+        height: 9vh !important;
     }
+
     .amount-section .col-md-2 {
         padding: 0 3px;
     }
@@ -211,7 +241,7 @@
         white-space: nowrap;
     }
 </style>
-<script src="~/Areas/OPD/JsModule/ServiceBooking.js"></script>
+<script src="~/Areas/OPD/JsModule/ServiceBooking.js?ver=1.3"></script>
 <div id="page-content">
     <div class="container">
         <div class="row">
@@ -316,7 +346,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">                                          
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group flex">
                                                     <span style="width:32%">Source</span>
@@ -428,231 +458,234 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">            
-                        <div class="panel">
-                            <div class="row amount-section" style="margin: 4px 8px;padding: 4px 0px;">
-                                <div class="col-md-4">
-                                    <button style="background-color: #0e96fd !important;border:none" onclick="Opd_ServiceBooking()" id="btnFinalSubmit" class="btn-primary btn-pay-ctrl"><i class="fa fa-plus">&nbsp;</i>Save</button>
-                                    <button style="background-color: #0e96fd !important;border:none" id="btnPrintReceipt" class="btn-primary btn-pay-ctrl"><i class="fa fa-print">&nbsp;</i>Receipt</button>
-                                    <button style="background-color: #0e96fd !important;border:none" id="btnClearAll" class="btn-primary btn-pay-ctrl"><i class="fa fa-refresh">&nbsp;</i>Reset</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <label id="txtError"></label>
-                                </div>
-                                <div class="col-md-2">
-                                    <button style="padding: 3px 11px;border: none;font-size: 18px;" onclick="$('.paymentSection').slideToggle('slow'); $('#PaymentDivision,.serviceInfo').toggleClass('itemHeight')" class="btn-warning btn-pay-ctrl pull-right"><i class="fa fa-inr">&nbsp;</i></button>
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="row amount-section" style="margin: 4px 8px;padding: 4px 0px;">
+                        <div class="col-md-4">
+                            <button style="background-color: #0e96fd !important;border:none" onclick="Opd_ServiceBooking()" id="btnFinalSubmit" class="btn-primary btn-pay-ctrl"><i class="fa fa-plus">&nbsp;</i>Save</button>
+                            <button style="background-color: #0e96fd !important;border:none" id="btnPrintReceipt" class="btn-primary btn-pay-ctrl"><i class="fa fa-print">&nbsp;</i>Receipt</button>
+                            <button style="background-color: #0e96fd !important;border:none" id="btnClearAll" class="btn-primary btn-pay-ctrl"><i class="fa fa-refresh">&nbsp;</i>Reset</button>
+                        </div>
+                        <div class="col-md-6">
+                            <label id="txtError"></label>
+                        </div>
+                        <div class="col-md-2">
+                            <label id="amountInfo"><span>Balance Amount</span><span></span></label>
+                            <button style="padding: 3px 8px;border: none;font-size: 18px;margin-left:5px;border-radius: 2px;" onclick="checkAmount()" class="btn-primary btn-pay-ctrl pull-right"><i class="fa fa-check-circle">&nbsp;</i></button>
+                            <button style="padding: 3px 11px;border: none;font-size: 18px;" onclick="$('.paymentSection').slideToggle('slow'); $('#PaymentDivision,.serviceInfo').toggleClass('itemHeight')" class="btn-warning btn-pay-ctrl pull-right"><i class="fa fa-inr">&nbsp;</i></button>
+                        </div>
+                    </div>
+                    <span class="nullInfo"><counter>0</counter></span>
+                    <div class="panel-body" style="background:#fff;padding: 0px 8px;" id="PaymentInformation">
+                        <div class="row paymentSection" style="display:none;max-height: 190px;margin-bottom: 7px;">
+                            <div class="col-md-12">
+                                <div class="form-group flex">
+                                    <span style="width:17%">Payment Mode</span>
+                                    <span style="width:5%">:</span>
+                                    <span style="width:70%">
+                                        <label>
+                                            <input type="checkbox" name="PaymentMode" class="cash" value="Cash" checked />Cash
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="PaymentMode" value="Cheque" />Cheque
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="PaymentMode" value="Swipe Card" />Swipe Card
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="PaymentMode" value="NEFT/RTGS/Online" />NEFT/RTGS/Online
+                                        </label>
+
+                                        <label>
+                                            <input type="checkbox" name="Credit" disabled="disabled" value="Credit" />Credit
+                                        </label>
+                                    </span>
                                 </div>
                             </div>
-                            <span class="nullInfo"><counter>0</counter></span>
-                            <div class="panel-body" style="background:#fff;padding: 0px 8px;" id="PaymentInformation">
-                                <div class="row paymentSection" style="display:none;max-height: 190px;margin-bottom: 7px;">
-                                    <div class="col-md-12">
-                                        <div class="form-group flex">
-                                            <span style="width:17%">Payment Mode</span>
-                                            <span style="width:5%">:</span>
-                                            <span style="width:70%">
-                                                <label>
-                                                    <input type="checkbox" name="PaymentMode" class="cash" value="Cash" checked />Cash
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="PaymentMode" value="Cheque" />Cheque
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="PaymentMode" value="Swipe Card" />Swipe Card
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="PaymentMode" value="NEFT/RTGS/Online" />NEFT/RTGS/Online
-                                                </label>
-
-                                                <label>
-                                                    <input type="checkbox" name="Credit" disabled="disabled" value="Credit" />Credit
-                                                </label>
-                                            </span>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="">
+                                        <div class="">
+                                            <table id="tblPaymentDetails" class="table table-bordered" style="margin-bottom:0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:15%">Payment Mode</th>
+                                                        <th style="width:13%">Paid Amount</th>
+                                                        <th>Currency</th>
+                                                        <th style="width:25%">Bank Name</th>
+                                                        <th style="width:13%">Ref No.</th>
+                                                        <th>Machine</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="pay">
+                                                        <td>Cash</td>
+                                                        <td><input type="text" data-int class="form-control" value="0" /></td>
+                                                        <td>INR</td>
+                                                        <td>-</td>
+                                                        <td>-</td>
+                                                        <td>-</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Cheque</td>
+                                                        <td><input type="text" class="form-control" value="0" /></td>
+                                                        <td>INR</td>
+                                                        <td><select class="form-control BankName"></select></td>
+                                                        <td><input type="text" class="form-control" /></td>
+                                                        <td>-</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Swipe Card</td>
+                                                        <td><input type="text" class="form-control" value="0" /></td>
+                                                        <td>INR</td>
+                                                        <td><select class="form-control BankName"></select></td>
+                                                        <td><input type="text" class="form-control" /></td>
+                                                        <td>
+                                                            <select class="form-control MachineName"></select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>NEFT/RTGS/Online</td>
+                                                        <td><input type="text" class="form-control" value="0" /></td>
+                                                        <td>INR</td>
+                                                        <td><select class="form-control BankName"></select></td>
+                                                        <td><input type="text" class="form-control" /></td>
+                                                        <td>
+                                                            <select class="form-control MachineName"></select>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
+                                    <hr class="hr-pay" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Discount Type</label>
+                                <div class="flex">
+                                    <select id="ddlDiscountType" class="form-control"></select>
+                                    <input type="button" title="Create New Source" id="btnNewSource" data-toggle="modal" data-target="#modalDiscountType" class="btn-success btn-flat" value="New" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Dis. Resason</label>
+                                <input type="text" id="txtDisResason" class="form-control" placeholder="Discount Reason" />
+                            </div>
+                            <div class="col-md-4">
+                                <label>Approved By</label>
+                                <select id="ddlApprovedBy" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div id="PaymentDivision">
+                            <div class="serviceInfo">
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
+                                            <div id="tblItemInfoNull">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:5%">ItemId</th>
+                                                            <th style="width:25%">Item Name</th>
+                                                            <th style="width:60%;text-align:left">Error Msg</th>
+                                                            <th style="text-align:center;padding: 2px">x</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
                                             <div class="">
-                                                <div class="">
-                                                    <table id="tblPaymentDetails" class="table table-bordered" style="margin-bottom:0">
+                                                <div style="margin-bottom:0;overflow:auto;max-height:inherit">
+                                                    <table id="tblItemInfo" class="table table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width:15%">Payment Mode</th>
-                                                                <th style="width:13%">Paid Amount</th>
-                                                                <th>Currency</th>
-                                                                <th style="width:25%">Bank Name</th>
-                                                                <th style="width:13%">Ref No.</th>
-                                                                <th>Machine</th>
+                                                                <th style="width:10%;">ItemId</th>
+                                                                <th style="width:30%;white-space:nowrap">Item Name</th>
+                                                                <th style="width:8%;text-align:center">Rate</th>
+                                                                <th style="width:8%;text-align:center">P.Disc</th>
+                                                                <th style="width:8%;text-align:center">P.Rate</th>
+                                                                <th style="width:8%;text-align:center">Qty</th>
+                                                                <th style="width:9%;text-align:center">Disc[%]</th>
+                                                                <th style="width:8%;text-align:center"> DiscAmt</th>
+                                                                <th style="width:8%;text-align:center">T.Disc</th>
+                                                                <th style="width:8%;text-align:center">NetAmt</th>
+                                                                <th style="width:2%;text-align:center;">x</th>
+                                                                <th style="width:2%;text-align:center;">U</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            <tr class="pay">
-                                                                <td>Cash</td>
-                                                                <td><input type="text" data-int class="form-control" value="0" /></td>
-                                                                <td>INR</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Cheque</td>
-                                                                <td><input type="text" class="form-control" value="0" /></td>
-                                                                <td>INR</td>
-                                                                <td><select class="form-control BankName"></select></td>
-                                                                <td><input type="text" class="form-control" /></td>
-                                                                <td>-</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Swipe Card</td>
-                                                                <td><input type="text" class="form-control" value="0" /></td>
-                                                                <td>INR</td>
-                                                                <td><select class="form-control BankName"></select></td>
-                                                                <td><input type="text" class="form-control" /></td>
-                                                                <td>
-                                                                    <select class="form-control MachineName"></select>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>NEFT/RTGS/Online</td>
-                                                                <td><input type="text" class="form-control" value="0" /></td>
-                                                                <td>INR</td>
-                                                                <td><select class="form-control BankName"></select></td>
-                                                                <td><input type="text" class="form-control" /></td>
-                                                                <td>
-                                                                    <select class="form-control MachineName"></select>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
+                                                        <tbody></tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                            <hr class="hr-pay" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label>Discount Type</label>
-                                        <div class="flex">
-                                            <select id="ddlDiscountType" class="form-control"></select>
-                                            <input type="button" title="Create New Source" id="btnNewSource" data-toggle="modal" data-target="#modalDiscountType" class="btn-success btn-flat" value="New" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>Dis. Resason</label>
-                                        <input type="text" id="txtDisResason" class="form-control" placeholder="Discount Reason" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>Approved By</label>
-                                        <select id="ddlApprovedBy" class="form-control"></select>
-                                    </div>
-                                </div>
-                                <div id="PaymentDivision">
-                                    <div class="serviceInfo">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <div id="tblItemInfoNull">
-                                                        <table class="table table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th style="width:5%">ItemId</th>
-                                                                    <th style="width:25%">Item Name</th>
-                                                                    <th style="width:60%;text-align:left">Error Msg</th>
-                                                                    <th style="text-align:center;padding: 2px">x</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="">
-                                                        <div style="margin-bottom:0;overflow:auto;max-height:inherit">
-                                                            <table id="tblItemInfo" class="table table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th style="width:10%;">ItemId</th>
-                                                                        <th style="width:30%;white-space:nowrap">Item Name</th>
-                                                                        <th style="width:8%;text-align:center">Rate</th>
-                                                                        <th style="width:8%;text-align:center">P.Disc</th>
-                                                                        <th style="width:8%;text-align:center">P.Rate</th>
-                                                                        <th style="width:9%;text-align:center">Disc[%]</th>
-                                                                        <th style="width:8%;text-align:center"> DiscAmt</th>
-                                                                        <th style="width:8%;text-align:center">T.Disc</th>
-                                                                        <th style="width:8%;text-align:center">NetAmt</th>
-                                                                        <th style="width:2%;text-align:center;">x</th>
-                                                                        <th style="width:2%;text-align:center;">U</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody></tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="discountSection paymentSection">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group flex">
-                                                    <span style="width:50%">Coupon Code</span>
-                                                    <span style="width:5%">:</span>
-                                                    <span style="width:55%;display:flex;">
-                                                        <input type="text" id="txtCouponCode" placeholder="Coupon" autocomplete="off" style="border-color: #0e96fd;" class="form-control" />
-                                                        <button id="btnValidateCoupon" onclick="ValidateCoupon()" class="btnvalidate"><i class="fa fa-check"></i></button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group flex">
-                                                    <span style="width:50%">Discount Amt</span>
-                                                    <span style="width:5%">:</span>
-                                                    <span style="width:55%">
-                                                        <input type="text" id="txtDiscountByAmt" data-int onkeyup="OverAllDiscount('ByAmount')" value="0" class="form-control" />
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group flex">
-                                                    <span style="width:50%">Discount %</span>
-                                                    <span style="width:5%">:</span>
-                                                    <span style="width:55%">
-                                                        <input type="text" id="txtDiscountByPer" data-int onkeyup="OverAllDiscount('ByPercent')" value="0" class="form-control" />
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row amount-section">
-                                    <div class="col-md-2">
-                                        <label>Gross</label>
-                                        <input type="text" id="txtGrossAmount" class="form-control">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label> Discount</label>
-                                        <input type="text" id="txtTDiscount" class="form-control">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Net</label>
-                                        <input type="text" id="txtNetAmount" class="form-control">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Tax</label>
-                                        <div class="flex">
-                                            <input type="text" id="txtTotalTax" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Payable</label>
-                                        <input type="text" id="txtPayable" class="form-control">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Balance</label>
-                                        <input type="text" id="txtBalance" class="form-control">
-                                    </div>
-                                    <hr>
                                 </div>
                             </div>
-                        </div>                    
+                            <div class="discountSection paymentSection">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group flex">
+                                            <span style="width:50%">Coupon Code</span>
+                                            <span style="width:5%">:</span>
+                                            <span style="width:55%;display:flex;">
+                                                <input type="text" id="txtCouponCode" placeholder="Coupon" autocomplete="off" style="border-color: #0e96fd;" class="form-control" />
+                                                <button id="btnValidateCoupon" onclick="ValidateCoupon()" class="btnvalidate"><i class="fa fa-check"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group flex">
+                                            <span style="width:50%">Discount Amt</span>
+                                            <span style="width:5%">:</span>
+                                            <span style="width:55%">
+                                                <input type="text" id="txtDiscountByAmt" data-int onkeyup="OverAllDiscount('ByAmount')" value="0" class="form-control" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group flex">
+                                            <span style="width:50%">Discount %</span>
+                                            <span style="width:5%">:</span>
+                                            <span style="width:55%">
+                                                <input type="text" id="txtDiscountByPer" data-int onkeyup="OverAllDiscount('ByPercent')" value="0" class="form-control" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row amount-section">
+                            <div class="col-md-2">
+                                <label>Gross</label>
+                                <input type="text" id="txtGrossAmount" class="form-control">
+                            </div>
+                            <div class="col-md-2">
+                                <label> Discount</label>
+                                <input type="text" id="txtTDiscount" class="form-control">
+                            </div>
+                            <div class="col-md-2">
+                                <label>Net</label>
+                                <input type="text" id="txtNetAmount" class="form-control">
+                            </div>
+                            <div class="col-md-2">
+                                <label>Tax</label>
+                                <div class="flex">
+                                    <input type="text" id="txtTotalTax" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Payable</label>
+                                <input type="text" id="txtPayable" class="form-control">
+                            </div>
+                            <div class="col-md-2">
+                                <label>Balance</label>
+                                <input type="text" id="txtBalance" class="form-control">
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

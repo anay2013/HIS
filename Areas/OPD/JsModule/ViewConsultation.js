@@ -9,6 +9,7 @@ $(document).ready(function () {
     GetDoctorList();
     $('#tblDoneAppointment tbody').on('click', '#btnView', function () {
         var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
@@ -24,6 +25,7 @@ $(document).ready(function () {
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnView', function () {
         var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
@@ -31,6 +33,7 @@ $(document).ready(function () {
     });
     $('#tblOtherAppList tbody').on('click', '#btnView', function () {
         var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
@@ -43,6 +46,23 @@ $(document).ready(function () {
         _AppId = AppId;
         _doctorId = DoctorId;
         InOutMarking('DoctorRoom_CALL', '');
+    });
+    $('#tblOtherAppList tbody').on('click', '#btnAbsent', function () {
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
+        selectRow($(this));
+        _AppId = AppId;
+        _doctorId = DoctorId;
+        InOutMarking('DoctorRoom_Absent', '');
+    });
+    $('#tblEmergencyAppList tbody').on('click', '#btnAbsent', function () {
+        var AppId = $(this).closest('tr').find('td:eq(2)').text();
+        var DoctorId = $(this).closest('tr').find('td:eq(3)').text();
+        var dashboard = $(this).data('dashboard');
+        selectRow($(this));
+        _AppId = AppId;
+        _doctorId = DoctorId;
+        InOutMarking('DoctorRoom_Absent', dashboard);
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnIn', function () {
         var AppId = $(this).closest('tr').find('td:eq(2)').text();
@@ -77,7 +97,6 @@ function GetDoctorList() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            console.log(data)
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
@@ -105,7 +124,7 @@ function ViewConsultation() {
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentSearch";
     var objBO = {};
     objBO.SearchValue = $('#txtSearchValue').val();
-    objBO.prm_1 = $('#ddlStatus').val();
+    objBO.prm_1 = $('#ddlStatus option:selected').text();
     objBO.DoctorId = $('#ddlDoctor option:selected').val();
     objBO.from = $('#txtFromAppDate').val();
     objBO.to = $('#txtToAppDate').val();
@@ -125,16 +144,21 @@ function ViewConsultation() {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         total++;
-                        tbody += "<tr>";
+                        if (val.IsAbsent == 'Y')
+                            tbody += "<tr style='background:yellow'>";
+                        else
+                            tbody += "<tr>";
+
                         tbody += "<td>" + val.token_no + "</td>";
                         tbody += "<td>" + val.UHID + "</td>";
                         tbody += "<td style='display:none'>" + val.app_no + "</td>";
                         tbody += "<td style='display:none'>" + val.DoctorId + "</td>";
-                        tbody += "<td>" + val.patient_name + "</td>";                    
+                        tbody += "<td>" + val.patient_name + "</td>";
                         tbody += "<td>" + val.AppDate + "</td>";
                         tbody += "<td>" + val.DoctorName + "</td>";
                         tbody += "<td style='background:#fff;'>";
                         tbody += "<button class='btn btn-success btn-xs' id='btnCall' " + val.IsCalled + ">Call</button>";
+                        tbody += "<button class='btn btn-danger btn-xs' id='btnAbsent' " + val.IsCalled + ">Absent</button>";
                         if (val.IsIn == 'disabled')
                             tbody += "<button class='btn btn-warning btn-xs' disabled style='Background:" + val.IsIn_Color + "' data-dashboard='" + val.Dept + "' id='btnIn'>In</button><div id='skill'><div class='circle'></div></div>";
                         else
@@ -152,17 +176,23 @@ function ViewConsultation() {
                     var total = 0;
                     $.each(data.ResultSet.Table1, function (key, val) {
                         total++;
-                        tbody1 += "<tr>";
-                        tbody1 += "<td>" + val.token_no  + "</td>";
+                        if (val.IsAbsent == 'Y')
+                            tbody1 += "<tr style='background:yellow'>";
+                        else
+                            tbody1 += "<tr>";
+                        tbody1 += "<td>" + val.token_no + "</td>";
                         tbody1 += "<td>" + val.UHID + "</td>";
                         tbody1 += "<td style='display:none'>" + val.app_no + "</td>";
-                        tbody1 += "<td>" + val.patient_name + "</td>";                    
+                        tbody1 += "<td>" + val.patient_name + "</td>";
                         tbody1 += "<td>" + val.AppDate + "</td>";
                         tbody1 += "<td>" + val.DoctorName + "</td>";
                         tbody1 += "<td style='background:#fff;'>";
                         tbody1 += "<button class='btn btn-success btn-xs' id='btnCall' " + val.IsCalled + ">Call</button>";
+                        tbody1 += "<button class='btn btn-danger btn-xs' id='btnAbsent' " + val.IsCalled + ">Absent</button>";
                         if (val.IsIn == 'disabled')
                             tbody1 += "<button class='btn btn-warning btn-xs' disabled  style='Background:" + val.IsIn_Color + "' data-dashboard='" + val.Dept + "' id='btnIn'>In</button><div id='skill'><div class='circle'></div></div>";
+                        else if (val.IsIn == 'In')
+                            tbody1 += "<button class='btn btn-warning btn-xs'  style='Background:" + val.IsIn_Color + "' data-dashboard='" + val.Dept + "' id='btnIn'>In</button><div id='skill'><div class='circle'></div></div>";
                         else
                             tbody1 += "<button class='btn btn-warning btn-xs' style='Background:" + val.IsIn_Color + "' data-dashboard='" + val.Dept + "' id='btnView'>View</button><div id='skill'><div class='circle'></div></div>";
                         tbody1 += "</td>";
@@ -182,7 +212,7 @@ function ViewConsultation() {
                         tbody2 += "<td>" + val.token_no + "</td>";
                         tbody2 += "<td>" + val.UHID + "</td>";
                         tbody2 += "<td style='display:none'>" + val.app_no + "</td>";
-                        tbody2 += "<td>" + val.patient_name + "</td>";                    
+                        tbody2 += "<td>" + val.patient_name + "</td>";
                         tbody2 += "<td>" + val.AppDate + "</td>";
                         tbody2 += "<td>" + val.DoctorName + "</td>";
                         tbody2 += "<td style='background:#fff;'>";
@@ -196,6 +226,12 @@ function ViewConsultation() {
         },
         error: function (response) {
             alert('Server Error...!');
+        },
+        complete: function (response) {
+            if ($('#tblEmergencyAppList tbody tr').length == 0)
+                $('#divOther').find('div:first').css({ 'min-height': '70vh', 'max-height': '70vh' });
+            else
+                $('#divOther').find('div:first').css({ 'min-height': '250px', 'max-height': '250px' });
         }
     });
 }
@@ -233,7 +269,6 @@ function InOutMarking(logic, dashboard) {
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnCall').prop('disabled', true);
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').prop('disabled', false);
                 }
-
                 if (objBO.Logic == "DoctorRoom_IN") {
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnCall').prop('disabled', true);
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').prop('disabled', true);
@@ -243,8 +278,7 @@ function InOutMarking(logic, dashboard) {
                     window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
                 }
                 if (objBO.Logic == "DoctorRoom_Absent") {
-                    $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnCall').prop('disabled', true);
-                    $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').prop('disabled', true);
+                    $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').prop('disabled', false);
                 }
             }
             else {

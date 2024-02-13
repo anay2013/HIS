@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "MedicalCertificate";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/OPD/JsModule/MedicalCertificate.js"></script>
+<style>
+    .select-row {
+        background: #0076d0 !important;
+        color: #fff;
+    }
+
+    .scroll {
+        overflow: auto;
+        max-height: 300px;
+    }
+
+    .sampleTaken {
+        background: #bcffe0
+    }
+
+    .panel-body input, .panel-body select {
+        padding: 5px !important;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="panel">
+                    <div class="panel-heading" style="background:#2478a9;padding:1px 10px; ">
+                        <p class="text-white">Print</p>
+                    </div>
+                    <div class="panel-body" style="background:#fff;padding:7px;">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:inline-flex;align-items: baseline;">
+                                    <input class="form-control" type="text" name="UHID No" placeholder="UHID NO" id="txtUHIDNo" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:inline-flex;align-items: baseline;">
+                                    <button class="btn-warning" onclick="GetdataByUHID()" style="width:20%;border:none;height:27px"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="overflow-y:auto;border: 1px solid #4f7ba1;">
+                                    <table class="table table-bordered" id="tblPatientByUHID">
+                                        <thead>
+                                            <tr>
+                                                <th>UHID</th>
+                                                <th>Patient Name</th>
+                                                <th>Age/Gender</th>
+                                                <th>Relation Name</th>
+                                                <th>Address</th>
+                                                <th>State</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 1%;">
+                            <div class="col-md-4">
+                                <label>IPD NO</label>
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:inline-flex;align-items: baseline;">
+                                    <input class="form-control" type="text" name="IPD No" placeholder="IPD NO" id="txtIPDNO" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Chief Complaint</label>
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:inline-flex;align-items: baseline;">
+                                    <input class="form-control" type="text" name="Chief Complaint" placeholder="Chief Complaint" id="txtChiefComplaint" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Date</label>
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:inline-flex;align-items: baseline;">
+                                    <input class="form-control" type="date" name="Date" id="txtDate" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <label>Remark</label>
+                                <label id="txtautoid" hidden></label>
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:inline-flex;align-items: baseline;">
+                                    <textarea id="txtRemark" style="padding:0px;font-size:12px" class="form-control" type="text"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label></label>
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex;align-items: baseline;">
+                                    <button class="btn-warning" id="btnSave" style="width:40%;margin-top: 6%;border:none;height:27px" onclick="InsertMedicalData()"><i class="fa fa-save">&nbsp;</i>Save</button>
+                                    <button class="btn-warning" id="btnUpdate" style="width:45%;margin-top: 6%;border:none;height:27px; display:none" onclick="UpdateMedical()"><i class="fa fa-save">&nbsp;</i>Update</button>
+                                    <button class="btn-success" onclick="Printdata()" style="width:30%; margin-left: 6%;border:none;height:27px"><i class="fa fa-print">&nbsp;</i>Print</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="overflow-y:auto;border: 1px solid #4f7ba1;">
+                                    <table class="table table-bordered" id="tblMedicalCertificate">
+                                        <thead>
+                                            <tr>
+                                                <th>UHID NO</th>
+                                                <th>IPD NO</th>
+                                                <th>Chief Complaint</th>
+                                                <th>Remark</th>
+                                                <th>Date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

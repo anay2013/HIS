@@ -1745,5 +1745,175 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             return obj.PrintForms(FormList);
         }
 
+        public FileResult DeathNotification(string IPDNo)
+        {
+            PdfGenerator pdfConverter = new PdfGenerator();
+            InsertDeathCertificateInfo obj = new InsertDeathCertificateInfo();
+            obj.IPDNo = IPDNo;
+            obj.Logic = "PrintDeathCertificate";
+            HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("IPDNursingService/IPD_PatientQueries", obj);
+            DataSet ds = dsResult.ResultSet;
+            string _result = string.Empty;
+            StringBuilder b = new StringBuilder();
+            StringBuilder h = new StringBuilder();
+            string Certificateid = "";
+            string PatientName = "";
+            string ageInfo = "";
+            string UHID = "";
+            string IPDNoo = "";
+            string fathername = "";
+            string DoctorName = "";
+            string SufferingFrom = "";
+            string ImmediateCauseOfDeath = "";
+            string address = "";
+            string date = "";
+            string time = "";
+
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            b.Append("<div class='row' style='padding:10px'>");
+            b.Append("<h1 style='text-align:center; color:black; text-transform:uppercase;margin-top:-2%'>Chandan Hospital</h1>");
+            b.Append("<h1 style='text-align:center; font-size:13px;color:black;margin-top:-2%'> Faizabad Road, Near Chinhat Flyover, Vijayant Khand,Gomti Nagar Lucknow,Uttar Pradesh 226010</h1>");
+            b.Append("<h1 style='text-align:center; font-size:13px;color:black;'> phone No : 0522-6666666 &nbsp; &nbsp;Email: care@chandanhospital.in</h1>");
+            b.Append("<h1 style='text-align:center; font-size:16px; color:black;margin-top:2%'><u> DEATH  NOTIFICATION</u></h1>");
+
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+
+                    PatientName = dr["patient_name"].ToString();
+                    ageInfo = dr["ageInfo"].ToString();
+                    UHID = dr["UHID"].ToString();
+                    IPDNoo = dr["IPDNo"].ToString();
+                }
+                if (ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[1].Rows)
+                    {
+
+                        Certificateid = dr["Certificateid"].ToString();
+                        PatientName = dr["patient_name"].ToString();
+                        fathername = dr["FatherName"].ToString();
+                        ageInfo = dr["ageInfo"].ToString();
+                        DoctorName = dr["DoctorName"].ToString();
+                        address = dr["address"].ToString();
+                        SufferingFrom = dr["SufferingFrom"].ToString();
+                        ImmediateCauseOfDeath = dr["ImmediateCauseOfDeath"].ToString();
+                        DateTime deathDateTime = Convert.ToDateTime(dr["DeathDateTime"]);
+                        date = deathDateTime.ToString("dd/MM/yyyy");
+                        time = deathDateTime.ToString("HH:mm");
+                    }
+                }
+            }
+
+
+            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
+            b.Append("<tr>");
+            b.Append("<td style='text-align:left'><b>DCFNo:</b></td>");
+            b.Append("<td style='text-align:left;margin-left:25px'>" + Certificateid + "</td>");
+            b.Append("<td>&nbsp;</td>");
+            b.Append("<td style='text-align:left'><b>Date:</b></td>");
+            b.Append("<td style='text-align:left;margin-left:25px'>" + date + "</td>");
+            b.Append("<td>&nbsp;</td>");
+            b.Append("<td style='text-align:left'><b>UHID :</b></td>");
+            b.Append("<td style='text-align:left;margin-left:25px'>" + UHID + "</td>");
+
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("<hr style='border: 1px solid black;margin-top:3%'>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex'><span style='white-space:pre'>This is notify that : &nbsp;</span><span style='margin-left:20px;width:100%;border-bottom:1px dashed;display:block'><b>" + PatientName + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre'>&nbsp;</span><span style='width:80%;border-bottom:1px dashed;display:block'><b>" + fathername + "</b></span>&nbsp;<span style='white-space:pre'>Age:&nbsp;</span><span style='margin-left:20px;width:20%;border-bottom:1px dashed;display:block'><b>" + ageInfo + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>R/O: &nbsp;</span><span style='margin-left:10px;width:100%;border-bottom:1px dashed;display:block'><b>" + address + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>was Suffering from </span>&nbsp;<span style='margin-left:35px;width:100%;border-bottom:1px dashed;display:block'><b>" + SufferingFrom + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'> and was under my treatrment of </span>&nbsp;&nbsp;<span style='margin-left:80px;width:100%;border-bottom:1px dashed;display:block'><b>" + DoctorName + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>at Chandan Hospital  Faizabad Road,Hear High Count,Lucknow</span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>Immediate Cause of Death Was</span>&nbsp;<span style='margin-left:55px;width:100%;border-bottom:1px dashed;display:block'><b>" + ImmediateCauseOfDeath + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>At </span>&nbsp;<span style='margin-left:5px;width:20%;border-bottom:1px dashed;display:block'><b>" + time + "</b></span> &nbsp;<span style='white-space:pre'>on Dated : &nbsp;</span><span style='margin-left:20px;width:80%;border-bottom:1px dashed;display:block'><b>" + date + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:10%'><span style='width:60%;'><b> Signature of Patient Attendant</b></span><span style='width:40%;'><b>Signature of Death Declaring Doctor</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='width:60%;'><b>Patient Attendant Name</b></span><span style='width:40%;'><b>" + DoctorName + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:6%'><span style='width:60%;'><b></b></span><span style='width:40%'><b> Counter Signature <br>Name..........................</b></span></p>");
+            b.Append("</div>");
+            pdfConverter.Header_Enabled = false;
+            pdfConverter.Footer_Enabled = false;
+            pdfConverter.Header_Hight = 150;
+            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginRight = 10;
+            pdfConverter.PageMarginBottom = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageName = "A4";
+            pdfConverter.PageOrientation = "Portrait";
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "DeathNotification.pdf");
+        }
+
+        public FileResult BirthCertificate(string IPDNo)
+        {
+            PdfGenerator pdfConverter = new PdfGenerator();
+            InsertBirthCertificate obj = new InsertBirthCertificate();
+            obj.IPDNO = IPDNo;
+            obj.Logic = "PrintBirthCertificate";
+            HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("IPDNursingService/IPD_PatientQueries", obj);
+            DataSet ds = dsResult.ResultSet;
+            string _result = string.Empty;
+            StringBuilder b = new StringBuilder();
+            StringBuilder h = new StringBuilder();
+            string BabyName = "";
+            string GuardianName = "";
+            string Gender = "";
+            string Address = "";
+            string DeliveryTime = "";
+            string Height = "";
+            string Weight = "";
+            string BirthCertificateid = "";
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            b.Append("<div class='row' style='padding:10px'>");
+            b.Append("<h2 style='text-align:center; color:black; text-transform:uppercase;'>Chandan Hospital</h2>");
+            b.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
+            b.Append("<h1 style='text-align:center; font-size:13px;color:black;margin-top:-9%;margin-left:150px'> Faizabad Road, Near Chinhat Flyover, Vijayant Khand,Gomti Nagar Lucknow,Uttar Pradesh 226010</h1>");
+            b.Append("<h1 style='text-align:left; font-size:13px;color:black;margin-left:175px;'> phone No : 0522-6666666 </h1>");
+            b.Append("<h1 style='text-align:left; font-size:13px;color:black;margin-left:175px;'>care@chandanhospital.in &nbsp; &nbsp;&nbsp;&nbsp;Website:-www.chandanhospital.in</h1>");
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+
+                    BirthCertificateid = dr["BirthCertificateid"].ToString();
+                    BabyName = dr["BabyName"].ToString();
+                    GuardianName = dr["GuardianName"].ToString();
+                    Gender = dr["Gender"].ToString();
+                    Address = dr["Address"].ToString();
+                    //DeliveryTime = dr["DeliveryTime"].ToString();
+                    DateTime BirthDateTime = Convert.ToDateTime(dr["DeliveryTime"]);
+                    DeliveryTime = BirthDateTime.ToString("dd/MM/yyyy HH:mm");
+
+                    Height = dr["Height"].ToString();
+                    Weight = dr["Weight"].ToString();
+                }
+
+            }
+            b.Append("<hr style='border: 1px solid black;margin-top:3%'>");
+            b.Append("<h1 style='text-align:center; font-size:17px; color:black;margin-top:1%'><u> BIRTH CERTIFICATE</u></h1>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>BIRTH NO:</span><span style='margin-left:20px;width:100%;'><b>" + BirthCertificateid + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>Name:&nbsp;</span>&nbsp;&nbsp;<span style='margin-left:25px;width:100%;border-bottom:1px dashed;display:block'><b>" + BabyName + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre'>S/O&nbsp;/&nbsp;D/O</span><span style='margin-left:20px;width:60%;border-bottom:1px dashed;display:block'><b>" + GuardianName + "</b></span>&nbsp;<span style='white-space:pre'>Gender:&nbsp;</span><span style='margin-left:20px;width:40%;border-bottom:1px dashed;display:block'><b>" + Gender + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>Address &nbsp;</span><span style='margin-left:20px;width:100%;border-bottom:1px dashed;display:block'><b>" + Address + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>Date/Time</span>&nbsp;<span style='margin-left:25px;width:40%;border-bottom:1px dashed;display:block'><b>" + DeliveryTime + "</b></span>&nbsp;<span style='white-space:pre;text-align:center;'>&nbsp;Weight</span>&nbsp;<span style='margin-left:30px;width:30%;border-bottom:1px dashed;display:block'><b>" + Weight + "</b></span><span style='white-space:pre;text-align:center;'>&nbsp;Height</span><span style='margin-left:30px;width:30%;border-bottom:1px dashed;display:block'><b>" + Height + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>at Chandan Hospital ,Lucknow</span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:85%'><span style='width:30%;'>___________________________</span>&nbsp;<span style='margin-left:30px;width:30%;'>___________________________</span>&nbsp;<span style='margin-left:30px;width:30%;'>___________________________</span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-2%'><span style='width:30%;'><b>Neonatologist</b></span>&nbsp;<span style='margin-left:30px;width:30%;'><b>Obstetrician</b></span>&nbsp;<span style='margin-left:35px;width:30%;'><b>Medical Director</b></span></p>");
+            b.Append("</div>");
+            pdfConverter.Header_Enabled = false;
+            pdfConverter.Footer_Enabled = false;
+            pdfConverter.Header_Hight = 150;
+            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginRight = 10;
+            pdfConverter.PageMarginBottom = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageName = "A4";
+            pdfConverter.PageOrientation = "Portrait";
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "BirthCertificate.pdf");
+        }
+
     }
 }

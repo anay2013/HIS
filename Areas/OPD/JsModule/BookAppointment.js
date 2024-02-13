@@ -3,8 +3,8 @@ var isApp = '';
 var roundOff = 0;
 var _empDiscountInfo = {};
 var _otp;
-var _GenFrom="Hospital";
-var _online_app_no="-";
+var _GenFrom = "Hospital";
+var _online_app_no = "-";
 $(document).ready(function () {
     // data = { "messages": [{ "messageId": "40089288737037212625", "status": { "description": "Message sent to next instance", "groupId": 1, "groupName": "PENDING", "id": 7, "name": "PENDING_ENROUTE" }, "to": "919670244590", "smsCount": 1 }] }
     TriggerEnter();
@@ -250,6 +250,40 @@ $(document).ready(function () {
         }
     });
 });
+function checkAmount() {
+    if ($('#txtUHID').val() == 'New') {
+        alert('Please Provide UHID');
+        $('#txtUHID').focus();
+        return;
+    }
+    if ($('#ddlPanel option:selected').val() == '000') {
+        alert('Please Select Panel');
+        return;
+    }
+    var url = config.baseUrl + "/api/Corporate/PanelQuerie";
+    var objBO = {};
+    objBO.PanelId = $('#ddlPanel option:selected').val();
+    objBO.UHID = $('#txtUHID').val();
+    objBO.from = '1900/01/01';
+    objBO.ReportType = '';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'GetAmountForBooking';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var Balance = data.ResultSet.Table[0].Balance;
+            $('#amountInfo span:last').text(Balance);
+            $('#amountInfo').toggleClass('grid');
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function PaymentAll() {
     $('#tblItemInfo tbody').empty();
     $('#tblPaymentDetails tbody input').val('');
@@ -1787,7 +1821,7 @@ function VerifyEmpForDiscount() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         async: false,
-        success: function (data) {         
+        success: function (data) {
             if (data.Msg.includes('Mobile No not Found')) {
                 alert("Mobile No not Found");
                 return

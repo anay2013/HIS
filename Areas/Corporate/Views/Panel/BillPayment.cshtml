@@ -32,8 +32,8 @@
     <div class="container">
         <div class="panel-body">
             <div class="row colnospace" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
-                <div class="col-md-4">
-                    Choose
+                <div class="col-md-3">
+                    Insurance Company Wise IPD List
                     <select id="ddlPanel" class="form-control border-imp"><option>Select</option></select>
                 </div>
                 <div class="col-md-1">
@@ -47,6 +47,14 @@
                 <div class="col-md-1">
                     <br />
                     <button id="btnCurrentPatient" onclick="BalanceInfo('BalanceInfo:ByIPDNo')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
+                </div>
+                <div class="col-md-3">
+                    TPA Wise IPD List
+                    <select id="ddlTPAList" class="form-control border-imp"><option>Select</option></select>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button id="btnByPANEL" onclick="BalanceInfo('BalanceInfo:TPAId')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
                 </div>
             </div>
             <div class="row colnospace">
@@ -106,8 +114,7 @@
                 </div>
                 <div class="col-md-2">
                     <label>Bank Name</label>
-                    <select id="ddlBankName" class="form-control">                       
-                    </select>
+                    <select id="ddlBankName" class="form-control"></select>
                 </div>
                 <div class="col-md-2">
                     <label>Reference No.</label>
@@ -124,9 +131,9 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label>Total TDS Receivable</label>
+                    <label>Total Bad Debt</label>
                     <div class="flex">
-                        <input type="text" id="txtTotalTDSReceivable" class="form-control" disabled />
+                        <input type="text" id="txtTotalBadDebt" class="form-control" disabled />
                     </div>
                 </div>
             </div>
@@ -134,14 +141,15 @@
                 <div class="col-md-3">
                     <div style="display: flex;align-items:baseline">
                         <label style="white-space:pre">Attachment : </label>
-                        <input type="file" id="txtReferenceNo" class="form-control" />
+                        <input type="file" id="uploadFile" onchange="readURL(this)" class="form-control" />
+                        <img id="imgFile" class="hide" />
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div style="display: flex;align-items:baseline">
                         <label style="white-space:pre">Remark : </label>
                         <input type="text" id="txtRemark" class="form-control" />
-                        <button id="btnPayment" onclick="IPD_BillPayment()" style="width: 14%;" class="btn btn-success"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                        <button id="btnPayment" onclick="IPD_BillPayment(this)" style="width: 14%;" class="btn btn-success"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@
 }
 <script src="~/Areas/EDP/JsModule/PanelRateUpdate.js"></script>
 
-<style>  
+<style>
     .btnRate {
         line-height: 0;
         height: 18px;
@@ -130,7 +130,15 @@
                         <label>Sub Category:</label>
                         <div class="flex">
                             <select id="ddlSubCategory" class="form-control"></select>
-                            <button style="width:9vmax;border-radius:0;height:27px" class="btn btn-warning" onclick="GetItemList()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                            <button style="width:7vmax;border-radius:0;height:27px" class="btn btn-warning" onclick="GetItemList()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>Item Name </label>
+                        <div class="flex">
+                            <input type="text" class="form-control" id="txtItemName" />
+                            <button style="width:2vmax;border-radius:0;height:27px;margin-right:2px;" class="btn btn-success" onclick="GetItemListTextWise()"><i class="fa fa-search">&nbsp;</i></button>
                         </div>
                     </div>
                 </div>

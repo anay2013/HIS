@@ -6,14 +6,6 @@
     FillCurrentDate("txtSearchFrom");
     FillCurrentDate("txtSearchTo");
 
-    $('#btnSearchByOption').click(function () {
-        SearchByKey();
-    });
-
-    $('#btnSearchByDate').click(function () {
-        SearchByDate();
-    });
-
     $('#tblOPDRegister tbody').on('click', 'button.Reschedule', function () {
         selectRow($(this));
         var doctor = $(this).data('doctorid');
@@ -118,6 +110,7 @@ function RescheduleBooking() {
         objBO.AppDate = date;
         objBO.AppInTime = time[0];
         objBO.AppOutTime = time[1];
+        objBO.login_id = Active.userId;
         objBO.Logic = 'RescheduleBooking';
         $.ajax({
             method: "POST",
@@ -157,6 +150,7 @@ function CancelBooking(appNo) {
         objBO.AppDate = date;
         objBO.AppInTime = '01:00';
         objBO.AppOutTime = '01:00';
+        objBO.login_id = Active.userId;
         objBO.Logic = 'CancelBooking';
         $.ajax({
             method: "POST",
@@ -211,7 +205,8 @@ function GetDoctor() {
         }
     });
 }
-function SearchByKey() {
+function SearchByKey(elem) {
+    $(elem).addClass('button-loading');
     $('#tblOPDRegister tbody').empty();
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
     var objBO = {};
@@ -271,15 +266,18 @@ function SearchByKey() {
                         tbody += "</tr>";
                     });
                     $('#tblOPDRegister tbody').append(tbody);
+                    $(elem).removeClass('button-loading');
                 }
                 else {
                     $('#tblOPDRegister tbody').empty();
                     alert("Data Not Found..");
+                    $(elem).removeClass('button-loading');
                 };
             }
             else {
                 $('#tblOPDRegister tbody').empty();
                 alert("Data Not Found..");
+                $(elem).removeClass('button-loading');
             };
         },
         //complete: function (data) {
@@ -290,14 +288,15 @@ function SearchByKey() {
         //            });
         //        }
         //    }
-            
+
         //},
         error: function (response) {
             alert('Server Error...!');
         }
     });
 }
-function SearchByDate() {
+function SearchByDate(elem) {
+    $(elem).addClass('button-loading');
     $('#tblOPDRegister tbody').empty();
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
     var objBO = {};
@@ -356,15 +355,18 @@ function SearchByDate() {
                         tbody += "</tr>";
                     });
                     $('#tblOPDRegister tbody').append(tbody);
+                    $(elem).removeClass('button-loading');
                 }
                 else {
                     $('#tblOPDRegister tbody').empty();
                     alert("Data Not Found..");
+                    $(elem).removeClass('button-loading');
                 };
             }
             else {
                 $('#tblOPDRegister tbody').empty();
                 alert("Data Not Found..");
+
             };
         },
         complete: function (data) {
@@ -376,7 +378,8 @@ function SearchByDate() {
                     });
                 }
             }
-            
+            $(elem).removeClass('button-loading');
+
         },
         error: function (response) {
             alert('Server Error...!');
@@ -389,7 +392,7 @@ function Receipt(tnxid) {
 }
 function Confirm(appno) {
     var url = "BookAppointment?appno=" + btoa(appno);
-    window.open(url, '_blank',);
+    window.open(url, '_blank');
 }
 function ValidateReschedule() {
     var NewAppTime = $('#txtNewAppointmentTime').text().length;
@@ -398,4 +401,32 @@ function ValidateReschedule() {
         return false;
     }
     return true;
+}
+function DoctorWiseAppointmentCount(elem) {
+    var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
+    var objBO = {};
+    objBO.DoctorId = $('#ddlDoctor option:selected').val();
+    objBO.SearcKey = '';
+    objBO.SearchValue = $('#txtSearchValue').val();
+    objBO.from = $('#txtSearchFrom').val();
+    objBO.to = $('#txtSearchTo').val();
+    objBO.prm_1 = $('#ddlVisitType option:selected').val();
+    objBO.ReportType = "Excel";
+    objBO.Logic = $('#ddlReportType option:selected').val();
+    Global_DownloadExcel(url, objBO, $('#ddlReportType option:selected').val() + ".xlsx", elem);
+}
+function Global_DownloadExcel(Url, objBO, fileName, elem) {
+    $(elem).addClass('button-loading');
+    var ajax = new XMLHttpRequest();
+    ajax.open("Post", Url, true);
+    ajax.responseType = "blob";
+    ajax.setRequestHeader("Content-type", "application/json")
+    ajax.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            var blob = new Blob([this.response], { type: "application/octet-stream" });
+            saveAs(blob, fileName); //refernce by ~/JsModule/FileSaver.min.js
+            $(elem).removeClass('button-loading');
+        }
+    };
+    ajax.send(JSON.stringify(objBO));
 }

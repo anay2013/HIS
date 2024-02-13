@@ -3,7 +3,7 @@
     ViewBag.Title = "Collection";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/Accounts/JsModule/Payments/Collection.js"></script>
+<script src="~/Areas/Accounts/JsModule/Payments/Collection.js?ver=1.4"></script>
 <style>
     #tblHOTOInfo, #tblTransfer {
         margin: 0;
@@ -85,7 +85,7 @@
                                 <table id="tblTransfer" class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th style="width:1%"><input type="checkbox" onchange="" checked /></th>
+                                            <th style="width:1%"></th>
                                             <th>Ledger Name</th>
                                             <th class="text-center">Count</th>
                                             <th class="text-right">Received</th>
@@ -96,7 +96,7 @@
                                 </table>
                                 <hr />
                                 <div class="row" style="padding:10px;margin-top:15px">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                                             <input type="text" id="txtEmpName" class="form-control input_pass" value="" placeholder="Employee Name">
                                             <span id="btnGetEmployee" class="input-group-addon btn btn-primary">
@@ -104,25 +104,29 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-10">
                                         <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
                                             <select id="ddlEmployee" class="form-control">
                                                 <option>Select Employee</option>
                                             </select>
+                                            <input type="text" id="txtRemark" style="width:100%;" placeholder="Remark" /><br />
                                             <button id="btnSave" onclick="Transfer()" class="btn btn-success" style="width:23%"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
                                         </div>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
                         <div id="Receiving" class="tab-pane fade">
-                            <div class="scroll" style="margin-bottom: 5px;height:55vh;overflow:auto;width:40%">
+                            <div class="scroll" style="margin-bottom: 5px;height:55vh;overflow:auto;width:50%">
                                 <table id="tblReceived" class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>Pay Mode</th>
                                             <th>Tnx Type</th>
                                             <th class="text-right">Received</th>
+                                            <th style="width:1%">cmd</th>
                                             <th style="width:1%">cmd</th>
                                         </tr>
                                     </thead>

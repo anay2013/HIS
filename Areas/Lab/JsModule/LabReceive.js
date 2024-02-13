@@ -89,6 +89,7 @@ function LabReceiveInfo(logic) {
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.hosp_id = Active.unitId;
+    objBO.DispatchNo = $("#ddlType option:selected").text();  
     objBO.SubCatId = $("#ddlCategory option:selected").val();
     objBO.TestCode = $("#ddlTest option:selected").val();
     objBO.Prm1 = $('#txtBarcode').val();
@@ -160,7 +161,7 @@ function LabSampleReceive() {
                 'LabCode': '',
                 'DispatchLab': '',
                 'DispatchNo': '',
-                'BarcodeNo': '',
+                'BarcodeNo': $(this).closest('tr').find('td:eq(3)').text(),
                 'login_id': Active.userId,
                 'Logic': 'LabReceived',
             });

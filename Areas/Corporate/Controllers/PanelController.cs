@@ -45,5 +45,9 @@ namespace MediSoftTech_HIS.Areas.Corporate.Controllers
         {
             return View();
         }
+        public ActionResult EditInsuranceCompInIPD()
+        {
+            return View();
+        }
     }
 }

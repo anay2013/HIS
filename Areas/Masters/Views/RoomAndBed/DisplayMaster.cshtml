@@ -56,23 +56,26 @@
                 <div class="panel-body">
                     <div class="col-sm-9 form-group">
                         <label>Display Name</label>
+                        <label hidden id="Displayid"></label>
                         <input type="text" id="txtDisplayName" class="form-control" style="border:1px solid #86b3de;height:30px;" />
                     </div>
                     <div class="col-md-3 form-group">
                         <button type="submit" id="btnAddDisplayMaster" style="margin: 21px 0 0 0; width:60px;height:30px;" class="btn btn-xs btn-success" value="Add" onclick="InsertDisplayMaster()">ADD</button>
+                        <button type="submit" id="btnUpdateDisplay" style="margin: 21px 0 0 0; width:60px;height:30px; display:none" class="btn btn-xs btn-warning" value="Update" onclick="UpdateDisplayMaster()">Update</button>
                     </div>
 
                 </div>
             </div>
             <div class="panel panel-primary">
                 <div class="panel-body">
-                    <div class="table-responsive" style="height:450px;overflow-y:auto">
+                    <div class="table-responsive" style="height:470px;overflow-y:auto">
                         <table class="table table-bordered" id="tblDisplayMaster">
                             <thead>
                                 <tr>
-                                    <th style="width:20%">Display Id</th>
-                                    <th style="width:70%">Display Name</th>
-                                    <th style="width:10%;align-items:center">Action</th>
+                                    <th style="width:17%">Display Id</th>
+                                    @*<th style="width:70%">Display Name</th>*@
+                                    <th> <input type="text" id="txtDisplayNameSearch" placeholder="Display Name" style="height:20px;margin-right:5px;margin-bottom:5px; padding:2px;margin-top:3px;width:70%" class="form-control" /></th>
+                                    <th style="width:13%;align-items:center">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -114,12 +117,13 @@
 
             <div class="panel panel-primary">
                 <div class="panel-body">
-                    <div class="table-responsive" style="height:450px;overflow-y:auto">
+                    <div class="table-responsive" style="height:470px;overflow-y:auto">
                         <table class="table table-bordered" id="tblDoctorDetails">
                             <thead>
                                 <tr>
-                                    <th style="width:20%">Doctor ID </th>
-                                    <th style="width:60%">Doctor Name</th>
+                                    <th style="width:13%">Doctor ID </th>
+                                    <th style="width:10%"><button onclick="SetSeqNo()" class="btn btn-danger btn-xs">Set Seq</button></th>
+                                    <th style="width:57%">Doctor Name</th>
                                     <th style="width:20%;align-items:center">Status</th>
                                 </tr>
                             </thead>

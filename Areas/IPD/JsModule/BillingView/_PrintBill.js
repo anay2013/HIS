@@ -87,7 +87,11 @@ function BillPrint_DateWise() {
     window.open(url, '_blank');
 }
 function BillPrint_IncludingPackagedItem() {
-    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=IncludingPackagedItem";
+    var strReceiptList = [];
+    $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
+        strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
+    });
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=IncludingPackagedItem";
     window.open(url, '_blank');
 }
 function Receipt_IPDDischargeReport() {

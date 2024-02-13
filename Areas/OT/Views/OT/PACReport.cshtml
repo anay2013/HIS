@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "PackOTReport";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/OT/JsModule/PackOTReport.js"></script>
+<style>
+
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 10px;
+        margin-bottom: 1px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 500px;
+        display: block;
+    }
+
+    .panel-body {
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .note {
+        list-style: disc;
+        color: red;
+        font-size: 11px;
+        font-weight: bold;
+        background: #f7f7f7;
+        border: 1px solid #d86c6c;
+    }
+
+    #tblPackOTReport thead th {
+        color: #fff;
+        background: #2478a9;
+        font-size: 13px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+
+    #tblPackOTReport tbody td {
+        font-size: 12px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding:4px;">
+                            <h4 class="text-white">Pack OT Report</h4>
+                        </div>
+                        <div class="panel-body" style="background:#fff;height:500px">
+
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label></label>
+                                    <div class="flex">
+                                        <input type="text" class="form-control" id="txttext" placeholder="Textwise" />
+                                        <button class="btn-success" type="submit" id="btnSearch" onclick="SearchByTextKey()" style="border:none;height:25px;width:30%; margin-left:10px"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>From</label>
+                                    <input type="date" class="form-control" id="txtFrom" />
+                                </div>
+                                <div class="col-md-5">
+                                    <label>To</label>
+                                    <div class="flex">
+                                        <input type="date" class="form-control" id="txtTo" />
+                                        <button class="btn-warning" type="submit" id="btnSearchs" style="border:none;height:25px;width: 30%; margin-left:10px" onclick="SearchByDateWise()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                        <button class="btn-success" type="submit" id="btnExecl" style="border:none;height:25px;width: 30%; margin-left:10px" onclick="DownloadExcelPacOTReport()"><i class="fa fa-file-excel-o">&nbsp;</i>Excel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="scroll">
+                                        <div class="table-responsive" style="margin:0;border: 1px solid #2478a9;">
+                                            <table id="tblPackOTReport" class="table table-bordered" style="margin-bottom:20px">
+                                                <thead style="background: #00a65a;color: #fff;">
+                                                    <tr>
+                                                        <th>IPOPType</th>
+                                                        <th>IPOPTNo</th>
+                                                        <th style="text-align:left">Patient Name</th>
+                                                        <th style="text-align:left"> Age/Gender</th>
+                                                        <th style="text-align:left">Date</th>
+                                                        <th>Amount</th>
+                                                        <th style="text-align:left">Employee Name</th>
+                                                        <th style="text-align:left">Item Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

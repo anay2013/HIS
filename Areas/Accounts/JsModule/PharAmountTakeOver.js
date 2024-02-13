@@ -95,6 +95,7 @@ function ReceivedByHosp(elem) {
         objBO.amount = '-';
         objBO.shiftID = '-';
         objBO.prm_1 = '-';
+        objBO.login_id = Active.userId;
         objBO.prm_2 = '-';
         objBO.logic = "ReceivedByHosp";
         $.ajax({

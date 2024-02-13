@@ -1,8 +1,6 @@
-﻿@*<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.js'></script>*@
-
-<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-      rel="stylesheet">
-<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+﻿
+<link href="~/Content/jui/jquery-ui.css" rel="stylesheet" />
+<script src="~/Content/jui/jquery-ui.js"></script>
 
 <script src="~/Areas/OPD/JsModule/Prescription/PrescriptionAdvice.js?ver=1.2"></script>
 <link href="~/Content/css/Accordian.css" rel="stylesheet" />
@@ -84,13 +82,16 @@
 
         .ui-widget-content li {
             font-size: 12px !important;
+            font-weight: 100 !important;
             border-top: 1px solid #ddd !important;
         }
 
 
     .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
-        background: #efefef !important;
-        color: #625f5f !important;
+        background: DodgerBlue !important;
+        font-size: 11px !important;
+        font-weight: 100 !important;
+        color: #fff !important;
     }
 
     #btnInitMediTemp {
@@ -252,19 +253,28 @@
         display: none;
     }
 
-        .msg span {
-            background: #ff0049;
-            padding: 2px;
-            border-radius: 20px;
-            width: 13px;
-            height: 13px;
-            font-size: 9px;
-            position: absolute;
-            right: 0;
-            top: 0;
-            text-align: center;
-            cursor: pointer;
+    .prescribedItem span {
+        font-size: 10.5px !important;
+    }
+
+        .prescribedItem span div {
+            font-weight: normal !important;
+            font-size: 10.5px !important;
         }
+
+    .msg span {
+        background: #ff0049;
+        padding: 2px;
+        border-radius: 20px;
+        width: 13px;
+        height: 13px;
+        font-size: 9px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        text-align: center;
+        cursor: pointer;
+    }
 
     .selected {
         background: DodgerBlue !important;
@@ -326,7 +336,7 @@
     }
 </style>
 <div style="padding:0 2px">
-    <div class="" style="width:29%;float:right;float:left">
+    <div class="" style="width:27%;float:right;float:left">
         <div class="example-box-wrapper">
             <div class="panel-group" id="accordion">
                 <div class="panel">
@@ -518,9 +528,9 @@
                                         <button class="btn btn-success" onclick="FilteredTemplate('HospitalList','T00009','LaboratoryRadiologyList')"><i class="fa fa-medkit"></i></button>
                                     </div>
                                     <ul class="ListItems" id="LaboratoryRadiologyList" style="height:250px"></ul>
-                                    @*<div class="bottom-box">
-                                            <input type="text" class="form-control" placeholder="Write Other Investigation" />
-                                        </div>*@
+                                    <div class="bottom-box">
+                                        <input type="text" id="RemarkLaboratoryRadiologyList" class="form-control" placeholder="Write Other Investigation" />
+                                    </div>
                                     <div class="bottom-box">
                                         <textarea class="form-control" data-id="LaboratoryRadiologyItems" placeholder="Enter Laboratory & Radiology Remarks" rows="8"></textarea>
                                     </div>
@@ -623,6 +633,9 @@
                                     </div>
                                     <ul class="ListItems" id="PrescribedProcedureList" style="height:250px"></ul>
                                     <div class="bottom-box">
+                                        <input type="text" id="RemarkPrescribedProcedureList" class="form-control" placeholder="Write Other Prescribed Procedure" />
+                                    </div>
+                                    <div class="bottom-box">
                                         <textarea class="form-control" data-id="PrescribedProcedureItems" placeholder="Enter Prescribed Procedure" rows="8"></textarea>
                                     </div>
                                 </div>
@@ -636,7 +649,7 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#PrescribedMedicine" class="collapsed" aria-expanded="false">
                                 <span class="circle"><i class="fa fa-plus-circle"></i></span>Prescribed Medicine
                             </a>
-                            <span class="btn-rx pull-right"><img src="~/Content/logo/rx.png" id="btnMediTemp" style="width:12px;" />+</span>&nbsp;&nbsp;
+                            <span class="btn-rx pull-right" id="btnMediTemp"><img src="~/Content/logo/rx.png" style="width:12px;" />+</span>&nbsp;&nbsp;
                         </h4>
                     </div>
                     <div id="PrescribedMedicine" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
@@ -821,7 +834,7 @@
                                         Database Search :
                                         <label class="switch"><input type="checkbox" class="IsActive" id="IsDB" checked=""><div class="slider round"></div></label>
                                         &nbsp;&nbsp;Expand Full Mode : <i class="fa fa-expand expandMedTab" onclick="expandMedicine()"></i>
-                                        <table class="table table-bordered MedicineTemplate" style="font-size: 11px;margin-bottom:0">
+                                        <table class="table table-bordered MedicineTemplate" id="MedicineTemplatePres" style="font-size: 11px;margin-bottom:0">
                                             <thead>
                                                 <tr>
                                                     <th>Name <i class="fa fa-check-circle addmedNewRow"></i> </th>
@@ -995,12 +1008,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label>Duration, Days, Quantity</label>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Times</label>
+                                            <div class="select-editable">
+                                                <input type="text" id="txtTimes" class="form-control" autocomplete="off" placeholder="Times" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Duration, Days</label>
                                         <div class="form-group" style="display:flex">
-                                            <input type="text" id="txtDuration" onkeyup="QtyCalculate()" onkeydown="NextFocus('ddlDays')" data-imp data-int class="form-control text-uppercase" value="0" autocomplete="off" placeholder="Duration" />
-                                            <select id="ddlDays" class="form-control" onkeydown="NextFocus('txtQty')" style="margin: 0 3px;" data-imp><option>Days</option></select>
-                                            <input type="text" id="txtQty" onkeydown="NextFocus('txtIntake')" data-imp data-int class="form-control text-uppercase" autocomplete="off" placeholder="Qty" />
+                                            <input type="text" id="txtDuration" data-imp class="form-control" value="0" autocomplete="off" placeholder="Duration" />
+                                            <select id="ddlDays" class="form-control" style="margin: 0 3px;padding:0;" data-imp><option selected="selected">Days</option><option>Month</option><option></option></select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -1018,10 +1038,10 @@
                                             <div class="select-editable">
                                                 <select id="ddlRoute" onkeydown="NextFocus('txtRemark')" class="form-control">
                                                     <option>Topical</option>
-                                                    <option>Oral</option>
+                                                    <option selected="selected">Oral</option>
                                                     <option>Nose</option>
                                                 </select>
-                                                <input type="text" id="txtRoute" name="format" class="form-control" placeholder="Route" />
+                                                <input type="text" id="txtRoute" value="Oral" name="format" class="form-control" placeholder="Route" />
                                             </div>
                                         </div>
                                     </div>

@@ -165,7 +165,7 @@ function SearchMedicine(key, type) {
     var objBO = {};
     objBO.searchKey = key;
     objBO.searchType = type;
-    objBO.PanelId = $('span[data-panelid]').text();
+    objBO.PanelId = _panelId;
     $.ajax({
         method: "POST",
         url: url,

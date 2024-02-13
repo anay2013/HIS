@@ -7,6 +7,31 @@
 }
 <script src="~/Areas/OPD/JsModule/BookAppointment.js"></script>
 <style>
+    #amountInfo {
+        border-top: none !important;
+        border: 1px solid #ebebeb;
+        z-index: 1000;
+        display: none;
+        background: #ffffff;
+        border-radius: 3px;
+        position: absolute;
+        right: 73%;
+        top: -10%;
+        width: 147px;
+    }
+
+        #amountInfo span:first-child {
+            color: #fff;
+            background: #06a08b;
+        }
+
+        #amountInfo span:last-child {
+            padding: 1px;
+        }
+
+    .grid {
+        display: grid !important;
+    }
     .paymentSection span:nth-child(4) {
         border: 1px solid #97d2ff;
         width: 22%;
@@ -442,6 +467,8 @@
                             <label id="txtError"></label>
                         </div>
                         <div class="col-md-2">
+                            <label id="amountInfo"><span>Balance Amount</span><span></span></label>
+                            <button style="padding: 3px 8px;border: none;font-size: 18px;margin-left:5px;border-radius: 2px;" onclick="checkAmount()" class="btn-primary btn-pay-ctrl pull-right"><i class="fa fa-check-circle">&nbsp;</i></button>
                             <button style="padding: 3px 11px;border: none;font-size: 18px;" onclick="$('.paymentSection').slideToggle('slow'); $('#PaymentDivision,.serviceInfo').toggleClass('itemHeight')" class="btn-warning btn-pay-ctrl pull-right"><i class="fa fa-inr">&nbsp;</i></button>
                         </div>
                     </div>

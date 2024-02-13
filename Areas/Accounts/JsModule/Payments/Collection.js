@@ -5,7 +5,7 @@
         var empName = $('#txtEmpName').val();
         GetEmpDetails(empName);
     });
-    $('#tblReceived tbody').on('click', 'button', function () {
+    $('#tblReceived tbody').on('click', '.receive', function () {
         if ($(this).hasClass('ind')) {
             var Index = $(this).closest('tr').index();
             var autoId = $(this).closest('tr').find('td:last').text();
@@ -20,7 +20,6 @@
             });
         }
     });
-   
     GetStatus();
 
 });
@@ -106,7 +105,7 @@ function OnLoadInfo() {
                         Balance += val.Received;
                         TRcptCount += val.RcptCount;
                         tbody1 += "<tr>";
-                        tbody1 += "<td><input type='checkbox' checked/></td>";
+                        tbody1 += "<td><input type='checkbox' /></td>";
                         tbody1 += "<td style='display:none'>" + val.LedgerId + "</td>";
                         tbody1 += "<td>" + val.LedgerName + "</td>";
                         tbody1 += "<td class='text-center'>" + val.RcptCount + "</td>";
@@ -159,7 +158,7 @@ function PendingReceipt() {
                         if (temp != val.TransferBy) {
                             tbody += "<tr style='background:#ddd' class='" + val.TransferBy + "'>";
                             tbody += "<td colspan='4'>" + val.TransferBy + ', ' + val.collDate + "";
-                            tbody += "<button class='btn btn-success btn-xs pull-right'>Receive</button>";
+                            tbody += "<button  class='receive btn btn-success btn-xs pull-right'>Receive</button>";
                             tbody += "</td>";
                             tbody += "</tr>";
                             temp = val.TransferBy
@@ -168,7 +167,8 @@ function PendingReceipt() {
                         tbody += "<td>" + val.LedgerName + "</td>";
                         tbody += "<td>" + val.TnxType + "</td>";
                         tbody += "<td class='text-right'>" + val.Amount + "</td>";
-                        tbody += "<td><button class='btn btn-success btn-xs ind'>Receive</button></td>";
+                        tbody += "<td><button  class='receive btn btn-success btn-xs ind'>Receive</button> &nbsp;&nbsp;</td>";
+                        tbody += "<td><button class='btn btn-danger btn-xs ind' id='"+val.autoId+"' onclick='RejectTransfer(this.id);'>Reject</button></td>";
                         tbody += "<td class='hide'>" + val.autoId + "</td>";
                         tbody += "</tr>";
                     });
@@ -180,6 +180,7 @@ function PendingReceipt() {
                 }
                 $('#tblReceived tbody').append(tbody);
             }
+
         },
         error: function (response) {
             alert('Server Error...!');
@@ -265,24 +266,31 @@ function Transfer() {
             alert('Please Select Transfer To')
             return
         }
+        if ($('#tblTransfer tbody tr:not(.total)').find('td:eq(0)').find('input[type=checkbox]:checked').length == 0) {
+            alert('Please select Transfer.')
+            return
+        }
+        var Remark = $('#txtRemark').val();
         var url = config.baseUrl + "/api/Account/HOTO_InsertModifyCollection";
         var objBO = [];
-        $('#tblTransfer tbody tr:not(.total)').each(function () {
-            if (parseFloat($(this).find('td:eq(5) input').val()) > 0) {
-                objBO.push({
-                    'AutoId': 0,
-                    'LedgerId': $(this).find('td:eq(1)').text(),
-                    'Amount': $(this).find('td:eq(5) input').val(),
-                    'hosp_id': Active.HospId,
-                    'tnxBy': Active.userId,
-                    'tnxTo': $('#ddlEmployee option:selected').val(),
-                    'Prm1': '-',
-                    'remark': '-',
-                    'login_id': Active.userId,
-                    'Logic': 'Transfer',
-                })
+        $('#tblTransfer tbody tr:not(.total)').each(function () {  
+            if ($(this).find('input[type=checkbox]').is(':checked')) {
+                  if (parseFloat($(this).find('td:eq(5) input').val()) > 0) {
+                    objBO.push({
+                        'AutoId': 0,
+                        'LedgerId': $(this).find('td:eq(1)').text(),
+                        'Amount': $(this).find('td:eq(5) input').val(),
+                        'hosp_id': Active.HospId,
+                        'tnxBy': Active.userId,
+                        'tnxTo': $('#ddlEmployee option:selected').val(),
+                        'Prm1': '-',
+                        'remark': Remark,
+                        'login_id': Active.userId,
+                        'Logic': 'Transfer',
+                    })
+                }
             }
-        })
+        })        
         $.ajax({
             method: "POST",
             url: url,
@@ -352,6 +360,38 @@ function Received(autoId, Index) {
             alert('Server Error...!');
         }
     });
+}
+function RejectTransfer(autoId) {
+    let text = "Do you want to Reject Entry ";
+    if (confirm(text) == true) {
+        var url = config.baseUrl + "/api/Account/HOTO_InsertModifyCollection";
+        var objBO = [
+            {
+                'AutoId': autoId,
+                'hosp_id': Active.HospId,
+                'tnxDate': '1900/01/01',
+                'tnxBy': Active.userId,
+                'tnxTo': '-',
+                'PayMode': '-',
+                'Amount': 0,
+                'Prm1': '-',
+                'login_id': Active.userId,
+                'Logic': 'RejectTransfer'
+            }];
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                PendingReceipt();
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
 }
 function ReportsInfo() {
     $('#tblReports tbody').empty();

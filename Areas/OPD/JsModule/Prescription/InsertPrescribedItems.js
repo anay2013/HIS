@@ -1,4 +1,5 @@
 ﻿var counterP = 11;
+var intervalPresc;
 $(document).ready(function () {
     $('#tblTemplateMaster tbody').on('click', '.fa-edit', function () {
         selectRow($(this));
@@ -23,12 +24,12 @@ $(document).ready(function () {
 })
 function StartCountDown() {
     var counter = counterP;
-    var interval = setInterval(function () {
+    intervalPresc = setInterval(function () {
         counter--;
         $("#txtSubmitCounter").html((counter < 10) ? counter = '0' + counter : counter);
         // Display 'counter' wherever you want to display it.
         if (counter <= 0) {
-            clearInterval(interval);
+            clearInterval(intervalPresc);
             InsertItemsForPres();
             StartCountDown();
             return;
@@ -38,7 +39,6 @@ function StartCountDown() {
         }
     }, 1000);
 }
-
 function InsertPresItems() {
     disableLoading();
     var url = config.baseUrl + "/api/Prescription/CPOE_InsertPrescribedItems";
@@ -61,7 +61,7 @@ function InsertPresItems() {
             objItems.push({
                 'TemplateId': $(this).parents('.prescribedItem').find('templategroup').attr('id'),
                 'ItemId': $(this).attr('id'),
-                'ItemName': $(this).html().trim().replace(',', ''),
+                'ItemName': $(this).html().trim(),
                 'Remark': '-',
             });
         }
@@ -208,7 +208,7 @@ function GetCPOEMedicineTemplateInfo(templateId) {
                         tbody += "<td>" + val.Item_name + "</td>";
                         tbody += "<td>" + val.med_dose + "</td>";
                         tbody += "<td>" + val.med_times + "</td>";
-                        tbody += "<td>" + val.med_duration + " Days</td>";
+                        tbody += "<td>" + val.med_duration + "</td>";
                         tbody += "<td>" + val.med_intake + "</td>";
                         tbody += "<td>" + val.med_route + "</td>";
                         tbody += "<td>" + val.remark + "</td>";
@@ -308,7 +308,7 @@ function CloseAppointment() {
             success: function (data) {
                 if (data.includes('Successfully')) {
                     alert('Appointment Closed Successfully..');
-                    window.location.href = 'OPD_ViewConsultation';
+                    window.location.href = config.rootUrl + '/OPD/Appointment/OPD_ViewConsultation?mid=SM186';
                     sessionStorage.removeItem('AppId');
                 }
                 else {
@@ -394,11 +394,11 @@ function InsertMedicineTemplateInfo() {
         objBO.Item_id = $('#txtItemID').val();
         objBO.Item_name = $('#txtSearchProduct').val();
         objBO.med_dose = $('#txtFreqMaster').val();
-        objBO.med_times = $('#txtDuration').val();
+        objBO.med_times = $('#txtTimes').val();
         objBO.med_duration = $('#txtDuration').val();
         objBO.med_intake = $('#txtIntake').val();
         objBO.med_route = $('#txtRoute').val();
-        objBO.qty = $('#txtQty').val();
+        objBO.qty = 1;
         objBO.remark = $('#txtRemark').val();
         objBO.login_id = Active.userId;
         objBO.Logic = 'InsertMedicineTemplateInfo';

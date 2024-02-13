@@ -16,8 +16,7 @@ function FillCurrentDateTime1() {
     var Second = date.getSeconds();
     if (month < 10) month = "0" + month;
     if (day < 10) day = "0" + day;
-    today = year + "-" + month + "-" + day + 'T' + "00" + ':' + "00" + ':' + "01";
-    console.log(today)
+    today=year+"-"+month+"-"+day+'T'+"00"+':'+"00"+':'+"01";
     $('#txtFrom').val(today)
     $('#txtTo').val(year + "-" + month + "-" + day + 'T' + "23" + ':' + "59" + ':' + "59")
     return today;
@@ -167,7 +166,7 @@ function GetUserList() {
     objBO.to = $('#txtTo').val();
     objBO.prm_1 = '-';
     objBO.prm_2 = '-';
-    objBO.loginId = 'ALL';
+    objBO.loginId = Active.userId;
     objBO.Logic = "UserList";
     $.ajax({
         method: "POST",
@@ -179,7 +178,6 @@ function GetUserList() {
             console.log(data);
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
-                    $('#ddlUsers').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#ddlUsers').append($('<option></option>').val(val.emp_code).html(val.emp_name));
 

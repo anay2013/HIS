@@ -445,6 +445,65 @@ function ItemsInfo(cateId) {
         }
     });
 }
+function ResetDiscount() {
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
+    var objBooking = {};
+    var objRateList = [];
+    $('#tblBillingInfo tbody tr').each(function () {
+        objRateList.push({
+            'AutoId': 0,
+            'TnxId': '-',
+            'RateListId': '-',
+            'CatId': $(this).find('td:eq(0)').text(),
+            'ItemId': '-',
+            'RateListName': '-',
+            'ItemSection': $(this).find('td:eq(2)').text(),
+            'IsPackage': '-',
+            'IsRateEditable': 'N',
+            'IsPatientPayable': 'N',
+            'IsDiscountable': 'N',
+            'panel_discount': 0,
+            'panel_rate': 0,
+            'qty': 0,
+            'mrp_rate': 0,
+            'adl_disc_perc': $(this).find('td:eq(6)').find('input').val(),
+            'adl_disc_amount': 0,
+            'net_amount': 0,
+            'IsUrgent': '-',
+            'Remark': '-',
+            'TaxRate': 0,
+            'TaxAmt': 0
+        });
+    });
+    objBooking.hosp_id = Active.HospId;
+    objBooking.IPDNo = _IPDNo;
+    objBooking.DoctorId = '-';
+    objBooking.ipAddress = '-';
+    objBooking.login_id = Active.userId;
+    objBooking.Logic = "ResetDiscount";
+    var MasterObject = {};
+    MasterObject.objBooking = objBooking;
+    MasterObject.objRateList = objRateList;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(MasterObject),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        traditional: true,
+        success: function (data) {
+            if (data.includes('Success')) {
+                SummarisedBilling();
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function Calculation() {
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
     var objBooking = {};

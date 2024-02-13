@@ -108,7 +108,7 @@ function DoctorDisplayScreen1(doctorId) {
                     }
                     if (val.InFlag == 'N' && count < 9) {
                         count++;
-                        tbody += "<tr>"
+                        tbody += (val.uStatus == 'Absent') ? "<tr style='background:yellow'>" : '<tr>';
                         tbody += "<td class='text-center'>" + val.token_no + "</td>";
                         tbody += "<td class='text-left'>" + val.patient_name + "</td>";
                         tbody += "<td class='text-left'>" + val.cr_date + "</td>";                  
@@ -133,7 +133,7 @@ function DoctorDisplayScreen1(doctorId) {
                 }
                 else {
                     length++;
-                    tbody += "<tr>"
+                    tbody += (val.uStatus == 'Absent') ? "<tr style='background:yellow'>" : '<tr>';
                     tbody += "<td colspan='3' class='text-center'>End Of List</td>";
                     tbody += "</tr>"
                     tbody += "<tr><td colspan='3' style='background:#fff' class='text-center'><img src='" + config.rootUrl + "/Content/logo/line.png'</td></tr>"
@@ -204,7 +204,7 @@ function DoctorDisplayScreen2(doctorId) {
                     }
                     if (val.InFlag == 'N' && count < 9) {
                         count++;
-                        tbody += "<tr>"
+                        tbody += (val.uStatus == 'Absent') ? "<tr style='background:yellow'>" : '<tr>';
                         tbody += "<td class='text-center'>" + val.token_no + "</td>";
                         tbody += "<td class='text-left'>" + val.patient_name + "</td>";
                         tbody += "<td class='text-left'>" + val.cr_date + "</td>";                      
@@ -227,7 +227,7 @@ function DoctorDisplayScreen2(doctorId) {
                 }
                 else {
                     length1++;
-                    tbody += "<tr>"
+                    tbody += (val.uStatus == 'Absent') ? "<tr style='background:yellow'>" : '<tr>';
                     tbody += "<td colspan='3' class='text-center'>End Of List</td>";
                     tbody += "</tr>"
                     tbody += "<tr><td colspan='3' style='background:#fff' class='text-center'><img src='" + config.rootUrl + "/Content/logo/line.png'</td></tr>"

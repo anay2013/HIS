@@ -14,6 +14,9 @@ $(document).ready(function () {
         $(this).addClass('activePage');
     });
 });
+function GoBack() {
+    window.history.back();
+}
 function loadBody(page) {
     $.ajax({
         type: 'POST',

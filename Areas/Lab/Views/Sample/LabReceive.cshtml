@@ -105,59 +105,58 @@
                                 <h4 class="text-white">Lab Receive</h4>
                             </div>
                             <div class="panel-body">
-
                                 <div class="row">
-                                    <div class="col-md-2" style="margin-top:5px;">
-                                        <div class="form-group flex bc">
-                                            <button class="btn btn-success bn" style=" font-size:9px;">From</button>
-                                            <input type="date" id="txtFrom" class="form-control" style="width:82%;  font-size:11px; " />
-                                        </div>
+                                    <div class="col-md-1" style="margin-top:5px;padding:0 11px;width:11%">
+                                        <label>Type</label>
+                                        <select class="form-control" id="ddlType">                                         
+                                            <option>Pending</option>
+                                            <option>Received</option>
+                                        </select>
                                     </div>
-                                    <div class="col-md-2" style="margin-top:5px;">
-                                        <div class="form-group flex bc">
-                                            <button class="btn btn-success bn" style=" font-size:10px;">To</button>
-                                            <input type="date" id="txtTo" class="form-control" style="width: 86%;  font-size:11px; " />
-                                        </div>
+                                    <div class="col-md-1" style="margin-top:5px;padding:0 2px;width:10%">
+                                        <label>From</label>
+                                        <input type="date" id="txtFrom" class="form-control" />
                                     </div>
-                                    <div class="col-md-3" style=" margin-top:5px;">
-                                        <div class="form-group flex bc">
-                                            <button class="btn btn-success bn" style="width:35%;font-size:10px;">Department</button>
-                                            <select id="ddlCategory" onchange="GetTestBySubCategory()" class="form-control bn">
-                                                <option></option>
-                                            </select>
-                                        </div>
+                                    <div class="col-md-1" style="margin-top:5px;padding:0 2px;width:10%">
+                                        <label>To</label>
+                                        <input type="date" id="txtTo" class="form-control" />
                                     </div>
-                                    <div class="col-md-5" style=" margin-top:5px;">
-                                        <div class="form-group flex bc">
-                                            <button class="btn btn-success bn" style="width:20%; font-size:10px;">Test Name</button>
-                                            <select id="ddlTest" class="form-control bn">
-                                                <option>Select</option>
-                                            </select>
-                                            <button class="btn btn-warning bn" onclick="LabReceiveInfo('LabReceiveInfo:ByDate');" style="width:21%;"><span class="fa fa-search">&nbsp;</span>Search</button>
+                                    <div class="col-md-3" style=" margin-top:5px;padding:0 2px">
+                                        <label>Department</label>
+                                        <select id="ddlCategory" onchange="GetTestBySubCategory()" class="form-control bn">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5" style=" margin-top:5px;padding:0 2px">
+                                        <label>Test Name</label>
+                                        <div class="form-group flex">          
+                                            <div style="width:400px">
+                                                <select id="ddlTest" class="form-control">
+                                                    <option value="ALL">ALL</option>
+                                                </select>
+                                            </div>
+                                            <button class="btn btn-warning bn" onclick="LabReceiveInfo('LabReceiveInfo:ByDate');" style="width:22%;height:26px"><span class="fa fa-search">&nbsp;</span>Search</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group flex bc">
-                                            <button class="btn btn-success bn" style="width: 51%;"><span class="fa fa-barcode">&nbsp;</span>Barcode No</button>
-                                            <input type="text" id="txtBarcodeNoByScan" class="form-control" onchange="" placeholder="Scan Barcode No ...." />
-                                        </div>
+                                    <div class="col-md-3" style="width: 22%;padding:0px 11px">
+                                        <input type="text" id="txtBarcodeNoByScan" class="form-control" onchange="" placeholder="Scan Barcode No ...." />
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group flex bc">
+                                        <div class="form-group flex">
                                             <input type="text" id="txtBarcode" class="form-control" placeholder="Search By Visit No, Barcode...." />
                                             <button class="btn btn-warning bn" onclick="LabReceiveInfo('LabReceiveInfo:ByBarcodeNo');" style="width: 89px;"><span class="fa fa-search">&nbsp;</span>Search</button>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <button class="btn btn-warning pull-right" onclick="LabSampleReceive();" style="height:30px;"><span class="fa fa-sign-in">&nbsp;</span>Receive</button>
                                     </div>
                                 </div>
                                 <div class="scroll" style="height:505px;  display:block; border:1px solid #00a65a; overflow:auto;padding-bottom:7px;">
                                     <table class="table table-bordered" id="tblLabDetails">
                                         <thead>
-                                            <tr>                                              
+                                            <tr>
                                                 <th>S.No</th>
                                                 <th>Visit No</th>
                                                 <th>BarCode No</th>

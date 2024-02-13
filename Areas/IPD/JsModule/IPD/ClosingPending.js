@@ -20,7 +20,7 @@ function DownloadExcelClosing() {
     objBO.Prm1 = '-';
     objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'ClosingPending:BetweenDate';
+    objBO.Logic = $('#ddlReportLogic option:selected').val();
     objBO.OutPutType = 'Excel';
     Global_DownloadExcel(url, objBO, "BillRegister" + ".xlsx");
 }
@@ -40,7 +40,7 @@ function GetDataAllClosingPending() {
     objBO.Prm1 = '-';
     objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'ClosingPending:BetweenDate';
+    objBO.Logic = $('#ddlReportLogic option:selected').val();
     $.ajax({
         method: "POST",
         url: url,
@@ -53,21 +53,25 @@ function GetDataAllClosingPending() {
                 var tbody = "";
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
-
                         if (temp != val.PanelName) {
                             tbody += "<tr style='background:#CCC'>";
-                            tbody += "<td colspan='16' style='font-size:13px;'><b>" + val.PanelName + "</b></td>";
+                            tbody += "<td colspan='15' style='font-size:13px;'><b>" + val.PanelName + "</b></td>";
                             tbody += "</tr>";
                             temp = val.PanelName
                         }
                         else {
 
                         }
-                        if (val.BillClosedDate != null) {
-                            tbody += "<tr style='background:#2cd52e'>";
-                        }
-                        else {
-                            tbody += "<tr>";
+                        if (val.IsErrorInCredit == "Y")
+                            tbody += "<tr style='background:#f59696'>";
+                        else
+                        {
+                            if (val.BillClosedDate != null) {
+                                tbody += "<tr style='background:#2cd52e'>";
+                            }
+                            else {
+                                tbody += "<tr>";
+                            }
                         }
                         //tbody += "<tr>";
                         tbody += "<td>" + val.UHID + "</td>";
@@ -80,9 +84,8 @@ function GetDataAllClosingPending() {
                         tbody += "<td>" + val.Discount + "</td>";
                         tbody += "<td>" + val.NetAmount + "</td>";
                         tbody += "<td>" + val.Tax + "</td>";
-                        tbody += "<td>" + val.Payble + "</td>";
+                        tbody += "<td>" + val.NetPayable + "</td>";
                         tbody += "<td>" + val.ApprovalAmount + "</td>";
-                        tbody += "<td>" + val.PanelApprovedAmount + "</td>";
                         tbody += "<td>" + val.Advance + "</td>";
                         tbody += "<td>" + val.Balance + "</td>";
                         tbody += "<td>" + val.BillClosedDate + "</td>";

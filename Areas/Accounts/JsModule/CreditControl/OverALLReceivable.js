@@ -62,6 +62,8 @@ function OverALLReceivable() {
                     var TReceivable = 0;
                     var IPD_Payment = 0;
                     var OPD_Payment = 0;
+                    var IPD_BadDet = 0;
+                    var OPD_BadDet  = 0;
                     var TPayment = 0;
                     var ClosingBalance = 0;
                     $.each(data.ResultSet.Table, function (key, val) {
@@ -69,7 +71,8 @@ function OverALLReceivable() {
                         IPD_Rec += val.IPD_Rec;
                         OPD_Rec += val.OPD_Rec;
                         TReceivable += val.TReceivable;
-                        IPD_Payment += val.IPD_Payment;
+                        IPD_BadDet += val.IPD_BadDet;
+                        OPD_BadDet += val.OPD_BadDet;
                         OPD_Payment += val.OPD_Payment;
                         TPayment += val.TPayment;
                         ClosingBalance += val.ClosingBalance;
@@ -82,7 +85,9 @@ function OverALLReceivable() {
                         tbody += "<td class='text-right'>" + val.OPD_Rec + "</td>";
                         tbody += "<td class='text-right'>" + val.TReceivable + "</td>";
                         tbody += "<td class='text-right'>" + val.IPD_Payment + "</td>";
+                        tbody += "<td class='text-right'>" + val.IPD_BadDet + "</td>";
                         tbody += "<td class='text-right'>" + val.OPD_Payment + "</td>";
+                        tbody += "<td class='text-right'>" + val.OPD_BadDet + "</td>";
                         tbody += "<td class='text-right'>" + val.TPayment + "</td>";
                         tbody += "<td class='text-right'>" + val.ClosingBalance + "</td>";
                         tbody += "</tr>";
@@ -94,7 +99,9 @@ function OverALLReceivable() {
                     tbody += "<td class='text-right'><b>" + OPD_Rec.toFixed(2) + "</b></td>";
                     tbody += "<td class='text-right'><b>" + TReceivable.toFixed(2) + "</b></td>";
                     tbody += "<td class='text-right'><b>" + IPD_Payment.toFixed(2) + "</b></td>";
+                    tbody += "<td class='text-right'><b>" + IPD_BadDet.toFixed(2) + "</b></td>";
                     tbody += "<td class='text-right'><b>" + OPD_Payment.toFixed(2) + "</b></td>";
+                    tbody += "<td class='text-right'><b>" + OPD_BadDet.toFixed(2) + "</b></td>";
                     tbody += "<td class='text-right'><b>" + TPayment.toFixed(2) + "</b></td>";
                     tbody += "<td class='text-right'><b>" + ClosingBalance.toFixed(2) + "</b></td>";
                     tbody += "</tr>";

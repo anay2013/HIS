@@ -41,6 +41,11 @@ function isDesc() {
     }
 }
 function loadBody(page) {
+    if (page.includes('PrescriptionCommon')) {
+        PatientHeaderInfo();
+    }
+    else
+        clearInterval(intervalPresc)
     $.ajax({
         type: 'POST',
         url: 'AdviceBody',
@@ -114,6 +119,7 @@ function PatientHeaderInfo() {
                     $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(6)').text(val.Age);
                     $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(9)').text(val.app_no);
                     $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(12)').text(val.AppDate);
+                    $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(15)').text(val.mobile_no);
 
                     _DoctorId = val.DoctorId;
                     $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(2)').text(val.DoctorName);
@@ -195,18 +201,20 @@ function PatientForAdvice() {
                         $('textarea[data-id=DoctorAdviceItems]').text(val.ItemName.replace(/<br>/g, '\n'));
                     }
                     if (val.TemplateId == 'T00009') {
-                        if (val.TemplateId != val.ItemId) {
-                            var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
-                            $('#LaboratoryRadiologyItems').append(item).show();
-                        }
-                        else {
-                            $('#LaboratoryRadiologyItems').append('<p>' + val.ItemName + '</p>').show();
-                            $('textarea[data-id=LaboratoryRadiologyItems]').text(val.ItemName.replace(/<br>/g, '\n'));
-                        }
+                        var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span>";
+                        $('#LaboratoryRadiologyItems').append(item).show();
+                        //if (val.TemplateId != val.ItemId) {
+                        //    var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span>";
+                        //    $('#LaboratoryRadiologyItems').append(item).show();
+                        //}
+                        //else {
+                        //    $('#LaboratoryRadiologyItems').append('<p>' + val.ItemName + '</p>').show();
+                        //    $('textarea[data-id=LaboratoryRadiologyItems]').text(val.ItemName.replace(/<br>/g, '\n'));
+                        //}
                     }
                     if (val.TemplateId == 'T00010') {
                         if (val.TemplateId != val.ItemId) {
-                            var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span><close class='remove'>X</close>";
+                            var item = "<span id='" + val.ItemId + "'>" + val.ItemName + "</span>";
                             $('#PrescribedProcedureItems').append(item).show();
                         }
                         else {

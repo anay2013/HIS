@@ -175,7 +175,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             {
                 int VitalCount = 0;
                 //Vital Sign
-               
+
                 foreach (DataRow dr in ds.Tables[3].Rows)
                 {
                     if (Convert.ToDecimal(dr["WT"]) > 0 || Convert.ToDecimal(dr["Temprarture"]) > 0 || Convert.ToDecimal(dr["Pulse"]) > 0 || Convert.ToDecimal(dr["BP_Sys"]) > 0 || Convert.ToDecimal(dr["SPO2"]) > 0 || Convert.ToDecimal(dr["HT"]) > 0)
@@ -183,59 +183,59 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
                         b.Append("<div style='width:95%;margin-top:5px;font-size:13px;margin-left:3px;'>");
                         b.Append("<p style='text-align:left;margin:0'><b>Vital Sign :</b></p>");
                         b.Append("<table style='width:99%;font-size:11px;line-height:8px;margin-left:3px;'>");
-                    }
 
-                    if (Convert.ToDecimal(dr["WT"]) > 0)
-                    {
-                        b.Append("<tr>");
-                        b.Append("<td>Weight</td>");
-                        b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["WT"].ToString() + " Kg</td>");
-                        b.Append("</tr>");
-                    }
-                    if (Convert.ToDecimal(dr["Temprarture"]) > 0)
-                    {
-                        b.Append("<tr>");
-                        b.Append("<td>Temprature</td>");
-                        b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["Temprarture"].ToString() + "</td>");
-                        b.Append("</tr>");
-                    }
-                    if (Convert.ToDecimal(dr["Pulse"]) > 0)
-                    {
-                        b.Append("<tr>");
-                        b.Append("<td>Pulse</td>");
-                        b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["Pulse"].ToString() + "</td>");
-                        b.Append("</tr>");
-                    }
-                    if (dr["BP_Sys"].ToString().Length>0 || dr["BP_Dys"].ToString().Length > 0)
-                    {
-                        b.Append("<tr>");
-                        b.Append("<td>B/P</td>");
-                        b.Append("<td>:</td>"); 
-                        b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString()+ "/" +dr["BP_Dys"].ToString() + " Mm/Hg</td>");
-                        b.Append("</tr>");
-                    }
-                    if (Convert.ToDecimal(dr["SPO2"]) > 0)
-                    {
-                        b.Append("<tr>");
-                        b.Append("<td>SPO2</td>");
-                        b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["SPO2"].ToString() + "</td>");
-                        b.Append("</tr>");
-                    }
-                    if (Convert.ToDecimal(dr["HT"]) > 0)
-                    {
-                        b.Append("<tr>");
-                        b.Append("<td>Height</td>");
-                        b.Append("<td>:</td>");
-                        b.Append("<td>" + dr["HT"].ToString() + " cm</td>");
-                        b.Append("</tr>");
+                        if (Convert.ToDecimal(dr["WT"]) > 0)
+                        {
+                            b.Append("<tr>");
+                            b.Append("<td>Weight</td>");
+                            b.Append("<td>:</td>");
+                            b.Append("<td>" + dr["WT"].ToString() + " Kg</td>");
+                            b.Append("</tr>");
+                        }
+                        if (Convert.ToDecimal(dr["Temprarture"]) > 0)
+                        {
+                            b.Append("<tr>");
+                            b.Append("<td>Temprature</td>");
+                            b.Append("<td>:</td>");
+                            b.Append("<td>" + dr["Temprarture"].ToString() + "</td>");
+                            b.Append("</tr>");
+                        }
+                        if (Convert.ToDecimal(dr["Pulse"]) > 0)
+                        {
+                            b.Append("<tr>");
+                            b.Append("<td>Pulse</td>");
+                            b.Append("<td>:</td>");
+                            b.Append("<td>" + dr["Pulse"].ToString() + "</td>");
+                            b.Append("</tr>");
+                        }
+                        if (dr["BP_Sys"].ToString().Length > 0 || dr["BP_Dys"].ToString().Length > 0)
+                        {
+                            b.Append("<tr>");
+                            b.Append("<td>B/P</td>");
+                            b.Append("<td>:</td>");
+                            b.Append("<td style='white-space: nowrap;'>" + dr["BP_Sys"].ToString() + "/" + dr["BP_Dys"].ToString() + " Mm/Hg</td>");
+                            b.Append("</tr>");
+                        }
+                        if (Convert.ToDecimal(dr["SPO2"]) > 0)
+                        {
+                            b.Append("<tr>");
+                            b.Append("<td>SPO2</td>");
+                            b.Append("<td>:</td>");
+                            b.Append("<td>" + dr["SPO2"].ToString() + "</td>");
+                            b.Append("</tr>");
+                        }
+                        if (Convert.ToDecimal(dr["HT"]) > 0)
+                        {
+                            b.Append("<tr>");
+                            b.Append("<td>Height</td>");
+                            b.Append("<td>:</td>");
+                            b.Append("<td>" + dr["HT"].ToString() + " cm</td>");
+                            b.Append("</tr>");
+                        }
+                        b.Append("</table>");
+                        b.Append("</div>");
                     }
                 }
-                b.Append("</table>");
-                b.Append("</div>");
             }
             if (ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
             {

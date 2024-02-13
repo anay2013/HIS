@@ -6,6 +6,34 @@
 
 <script src="~/Areas/EMR/JsModule/CaseSheet.js?v1.1"></script>
 <style>
+    .Casesheet .fa {
+        margin-top: 3px;
+        color: #06a08b;
+        font-size: 11px;
+    }
+
+    .Casesheet span {
+        border: 1px solid #dfdfdf;
+        float: right;
+        background: #fff;
+        border-radius: 30px;
+        padding: 4px;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        color: #f00;
+        margin: -4px 4px;
+    }
+
+    .Casesheet {
+        background: #efefef;
+        width: 100%;
+        padding: 10px;
+        display: block;
+        margin-top: 6px;
+        color: #3a3a3a;
+    }
+
     .flex {
         display: flex;
         align-items: flex-end;
@@ -103,7 +131,7 @@
                                     <div class="col-md-5" style="padding:0 3px">
                                         <label>IPD No</label>
                                         <div class="flex">
-                                            <input type="text" value="69289" id="txtIPDNo" class="form-control" placeholder="IPD No.." />
+                                            <input type="text" value="2324-000109" id="txtIPDNo" class="form-control" placeholder="IPD No.." />
                                             <button class="btn btn-warning btnget" style="width: 33%;" onclick="GetPatientInfo('GetPatientInfo')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
                                         </div>
                                     </div>
@@ -160,6 +188,23 @@
                         </div>
                         <div class="col-md-6">
                             <button onclick="$('#modalRackMaster').modal('show')" class="btn btn-primary btnPDF pull-right" style="width:47%"><i class="fa fa-plus-circle">&nbsp;</i>Create New Rack</button>
+                        </div>
+                        <div class="col-md-12">
+                            <a href="#casesheetinfo" class="Casesheet" data-toggle="collapse">Patient Casesheet Info <span>0</span> <i class="fa fa-plus pull-right" data-col>&nbsp;</i></a>
+                            <div class="collapse" id="casesheetinfo" style="max-height:150px;overflow:auto;">
+                                <table id="tblCasesheetInfo" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Doc Name</th>
+                                            <th>Rack Name</th>
+                                            <th>Upload Date</th>
+                                            <th>Upload By</th>
+                                            <th>CMD</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="flex uploadSection">

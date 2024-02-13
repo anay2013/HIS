@@ -10,6 +10,9 @@ $(document).ready(function () {
     });
 });
 function GetPatientInfo(logic) {
+    $("#tblCasesheetInfo tbody").empty();
+    $(".Casesheet span").text('0');
+    $("#filePath").prop('src', '-');
     if ($("#txtIPDNo").val() == '' && logic == 'GetPatientInfo') {
         alert('Please Provide IPD No.');
         return
@@ -47,7 +50,10 @@ function GetPatientInfo(logic) {
                         tbody += '<td>' + val.AdmitDate + '</td>';
                         tbody += '<td>' + val.uploadBy + '</td>';
                         tbody += '<td>' + val.DischargeDateTime + '</td>';
-                        tbody += "<td><button onclick=ViewPatient(this) class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
+                        if (eval(val.totalCount) > 1)
+                            tbody += "<td><button onclick=GetCasesheetInfo(this) class='btn btn-warning btn-xs'><i class='fa fa-eye'></i></button></td>";
+                        else
+                            tbody += "<td><button onclick=ViewPatient(this) class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
                         tbody += '</tr>';
                         count++;
                     });
@@ -60,16 +66,64 @@ function GetPatientInfo(logic) {
         }
     });
 }
+function GetCasesheetInfo(elem) {
+    $("#tblCasesheetInfo tbody").empty();
+    $(".Casesheet span").text('0');
+    var info = JSON.parse($(elem).closest('tr').find('td:eq(0)').text());
+    var url = config.baseUrl + "/api/EMR/EMR_DocumentQueries";
+    var objBO = {};
+    objBO.IPDNo = info.IPDNo;
+    objBO.from = $("#txtFrom").val();
+    objBO.to = $("#txtTo").val();
+    objBO.Prm1 = '-';
+    objBO.Prm2 = '-';
+    objBO.login_id = '-';
+    objBO.Logic = 'GetCasesheetInfoByIPDNo';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var tbody = "";
+            var count = 0;
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += '<tr>';
+                        tbody += '<td class="hide">' + JSON.stringify(data.ResultSet.Table[count]) + '</td>';
+                        tbody += '<td>' + val.docName + '</td>';
+                        tbody += '<td>' + val.RackName + '</td>';
+                        tbody += '<td>' + val.uploadDate + '</td>';
+                        tbody += '<td>' + val.uploadBy + '</td>';
+                        tbody += "<td><button onclick=ViewPatient(this) class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
+                        tbody += '</tr>';
+                        count++;
+                    });
+                    $("#tblCasesheetInfo tbody").append(tbody);
+                    $(".Casesheet span").text(info.totalCount);
+                    $(".Casesheet").click();
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function ViewPatient(elem) {
+    selectRow($(this))
     var date = new Date();
     var info = JSON.parse($(elem).closest('tr').find('td:eq(0)').text());
     $("#txtPatientIPDNO").text(info.IPDNo);
     $("#txtPatientName").text(info.PatientName);
     $("#txtAdmitDate").text(info.AdmitDate);
     $("#txtDischargeDateTime").text(info.DischargeDateTime);
-    debugger
-    var FilePath = info.FilePath + "?v=" + date.getMilliseconds();
-    $("#filePath").prop('src', FilePath);
+    if (eval(info.totalCount) > 0) {
+        var FilePath = info.FilePath + "?v=" + date.getMilliseconds();
+        $("#filePath").prop('src', FilePath);
+    }
 }
 function readURL(input) {
     if (input.files && input.files[0]) {
@@ -167,10 +221,10 @@ function InsertRackInfo() {
     });
 }
 function GetRackInfo() {
-    if ($("#txtIPDNo").val() == '') {
-        alert('Please Provide IPD No.');
-        return
-    }
+    //if ($("#txtIPDNo").val() == '') {
+    //    alert('Please Provide IPD No.');
+    //    return
+    //}
     $("#tblRackInfo tbody").empty();
     $('#ddlFileRack').empty().append($('<option>Select</option>')).change();
     var url = config.baseUrl + "/api/EMR/EMR_DocumentQueries";

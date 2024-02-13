@@ -16,6 +16,11 @@ namespace MediSoftTech_HIS.Areas.OT.Controllers
         public ActionResult ConfirmconferenceRoom()
         {
             return View();
-        }      
+        }
+
+        public ActionResult PACReport()
+        {
+            return View();
+        }
     }
 }

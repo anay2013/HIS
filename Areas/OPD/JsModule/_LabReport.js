@@ -1,4 +1,4 @@
-﻿$(document).ready(function () { 
+﻿$(document).ready(function () {
     $("#tblReport tbody").on('change', 'input:checkbox', function () {
         if ($(this).closest('tr').hasClass('pt')) {
             $(this).parents('table').find('tbody').find('input:checkbox').not($(this)).prop('checked', false);
@@ -29,9 +29,9 @@ function LoadTestCategory() {
     objBO.TestIds = '-';
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
-    objBO.Prm1 = '-';
+    objBO.Prm1 = $('#tblAdviceHeader tbody tr:eq(1)').find('td:eq(5)').text();
     objBO.Prm2 = '-';
-    objBO.Logic = "LoadTestCategory";
+    objBO.Logic = "LoadTestCategoryByUHID";
     $.ajax({
         method: "POST",
         url: url,
@@ -70,7 +70,7 @@ function ReportInfo() {
     objBO.to = '1900/01/01';
     objBO.Prm1 = $('#ddlIPOPType option:selected').text();
     objBO.Prm2 = '-';
-    objBO.Logic = $('input[name=reportBy]:checked').val();
+    objBO.Logic = 'OPD-IPD:TestWiseReport';
     $.ajax({
         method: "POST",
         url: url,
@@ -110,42 +110,28 @@ function ReportList(data, Logic) {
             tbody += "</tr>";
             visitNo = val.VisitNo;
         }
-        if (Logic == 'OPD-IPD:TestCategoryWise') {
-            tbody += "<tr>";
+        if (testCategory != val.TestCat2) {
+            tbody += "<tr class='g'>";
             tbody += "<td colspan='7'></td>";
             tbody += "<td>";
             tbody += "<div class='testCategory " + val.RepStatus + "Group'>";
-            tbody += "<input data-ids=" + val.TestIds + " type='checkbox'/>";
-            tbody += "<label>" + val.testCategory + "</label>";
+            tbody += "<input type='checkbox'/>";
+            tbody += "<label data-ids=" + val.TestIds + " onclick=alert('" + val.TestIds + "')>" + val.testCategory + "</label>";
             tbody += "<label>" + val.TApprCount + '/' + val.TCount + "</label>";
             tbody += "</div>";
             tbody += "</td>";
             tbody += "</tr>";
+            testCategory = val.TestCat2;
         }
-        else {
-            if (testCategory != val.TestCat2) {
-                tbody += "<tr class='g'>";
-                tbody += "<td colspan='7'></td>";
-                tbody += "<td>";
-                tbody += "<div class='testCategory " + val.RepStatus + "Group'>";
-                tbody += "<input type='checkbox'/>";
-                tbody += "<label data-ids=" + val.TestIds + " onclick=alert('" + val.TestIds + "')>" + val.testCategory + "</label>";
-                tbody += "<label>" + val.TApprCount + '/' + val.TCount + "</label>";
-                tbody += "</div>";
-                tbody += "</td>";
-                tbody += "</tr>";
-                testCategory = val.TestCat2;
-            }
-            tbody += "<tr>";
-            tbody += "<td colspan='7'></td>";
-            tbody += "<td>";
-            tbody += "<div class='testGroup'>";
-            tbody += "<input data-ids=" + val.TestIds + " type='checkbox'/>";
-            tbody += "<label class=" + val.RepStatus + ">" + val.TestName + "</label>";
-            tbody += "</div>";
-            tbody += "</td>";
-            tbody += "</tr>";
-        }
+        tbody += "<tr>";
+        tbody += "<td colspan='7'></td>";
+        tbody += "<td>";
+        tbody += "<div class='testGroup'>";
+        tbody += "<input data-ids=" + val.TestIds + " type='checkbox'/>";
+        tbody += "<label class=" + val.RepStatus + ">" + val.TestName + "</label>";
+        tbody += "</div>";
+        tbody += "</td>";
+        tbody += "</tr>";
     });
     $("#tblReport tbody").append(tbody);
 }
@@ -154,19 +140,11 @@ function Print(elem) {
     var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
     var SubCat = 'ALL';
     var TestIds = [];
-    if ($('input[name=reportBy]:checked').val() == 'OPD-IPD:TestWiseReport') {
-        TestIds = [];
-        $("#tblReport tbody tr:not(.g,.pt) input:checkbox:checked").each(function () {
-            TestIds.push($(this).data('ids'));
-        });
-    }
-    if ($('input[name=reportBy]:checked').val() == 'OPD-IPD:TestCategoryWise') {
-        TestIds = [];
-        $("#tblReport tbody tr:not(.pt) input:checkbox:checked").each(function () {
-            TestIds.push($(this).data('ids'));
-        });
-    }
+    TestIds = [];
+    $("#tblReport tbody tr:not(.g,.pt) input:checkbox:checked").each(function () {
+        TestIds.push($(this).data('ids'));
+    });
     var Logic = 'ByFinalPrint';
-    var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Logic=" + Logic;
+    var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Source=In-House&Logic=" + Logic;
     window.open(url, '_blank');
 }

@@ -1,0 +1,189 @@
+﻿
+@{
+    ViewBag.Title = "EditInsuranceCompInIPD";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Corporate/JsModule/EditInsuranceCompInIPD.js"></script>
+<style>
+    .select-row {
+        background: #0076d0 !important;
+        color: #fff;
+    }
+
+    .scroll {
+        overflow: auto;
+        max-height: 300px;
+    }
+
+    .sampleTaken {
+        background: #bcffe0
+    }
+
+    .panel-body input, .panel-body select {
+        padding: 5px !important;
+    }
+
+
+    #tblFristInsurance thead th {
+        color: #fff;
+        background: #2478a9;
+        font-size: 12px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+
+    #tblFristInsurance tbody td {
+        font-size: 13px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+
+    #tblsecondInsurance thead th {
+        color: #fff;
+        background: #2478a9;
+        font-size: 12px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+
+    #tblsecondInsurance tbody td {
+        font-size: 13px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#2478a9;padding:1px 10px; ">
+                            <p class="text-white">Edit Insurance Company</p>
+                        </div>
+                        <div class="panel-body" style="background:#fff;padding:7px">
+
+                            <div class="row" style="margin:0px; background:#e6f4ff; padding:5px;margin-bottom: 5px;">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        IPD NO
+                                        <div style="display:flex">
+                                            <input type="text" id="txtIPDNo" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button id="btnSearch" style="width:100%;height: 26px;margin-top: 22%; border:none" class="btn-success btn-flat" onclick="GetAllDataByIPDNo()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <table style="width:100%">
+                                            <tr>
+                                                <td style="text-align:left">PatientName</td>
+                                                <td style="text-align:left"><label id="Pname" style="margin-left:16px"></label></td>
+                                                <td style="text-align:left">RoomFullName</td>
+                                                <td style="text-align:left"><label id="Rfullname" style="margin-left:16px"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left">IPDNO</td>
+                                                <td style="text-align:left"><label id="IPDNo" style="margin-left:16px"></label></td>
+                                                <td style="text-align:left">UHIDNo</td>
+                                                <td style="text-align:left"><label id="UHIDNo" style="margin-left:16px"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left">Billing Category</td>
+                                                <td style="text-align:left"><label id="RoomBillingname" style="margin-left:16px"></label></td>
+                                                <td style="text-align:left">Curent Panel</td>
+                                                <td style="text-align:left">
+                                                    <label id="CurentPanel" style="margin-left:16px"></label>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        New Insurance Company
+                                        <div style="display:flex">
+                                            <select id="ddlPanel" class="form-control" style="width:500px"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button id="btnSave" type="submit" style="width:100%;height: 26px;margin-top: 22%; border:none" class="btn-warning btn-flat" onclick="SavedataByInsurance()"><i class="fa fa-save">&nbsp;</i>submit</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel-heading" style="background:#2478a9;padding:1px 10px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="text-white">Approval information</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive" style="overflow-y:auto;border: 1px solid #4f7ba1;">
+                                        <table class="table table-bordered" id="tblFristInsurance">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align:left">Insurance Company Name</th>
+                                                    <th>Approval Amount</th>
+                                                    <th>Approval Date</th>
+                                                    <th>Approval Type</th>
+                                                    <th>Claim No</th>
+                                                    <th>CoPay Amount</th>
+                                                    <th>Discount</th>
+                                                    <th>IsSettled</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel-heading" style="background:#2478a9;padding:1px 10px;margin-top: 15px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="text-white">Receivable Information</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive" style="height:250px;overflow-y:auto;border: 1px solid #4f7ba1;">
+                                        <table class="table table-bordered" id="tblsecondInsurance">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align:left">Insurance Company Name</th>
+                                                    <th>Amount</th>
+                                                    <th>Narration</th>
+                                                    <th>Date</th>
+                                                    <th>Type</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

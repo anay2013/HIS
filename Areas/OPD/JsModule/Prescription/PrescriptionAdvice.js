@@ -23,7 +23,7 @@ $(document).ready(function () {
     $('.panel-body').on('click', 'a.fa-pencil', function () {
         var templateId = $(this).data('templateid');
         var itemName = $(this).data('itemname');
-        var itemDesc = ($(this).data('desc') == null) ? itemName : $(this).data('desc');
+        var itemDesc = ($(this).closest('li').find('label:first').html() == null) ? itemName : $(this).closest('li').find('label:first').html();
         var itemid = $(this).data('itemid');
         var fav = $(this).data('fav');
         if (fav == true) {
@@ -109,6 +109,24 @@ $(document).ready(function () {
     });
 
     //select Checkbox Item from Template To Prev
+    $('.panel-body').on('keyup', '#RemarkLaboratoryRadiologyList,#RemarkPrescribedProcedureList', function (e) {
+        if (e.keyCode == 13) {
+
+            var itemName = $(this).val();
+            var PrevTemplateId = $(this).attr('id').replace('List', 'Items').replace('Remark', '');
+            var list = "";
+            list += " <span id='test'><i class='fa fa-check'>&nbsp;</i>" + itemName + "</span>";//create item list
+            $('textarea[data-id=' + PrevTemplateId + ']').val('');
+            $('#' + PrevTemplateId).show();
+
+            if ($('#' + PrevTemplateId).is('p'))
+                $(list).insertBefore($('#' + PrevTemplateId + ' p'));//add item to prev side template group
+            else
+                $('#' + PrevTemplateId).append(list);
+
+            $(this).val('');
+        }
+    })
     $('.panel-body').on('change', 'input:checkbox', function () {
         var listArr = ['LaboratoryRadiologyList', 'PrescribedProcedureList'];
         var template = $(this).parents('ul').attr('id');//get parent UL id on template item check
@@ -116,9 +134,10 @@ $(document).ready(function () {
         var itemId = $(this).data('itemid');//get item id on check
         var listName = $(this).closest('li').parents('ul').attr('id');
         if ($.inArray(template, listArr) > -1) {
-            var itemName1 = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label input:checkbox').data('desc') : $(this).closest('li').find('label').text();//get item name on check
-            var list = "";
-            list += " <span id='" + itemId + "'>," + itemName1 + "</span><close class='remove'>X</close>";//create item list
+            $('textarea[data-id=' + PrevTemplateId + ']').val('');
+            var itemName1 = $(this).closest('label').text();
+            var list = "";  
+            list += " <span id='" + itemId + "'><i class='fa fa-check'>&nbsp;</i>" + itemName1 + "</span>";//create item list
             $('#' + PrevTemplateId).show();//show related template on prev side [default all template hide in prev side]
             if (this.checked)//on check
             {
@@ -139,7 +158,8 @@ $(document).ready(function () {
             return
         }
 
-        var itemName = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label input:checkbox').data('desc') : $(this).closest('li').find('label').html();//get item name on check       
+        // var itemName = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label input:checkbox').data('desc') : $(this).closest('li').find('label').html();//get item name on check       
+        var itemName = ($.inArray($(this).closest('li').parents('ul').attr('id'), listArr) == -1) ? $(this).closest('li').find('label:first').html() : $(this).closest('li').find('label').html();//get item name on check       
         $('#' + PrevTemplateId).show();//show related template on prev side [default all template hide in prev side]
         if (this.checked)//on check
         {
@@ -219,6 +239,9 @@ $(document).ready(function () {
         }
     });
     //remove all slected items from prev side and uncheck from template side
+    $('.OPDPrintPreview .prescribedItem').on('dblclick', 'span', function () {
+        $(this).remove();
+    });
     $('.OPDPrintPreview .prescribedItem').on('dblclick', 'TemplateGroup', function () {
         var template = $(this).parents('.prescribedItem').attr('id');//get template id
         var templateId = template.replace('Items', 'List');//get UL id of template list
@@ -228,7 +251,7 @@ $(document).ready(function () {
         $('.panel-body #' + templateId).find('input:checkbox').prop('checked', false);//uncheck all related items from template side
     });
     $('#PatientVisits #tblPatientVisits tbody').on('click', '.currentVisit', function () {
-        $('#PresPreview').attr('src', 'https://media.tenor.com/guhB4PpjrmUAAAAM/loading-loading-gif.gif');
+        $('#PresPreview').attr('src', config.baseUrl + '/images/pres-loading.gif');
         var appno = $(this).closest('tr').find('td:eq(1)').text();
         AdvicePreview(appno);
         $('.nav-tabs li').removeClass('active')
@@ -237,7 +260,7 @@ $(document).ready(function () {
         $('.tab-content div[id="menu11"]').addClass('active in')
     });
     $('#tblOldHISData tbody').on('click', '.currentVisitOldHIS', function () {
-        $('#PresPreview').attr('src', 'https://media.tenor.com/guhB4PpjrmUAAAAM/loading-loading-gif.gif');
+        $('#PresPreview').attr('src', config.baseUrl + '/images/pres-loading.gif');
         var appno = $(this).closest('tr').find('td:eq(1)').text();
         AdvicePreviewOldHIS(appno);
         $('.nav-tabs li').removeClass('active')
@@ -253,12 +276,25 @@ $(document).ready(function () {
 });
 function FillPreview(PrevTemplateId) {
     var data = $('textarea[data-id=' + PrevTemplateId + ']').val();
+    var list = ['LaboratoryRadiologyItems', 'PrescribedProcedureItems'];
+    if ($.inArray(PrevTemplateId, list) > -1) {
+        // $('#' + PrevTemplateId).find('span:last').find('remark').empty.append('<br/><remark>Remark:' + data.replace(/\n/g, '<br/>')+'</remark>');
+        if ($('#' + PrevTemplateId).find('span:last').find('div').length == 0)
+            $('#' + PrevTemplateId).find('span:last').append('<div></div>');
 
-    if ($('#' + PrevTemplateId).find('p').length == 0)
-        $('#' + PrevTemplateId).append('</p>');
+        $('#' + PrevTemplateId).find('span:last').find('div').html('Remark: ' + data.replace(/\n/g, '<br/>'));
+        $('#' + PrevTemplateId).show();
+        return
+    }
+    else {
+        if ($('#' + PrevTemplateId).find('p').length == 0)
+            $('#' + PrevTemplateId).append('</p>');
 
-    $('#' + PrevTemplateId).find('p').html(data.replace(/\n/g, '<br/>'));
-    $('#' + PrevTemplateId).show();
+        $('#' + PrevTemplateId).find('p').html(data.replace(/\n/g, '<br/>'));
+        $('#' + PrevTemplateId).show();
+    }
+
+
 }
 function DischargeReportContent(ipdNo) {
     $('#tblDischargeReportContent tbody').empty();
@@ -405,80 +441,86 @@ function FillHospitalTemplateItems() {
             var li = "";
             $.each(data.ResultSet.Table, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "' data-desc='" + val.ItemDescription + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<label class='hide'>'" + val.ItemDescription + "'</label>";
+                li += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
                 li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 li += "</li>";
             });
             $('#ProvisionalDiagnosisList').append(li);
 
             $('#ChiefComplaintList').empty();
-            var li = "";
+            var li1 = "";
             $.each(data.ResultSet.Table1, function (key, val) {
-                li += "<li>";
-                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
-                li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
-                li += "</li>";
+                li1 += "<li>";
+                li1 += "<label class='hide'>'" + val.ItemDescription + "'</label>";
+                li1 += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li1 += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                li1 += "</li>";
             });
-            $('#ChiefComplaintList').append(li);
+            $('#ChiefComplaintList').append(li1);
 
             $('#SignSymptomsList').empty();
-            var li = "";
+            var li2 = "";
             $.each(data.ResultSet.Table2, function (key, val) {
-                li += "<li>";
-                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
-                li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
-                li += "</li>";
+                li2 += "<li>";
+                li2 += "<label class='hide'>'" + val.ItemDescription + "'</label>";
+                li2 += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li2 += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                li2 += "</li>";
             });
-            $('#SignSymptomsList').append(li);
+            $('#SignSymptomsList').append(li2);
 
             $('#VaccinationStatusList').empty();
-            var li = "";
+            var li3 = "";
             $.each(data.ResultSet.Table3, function (key, val) {
-                li += "<li>";
-                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
-                li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
-                li += "</li>";
+                li3 += "<li>";
+                li3 += "<label class='hide'>'" + val.ItemDescription + "'</label>";
+                li3 += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li3 += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                li3 += "</li>";
             });
-            $('#VaccinationStatusList').append(li);
+            $('#VaccinationStatusList').append(li3);
 
             $('#DoctorNotesList').empty();
-            var li = "";
+            var li4 = "";
             $.each(data.ResultSet.Table4, function (key, val) {
-                li += "<li>";
-                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
-                li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
-                li += "</li>";
+                li4 += "<li>";
+                li4 += "<label class='hide'>'" + val.ItemDescription + "'</label>";
+                li4 += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li4 += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                li4 += "</li>";
             });
-            $('#DoctorNotesList').append(li);
+            $('#DoctorNotesList').append(li4);
 
             $('#LaboratoryRadiologyList').empty();
-            var li = "";
+            var li5 = "";
             $.each(data.ResultSet.Table8, function (key, val) {
-                li += "<li>";
-                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
-                li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
-                li += "</li>";
+                li5 += "<li>";
+                li5 += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li5 += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                li5 += "</li>";
             });
-            $('#LaboratoryRadiologyList').append(li);
+            $('#LaboratoryRadiologyList').append(li5);
 
             $('#PrescribedMedicineList').empty();
-            var li = "";
+            var li6 = "";
             $.each(data.ResultSet.Table9, function (key, val) {
-                li += "<li>";
-                li += "<a><label><input type='checkbox' data-templateid='" + val.med_TemplateId + "'/>&nbsp;" + val.med_TemplateName + "</label></a>";
-                li += "</li>";
+                li6 += "<li>";
+                li6 += "<a><label><input type='checkbox' data-templateid='" + val.med_TemplateId + "'/>&nbsp;" + val.med_TemplateName + "</label></a>";
+                li6 += "</li>";
             });
-            $('#PrescribedMedicineList').append(li);
+            $('#PrescribedMedicineList').append(li6);
 
             $('#PrescribedProcedureList').empty();
-            var li = "";
+            var li7 = "";
             $.each(data.ResultSet.Table10, function (key, val) {
-                li += "<li>";
-                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
-                li += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
-                li += "</li>";
+                li7 += "<li>";
+                li7 += "<label class='hide'>'" + val.ItemDescription + "'</label>";
+                li7 += "<a><label><input type='checkbox' data-itemid='" + val.ItemId + "'/>&nbsp;" + val.ItemName + "</label></a>";
+                li7 += "<a data-temp='HospitalList' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                li7 += "</li>";
             });
-            $('#PrescribedProcedureList').append(li);
+            $('#PrescribedProcedureList').append(li7);
         },
         error: function (response) {
             alert('Server Error...!');
@@ -507,7 +549,7 @@ function PresMediInfoByTempId(templateId) {
                         tbody += "<td><remove class='delRow'>X</remove>" + val.Item_name + "</td>";
                         tbody += "<td>" + val.med_dose + "</td>";
                         tbody += "<td>" + val.med_times + "</td>";
-                        tbody += "<td>" + val.med_duration + " Days</td>";
+                        tbody += "<td>" + val.med_duration + "</td>";
                         tbody += "<td>" + val.med_intake + "</td>";
                         tbody += "<td>" + val.med_route + "</td>";
                         tbody += "<td>" + val.remark + "</td>";
@@ -542,19 +584,20 @@ function FilteredTemplate(FilterType, TemplateId, ul) {
             var li = "";
             $.each(data.ResultSet.Table, function (key, val) {
                 li += "<li>";
-                li += "<a><label><input type='checkbox' data-desc='" + val.ItemDescription + "' data-itemid=" + val.ItemId + "/>&nbsp;" + val.ItemName + "</label></a>";
+                li += "<label class='hide'>" + val.ItemDescription + "</label>";
+                li += "<a><label><input type='checkbox' data-itemid=" + val.ItemId + "/>&nbsp;" + val.ItemName + "</label></a>";
                 if (FilterType == 'HospitalList') {
                     li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 }
                 else if (FilterType == 'FavouriteList') {
-                    li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                    li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 }
                 else {
-                    li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-trash'></a>";
+                    li += "<a data-temp=" + FilterType + "  data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-trash'></a>";
                     if (ul != 'LaboratoryRadiologyList' && ul != 'PrescribedProcedureList')
-                        li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-pencil' style='color:#1483a5'></a>";
+                        li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " data-itemname='" + val.ItemName + "' class='fa fa-pencil' style='color:#1483a5'></a>";
 
-                    li += "<a data-temp=" + FilterType + " data-desc='" + val.ItemDescription + "' data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
+                    li += "<a data-temp=" + FilterType + " data-fav=" + val.IsFavourite + " data-templateid=" + val.TemplateId + " data-itemid=" + val.ItemId + " class='fa fa-heart' style='color:" + val.fav + "'></a>";
                 }
                 li += "</li>";
             });

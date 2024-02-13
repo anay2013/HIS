@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HISWebApi", "..\HISWebApi\H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudStorageApi", "..\CloudStorageApi\CloudStorageApi.csproj", "{5EB6CAD9-4AAD-45FD-AC2D-9B70431D6172}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITDLISWebApi", "..\..\ITDLISWebApi\ITDLISWebApi\ITDLISWebApi.csproj", "{11A6073F-320A-450A-BDB2-1771B33C7BFE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{5EB6CAD9-4AAD-45FD-AC2D-9B70431D6172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EB6CAD9-4AAD-45FD-AC2D-9B70431D6172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EB6CAD9-4AAD-45FD-AC2D-9B70431D6172}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11A6073F-320A-450A-BDB2-1771B33C7BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11A6073F-320A-450A-BDB2-1771B33C7BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11A6073F-320A-450A-BDB2-1771B33C7BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11A6073F-320A-450A-BDB2-1771B33C7BFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

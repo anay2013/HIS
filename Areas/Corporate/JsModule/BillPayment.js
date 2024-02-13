@@ -32,6 +32,9 @@ function GetPanel() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#ddlPanel').append($('<option></option>').val(val.PanelId).html(val.PanelName));
                     });
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlTPAList').append($('<option></option>').val(val.PanelId).html(val.PanelName));
+                    });
                 }
             }
             if (Object.keys(data.ResultSet).length > 0) {
@@ -56,15 +59,10 @@ function BalanceInfo(logic) {
         }
         Prm1 = $('#ddlPanel option:selected').val();
     }
-
-
     else if (logic == 'BalanceInfo:ByIPDNo')
         Prm1 = $('#txtIPDNo').val();
 
     $('#ddlPanel option:selected').val()
-
-
-
     $('#tblSelectBillingInfo tbody').empty();
     $('#tblBillingInfo tbody').empty();
     $('#txtTotalReceivable').val(0);
@@ -73,7 +71,7 @@ function BalanceInfo(logic) {
     var objBO = {};
     objBO.HospId = Active.HospId;
     objBO.IPDNo = $('#txtIPDNo').val();
-    objBO.BillNo = '-';
+    objBO.BillNo = $('#ddlTPAList option:selected').val();
     objBO.ReceiptNo = '-';
     objBO.Prm1 = Prm1;
     objBO.from = '1900/01/01';
@@ -89,8 +87,16 @@ function BalanceInfo(logic) {
         success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
                 var tbody = "";
+                var temp = "";
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
+                        if (temp != val.PanelName) {
+                            tbody += '<tr style="background:lightgreen">';
+                            tbody += '<td colspan="13">' + val.PanelName + '</td>';
+                            tbody += '</tr>';
+                            temp = val.PanelName
+                        }
+
                         if (val.IsSettled == 'Y') {
                             tbody += '<tr style="background:#b7e4b7">';
                             tbody += '<td>Settled</td>';
@@ -99,7 +105,7 @@ function BalanceInfo(logic) {
                             tbody += '<tr>';
                             tbody += '<td><input onchange=selectBill(this) type="checkbox"/></td>';
                         }
-          
+                     
                         tbody += '<td>' + val.BillNo + '</td>';
                         tbody += '<td>' + val.ClaimNo + '</td>';
                         tbody += '<td>' + val.IPDNo + '</td>';
@@ -161,13 +167,10 @@ function selectBill(elem) {
     }
     $("#tblSelectBillingInfo tbody").append(tbody);
     totalReceivable = 0;
-    totalTDSReceivable = 0;
     $("#tblSelectBillingInfo tbody tr").each(function () {
         totalReceivable += parseFloat($(this).find('td').eq(8).text());
-        totalTDSReceivable += parseFloat($(this).find('td').eq(9).text());
     });
     $('#txtTotalReceivable').val(totalReceivable);
-    $('#txtTotalTDSReceivable').val(totalTDSReceivable);
 }
 function removeSelectedBill(elem) {
     if (confirm('Are you sure to Remove?')) {
@@ -182,21 +185,33 @@ function removeSelectedBill(elem) {
 function calculate() {
     var receivable = 0;
     var paid = 0;
+
+    var totalReceivable = 0;
+    var TotalBadDebt = 0;
+
+
     $("#tblSelectBillingInfo tbody tr").each(function () {
-        receivable = parseFloat($(this).find('td').eq(7).text());
-        paid = parseFloat($(this).find('td:eq(8) input:text').val());
+        receivable = parseFloat($(this).find('td').eq(8).text());
+        paid = parseFloat($(this).find('td:eq(9) input:text').val());
         if (receivable < paid) {
-            $(this).find('td:eq(9)').text(0);
-            $(this).find('td:eq(8) input:text').val(receivable)
+            $(this).find('td:eq(9) input:text').val(receivable)
         }
         else {
-            $(this).find('td:eq(9)').text(receivable - paid);
+            $(this).find('td:eq(10)').text(receivable - paid);
         }
-
+        totalReceivable += parseFloat($(this).find('td:eq(9) input:text').val());
+        TotalBadDebt += parseFloat($(this).find('td').eq(10).text());
     });
+    $('#txtTotalReceivable').val(totalReceivable);
+    $('#txtTotalBadDebt').val(TotalBadDebt);
 }
-function IPD_BillPayment() {
+function IPD_BillPayment(elem) {
     if (confirm('Are you sure to Submit')) {
+        if ($('input[type=file]').val() == '') {
+            alert('Please Choose File')
+            return
+        }
+        $(elem).addClass('loading');
         if ($('#tblSelectBillingInfo tbody tr').length < 1) {
             alert('Please Select Bill');
             return
@@ -213,7 +228,19 @@ function IPD_BillPayment() {
             alert('Please Provide Reference No')
             return
         }
-        var url = config.baseUrl + "/api/Corporate/IPD_BillPayment";
+        var isDebtRemark = 0;
+        $("#tblSelectBillingInfo tbody tr").each(function () {
+            if (parseFloat($(this).find('td').eq(10).text()) > 0 && $(this).find('td:eq(11) input:text').val() == '') {
+                isDebtRemark++;
+                $(this).find('td:eq(11) input:text').css(' border-color', 'red');
+            }
+        });
+
+        if (isDebtRemark > 0) {
+            alert('Please Provide Bad Debt Type, when Bad Debt Amount > 0')
+            return
+        }
+        var url = config.baseUrl + "/api/Corporate/UploadIPD_BillPayment";
         var objBO = [];
         $("#tblSelectBillingInfo tbody tr").each(function () {
             objBO.push({
@@ -225,7 +252,6 @@ function IPD_BillPayment() {
                 'RefNo': $('#txtReferenceNo').val(),
                 'Pay_ChequeDate': $('#txtPayDate').val(),
                 'TotalBillAmount': $('#txtTotalReceivable').val(),
-                'TDSAmt': $('#txtTotalTDSReceivable').val(),
 
                 'InsuranceProvId': $(this).find('td:eq(12)').text(),
                 'PanelId': $(this).find('td:eq(12)').text(),
@@ -236,29 +262,58 @@ function IPD_BillPayment() {
                 'TDSAmount': 0,
                 'BadDebt': $(this).find('td:eq(10)').text(),
                 'BadDebtType': $(this).find('td:eq(11) input:text').val(),
-
                 'login_id': Active.userId,
+
+                'hasfile': ($('#imgFile').attr('src').length > 10) ? 'Y' : 'N',
+                'fileType': ($('#uploadFile').val().split('.').pop() == 'pdf') ? 'application/pdf' : 'Image',
+                'fileExtention': $('#uploadFile').val().split('.').pop(),
+                'Base64String': $('#imgFile').attr('src'),
+
                 'Logic': 'PayBill'
             });
-        });        
-        $.ajax({
-            method: "POST",
-            url: url,
-            data: JSON.stringify(objBO),
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                if (data.includes('Success')) {
-                    alert(data)
-                    Clear();
-                } else {
-                    alert(data)
-                }
-            },
-            error: function (response) {
-                alert('Server Error...!');
-            }
         });
+        debugger
+        var UploadDocumentInfo = new XMLHttpRequest();
+        var data = new FormData();
+        data.append('obj', JSON.stringify(objBO));
+        data.append('ImageByte', objBO[0].Base64String);
+        UploadDocumentInfo.onreadystatechange = function () {
+            if (UploadDocumentInfo.status) {
+                if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {
+                    var json = JSON.parse(UploadDocumentInfo.responseText);
+                    if (json.includes('Success')) {
+                        var date = new Date();
+                        alert('Successfully Uploaded..!');
+                        //var FilePath = json.split('|')[1] + "?v=" + date.getMilliseconds();
+                        //window.open(FilePath, '_blank');
+                        $(elem).removeClass('loading');
+                    }
+                    else {
+                        alert(json);
+                        $(elem).removeClass('loading');
+                    }
+                }
+            }
+        }
+        UploadDocumentInfo.open('POST', url, true);
+        UploadDocumentInfo.send(data);
+    }
+}
+function readURL(elem) {
+    if (elem.files && elem.files[0]) {
+        var ext = $(elem).val().split('.').pop().toLowerCase();
+        if ($.inArray(ext, ['jpg', 'png', 'pdf']) == -1) {
+            alert('invalid fileextension!');
+            return false;
+        }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#imgFile').removeAttr('src', '');
+            $('#imgFile').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(elem.files[0]); // convert to base64 string
+        var formData = new FormData();
+        var files = $(elem).get(0).files;
     }
 }
 function checkTotalPayment() {

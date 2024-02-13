@@ -79,14 +79,21 @@
                                     <button id="btnSearch" style="width:62%;height:28px" class="btn bg-blue bn" onclick="GetDataAllIPDNO()"><i class="fa fa-search"></i>Search</button>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                Report Type
+                                <div style="display:flex">
+                                    <select id="ddlReportLogic" class="form-control" style="width:400px">
+                                        <option value="ByBillDate">By Bill Date</option>
+                                        <option value="ByBillClosingDate">By Bill Closing Date</option>
+                                    </select>
 
-                            <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
                                 Panel Name
                                 <div style="display:flex">
                                     <select id="ddlPanel" class="form-control" style="width:400px"></select>
-                                    @*<div style="width:400px">
-                                            <select id="ddlPanel" class="form-control"></select>
-                                        </div>*@
+
                                 </div>
                             </div>
 
@@ -94,7 +101,7 @@
                                 From
                                 <input type="date" id="txtfromdate" class="form-control" />
                             </div>
-                            <div class="col-md-3" style="width: 29%;">
+                            <div class="col-md-4" style="width: 29%;">
                                 To
                                 <div style="display:flex">
                                     <input type="date" id="txttodate" class="form-control" />
@@ -124,8 +131,7 @@
                                         <th>Tax</th>
                                         <th>Payable</th>
                                         <th>Approval Amount</th>
-                                        <th>Approval Applied</th>
-                                        <th>Advance</th>
+                                         <th>Advance</th>
                                         <th>Balance</th>
                                         <th>BillClosed Date</th>
                                     </tr>

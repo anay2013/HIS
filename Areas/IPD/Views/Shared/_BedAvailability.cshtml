@@ -1,8 +1,19 @@
 ﻿<script src="~/Areas/IPD/JsModule/NursingView/_BedAvailability.js"></script>
 <style>
-    .status img {
+    .col-md-4 .status img {
+        width: 67px;
+        padding: 3px;
+    }
+    .col-md-8 .status:not(.Housekeeping) img {
         width: 45px;
         padding: 3px;
+    }
+    .col-md-8 .Housekeeping img {
+        width: 22px !important;
+        padding: 0px !important;
+    }
+    .col-md-8 .Housekeeping label.Housekeeping {
+        line-height: 1 !important;
     }
     .OuterRoomType {
         height: 490px;
@@ -58,7 +69,7 @@
         list-style: none;
         padding: 3px;
         overflow: auto;
-        height: 100px;
+        height: 117px;
     }
 
         #listTotal li {
@@ -68,10 +79,10 @@
             display: inline-flex;
             font-size: 11px;
             text-align: left;
-            width: 28%;
+            width: 23%;
             background: #fff;
-            margin: 5px;
-            border: 1px solid #ddd
+            margin: 5px 2px;
+            border: 1px solid #ddd;
         }
 
             #listTotal li .fa-bed {
@@ -145,10 +156,10 @@
             display: inline-flex;
             font-size: 11px;
             text-align: left;
-            width: 200px;
+            width: 195px;
             background: #fff;
-            margin: 5px;
-            border: 1px solid #ddd;
+            margin: 5px 3px;
+            border: 1px solid #dbdbdb;
         }
 
     .Reserved {
@@ -171,7 +182,13 @@
         background: #ef5454;
         border-radius: 13px;
     }
-
+    .HouseKeeping {
+        padding: 1px 6px;
+        color: #ffffff;
+        background: #5b9bd7;
+        border-radius: 13px;
+        font-size: 9px;
+    }
 
     #tblPrevInfo th, #tblPrevInfo td {
         border: none;
@@ -201,7 +218,7 @@
     }
 </style>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="OuterRoomType">
             <h3>Room Types</h3>
             <table class="table table-bordered" id="tblRoomType" style="margin-bottom: -1px;">
@@ -211,6 +228,7 @@
                         <th class="text-center">Total</th>
                         <th class="text-center">Booked</th>
                         <th class="text-center">Vacant</th>
+                        <th class="text-center" style="white-space: pre;">House Keeping</th>
                         <th style="width: 1%;">CMD</th>
                     </tr>
                 </thead>
@@ -219,29 +237,36 @@
             <ul id="listTotal">
                 <li>
                     <div class="status">
-                        <img src='/Content/logo/bedTotal.png' />
+                        <img src='~/Content/logo/bedTotal.png' />
                         <label class="Reserved" onclick="BedAvailabilityTotal('ALL')">Total</label>
                         <label class="total"><label>0</label></label>
                     </div>
                 </li>
                 <li>
                     <div class="status">
-                        <img src='/Content/logo/bedPatient.png' />
+                        <img src='~/Content/logo/bedPatient.png' />
                         <label class="Booked" onclick="BedAvailabilityTotal('Booked')">Booked</label>
                         <label class="total"><label style="background:#ef5454">0</label></label>
                     </div>
                 </li>
                 <li>
                     <div class="status">
-                        <img src='/Content/logo/bedEmpty.png' />
+                        <img src='~/Content/logo/bedEmpty.png' />
                         <label class="Vacant" onclick="BedAvailabilityTotal('Vacant')">Vacant</label>
                         <label class="total"><label style="background:#66a60e">0</label></label>
+                    </div>
+                </li>
+                <li>
+                    <div class="status">
+                        <img src='~/Content/logo/houseKeeping.png' style="width:35px" />
+                        <label class="HouseKeeping" onclick="BedAvailabilityTotal('HouseKeeping')">House Keeping</label>
+                        <label class="total"><label style="background:#5b9bd7">0</label></label>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-8">
         <div class="OuterRoomType">
             <h3>Room/Bed Availability
                 <div style="width:30%;display: flex;margin:-15px 0px 1px 70%">

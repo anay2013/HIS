@@ -3,8 +3,7 @@ var _vacantLogic = "";
 $(document).ready(function () {
     LoadRoomTypes();   
     getCurrentDateTime();      
-    $('#tblRoomType tbody').on('click', 'button', function () {
-        debugger
+    $('#tblRoomType tbody').on('click', 'button', function () {        
         selectRow(this);
         var RoomType = $(this).closest('tr').find('td:eq(0)').text();
         BedAvailability(RoomType);
@@ -120,6 +119,7 @@ function LoadRoomTypes() {
                         tbody += "<td class='text-center'>" + val.total + "</td>";
                         tbody += "<td class='text-center'>" + val.booked + "</td>";
                         tbody += "<td class='text-center'>" + val.vacant + "</td>";
+                        tbody += "<td class='text-center'>" + val.vacant + "</td>";
                         tbody += "<td><button class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
                         tbody += "</tr>";
                     });
@@ -176,6 +176,8 @@ function BedAvailability(roomType) {
                         //listBed += "<i class='fa fa-bed'>&nbsp;</i>";
                         if (val.roomStatus == 'Vacant')
                             listBed += "<img src='" + config.rootUrl + "/Content/logo/bedEmpty.png' />";
+                        else if (val.roomStatus == 'Housekeeping')
+                            listBed += "<img src='" + config.rootUrl + "/Content/logo/HouseKeeping.png' />";
                         else
                             listBed += "<img src='" + config.rootUrl + "/Content/logo/bedPatient.png' />";
 
@@ -221,6 +223,7 @@ function BedAvailabilityTotal(total) {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
+            console.log(data)
             if (Object.keys(data.ResultSet).length) {
                 var listBed = "";
                 var temp = "";
@@ -235,13 +238,18 @@ function BedAvailabilityTotal(total) {
                             listBed += "<li data-floor='" + val.FloorName + "' style='pointer-events:none'>";
                         else
                             listBed += "<li data-floor='" + val.FloorName + "'>";
+                        
 
-                        listBed += "<div class='status'>";
+                        listBed += "<div class='status " + val.roomStatus+"'>";
                         if (val.roomStatus == 'Vacant')
                             listBed += "<img src='" + config.rootUrl + "/Content/logo/bedEmpty.png' />";
+                        else if (val.roomStatus == 'Housekeeping')
+                            listBed += "<img src='" + config.rootUrl + "/Content/logo/HouseKeeping.png' />";
                         else
                             listBed += "<img src='" + config.rootUrl + "/Content/logo/bedPatient.png' />";
-                        listBed += "<label class=" + val.roomStatus + ">" + val.roomStatus + "</label>";
+
+                        var roomStatus = (val.roomStatus == 'Housekeeping') ? 'House Keeping' : val.roomStatus;
+                        listBed += "<label class=" + val.roomStatus + ">" + roomStatus+ "</label>";
                         listBed += "</div>";
 
                         listBed += "<div class='info'>";

@@ -557,6 +557,8 @@ function PatientAdvance() {
                 if (data.includes('Success')) {
                     alert('Successfully Saved..!');
                     _ReceiptNo = data.split('|')[1];
+                    $('#tblPaymentDetails tbody').find('input[type=text]').val(0);
+                    $('input[name=PaymentMode]:not(.cash)').prop('checked', false).trigger('change.select2');
                 }
                 else {
                     alert(data);

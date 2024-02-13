@@ -16,7 +16,12 @@
         font-size: 12px;
     }
 
-
+   .btnUpdate {
+        width: 34%;
+        height: 30px;
+        border-radius: 0;
+        background: #06a08b;
+    }
     .selected {
         background: DodgerBlue !important;
         color: #fff;
@@ -155,33 +160,52 @@
         border-bottom-right-radius: 0;
         border-color: #06a08b;
     }
+    .lock{
+        pointer-events:none;
+        opacity:0.5;
+    }
 </style>
 <div class="example-box-wrapper">
-    <div class="row dischargeSection" style="height:345px">
+    <div class="row dischargeSection" style="height:350px">
         <div class="" style="height:70px;padding:5px;">
             <div class="col-md-4 flex-margin">
-                <label style="width:20%">Header</label>
+                <label style="white-space:pre">Report Header : </label>
+                <select id="ddlReportHeader" class="form-control">
+                    <option>Select Report Header</option>
+                    <option value="1">DISCHARGE SUMMARY</option>
+                    <option value="2">TRANSFER SUMMARY</option>
+                    <option value="3">DEATH SUMMARY</option>
+                    <option value="4">REFERRAL SUMMARY</option>
+                    <option value="5">LAMA SUMMARY</option>
+                    <option value="8">ABSCONDING SUMMARY</option>
+                    <option value="7">CASE SUMMARY</option>
+                </select>
+                <button class="btn btn-primary pull-right btnUpdate" onclick="UpdateReportHeader()"><i class="fa fa-sign-in">&nbsp;</i>Save</button>
+            </div>
+            <div class="col-md-3 flex-margin">
+                <label style="white-space:pre">Header : </label>
                 <select id="ddlHeader" onchange="GetTemplateListByHeader()" class="form-control"></select>
             </div>
             <div class="col-md-4 flex-margin">
-                <label style="width:30%">Templates</label>
+                <label style="white-space:pre">Templates : </label>
                 <select id="ddlTemplates" class="form-control"></select>
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-warning pull-right" onclick="PrintDischargeReport()"><i class="fa fa-print">&nbsp;</i>Discharge Report</button>
-            </div>
+            </div>         
             <div class="col-md-12" style="margin:10px 0;">
                 <textarea class="form-control" id="txtTemplate" placeholder="Describe Test Interpretation here..."></textarea>
             </div>
             <div class="col-md-12">
                 <button class="btn btn-primary pull-left" id="btnSave" onclick="InsertDischargeSummary('InsertDischargeSummary')" style="margin:-5px 0;"><i class="fa fa-sign-in">&nbsp;</i>Add Detail</button>
+                <button class="btn btn-danger pull-left" id="btnLock" onclick="LockUnLockDischargeSummary('LockDischargeSummary')" style="margin:-5px 10px;"><i class="fa fa-lock">&nbsp;</i>Lock</button>
                 <button class="btn btn-warning pull-right" id="btnSave" onclick="InsertDischargeSummary('UpdateDischargeSummary')" style="margin:-5px 0;"><i class="fa fa-sign-in">&nbsp;</i>Update Detail</button>
+                <button class="btn btn-info pull-right" style="margin:-4px 5px" onclick="PrintDischargeReport()"><i class="fa fa-print">&nbsp;</i>Discharge Report</button>
+                <button class="btn btn-success pull-right" id="btnUnLock" onclick="LockUnLockDischargeSummary('UnLockDischargeSummary')" style="margin:-5px 10px;"><i class="fa fa-unlock">&nbsp;</i>Un-Lock</button>
+
             </div>
         </div>
     </div>
     <div class="row">
         <div class="table-responsive vertiscrl" style="overflow:auto;height:135px;margin:10px 0;border: 1px solid #2478a9;">
-            <label class="generateBill">Templates Info</label>
+            <label class="generateBill">Templates Info <button onclick="expandContent()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-expand">&nbsp;</i></button></label>
             <table id="tblDischargeSummary" class="table table-bordered">
                 <thead style="background: #00a65a;color: #fff;">
                     <tr>

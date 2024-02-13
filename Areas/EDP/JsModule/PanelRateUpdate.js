@@ -183,16 +183,16 @@ function GetItemRateList() {
                 }
             }
         },
-        complete: function (response) {         
+        complete: function (response) {
             var index = -1;
             $("#tblRateListInfo tbody tr").each(function () {
                 if ($(this).hasClass('itemGroup'))
                     index++;
-                    
+
                 if ($(this).find('td:eq(1)').text() == 'OPD') {
                     var content = $(this).closest('tr').html();
                     $(this).closest('tr').remove();
-                    $('#tblRateListInfo > tbody > tr.itemGroup').eq(index).after("<tr class='bg-success'>" + content+"</tr>");                    
+                    $('#tblRateListInfo > tbody > tr.itemGroup').eq(index).after("<tr class='bg-success'>" + content + "</tr>");
                 }
             });
         },
@@ -217,7 +217,7 @@ function RoomChargesUpdate() {
                     'RoomBillCategory': $(this).find("td:eq(1)").text(),
                     'hosp_id': Active.HospId,
                     'login_id': Active.userId,
-                    'Logic': 'RoomChargesUpdate',
+                    'Logic': 'SelectedUpdate',
                 });
             }
         }
@@ -257,7 +257,7 @@ function UpdateItemRateListSingle(element) {
         'RoomBillCategory': $(element).data('roombillcat'),
         'hosp_id': Active.HospId,
         'login_id': Active.userId,
-        'Logic': 'Insert',
+        'Logic': 'SelectedUpdate',
     });
     $.ajax({
         method: "POST",
@@ -292,4 +292,47 @@ function ValidateRatePanel() {
     }
     return true;
 }
-
+function GetItemListTextWise() {
+    $("#tblItemList tbody").empty();
+    var url = config.baseUrl + "/api/EDP/PanelRateQueries";
+    var objBO = {};
+    objBO.HospId = '-',
+        objBO.PanelId = '-',
+        objBO.RateListId = '-';
+    objBO.DoctorId = '-',
+        objBO.catid = '-';
+    objBO.subcatid = '-',
+        objBO.Itemid = '-',
+        objBO.prm_1 = $("#txtItemName").val(),
+        objBO.login_id = '-',
+        objBO.Logic = "ItemSearch";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            console.log(data);
+            var htmldata = "";
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        htmldata += '<tr>';
+                        htmldata += '<td><input type="checkbox" data-itemid="' + val.ItemId + '"/></td>';
+                        htmldata += '<td>' + val.ItemId + '</td>';
+                        htmldata += '<td>' + val.ItemName + '</td>';
+                        htmldata += '</tr>';
+                    });
+                    $("#tblItemList tbody").append(htmldata);
+                }
+            }
+            else {
+                alert('No Data Found')
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}

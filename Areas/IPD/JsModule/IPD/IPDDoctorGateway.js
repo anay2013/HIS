@@ -14,6 +14,9 @@ $(document).ready(function () {
         $(this).addClass('activePage');
     });
 });
+function GoBack() {
+    window.location.href = config.rootUrl + '/IPD/IPD/IPD_DoctorPatientRegister?mid=SM262';
+}
 function loadBody(page) {
     $.ajax({
         type: 'POST',

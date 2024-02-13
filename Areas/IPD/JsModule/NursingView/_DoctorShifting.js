@@ -42,35 +42,33 @@ function GetDoctor() {
     });
 }
 function DoctorShift() {
-    var url = config.baseUrl + "/api/IPDNursingService/IPD_RoomAndDoctorShift";
-    var objBO = {};   
-    objBO.IPDNo = '-';
-    objBO.DoctorId = $('#ddlDoctor option:selected').val();
-    objBO.RoomBedId = '-';
-    objBO.RoomBillingCategory = '-';
-    objBO.Prm1 = '-';
-    objBO.Prm2 = '-';
-    objBO.RoomChangeDateTime = '1900/01/01';  
-    objBO.login_id = Active.userId;
-    objBO.Logic = 'DoctorShifting';
-    $.ajax({
-        method: "POST",
-        url: url,
-        data: JSON.stringify(objBO),
-        contentType: "application/json;charset=utf-8",
-        dataType: "JSON",
-        success: function (data) {
-            if (data.includes('Success')) {
+    let text = "Do you want to change Doctor ";
+    if (confirm(text) == true) {
+        var url = config.baseUrl + "/api/IPDNursingService/IPD_RoomAndDoctorShift";
+        var objBO = {};
+        objBO.IPDNo = _IPDNo;
+        objBO.DoctorId = $('#ddlDoctor option:selected').val();
+        objBO.RoomBedId = '-';
+        objBO.RoomBillingCategory = '-';
+        objBO.Prm1 = '-';
+        objBO.Prm2 = '-';
+        objBO.RoomChangeDateTime = '1900/01/01';
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'DoctorShifting';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            contentType: "application/json;charset=utf-8",
+            dataType: "JSON",
+            success: function (data) {
                 alert(data);
+            },
+            error: function (response) {
+                alert('Server Error...!');
             }
-            else {
-                alert(data)
-            }
-        },       
-        error: function (response) {
-            alert('Server Error...!');
-        }
-    });
+        });
+    }
 }
 
 

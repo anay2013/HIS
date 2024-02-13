@@ -205,7 +205,7 @@ div#skill {
     }
 
         div#skill .circle:after {
-            content: url(../img/icons/arrow-point-to-right.png);
+            content:'';
             position: absolute;
             top: 25px;
             right: 0;

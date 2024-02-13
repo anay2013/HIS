@@ -93,14 +93,15 @@
 
     .OPDPrintPreview {
         height: max-content;
-        width: 70%;
+        width: 73%;
         float: right;
         /*padding: 0 13px;*/
-        border: 1px solid #000;
+        /*border: 1px solid #000;*/
     }
 
     .bottom-tab {
         height: max-content;
+        width:99% !important;
     }
 
     .OPDPrintPreview-header {
@@ -531,7 +532,7 @@
                 <div class="dash-header">
                     <table class="table" id="tblAdviceHeader">
                         <tr>
-                            <td rowspan="2"><img src="#" width="50" class="img-humbnail" /></td>
+                            <td class="hide" rowspan="2"><img src="#" width="50" class="img-humbnail" /></td>
                             <td><b>Patient Name</b></td>
                             <td><b>:</b></td>
                             <td class="text-red">NA</td>
@@ -547,6 +548,10 @@
                             <td><b>App. Date</b></td>
                             <td><b>:</b></td>
                             <td class="text-red">NA</td>
+
+                            <td><b>Mobile No</b></td>
+                            <td><b>:</b></td>
+                            <td class="text-red">NA</td>
                         </tr>
                         <tr>
                             <td><b>Current Doctor</b></td>
@@ -560,7 +565,7 @@
                             <td><b>Panel</b></td>
                             <td><b>:</b></td>
                             <td colspan="1" class="text-red">NA</td>
-                            <td colspan="3">
+                            <td colspan="6">
                                 <div class="input-group-btn btnGroup">
                                     <button class="btn btn-primary btn-xs" style="margin-right:2%" id="btnOutApp" onclick="InOutMarking()">Out</button>
                                     <button class="btn btn-danger btn-xs" style="margin-right:2%" id="btnCloseApp" onclick="CloseAppointment()">Close</button>
@@ -568,7 +573,7 @@
                                     <button class="btn btn-primary btn-xs btnRound" id="btnSaveCounter"><div id='skill'><div class='circle'></div></div><span id="txtSubmitCounter"></span></button>
                                     <button class="btn btn-primary btn-xs" style="margin-right:2%" id="btnSaveApp" onclick="InsertItemsForPres()">Save</button>
                                     <button class="btn btn-warning btn-xs" id="btnNextFollowUp" data-target="#modalNextFollowUp" data-toggle="modal">Next Follow-Up Date</button>&nbsp;
-                                    <button class="btn btn-danger btn-xs" onclick="window.history.back()" style="margin-left:3px;"><i class="fa fa-arrow-left">&nbsp;</i>Back</button>
+                                    <button class="btn btn-danger btn-xs" onclick="window.location.href = '' + config.rootUrl + '/OPD/Appointment/OPD_ViewConsultation?mid=SM186'" style="margin-left:3px;"><i class="fa fa-arrow-left">&nbsp;</i>Back</button>
                                 </div>
                             </td>
                         </tr>

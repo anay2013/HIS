@@ -83,6 +83,27 @@ function HeaderList(prm) {
                         tbody += "</tr>";
                     });
                     $('#tblHeaderMaster tbody').append(tbody);
+                    var DischargeReportHeader = data.ResultSet.Table1[0].DischargeReportHeader;
+                    var IsDischSummaryLocked = data.ResultSet.Table1[0].IsDischSummaryLocked;
+                    if (IsDischSummaryLocked == 'Y') {
+                        $('#btnLock').addClass('lock');
+                        $('#btnUnLock').removeClass('lock');
+                    }
+                    if (IsDischSummaryLocked == 'N') {
+                        $('#btnLock').removeClass('lock');
+                        $('#btnUnLock').addClass('lock');
+                    }
+
+                    if (DischargeReportHeader == '-')
+                        $('#ddlReportHeader').prop('selectedIndex', 0).change();
+                    else {
+                        $('#ddlReportHeader option').each(function () {
+                            if ($(this).text() == DischargeReportHeader)
+                                $('#ddlReportHeader').prop('selectedIndex', '' + $(this).index() + '').change();
+                        });
+                    }
+
+
                 }
             }
         },
@@ -280,7 +301,89 @@ function InsertUpdateTemplate() {
         }
     });
 }
+function LockUnLockDischargeSummary(logic) {
+    if (confirm('Are you sure?')) {
+        var url = config.baseUrl + "/api/IPDDoctor/IPD_InsertDischargeReportInfo";
+        var objBO = {};
+        objBO.IPDNo = _IPDNo;
+        objBO.TemplateId = _AutoId;
+        objBO.TemplateName = '-';
+        objBO.TemplateContent = '-';
+        objBO.Prm1 = '-';
+        objBO.Prm2 = '-';
+        objBO.login_id = Active.userId;
+        objBO.Logic = logic;
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            contentType: "application/json;charset=utf-8",
+            dataType: "JSON",
+            success: function (data) {
+                if (data.includes('Success')) {                  
+                    if (logic == 'LockDischargeSummary') {
+                        $('#btnLock').addClass('lock');
+                        $('#btnUnLock').removeClass('lock');
+                    }
+                    if (logic == 'UnLockDischargeSummary') {
+                        $('#btnLock').removeClass('lock');
+                        $('#btnUnLock').addClass('lock');
+                    }
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function expandContent() {
+    $('')
+}
+function UpdateReportHeader() {
+    if (confirm('Are you sure to update?')) {
+        if ($('#ddlReportHeader option:selected').text() == 'Select Report Header') {
+            alert('Please Select Report Header Name');
+            return
+        }
+        var url = config.baseUrl + "/api/IPDDoctor/IPD_InsertDischargeReportInfo";
+        var objBO = {};
+        objBO.IPDNo = _IPDNo;
+        objBO.TemplateId = _AutoId;
+        objBO.TemplateName = '-';
+        objBO.TemplateContent = '-';
+        objBO.Prm1 = $('#ddlReportHeader option:selected').text();
+        objBO.Prm2 = '-';
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'UpdateReportHeader';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            contentType: "application/json;charset=utf-8",
+            dataType: "JSON",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    alert(data);
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
 function InsertDischargeSummary(logic) {
+    if ($('#ddlReportHeader option:selected').text() == 'Select Report Header') {
+        alert('Please Update Report Header Name');
+        return
+    }
     var url = config.baseUrl + "/api/IPDDoctor/IPD_InsertDischargeReportInfo";
     var objBO = {};
     objBO.IPDNo = _IPDNo;

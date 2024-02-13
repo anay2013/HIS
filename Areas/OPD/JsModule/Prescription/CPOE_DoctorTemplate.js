@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    Active.doctorId = 'DR00033';
     GetTemplateMaster();
     $('#btnSaveDoctorTemplate').on('click', function () {
         var val = $(this).text();
@@ -15,6 +14,7 @@
 function GetTemplateMaster() {
     var url = config.baseUrl + "/api/master/CPOE_MasterQueries";
     var objBO = {};
+    objBO.DoctorId = Active.doctorId;
     objBO.Logic = 'GetTemplateMaster';
     $.ajax({
         method: "POST",
@@ -80,7 +80,7 @@ function UpdateTemplateInfo() {
         objBO.TemplateId = $('#ddlDoctorTemplate option:selected').val();
         objBO.ItemId = $('#hiddenDoctorTempItemId').text();
         objBO.ItemName = $('#txtDoctorItemName').val();
-        objBO.prm_1 = ($('#txtDoctorTempDescription').val().trim() == '') ? $('#txtDoctorItemName').val() : $('#txtDoctorTempDescription').val().replace(/\n/g, '<br>');
+        objBO.prm_1 = ($('#txtDoctorTempDescription').val().trim() == '') ? $('#txtDoctorItemName').val() : $('#txtDoctorTempDescription').val().replace(/\n/g,'<br>');
         var fav = $('input[name=IsFavourite]').is(':checked');
         objBO.IsFavourite = (fav == true) ? 1 : 0;
         objBO.login_id = Active.userId;
