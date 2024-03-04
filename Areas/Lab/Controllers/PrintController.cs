@@ -259,9 +259,14 @@ namespace MediSoftTech_HIS.Areas.Lab.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf("-", b.ToString(), f.ToString(), "ConsentForm.pdf");
         }
-        public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic)
+        public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic,string IsHeader)
         {
             GenReport rep = new GenReport();
+            if(IsHeader!=null && IsHeader=="Y")
+                rep._PrintWithHeader = "Y";
+            else
+                rep._PrintWithHeader = "N";
+
             return rep.PrintLabReport(visitNo, SubCat, TestIds, Logic);
         }
         public FileResult PrintWorkSheet(string visitNo, string SubCat, string TestIds, string Logic)

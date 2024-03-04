@@ -29,6 +29,8 @@ function GetDataAllBindNew() {
                         else {
                             tbody += "<tr>";
                         }
+                        tbody += "<td><button class='btn btn-success btn-xs' id='" + val.tnxDate2 + "' onclick='SaleVoucherDetails(this.id);'>Details</button></td>";
+                        //tbody += "<td></td>";
                         tbody += "<td>" + val.tnxDate + "</td>";
                         tbody += "<td>" + val.Sales + "</td>";
                         tbody += "<td>" + val.ByCash + "</td>";
@@ -39,7 +41,7 @@ function GetDataAllBindNew() {
                         tbody += "<td>" + val.VchAmount + "</td>";
                         tbody += "<td>" + val.dif2 + "</td>";
                         if (val.clr == "Red")
-                            tbody += "<td><input type='Button' id='" + val.tnxDate2+"' class='form-control btn-success' value='Re-Process' onclick='ReProcess(this.id);' /></td>";
+                            tbody += "<td><input type='Button' id='" + val.tnxDate2 + "' class='form-control btn-success' value='Re-Process' onclick='ReProcess(this.id);' /></td>";
                         else
                             tbody += "<td></td>";
                         tbody += "</tr>";
@@ -72,7 +74,7 @@ function ReProcess(TnxDate) {
                 $.each(data.ResultSet.Table, function (key, val) {
                     alert(val.result);
                 });
-              }
+            }
         },
         error: function (response) {
             alert('Server Error...!');
@@ -92,7 +94,6 @@ function DownloadExcelAuditSaleNew() {
     objBO.OutPutType = "Excel";
     Global_DownloadExcel(url, objBO, logic + ".xlsx");
 }
-
 function GetDataAllBind() {
     $('#tblSaleVoucher tbody').empty();
     var url = config.baseUrl + "/api/Account/Audit_SalesAndVouchers";
@@ -109,7 +110,7 @@ function GetDataAllBind() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-             if (Object.keys(data.ResultSet).length) {
+            if (Object.keys(data.ResultSet).length) {
                 var tbody = "";
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
@@ -148,12 +149,10 @@ function GetDataAllBind() {
         }
     });
 }
-
 function DownloadExcelAuditSale() {
     var logic = 'Audit:InDetail';
     $('#tblSaleVoucher tbody').empty();
     var url = config.baseUrl + "/api/Account/Audit_SalesAndVouchers";
-    debugger
     var objBO = {};
     objBO.from = $('#txtfromdate').val();
     objBO.to = $('#txttodate').val();
@@ -162,4 +161,54 @@ function DownloadExcelAuditSale() {
     objBO.OutPutType = "Excel";
     Global_DownloadExcel(url, objBO, logic + ".xlsx");
 }
+function SaleVoucherDetails(tnxDatee) {
+    $('#SaleVoucherDetailsPop').modal('show');
+    GetDataDSaleVoucherNewInfo(tnxDatee);
+}
+function GetDataDSaleVoucherNewInfo(tnxDatee) {
+    $('#tblSaleVoucherInfo tbody').empty();
+    var url = config.baseUrl + "/api/Account/Audit_SalesAndVouchers";
 
+    var objBO = {};
+    objBO.from = tnxDatee;
+    objBO.to = tnxDatee;
+    objBO.loginid = Active.userId;
+    objBO.Logic = 'Match:SalesAndVoucher';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length) {
+                var tbody = "";
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        if (val.DiffFlag == "Red") {
+                            tbody += "<tr style='background:#ffb8b8'>";
+                        }
+                        else {
+                            tbody += "<tr>";
+                        }
+                        //tbody += "<td></td>";
+                        tbody += "<td style='text-align:center;width:10%'>" + val.LedgerId + "</td>";
+                        tbody += "<td style='text-align:left;width:30%'>" + val.ledgerName + "</td>";
+                        tbody += "<td style='text-align:center;width:10%'>" + val.ReceiptType + "</td>";
+                        tbody += "<td style='text-align:center;width:5%'>" + val.SeqNo + "</td>";
+                        tbody += "<td style='text-align:center;width:10%'>" + val.refNo + "</td>";
+                        tbody += "<td style='text-align:center;width:10%'>" + val.vchAmt + "</td>";
+                        tbody += "<td style='text-align:center;width:10%'>" + val.Amount + "</td>";
+                        tbody += "<td style='text-align:left;width:15%'>" + val.narration + "</td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblSaleVoucherInfo tbody').append(tbody);
+
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}

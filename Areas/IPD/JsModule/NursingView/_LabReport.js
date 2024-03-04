@@ -97,6 +97,10 @@ function LoadTest() {
     });
 }
 function ReportInfo() {
+    var Logic = "IPD:TestWiseReport";
+    if ($('#ddlIPOPType option:selected').val()=="OPD")
+    Logic = "OPD:TestWiseReport";
+
     $("#tblReport tbody").empty();
     var url = config.baseUrl + "/api/Lab/Lab_ReportPrintingQueries";
     var objBO = {};
@@ -109,7 +113,8 @@ function ReportInfo() {
     objBO.to = '1900/01/01';
     objBO.Prm1 = $('#ddlIPOPType option:selected').text();
     objBO.Prm2 = $("#ddlTest option:selected").val();
-    objBO.Logic ='IPD:TestWiseReport';
+    objBO.Logic = Logic;
+
     $.ajax({
         method: "POST",
         url: url,

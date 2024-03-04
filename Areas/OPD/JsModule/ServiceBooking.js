@@ -324,6 +324,7 @@ $(document).ready(function () {
         let index = itemIds.indexOf(itemid);
         itemIds.splice(index, 1);
         $(this).closest('tr').remove();
+        ServiceRates(itemIds.join('|'), '')
         totalCal();
     });
     $('#tblItemInfoNull tbody').on('click', 'button', function () {

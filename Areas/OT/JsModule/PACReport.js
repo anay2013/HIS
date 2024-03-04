@@ -1,6 +1,6 @@
 ﻿var logic = ''
 $(document).ready(function () {
-    //CloseSidebar();
+    CloseSidebar();
     FillCurrentDate('txtFrom');
     FillCurrentDate('txtTo');
 
@@ -49,12 +49,16 @@ function SearchByTextKey() {
                         tbody += "<tr>";
                         tbody += "<td>" + val.ipopType + "</td>";
                         tbody += "<td>" + val.ipop_no + "</td>";
+                        tbody += "<td>" + val.UHID + "</td>";
+                        tbody += "<td>" + val.mobile_no + "</td>";
+                        tbody += "<td style='text-align: left'>" + val.DoctorName + "</td>";
                         tbody += "<td style='text-align: left'>" + val.patient_name + "</td>";
                         tbody += "<td style='text-align: left'>" + val.ageinfo + "</td>";
-                        tbody += "<td style='text-align: left'>" + val.tnxDate + "</td>";
-                        tbody += "<td>" + val.amount + "</td>";
+                        tbody += "<td style='text-align: left'>" + val.address + "</td>";
                         tbody += "<td style='text-align: left'>" + val.emp_name + "</td>";
                         tbody += "<td style='text-align: left'>" + val.ItemName + "</td>";
+                        tbody += "<td style='text-align: left'>" + val.tnxDate + "</td>";
+                        tbody += "<td>" + val.amount + "</td>";
                         tbody += "</tr>";
 
                     });
@@ -99,12 +103,16 @@ function SearchByDateWise() {
                         tbody += "<tr>";
                         tbody += "<td>" + val.ipopType + "</td>";
                         tbody += "<td>" + val.ipop_no + "</td>";
+                        tbody += "<td>" + val.UHID + "</td>";
+                        tbody += "<td>" + val.mobile_no + "</td>";
+                        tbody += "<td style='text-align: left'>" + val.DoctorName + "</td>";
                         tbody += "<td style='text-align: left'>" + val.patient_name + "</td>";
                         tbody += "<td style='text-align: left'>" + val.ageinfo + "</td>";
-                        tbody += "<td style='text-align: left'>" + val.tnxDate + "</td>";
-                        tbody += "<td>" + val.amount + "</td>";
+                        tbody += "<td style='text-align: left'>" + val.address + "</td>";
                         tbody += "<td style='text-align: left'>" + val.emp_name + "</td>";
                         tbody += "<td style='text-align: left'>" + val.ItemName + "</td>";
+                        tbody += "<td style='text-align: left'>" + val.tnxDate + "</td>";
+                        tbody += "<td>" + val.amount + "</td>";
                         tbody += "</tr>";
 
                     });

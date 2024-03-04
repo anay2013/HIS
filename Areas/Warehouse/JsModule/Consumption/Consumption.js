@@ -259,8 +259,8 @@ function AddStock() {
         alert('Consuming Stock is not allowed by Non-Consumable Cart.');
         return
     }
-    var stqty = $('#txtInStock').val();
-    var qty = $('#txtQty').val();
+    var stqty = eval($('#txtInStock').val());
+    var qty = eval($('#txtQty').val());
     if (qty > stqty) {
         alert('supply qunatity can not be geater than stock qty');
         return false;

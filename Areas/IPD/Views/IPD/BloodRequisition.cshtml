@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "BloodRequisition";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
@@ -7,14 +6,17 @@
 <style>
     .personalInfo {
         background: #fffce7;
-        pointer-events: none;     
+        pointer-events: none;
     }
+
         .personalInfo input {
             background: #edebde;
         }
+
     .selectedReqTime {
         border: 1px solid #1d8d07 !important;
     }
+
     div.ComponentQuantity {
         padding: 1px;
         overflow: auto;
@@ -23,6 +25,7 @@
         width: 100%;
         white-space: nowrap;
     }
+
         div.ComponentQuantity span {
             cursor: pointer;
             color: #fff;
@@ -30,10 +33,11 @@
             background: #b58a3a;
             padding: 3px 4px;
             border-radius: 5px;
-        }    
+        }
+
     #tblComponentsInfo tbody input[type=text] {
         text-align: right;
-        height: 20px;        
+        height: 20px;
         border-radius: 2px;
         border: 1px solid #a19943;
     }
@@ -271,7 +275,8 @@
                                                 <label style="white-space:pre"><input type="radio" name="Transfusion" value="Yes" checked />&nbsp;Yes</label>
                                                 <label style="white-space:pre"><input type="radio" name="Transfusion" value="No" />&nbsp;No</label>&nbsp;
                                                 <input type="text" id="txtDonorNumber" class="form-control TransfusionHistory" placeholder="Donor Number" />&nbsp;
-                                                <input type="text" id="txtABORh" class="form-control TransfusionHistory" placeholder="ABO Rh" />&nbsp;
+                                                @*<input type="text" id="txtABORh" class="form-control TransfusionHistory" placeholder="ABO Rh" />&nbsp;*@
+                                                <select id="ddlABORh" class="form-control TransfusionHistory"></select>&nbsp;
                                                 <input type="date" id="txtdateTransfuse" class="form-control TransfusionHistory" placeholder="Date" />&nbsp;
                                                 <input type="text" id="txtReactionAny" class="form-control TransfusionHistory" placeholder="Reaction If Any" />
                                             </div>
@@ -386,35 +391,34 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-warning pull-right" onclick="Insert()" style="margin: 2px 12px;"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                            <button class="btn btn-warning pull-right" onclick="Insert()" type="submit" style="margin: 2px 12px;"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
                         </div>
                     </div>
                     <div id="PrintReport" class="tab-pane fade">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="section" style="height:90vh;">
-                                <label class="title">Patient Details</label>
-                                <div style="height:560px;overflow:auto">
-                                    <table class="table table-bordered" id="tblReportInfo">
-                                        <thead>
-                                            <tr>                                            
-                                                <th>IPD No</th>
-                                                <th>Indent No</th>
-                                                <th style="white-space:pre">Patient Name</th>
-                                                <th style="white-space:pre">Indent Date</th>                                               
-                                                <th style="width:1%">CMD</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="section" style="height:90vh;">
+                                    <label class="title">Patient Details</label>
+                                    <div style="height:560px;overflow:auto">
+                                        <table class="table table-bordered" id="tblReportInfo">
+                                            <thead>
+                                                <tr>
+                                                    <th>Indent No</th>
+                                                    <th style="white-space:pre">Indent Date</th>
+                                                    <th style="white-space:pre">Component List</th>
+                                                    <th style="width:1%">CMD</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </div>
-                  
+
                 </div>
-               
+
             </div>
         </div>
     </div>

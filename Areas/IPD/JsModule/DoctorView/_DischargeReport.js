@@ -163,6 +163,48 @@ function TemplateList(prm) {
         }
     });
 }
+function GetPreviousDischargeInfo() {
+    $('#tblPatientDischargeInfo tbody').empty();
+    var url = config.baseUrl + "/api/IPDDoctor/IPD_DoctorQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = $('#tblAdviceHeader tbody tr:last td:eq(5)').text();
+    objBO.IPDNo = _IPDNo;
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = '-';
+    objBO.Prm2 = '-';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'GetPreviousDischargeInfo';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length) {
+                var tbody = "";
+                if (Object.keys(data.ResultSet.Table).length) {                 
+                    $.each(data.ResultSet.Table, function (key, val) {                                              
+                        tbody += "<tr>";                                           
+                        tbody += "<td>" + val.IPDSource + "</td>";
+                        tbody += "<td>" + val.IPDNo + "</td>";
+                        tbody += "<td>" + val.AdmitDate  + "</td>";
+                        tbody += "<td>" + val.DischargeDate  + "</td>";
+                        tbody += "<td>" + val.DoctorName + "</td>";
+                        tbody += "<td><button onclick=DischargeTemplateInfo(this) class='btn btn-warning btn-xs edit'><i class='fa fa-sign-in'></i></button></td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblPatientDischargeInfo tbody').append(tbody);
+                }
+            }
+        },      
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function GetTemplateListByHeader() {
     var url = config.baseUrl + "/api/IPDDoctor/IPD_DoctorQueries";
     var objBO = {};
@@ -202,6 +244,7 @@ function GetTemplateListByHeader() {
 }
 function DischargeSummaryByTemplateId() {
     CKEDITOR.instances['txtTemplate'].setData('');
+    var ms = new Date().getUTCMilliseconds;
     var url = config.baseUrl + "/api/IPDDoctor/IPD_DoctorQueries";
     var objBO = {};
     objBO.hosp_id = '';
@@ -210,7 +253,7 @@ function DischargeSummaryByTemplateId() {
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
     objBO.Prm1 = $('#ddlTemplates option:selected').val();
-    objBO.Prm2 = '';
+    objBO.Prm2 = ms;
     objBO.login_id = Active.userId;
     objBO.Logic = 'GetTemplateContent';
     $.ajax({
@@ -341,7 +384,10 @@ function LockUnLockDischargeSummary(logic) {
     }
 }
 function expandContent() {
-    $('')
+    $('.dischargeSection').slideToggle('slow');
+  //  $(this).parents('.section').slideToggle('slow');
+    $('.TemplateInfo').toggleClass('fullHeight');
+    $('.vertiscrl').toggleClass('fullHeight');
 }
 function UpdateReportHeader() {
     if (confirm('Are you sure to update?')) {
@@ -401,9 +447,11 @@ function InsertDischargeSummary(logic) {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            if (data.includes('Success')) {
-                alert(data);
-                CKEDITOR.instances['txtTemplate'].setData('');
+            if (data.includes('Success')) {               
+                for (instance in CKEDITOR.instances) {                    
+                    CKEDITOR.instances[instance].updateElement();
+                    CKEDITOR.instances[instance].setData('');
+                }                                                        
                 DischargeSummary();
             }
             else {
@@ -497,6 +545,65 @@ function DischargeSummary() {
             alert('Server Error...!');
         }
     });
+}
+function DischargeTemplateInfo(elem) {
+    $('#tblDischargeTemplateInfo tbody').empty();
+    var url = config.baseUrl + "/api/IPDDoctor/IPD_DoctorQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = $(elem).closest('tr').find('td:eq(1)').text();
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = $(elem).closest('tr').find('td:eq(0)').text();
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = ($(elem).closest('tr').find('td:eq(0)').text() == 'NewHIS') ? 'DischargeSummary' : 'DischargeSummaryOldHIS';
+    debugger
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data)
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    var tbody = '';
+                    var count = 0;
+                    var temp = "";
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        count++;
+                        if (temp != val.HeaderName) {
+                            tbody += "<tr class='bg-warning'>";
+                            tbody += "<td colspan='4'><b>" + val.HeaderName + "</b></td>";
+                            tbody += "</tr>";
+                            temp = val.HeaderName;
+                        }
+                        tbody += "<tr>";                    
+                        tbody += "<td class='hide'>" + val.HeaderId + "</td>";
+                        tbody += "<td class='hide'>" + val.AutoId + "</td>";
+                        tbody += "<td>" + val.template_content + "</td>";
+                        tbody += "<td>" + val.cr_date + "</td>";
+                        tbody += "<td><button onclick=copyPrevContent(this) class='btn btn-warning btn-xs edit'><i class='fa fa-copy' ></i></button></td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblDischargeTemplateInfo tbody').append(tbody);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function copyPrevContent(elem) {
+    if (confirm('Do you want to paste selected content in Ediotr?')) {
+        var data = $(elem).closest('tr').find('td:eq(2)').html();
+        $('.nav-tabs li:first a[href=#DischargeReportSummary]').trigger('click');
+        CKEDITOR.instances['txtTemplate'].setData(data);
+    }
 }
 function PrintDischargeReport() {
     var url = config.rootUrl + "/ipd/print/IPDDischargeReport?_IPDNo=" + _IPDNo;

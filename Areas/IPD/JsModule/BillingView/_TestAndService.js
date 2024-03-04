@@ -8,6 +8,12 @@
     FillCurrentDate('txtBookingTo')
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')
+    $('#tblServiceBookingInfo tbody').on('mouseover', '.entryBy', function () {
+        var entryBy = '<b>Entry By : </b>' + $(this).data('entryby');
+        $(this).siblings('span').html(entryBy).show('fast');
+    }).on('mouseleave', '.entryBy', function () {
+        $(this).siblings('span').empty().hide('fast');
+    });
     $('select').select2();
     BookingInfoByIPDNo();
     searchTable('txtFilterSearch', 'tblItemInfo');
@@ -351,13 +357,11 @@ function BookingInfoByIPDNo() {
                         tbody += "<td style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</td>";
                         tbody += "<td>" + counter + "</td>";
                         tbody += "<td>" + val.tnxDate + "</td>";
-                        tbody += "<td>" + val.ItemId + "</td>";
-                        tbody += "<td>" + val.ItemName + "</td>";
+                        tbody += "<td>" + val.TnxId + "</td>";
+                        tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "'></i><span class='entryByName'></span></td>";
                         tbody += "<td>" + val.Qty + "</td>";
                         tbody += "<td>" + val.SubCatName + "</td>";
-
                         tbody += "<td>" + val.DoctorName + "</td>";
-                        tbody += "<td><button style='height: 15px;line-height:0;' class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i>Track Status</button></td>";
                         tbody += "</tr>";
                         count++;
                     });

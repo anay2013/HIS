@@ -204,15 +204,16 @@
                             <option selected="selected" value="Out">Discharged</option>
                         </select>
                     </div>
-                    <div class="col-md-2" style="width:10%">
+                    <div class="col-md-2" style="width:7%">
                         From Date
                         <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
                     </div>
-                    <div class="col-md-2" style="width:10%">
+                    <div class="col-md-2" style="width:13%">
                         To Date
                         <div style="display:flex">
                             <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
-                            <button id="btnAllPatient" style="width:20%;height:27px" onclick="AdmittedPatientList('AdmittedPatientListBetweenDate')" class="btn btn-success"><i class="fa fa fa-search"></i></button>
+                            <button id="btnAllPatient"  style="width:20%;height:27px" onclick="AdmittedPatientList('AdmittedPatientListBetweenDate')" class="btn btn-success"><i class="fa fa fa-sign-in"></i></button>
+                            <button id="btnSearchPatient" style="width:20%;height:27px" onclick="$('#modalSearch').modal('show')" class="btn btn-warning"><i class="fa fa fa-search"></i></button>
                         </div>
                     </div>
 
@@ -251,19 +252,23 @@
             </div>
             <div class="modal-body" style="height:360px;">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="overflow: auto;">
                         <table id="tblPatientInfo" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Admission Type</th>
                                     <th>Room Type</th>
                                     <th>room Full Name</th>
-                                    <th>Room Billing Category</th>
+                                    <th>Billing Category</th>
+                                    <th>Mobile No</th>
+                                    <th>Attendant Mobile</th>
                                     <th>MLC Type</th>
                                     <th>Ref Name</th>
                                     <th>Patient Type</th>
                                     <th>Policy No</th>
                                     <th>Source Name</th>
+                                    <th>Admitted Date</th>
+                                    <th>Admitted By</th>
                                     <th>Discharge Date</th>
                                     <th>Discharge By</th>
                                 </tr>
@@ -274,6 +279,46 @@
                     <p class="text-center">
                         <button class="btn btn-warning btnRC" onclick="Receipt_IPDDischargeReport()" id="btnPrintBill"><i class="fa fa-print">&nbsp;</i>Discharge Summary</button>
                     </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-top:10%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;">
+                <h5 class="text-white">Patient Seach</h5>
+                <span data-dismiss="modal" class="btn-close">x</span>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>From</label>
+                        <div style="display:flex">
+                            <input type="date" id="txtFilterFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label>To</label>
+                        <div style="display:flex">
+                            <input type="date" id="txtFilterTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Patient Name</label>
+                        <div style="display:flex">
+                            <input type="text" id="txtPatientName" class="form-control" />
+                            <button style="width:40%;height:27px" class="btn bg-blue bn" onclick="AdmittedPatientList('PatientInfoByPatientName')"><i class="fa fa fa-search">&nbsp;</i>Search</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label>UHID</label>
+                        <div style="display:flex">
+                            <input type="text" id="txtUHID" class="form-control" />
+                            <button style="width:40%;height:27px" class="btn bg-blue bn" onclick="AdmittedPatientList('PatientInfoByUHID')"><i class="fa fa fa-search">&nbsp;</i>Search</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
         dataSet dsResult = new dataSet();
         string _Deptname = string.Empty;
         string _IsNABL = string.Empty;
-        string _PrintWithHeader = "N";
+        public string _PrintWithHeader = "N";
         List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
         public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic)
         {
@@ -457,10 +457,9 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             string t = b.ToString();
             return b.ToString();
         }
-        private string GetHeaderHTML(string DepartmentName, DataSet ds,string IsNABL)
+        public string GetHeaderHTML(string DepartmentName, DataSet ds,string IsNABL)
         {
-            _PrintWithHeader = "N";
-            StringBuilder h = new StringBuilder();
+           StringBuilder h = new StringBuilder();
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)

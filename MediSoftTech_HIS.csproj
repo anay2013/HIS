@@ -291,7 +291,6 @@
     <Content Include="Areas\IPD\JsModule\BillingView\_BillingCategoryUpdate.js" />
     <Content Include="Areas\IPD\JsModule\BillingView\_BillingClearance.js" />
     <Content Include="Areas\IPD\JsModule\BillingView\_BillingFinalization.js" />
-    <Content Include="Areas\IPD\JsModule\BillingView\_BillingInfo - Copy.js" />
     <Content Include="Areas\IPD\JsModule\BillingView\_BillingInfo.js" />
     <Content Include="Areas\IPD\JsModule\BillingView\_DateWiseDetail.js" />
     <Content Include="Areas\IPD\JsModule\BillingView\_DoctorVisit.js" />
@@ -442,7 +441,6 @@
     <Content Include="Areas\Lab\JsModule\ReportResetLab.js" />
     <Content Include="Areas\Lab\JsModule\Report\InvestigationReport.js" />
     <Content Include="Areas\Lab\JsModule\Report\LabWorkBook.js" />
-    <Content Include="Areas\Lab\JsModule\Report\ReportEditing.js" />
     <Content Include="Areas\Lab\JsModule\Report\TestTracking.js" />
     <Content Include="Areas\Lab\JsModule\Report\TextReportEditing.js" />
     <Content Include="Areas\Lab\JsModule\SampleCollection.js" />
@@ -499,6 +497,8 @@
     <Content Include="Areas\MenuMaster\Views\Master\GroupMenuAllotment.cshtml" />
     <Content Include="Areas\MenuMaster\Views\Master\MenuAllotmentMaster.cshtml" />
     <Content Include="Areas\MenuMaster\Views\web.config" />
+    <Content Include="Areas\MIS\JsModule\CancelRefundApproval.js" />
+    <Content Include="Areas\MIS\JsModule\DiscountApproval.js" />
     <Content Include="Areas\MIS\JsModule\Finance\BugAudit.js" />
     <Content Include="Areas\MIS\JsModule\Finance\DailyCollectionReport.js" />
     <Content Include="Areas\MIS\JsModule\Finance\DailyWorkReport.js" />
@@ -813,6 +813,8 @@
     <Content Include="Areas\OPD\Views\Appointment\MedicalCertificate.cshtml" />
     <Content Include="Areas\IPD\Views\NursingView\_InvestigationTracking.cshtml" />
     <Content Include="Areas\OT\Views\OT\PACReport.cshtml" />
+    <Content Include="Areas\MIS\Views\MISReport\DiscountApproval.cshtml" />
+    <Content Include="Areas\MIS\Views\MISReport\CancelRefundApproval.cshtml" />
     <None Include="Connected Services\LISProxy\configuration91.svcinfo" />
     <None Include="Connected Services\LISProxy\configuration.svcinfo" />
     <None Include="Connected Services\LISProxy\Reference.svcmap">
@@ -1267,6 +1269,7 @@
     <Content Include="Content\css\element.css" />
     <Content Include="Content\css\fix-table.css" />
     <Content Include="Content\css\helper.css" />
+    <Content Include="Content\css\hover.css" />
     <Content Include="Content\css\jquery-ui.css" />
     <Content Include="Content\css\MenuMaster.css" />
     <Content Include="Content\css\multiselect.css" />
@@ -1992,6 +1995,7 @@
     <Compile Include="Areas\Assets\Controllers\AssetExcelController.cs" />
     <Compile Include="Areas\BloodBank\BloodBankAreaRegistration.cs" />
     <Compile Include="Areas\BloodBank\Controllers\BloodBankController.cs" />
+    <Compile Include="Areas\BloodBank\Controllers\PrintBloodController.cs" />
     <Compile Include="Areas\Commission\CommissionAreaRegistration.cs" />
     <Compile Include="Areas\Commission\Controllers\ShareController.cs" />
     <Compile Include="Areas\Corporate\Controllers\PanelController.cs" />

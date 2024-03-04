@@ -152,84 +152,104 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
                 b.Append("<div style='width:100%;float:left;font-size:15px;padding:2px 0;line-height:18px;height:auto;border:1px solid #000;'>");
 
-                b.Append("<div style='width:100%;float:left;'>");
-                b.Append("<div style='width:38%;padding:3px;float:left;'>");
-                b.Append("<label style='font-size:13px'><b>Patient Name : </b> " + dr["PatientName"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:59%;padding:2px;float:right;'>");
-                b.Append("<label><b>Hospital : </b></label>");
-                b.Append("<label style='white-space:pre;padding:3px;font-size:12px'>CHANDAN HOSPITAL (Private) Reg. No. 0915700044</label>");
-                b.Append("&nbsp;<label style='white-space:pre;padding:3px'><b>Other : </b> OPD</label>");
-                b.Append("</div>");
-                b.Append("</div>");
+                b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>Hospital</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:60%'>CHANDAN HOSPITAL (Private) Reg. No. 0915700044</td>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:10%'><b>Other</b></td>");
+                b.Append("<td style='width:6%;text-align:right;'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:8%'>" + dr["IPOPType"].ToString() + "</td>");
 
-                b.Append("<div style='width:100%;float:left;'>");
-                b.Append("<div style='width:17%;padding:3px;float:left;'>");
-                b.Append("<label><b>Age : </b> " + dr["ageInfo"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:17%;padding:3px;float:left;'>");
-                b.Append("<label><b>Gender : </b> " + dr["Gender"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:63%;padding:2px;float:right;'>");
-                b.Append("<label><b>Address : </b>" + dr["address"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("</div>");
+                b.Append("</tr>");
+                b.Append("</table>");
+                b.Append("<table style='width:100%;font-size:15px;text-align:left;margin-top:2%'>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>Patient Name</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:29%'>" + dr["PatientName"].ToString() + "</td>");
 
-                b.Append("<div style='width:100%;float:left;'>");
-                b.Append("<div style='width:24%;padding:3px;float:left;'>");
-                b.Append("<label><b>UHID : </b> " + dr["UHID"].ToString() + "</ label>");
-                b.Append("</div>");
-                b.Append("<div style='width:24%;padding:3px;float:left;'>");
-                b.Append("<label><b>IPD No. : </b> " + dr["IPOPNo"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:24%;padding:3px;float:left;'>");
-                b.Append("<label><b>Ward : </b> " + dr["RoomType"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:24%;padding:3px;float:left;'>");
-                b.Append("<label><b>Bed : </b> " + dr["BedNo"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("</div>");
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>Age</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:14%'>" + dr["ageInfo"].ToString() + "</td>");
 
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>Gender</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:14%'>" + dr["Gender"].ToString() + "</td>");
+                b.Append("</tr>");
+
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>UHID</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:30%'>" + dr["UHID"].ToString() + "</td>");
+
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>IPD No.</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:15%'>" + dr["IPOPNo"].ToString() + "</td>");
+
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>RoomWard</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:15%'>" + dr["RoomType"].ToString() + "</td>");
+                b.Append("</tr>");
+
+                b.Append("<tr style='padding:3px;' colspan='6'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>Address</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:30%'>" + dr["address"].ToString() + "</td>");
+
+                b.Append("</tr>");
+                b.Append("</table>");
                 b.Append("</div>");
 
                 b.Append("<div style='width:100%;float:left;font-size:15px;padding:2px 0;line-height:18px;height:auto;margin-top:15px;border:1px solid #000;'>");
 
-                b.Append("<div style='width:100%;float:left;'>");
-                b.Append("<div style='width:45%;padding:3px;float:left;'>");
-                b.Append("<label><b>Consultant : </b> " + dr["Consultant"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:52%;padding:2px;float:right;'>");
-                b.Append("<label><b>Diagnosis : </b> " + dr["Diagnosis"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("</div>");
+                b.Append("<table style='width:100%;font-size:15px;text-align:left;'>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:25%'><b>Consultant</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:24%'>" + dr["Consultant"].ToString() + "</td>");
 
-                b.Append("<div style='width:100%;float:left;'>");
-                b.Append("<div style='width:80%;padding:3px;float:left;'>");
-                b.Append("<label><b>Indication for Transfusion : </b> " + dr["TransfusionIndicator"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:17%;padding:2px;float:right;'>");
-                b.Append("<label><b>Hb % : </b> " + dr["HbPerc"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("</div>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:25%'><b>Diagnosis</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:14%'>" + dr["Diagnosis"].ToString() + "</td>");
 
-                b.Append("<div style='width:100%;float:left;font-size:13px'>");
-                b.Append("<div style='width:20%;padding:3px;float:left;'>");
-                b.Append("<label><b>Previous Transfusion : </b> " + dr["PreviousTransfusion"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:13%;padding:2px;float:left;'>");
-                b.Append("<label><b>Donor No : </b> " + dr["DonorNo"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:13%;padding:2px;float:left;'>");
-                b.Append("<label><b>ABO Rh : </b> " + dr["AboRH"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:21%;padding:2px;float:left;'>");
-                b.Append("<label><b>Date Transfused : </b>" + dr["dateTransfuse"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("<div style='width:30%;padding:2px;float:right;'>");
-                b.Append("<label><b>Reaction if any : </b> " + dr["ReactionAny"].ToString() + "</label>");
-                b.Append("</div>");
-                b.Append("</div>");
+                b.Append("</tr>");
 
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:25%'><b>Indication for Transfusion</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:24%'>" + dr["TransfusionIndicator"].ToString() + "</td>");
+
+                b.Append("<td style='text-align:left;font-weight:bold; width:25%'><b>Hb %</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:14%'>" + dr["HbPerc"].ToString() + "</td>");
+                b.Append("</tr>");
+
+                b.Append("<tr style='padding:3px;' colspan='3'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>Previous Transfusion</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:30%'>" + dr["PreviousTransfusion"].ToString() + "</td>");
+                b.Append("</tr>");
+                b.Append("</table>");
+                b.Append("<table style='width:100%;font-size:15px;text-align:left;'>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:10%'><b>Donor No </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:10%'>" + dr["DonorNo"].ToString() + "</td>");
+
+                b.Append("<td style='text-align:left;font-weight:bold; width:10%'><b>ABO Rh </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:10%'>" + dr["AboRH"].ToString() + "</td>");
+
+                b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>Date Transfused </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:13%'>" + dr["dateTransfuse"].ToString() + "</td>");
+
+                b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>Reaction if any  </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left; width:13%'>" + dr["ReactionAny"].ToString() + "</td>");
+                b.Append("</tr>");
+                b.Append("</table>");
                 b.Append("</div>");
                 if (dr["IsPregnant"].ToString() == "Y")
                 {
@@ -296,78 +316,67 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 b.Append("</div>");
                 b.Append("</div>");
 
+
                 b.Append("<label style='margin-top:15px;width:100%;float:left;padding:3px;text-align:center'><b>TO BE FILLED BY DEPARTMENT OF TRANSFUSION MEDICINE</b></label>");
 
                 b.Append("<div style='width:100%;float:left;font-size:15px;padding:5px 0;line-height:18px;height:auto;margin-top:5px;border:1px solid #000;'>");
-                b.Append("<div style='width:100%;float:left;font-size:14px'>");
 
-                b.Append("<div style='width:25%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Booking No :</b></label>");
-                b.Append("<label style='padding:3px 50px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
+                b.Append("<table style='width:100%;font-size:15px;text-align:left;'>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:18%'><b>Booking No</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%'></td>");
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%;margin-left:5px'><b>Date</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%'></td>");
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%;margin-left:5px'><b>Time</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%'></td>");
+                b.Append("</tr>");
+                b.Append("</table>");
 
-                b.Append("<div style='width:20%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Date :</b></label>");
-                b.Append("<label style='padding:3px 50px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
+                b.Append("<table style='width:100%;font-size:15px;text-align:left;'>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:25%'><b>Blood Group (ABO & Rh) </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:74%'></td>");
+                b.Append("</tr>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:25%'><b>Mode of Adjustment </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:74%'></td>");
+                b.Append("</tr>");
 
-                b.Append("<div style='width:18%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Time :</b></label>");
-                b.Append("<label style='padding:3px 40px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
+                b.Append("</table>");
+                b.Append("<table style='width:100%;font-size:15px;text-align:left;'>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:18%; margin-left:2px'><b>Issue on date</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%;'></td>");
 
-                b.Append("<div style='width:35%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Blood Group (ABO & Rh) :</b></label>");
-                b.Append("<label style='padding:3px 40px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%; margin-left:2px'><b>Booking No </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;2px;width:16%'></td>");
 
-                b.Append("</div>");
+                b.Append("<td style='text-align:left;font-weight:bold;width:15% margin-left:2px'><b>Donor No</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%'></td>");
+                b.Append("</tr>");
 
-                b.Append("<div style='width:100%;float:left;font-size:14px'>");
-                b.Append("<div style='width:97%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Mode of Adjustment :</b></label>");
-                b.Append("<label style='padding:3px 300px;height:16px;border:1px solid #000;'></label>");
-                b.Append("</div>");
-                b.Append("</div>");
+                b.Append("<tr style='padding:3px;'>");
+                b.Append("<td style='text-align:left;font-weight:bold; width:18%'><b>Amount Collected </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%'></td>");
 
-                b.Append("<div style='width:100%;float:left;font-size:14px'>");
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>Bill No </b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%'></td>");
 
-                b.Append("<div style='width:32%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Issue on date :</b></label>");
-                b.Append("<label style='padding:3px 50px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
-
-                b.Append("<div style='width:32%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Booking No :</b></label>");
-                b.Append("<label style='padding:3px 50px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
-
-                b.Append("<div style='width:32%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Donor No :</b></label>");
-                b.Append("<label style='padding:3px 40px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
-
-                b.Append("</div>");
-
-                b.Append("<div style='width:100%;float:left;font-size:14px'>");
-
-                b.Append("<div style='width:32%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Amount Collected :</b></label>");
-                b.Append("<label style='padding:3px 50px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
-
-                b.Append("<div style='width:32%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Bill No :</b></label>");
-                b.Append("<label style='padding:3px 50px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
-
-                b.Append("<div style='width:32%;padding:2px;float:left;display:flex;margin-top:4px'>");
-                b.Append("<label><b>Bill Date :</b></label>");
-                b.Append("<label style='padding:3px 40px;height:16px;border:1px solid #000;margin-left:2px'></label>");
-                b.Append("</div>");
-
-                b.Append("</div>");
-
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>Bill Date</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='height:15px;border:1px solid #000;width:16%'></td>");
+                b.Append("</tr>");
+                b.Append("</table>");
                 b.Append("</div>");
                 b.Append("<label style='width:100%;font-size:13px;float:left;padding:3px;text-align:left;margin-top:10px'><b>NOTE : ALL FIELDS MUST BE FILLED. PLEASE WRITE N/A WHERE NOT APPLICABLE.</b></label>");
 
@@ -697,10 +706,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "StaffAlloted.pdf");
         }
-        public FileResult IPDBillSummary(string _IPDNo, string _ReceiptList, string _BillPrintType)
+        public FileResult IPDBillSummary(string _IPDNo, string _ReceiptList, string _BillPrintType, string ExcludeAdlItemDiscount)
         {
             IPDBillPrint obj = new IPDBillPrint();
-            return  obj.PrintBill(_IPDNo, _ReceiptList, _BillPrintType);
+            return obj.PrintBill(_IPDNo, _ReceiptList, _BillPrintType, ExcludeAdlItemDiscount);
         }
         public FileResult IPDBillSummary2(string _IPDNo, string _ReceiptList, string _BillPrintType)
         {
@@ -1379,6 +1388,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             string BillDate = "";
             string ContactNo = "";
             string DischargeType = "";
+            string DischargeHeader = "";
+
             string Address = "";
 
             foreach (DataRow dr in ds.Tables[0].Rows)
@@ -1398,6 +1409,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 DischargeType = dr["DischargeType"].ToString();
                 ContactNo = dr["ContactNo"].ToString();
                 Address = dr["Address"].ToString();
+                DischargeHeader = dr["DischargeReportHeader"].ToString();
             }
             h.Append("<div style='height:320px;border-bottom:1px solid #000'></div>");
             h.Append("<table style='width:2080px;padding:10px 0;background:#fff;font-size:42px;text-align:left;border:1px solid #000;margin:0 15px'>");
@@ -1435,7 +1447,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
             b.Append("<div style='height:110px;'></div>");
 
-            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>IPD Discharge Report</h2>");
+            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + DischargeHeader + "</h2>");
             b.Append("<table style='padding:10px 0;background:#fff;width:100%;font-size:15px;text-align:left;border:1px solid #000;margin-bottom:-15px;margin-top:0'>");
             b.Append("<tr>");
             b.Append("<td style='width:17%;padding:3px;'><b>UHID</b></td>");

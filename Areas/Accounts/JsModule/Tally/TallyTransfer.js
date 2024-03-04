@@ -95,7 +95,8 @@ function VoucherForSync(VoucherNo, elem) {
 	var count = 0;
 	var url = config.baseUrl + "/api/Account/Tally_VoucherForSync";
 	var objBO = {};
-	objBO.VoucherNo = VoucherNo;
+    objBO.VoucherNo = VoucherNo;
+    objBO.LoginId = Active.userId;
 	objBO.Logic = 'Tally:VoucherForSync';
 	$.ajax({
 		method: "POST",

@@ -7,6 +7,10 @@
 }
 <script src="~/Areas/Lab/JsModule/Report/TextReportEditing.js"></script>
 <style>
+    .custom-table span {
+        font-weight: bold;
+    }
+
     .flex {
         display: flex;
     }
@@ -195,9 +199,16 @@
                                             <option>OPD</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-6" style="padding:0 3px">
+                                    <div class="col-md-8" style="padding:0 3px">
 
-                                        <select class="form-control" id="ddldepartment" style="padding:7px">
+                                        <select class="form-control" id="ddldepartment" onchange="GetTestNameByDept()" style="padding:7px">
+                                            <option>ALL</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin:5px 0">
+                                    <div class="col-md-10" style="padding:0">
+                                        <select class="form-control" id="ddlTest" style="padding:7px">
                                             <option>ALL</option>
                                         </select>
                                     </div>

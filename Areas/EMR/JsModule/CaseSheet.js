@@ -124,6 +124,10 @@ function ViewPatient(elem) {
         var FilePath = info.FilePath + "?v=" + date.getMilliseconds();
         $("#filePath").prop('src', FilePath);
     }
+    else {
+        var FilePath = info.FilePath + "?v=" + date.getMilliseconds();
+        $("#filePath").prop('src', FilePath);
+    }
 }
 function readURL(input) {
     if (input.files && input.files[0]) {

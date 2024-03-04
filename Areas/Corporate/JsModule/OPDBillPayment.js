@@ -82,7 +82,7 @@ function BalanceInfo(logic) {
                                 tbody += '<tr>';
                                 tbody += '<td><input onchange=selectBill(this) type="checkbox"/></td>';
                             }
-                            tbody += '<td>' + val.OPD_ClaimNo + '</td>';
+                            tbody += '<td>' + val.ClaimNo + '</td>';
                             tbody += '<td>' + val.BillNo + '</td>';
                             tbody += '<td>' + val.IPDNo + '</td>';
                             tbody += '<td>' + val.patient_name + '</td>';

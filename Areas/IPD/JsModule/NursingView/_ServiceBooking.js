@@ -4,10 +4,18 @@
             e.preventDefault();
         }
     }, false);
+    FillCurrentDate('txtFromSearch')
+    FillCurrentDate('txtToSearch')    
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')
     $('select').select2();
     BookingInfoByIPDNo();
+    $('#tblServiceBookingInfo tbody').on('mouseover', '.entryBy', function () {
+        var entryBy = '<b>Entry By : </b>' + $(this).data('entryby');
+        $(this).siblings('span').html(entryBy).show('fast');
+    }).on('mouseleave', '.entryBy', function () {
+        $(this).siblings('span').empty().hide('fast');
+    });
     searchTable('txtFilterSearch', 'tblItemInfo');
     $('#dash-dynamic-section').find('label.title').text('Patient Service Booking').show();
     GetCategory();
@@ -79,6 +87,7 @@
         $(this).closest('tr').addClass('selected');
         $("#txtDBSearch").focus();
     });
+    LockPrvDate() 
 });
 function searchTable12(txt, tbl) {
     $('#' + txt).on('keyup', function () {
@@ -87,6 +96,18 @@ function searchTable12(txt, tbl) {
             alert($(this).text().toLocaleLowerCase().indexOf(val) > -1);
         });
     });
+   
+}
+function LockPrvDate() {
+    var date = new Date(sessionStorage.getItem('ServerTodayDate'))
+    date.setDate(date.getDate()-2)
+    var day = date.getDate();
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+    var today = year + "-" + month + "-" + day;
+    $("#txtFromSearch,#txtToSearch").attr("min", today);
 }
 function GetBookingDetails() {
     _itemId = $('#tblItemInfo tbody').find('tr.selected').find('td:eq(0)').text();
@@ -236,7 +257,7 @@ function FilterData(data) {
     $('#tblItemInfo tbody').append(tbody);
 }
 function BookingInfo() {
-    // $('#tblBookingInfo tbody').empty();
+    //$('#tblBookingInfo tbody').empty();
     var url = config.baseUrl + "/api/IPDNursingService/pIPD_ItemsRate";
     var objBO = {};
     objBO.hosp_id = Active.HospId;
@@ -245,12 +266,14 @@ function BookingInfo() {
     objBO.DoctorId = $("#ddlDoctor option:selected").val();
     objBO.PanelId = _panelId;
     objBO.CPT_Code = '';
+    objBO.from = $("#txtFromSearch").val();
+    objBO.to = $("#txtToSearch").val();
     objBO.RoomBillingCategory = _RoomBillingCategory;
     objBO.SearchType = 'ByCPTCode';
     objBO.ItemIds = _itemId;
     objBO.Qty = 1;
     objBO.login_id = Active.userId;
-    objBO.Logic = "BookingInfo";
+    objBO.Logic = "FromBilling";
     $.ajax({
         method: "POST",
         url: url,
@@ -270,8 +293,10 @@ function BookingInfo() {
                             tbody += "<td style='display:none'>" + val.ItemId + "</td>";
                             tbody += "<td>" + counter + "</td>";
                             tbody += "<td>" + val.ItemName + "</td>";
+                            tbody += "<td>" + val.EntryDate + "</td>";
                             tbody += "<td><input type='text' style='width:80%;height: 17px;' class='form-control text-right' value='1'/></td>";
                             tbody += "<td><input type='checkbox'/></td>";
+                            tbody += "<td><input type='text' class='form-control remark'/></td>";
                             tbody += "<td><button style='height: 15px;line-height:0;' onclick=$(this).closest('tr').remove() class='btn btn-danger btn-xs'><i class='fa fa-remove'></i></button></td>";
                             tbody += "</tr>";
                             count++;
@@ -302,8 +327,8 @@ function BookingInfoByIPDNo() {
     objBO.IPDNo = _IPDNo;
     objBO.Floor = '';
     objBO.PanelId = '';
-    objBO.from = $('#txtFrom').val();
-    objBO.to = $('#txtTo').val();
+    objBO.from = $('#txtFromSearch').val();
+    objBO.to = $('#txtToSearch').val();
     objBO.Prm1 = '';
     objBO.Prm2 = '';
     objBO.login_id = Active.userId;
@@ -338,13 +363,11 @@ function BookingInfoByIPDNo() {
                         tbody += "<td style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</td>";
                         tbody += "<td>" + counter + "</td>";
                         tbody += "<td>" + val.tnxDate + "</td>";
-                        tbody += "<td>" + val.ItemId + "</td>";
+                        tbody += "<td>" + val.ItemId + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "'></i><span class='entryByName'></span></td>";
                         tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td>" + val.Qty + "</td>";
                         tbody += "<td>" + val.SubCatName + "</td>";
-
                         tbody += "<td>" + val.DoctorName + "</td>";
-                        tbody += "<td><button style='height: 15px;line-height:0;' class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i>Track Status</button></td>";
                         tbody += "</tr>";
                         count++;
                     });
@@ -364,6 +387,7 @@ function ItemInsert() {
     $('#tblBookingInfo tbody tr').each(function () {
         var Info = JSON.parse($(this).find('td:eq(0)').text());
         objRateList.push({
+            'EntryDateTime': Info.EntryDate,
             'AutoId': 0,
             'TnxId': '-',
             'RateListId': Info.RateListId,
@@ -375,15 +399,15 @@ function ItemInsert() {
             'IsRateEditable': Info.IsRateEditable,
             'IsPatientPayable': 'N',
             'IsDiscountable': Info.IsDiscountable,
-            'qty': $(this).find('td:eq(4)').find('input:text').val(),
+            'qty': $(this).find('td:eq(5)').find('input:text').val(),
             'mrp_rate': Info.mrp_rate,
             'panel_rate': Info.panel_rate,
             'panel_discount': Info.panel_discount,
             'adl_disc_perc': 0,
             'adl_disc_amount': 0,
             'net_amount': parseFloat(Info.panel_rate) - parseFloat(Info.panel_discount),
-            'IsUrgent': ($(this).find('td:eq(5)').find('input:checkbox').is(':checked')) ? 'Y' : 'N',
-            'Remark': Info.Remark,
+            'IsUrgent': ($(this).find('td:eq(6)').find('input:checkbox').is(':checked')) ? 'Y' : 'N',
+            'Remark': $(this).find('td:eq(7)').find('input:text').val(),
             'TaxRate': Info.TaxRate,
             'TaxAmt': 0
         });

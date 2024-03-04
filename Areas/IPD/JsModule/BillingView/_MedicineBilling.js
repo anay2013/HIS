@@ -193,6 +193,7 @@ function ItemInsert() {
             if (data.includes('Success')) {
                 alert(data);
                 $('#tblIPDInfo tbody').find('input[type=checkbox]').prop('checked', false);
+                IPDSalebyIPDNo()
             }
             else {
                 alert(data);

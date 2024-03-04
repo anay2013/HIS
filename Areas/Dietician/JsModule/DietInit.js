@@ -64,10 +64,10 @@ function GetDietType() {
 }
 function GetPatientDetails() {
     $('#IPDPatientList').empty();
-    var url = config.baseUrl + "/api/Dietician/PatientListForDietInit";
+    var url = config.baseUrl + "/api/Dietician/diet_DiticianQueries";
     var objBO = {};
     objBO.login_id = Active.userId;
-    objBO.Logic = 'GetIPDInfo';
+    objBO.Logic = 'GetPatientInfoForInit';
     $.ajax({
         method: "POST",
         url: url,
@@ -75,25 +75,24 @@ function GetPatientDetails() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            console.log(data)
             var count = 0;
             var html = ""; var room = []; var roomType = [];
-            $.each(data.Table1, function (key, val) {
+            $.each(data.ResultSet.Table, function (key, val) {
                 var r = val.RoomName.split('/');
-                room.push(r[3]);
+                room.push(r.pop());
                 roomType.push(val.RoomType);
 
-                html += "<div  class='section' data-ipd='" + val.IPDNO + "' data-name='" + val.PName + "' data-roomtype='" + val.RoomType + "' data-floor='" + r[3] + "'>";
-                html += "<label style='display:none'>" + JSON.stringify(data.Table1[count]) + "</label>";
+                html += "<div  class='section' data-ipd='" + val.IPDNo + "' data-name='" + val.PatientName + "' data-roomtype='" + val.RoomType + "' data-floor='" + r[3] + "'>";
+                html += "<label style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</label>";
                 html += "<table class='table'>";
                 html += "<tr>";
                 html += "<th>IPD No</th>";
                 html += "<th>:</th>";
-                html += "<td>" + val.IPDNO + "</td>";
+                html += "<td>" + val.IPDNo + "</td>";
                 html += "<th>&nbsp</th>";
                 html += "<th>Patient Name</th>";
                 html += "<th>:</th>";
-                html += "<td>" + val.PName + "</td>";
+                html += "<td>" + val.PatientName + "</td>";
                 html += "</tr>";
                 html += "<tr>";
                 html += "<th>Age</th>";
@@ -108,19 +107,17 @@ function GetPatientDetails() {
                 html += "<tr>";
                 html += "<th>Admitted Under</th>";
                 html += "<th>:</th>";
-                html += "<td colspan='5'>" + val.DName + "</td>";
+                html += "<td colspan='5'>" + val.DoctorName + "</td>";
                 html += "</tr>";
                 html += "<tr>";
                 html += "<th>Admit Date</th>";
                 html += "<th>:</th>";
-                html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1><span2 style='display:none'>" + val.DoctorId + "</span2><span3 style='display:none'>" + val.Floor + "</span3>";
+                html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1><span2 style='display:none'>" + val.DoctorId + "</span2><span3 style='display:none'>" + val.FloorName + "</span3>";
                 html += "<span class='text-right' style='margin: -4px 0;float:right'>";
-                if (!_isContains(data.Table2, val.IPDNO))
-                    html += "<button class='btn btn-warning btn-xs pull-right' onclick=PatientInfo(this)><i class='fa fa-eye'>&nbsp;</i>View Info</button>";
-                else
-                    html += "<button class='btn btn-success btn-xs pull-right' onclick=PatientInfo(this)><i class='fa fa-eye'>&nbsp;</i>View Info</button>";
 
-                html += "<button class='btn btn-warning btn-xs pull-right' data-ipd='" + val.IPDNO + "' onclick=RemarkInit(this)><i class='fa fa-sticky-note-o'>&nbsp;</i>Note</button>";
+                html += "<button class='btn btn-success btn-xs pull-right' onclick=PatientInfo(this)><i class='fa fa-eye'>&nbsp;</i>View Info</button>";
+
+                html += "<button class='btn btn-warning btn-xs pull-right' data-ipd='" + val.IPDNo + "' onclick=RemarkInit(this)><i class='fa fa-sticky-note-o'>&nbsp;</i>Note</button>";
                 html += "</span>";
                 html += "</td>";
                 html += "</tr>";
@@ -260,22 +257,22 @@ function PatientInfo(elem) {
     $(elem).parents('#IPDPatientList').find('.section*').removeClass('selected');
     $(elem).parents('.section').addClass('selected');
     var patientInfo = JSON.parse($(elem).parents('.section').find('label').text());
-    $('#txtUHID').text(patientInfo.Patient_ID);
-    $('#txtIPDNo').text(patientInfo.IPDNO);
+    $('#txtUHID').text(patientInfo.UHID);
+    $('#txtIPDNo').text(patientInfo.IPDNo);
     $('#txtAdmitDate').text(patientInfo.AdmitDate);
-    $('#txtPatientName').text(patientInfo.PName);
+    $('#txtPatientName').text(patientInfo.PatientName);
     $('#txtGender').text(patientInfo.Gender);
     $('#txtContactNo').text(patientInfo.Mobile);
-    $('#txtAge').text(patientInfo.Age.split(' ')[0]);
-    $('#txtAgeType').text(patientInfo.Age.split(' ')[1]);
-    $('#txtDoctorName').text(patientInfo.DName);
+    $('#txtAge').text(patientInfo.Age);
+    $('#txtAgeType').text(patientInfo.ageType);
+    $('#txtDoctorName').text(patientInfo.DoctorName);
     $('#txtDoctorId').text(patientInfo.DoctorId);
-    $('#txtFloorName').text(patientInfo.Floor);
+    $('#txtFloorName').text(patientInfo.FloorName);
     $('#txtRoomType').text(patientInfo.RoomType);
-    $('#txtRoomNo').text(patientInfo.BedNo.split('/')[0]);
-    $('#txtBedNo').text(patientInfo.BedNo.split('/')[1]);
+    $('#txtRoomNo').text(patientInfo.RoomNo);
+    $('#txtBedNo').text(patientInfo.BedNo);
 
-    GetPatientDataFromChandanServerSide(patientInfo.IPDNO);
+    GetPatientDataFromChandanServerSide(patientInfo.IPDNo);
 }
 
 function GetPatientDataFromChandanServerSide(IPDNo) {

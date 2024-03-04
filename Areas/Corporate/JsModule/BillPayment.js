@@ -105,7 +105,7 @@ function BalanceInfo(logic) {
                             tbody += '<tr>';
                             tbody += '<td><input onchange=selectBill(this) type="checkbox"/></td>';
                         }
-                     
+
                         tbody += '<td>' + val.BillNo + '</td>';
                         tbody += '<td>' + val.ClaimNo + '</td>';
                         tbody += '<td>' + val.IPDNo + '</td>';
@@ -138,8 +138,14 @@ function selectBill(elem) {
     var admitDate = $(elem).closest('tr').find('td:eq(6)').text();
     var dischargeDate = $(elem).closest('tr').find('td:eq(7)').text();
     var Receivable = $(elem).closest('tr').find('td:eq(10)').text();
-
+    var duplicateInsuranceId = [];
+    $("#tblSelectBillingInfo tbody tr").each(function () { duplicateInsuranceId.push($(this).find('td:last').text()) });
     var InsuranceId = $(elem).closest('tr').find('td:eq(12)').text();
+    if (duplicateInsuranceId.length > 0 && $.inArray(InsuranceId, duplicateInsuranceId) == -1) {
+        alert('Same Insurance Company Allowed!')
+        $(elem).prop('checked', false)
+        return
+    }
     var isCheck = $(elem).is(':checked');
     if (isCheck) {
         var tbody = "";
@@ -211,7 +217,7 @@ function IPD_BillPayment(elem) {
             alert('Please Choose File')
             return
         }
-        $(elem).addClass('loading');
+        $(elem).addClass('button-loading');
         if ($('#tblSelectBillingInfo tbody tr').length < 1) {
             alert('Please Select Bill');
             return
@@ -272,7 +278,6 @@ function IPD_BillPayment(elem) {
                 'Logic': 'PayBill'
             });
         });
-        debugger
         var UploadDocumentInfo = new XMLHttpRequest();
         var data = new FormData();
         data.append('obj', JSON.stringify(objBO));
@@ -286,11 +291,15 @@ function IPD_BillPayment(elem) {
                         alert('Successfully Uploaded..!');
                         //var FilePath = json.split('|')[1] + "?v=" + date.getMilliseconds();
                         //window.open(FilePath, '_blank');
-                        $(elem).removeClass('loading');
+                        $('.colnospace select').prop('selectedIndex', '0').trigger('select2.change()');
+                        $('#txtReferenceNo, #txtTotalReceivable,#txtTotalBadDebt,#txtRemark').val('');
+                        $('#tblSelectBillingInfo tbody').empty();
+                        $('#tblBillingInfo tbody input:checkbox').prop('checked', false);
+                        $(elem).removeClass('button-loading');
                     }
                     else {
                         alert(json);
-                        $(elem).removeClass('loading');
+                        $(elem).removeClass('button-loading');
                     }
                 }
             }

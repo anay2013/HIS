@@ -109,7 +109,7 @@ function LabReporting(logic) {
     objBO.SubCat = $('#ddldepartment option:selected').val();
     objBO.TestCategory = '-';
     objBO.AutoTestId = 0;
-    objBO.TestCode = '-';
+    objBO.TestCode = $('#ddlTest option:selected').val();
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Logic = logic;
@@ -152,6 +152,42 @@ function LabReporting(logic) {
                         tbody += "</tr>";
                     });
                     $('#tblReport tbody').append(tbody);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function GetTestNameByDept() {
+    $('#ddlTest').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";
+    var objBO = {};
+    objBO.LabCode = Active.HospId;
+    objBO.IpOpType = '-';
+    objBO.ReportStatus = '-';
+    objBO.VisitNo = '-';
+    objBO.BarccodeNo = '-';
+    objBO.SubCat = $('#ddldepartment option:selected').val();
+    objBO.TestCategory = '-';
+    objBO.AutoTestId = 0;
+    objBO.TestCode = '-';
+    objBO.from = $('#txtFrom').val();
+    objBO.to = $('#txtTo').val();
+    objBO.Logic = 'GetTestNameByDept';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlTest').append($('<option></option>').val(val.testcode).html(val.TestName));
+                    });
                 }
             }
         },

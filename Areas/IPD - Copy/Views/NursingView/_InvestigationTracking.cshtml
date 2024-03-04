@@ -1,0 +1,93 @@
+﻿<script src="~/Areas/IPD/JsModule/NursingView/_InvestigationTracking.js"></script>
+
+<style>
+    /*.custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }*/
+    .example-box-wrapper {
+        margin: 10px 10px;
+    }
+    .selected {
+        background: DodgerBlue !important;
+        color: #fff;
+    }
+
+    .panel-body {
+        padding: 15px 15px 0px 20px;
+        position: relative;
+    }
+
+    hr {
+        /*margin-top: 35px;*/
+        margin-bottom: -10px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .example-box-wrapper {
+        margin: 10px 10px;
+    }
+
+    #tblInvestigationTracking thead th {
+        color: #fff;
+        background: #2478a9;
+        font-size: 13px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+
+    #tblInvestigationTracking tbody td {
+        font-size: 12px;
+        font-weight: bold;
+        padding-right: 3px;
+        text-align: center;
+    }
+</style>
+<div class="example-box-wrapper">
+    <div class="row">
+        <div class="col-md-3">
+            <label>From</label>
+          <input type="date" class="form-control" id="txtfromdate" />
+        </div>
+        <div class="col-md-3">
+            <label>To</label>
+                <input type="date" class="form-control" id="txtTodate" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn-success" type="submit" id="btnSearch" style="width:45%;border:none;height:25px;margin-top: 15%;" onclick="InvestigationTracking()"><i class="fa fa-search">&nbsp;</i>Search</button>
+        </div>
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive" style="margin:0;border: 1px solid #2478a9;">
+                <table id="tblInvestigationTracking" class="table table-bordered" style="margin-bottom:20px">
+                    <thead style="background: #00a65a;color: #fff;">
+                        <tr>
+                            @*<th>VisitNo</th>*@
+                            @*<th>Date</th>*@
+                            <th style="width:9%">TestCategory</th>
+                            <th style="width:5%">ItemId</th>
+                            <th style="width:24%">ItemName</th>
+                            <th style="width:6%">SampleCode</th>
+                            <th style="width:9%">SampleInBy</th>
+                            <th style="width:9%">SampleInTime</th>
+                            <th style="width:9%">ApprovedDate</th>
+                            <th style="width:9%">ApproveBy</th>
+                            <th style="width:9%">IsLocalTest</th>
+                            <th style="width:5%">IsCancelled</th>
+                            <th style="width:5%">InOutStatus</th>
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

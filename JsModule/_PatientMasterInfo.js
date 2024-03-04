@@ -334,7 +334,7 @@ function GetBookingByAppNo(appno) {
         complete: function (response) {
             $('#ddlDoctor').prop('disabled', true).change();
             $('#txtAppointmentOn').prop('disabled', true);
-            $('input[value=Availability]').prop('disabled', true).css('background','green');
+            $('input[value=Availability]').prop('disabled', true).css('background', 'green');
             $('#txtTime').prop('disabled', true);
         },
         error: function (response) {

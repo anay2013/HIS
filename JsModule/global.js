@@ -16,6 +16,7 @@ $(document).ready(function () {
 	onlyInt();
     loading();
     voiceRecord();
+    DisableAjaxButton();
     sessionStorage.setItem('ActiveFormId', document.location.href.split('=')[1])
 	//urlEncript();
 });
@@ -53,6 +54,24 @@ function Global_DownloadExcel(Url, objBO, fileName) {
 		}
 	};
 	ajax.send(JSON.stringify(objBO));
+}
+function DisableAjaxButton() {
+    var btn = null;
+    $(document).on('click', 'button[data-ajax]', function () {
+
+        btn = $(this);
+
+        $(document).on({
+            ajaxStart: function () {
+                $('button').removeClass('button-loading');
+                $(btn).addClass('button-loading');
+            },
+            ajaxStop: function () {
+                $(btn).removeClass('button-loading');
+            }
+        });
+    });
+
 }
 function voiceRecord() {
     $('input:text').on('click', function () {

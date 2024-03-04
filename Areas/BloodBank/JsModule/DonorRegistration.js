@@ -7,8 +7,24 @@ $(document).ready(function () {
     let canvas = document.querySelector("#canvas");
     $('#ImgCaptured').hide();
     $('select').select2();
-    FillCurrentDate('txtDOB')
+    //FillCurrentDate('txtDOB')
     OnLoad();
+
+    FillCurrentDate('hiddenDOBId');
+    $('#txtDOB').on('change', function () {
+        var todayDate = new Date($('#hiddenDOBId').val());
+        var dobDate = new Date($(this).val());
+        if (dobDate > todayDate) {
+            alert('DOB should not be greater than current Date');
+            $(this).val('')
+            return
+        }
+        var currentDate = new Date().getFullYear();
+        var dob = $(this).val();
+        var year = dob.split('-');
+        var age = parseInt(currentDate) - parseInt(year[0]);
+        $('#txtAge').val(age);
+    });
 
     var toggleButton = "<button class='btn btn-warning btn-xs pull-right fullSlide'><i class='fa fa-expand'></i></button>";
     $('.section:eq(3) .title').append(toggleButton);
@@ -79,9 +95,17 @@ function OnLoad() {
 
                         Question += "<label class='hide'>" + val.QuestId + "</label>";
                         Question += "<label class='lblQuest'>" + val.Question + "</label>";
+                        var flag = (val.Flag == '1') ? 'checked' : '-';
                         if (val.QType != 'NA') {
-                            Question += "<label><input type='radio' name='" + val.QuestId + "' value='Yes' checked />&nbsp;Yes</label>";
-                            Question += "<label><input type='radio' name='" + val.QuestId + "' value='No' />&nbsp;No</label>";
+                            if (val.Flag == '1') {
+                                Question += "<label><input type='radio' name='" + val.QuestId + "' value='Yes' " + flag + " />&nbsp;Yes</label>";
+                                Question += "<label><input type='radio' name='" + val.QuestId + "' value='No' />&nbsp;No</label>";
+                            }
+                            else {
+                                Question += "<label><input type='radio' name='" + val.QuestId + "' value='Yes' />&nbsp;Yes</label>";
+                                Question += "<label><input type='radio' name='" + val.QuestId + "' value='No' checked/>&nbsp;No</label>";
+                            }
+                           
                             Question += "<label class='lblRemark'>Remark : </label>";
                             Question += "<input type='text'' class='form-control remark' placeholder='Reamrk..' />";
                         }
@@ -125,6 +149,10 @@ function OnLoad() {
     });
 }
 function SearchDonor() {
+    if ($('#txtSearchValue').val() == '') {
+        alert('Please Provide Search Value.')
+        return
+    }
     $('#tblDonorSearchInfo tbody').empty();
     var url = config.baseUrl + "/api/BloodBank/BB_SelectQueries";
     var objBO = {};
@@ -205,9 +233,10 @@ function FillFormData(elem) {
     $('#tblDonorSearchInfo tbody').empty();
     $('#txtSearchValue').val('');
 }
-function FinalSubmit() {
+function FinalSubmit(elem) {
     if (Validate()) {
         if (confirm('Are you sure?')) {
+            $(elem).addClass('button-loading');
             var url = config.baseUrl + "/api/BloodBank/SaveDonorInfo";
             var objDonorInfo = {};
             var objDonorAnswers = [];
@@ -227,6 +256,7 @@ function FinalSubmit() {
             objDonorInfo.Dlastname = $('#txtLastName').val();
             objDonorInfo.Dtbirth = $('#txtDOB').val();
             objDonorInfo.Dob = $('#txtDOB').val();
+            objDonorInfo.donor_age = $('#txtAge').val();
             objDonorInfo.Gender = $('input[name=gender]:checked').val();
             objDonorInfo.Relative_Name = $('#txtRelativeName').val();
             objDonorInfo.Relation = $('#ddlRelation option:selected').text();
@@ -251,6 +281,7 @@ function FinalSubmit() {
             objDonorInfo.isFit = $('input[name=Fit]:checked').val();
             objDonorInfo.DonationType = $('#ddlDonationType option:selected').val();
             objDonorInfo.DonorType = $('#ddlDonorType option:selected').text();
+            objDonorInfo.donate_to = $('#txtDonateTo').val();
             objDonorInfo.uhid = '-';
             objDonorInfo.Platelet = $('#txtPlateletCount').val();
             objDonorInfo.Remark = $('#txtRemark').val();
@@ -264,6 +295,7 @@ function FinalSubmit() {
             data.append('obj', JSON.stringify(objDonorInfo));
             data.append('ImageByte', objDonorInfo.Base64String);
             UploadDocumentInfo.onreadystatechange = function () {
+                $(elem).removeClass('button-loading');
                 if (UploadDocumentInfo.status) {
                     if (UploadDocumentInfo.status == 200 && (UploadDocumentInfo.readyState == 4)) {
                         var json = JSON.parse(UploadDocumentInfo.responseText);
@@ -275,9 +307,11 @@ function FinalSubmit() {
                                 $('#liveCamera').show("slide", { direction: "left" }, 500);
                             });
                             $('#liveCamera label').text('Start Camera.');
+                           
+                            Clear()
                         }
                         else {
-                            alert(json.Message);
+                            alert(json.Message);                          
                         }
                     }
                 }
@@ -286,6 +320,10 @@ function FinalSubmit() {
             UploadDocumentInfo.send(data);
         }
     }
+}
+function Clear() {
+    $('input:text').val('')
+    $('select').prop('selectedIndex', 0).trigger('select2.change');
 }
 function Validate() {
     var FirstName = $('#txtFirstName').val();
@@ -317,14 +355,14 @@ function Validate() {
     else {
         $('#txtLastName').removeAttr('style');
     }
-    if (DOB == '') {
-        alert('Please Provide DOB.');
-        $('#txtDOB').css('border-color', 'red');
-        return false;
-    }
-    else {
-        $('#txtDOB').removeAttr('style');
-    }
+    //if (DOB == '') {
+    //    alert('Please Provide DOB.');
+    //    $('#txtDOB').css('border-color', 'red');
+    //    return false;
+    //}
+    //else {
+    //    $('#txtDOB').removeAttr('style');
+    //}
     if (Age == '') {
         alert('Please Provide Age.');
         $('#txtAge').css('border-color', 'red');
@@ -397,8 +435,8 @@ function Validate() {
         $('#txtTemp').css('border-color', 'red');
         return false;
     }
-    else if (parseFloat(Temp) < 99.5) {
-        alert('Temperature should not be less then 99.5');
+    else if (parseFloat(Temp) > 99.5) {
+        alert('Temperature should not be greater than 99.5');
         $('#txtTemp').css('border-color', 'red');
         return false;
     }
@@ -418,22 +456,22 @@ function Validate() {
     else {
         $('#txtPulse').removeAttr('style');
     }
-    if (GPE == '') {
-        alert('Please Provide GPE.');
-        $('#txtGPE').css('border-color', 'red');
-        return false;
-    }
-    else {
-        $('#txtGPE').removeAttr('style');
-    }
-    if (PlateletCount == '') {
-        alert('Please Provide PlateletCount.');
-        $('#txtPlateletCount').css('border-color', 'red');
-        return false;
-    }
-    else {
-        $('#txtPlateletCount').removeAttr('style');
-    }
+    //if (GPE == '') {
+    //    alert('Please Provide GPE.');
+    //    $('#txtGPE').css('border-color', 'red');
+    //    return false;
+    //}
+    //else {
+    //    $('#txtGPE').removeAttr('style');
+    //}
+    //if (PlateletCount == '') {
+    //    alert('Please Provide PlateletCount.');
+    //    $('#txtPlateletCount').css('border-color', 'red');
+    //    return false;
+    //}
+    //else {
+    //    $('#txtPlateletCount').removeAttr('style');
+    //}
     if (Hemoglobin == 'Select') {
         alert('Please Select Hemoglobin.');
         $('span.selection').find('span[aria-labelledby=select2-ddlHemoglobin-container]').css('border-color', 'red').focus();

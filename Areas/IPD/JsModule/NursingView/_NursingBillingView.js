@@ -148,9 +148,9 @@ function ItemsInfo(cateId) {
                         tbody += "<td style='display:none'>" + val.auto_id + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td style='padding: 0 3px;'><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.Qty + "'/></td>";
-                         tbody += "<td>" + val.doctorName + "</td>";
-                        tbody += "<td>";
-                        tbody += "</td>";
+                        tbody += "<td>" + val.doctorName + "</td>";
+                        tbody += "<td>" + val.EntryBy + "</td>";
+                        tbody += "<td></td>";
                         tbody += "</tr>";
                     });
                     $('#tblItemsInfo tbody').append(tbody);

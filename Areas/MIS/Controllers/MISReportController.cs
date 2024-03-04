@@ -21,6 +21,14 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
         {
             return View();
         }
-    
+        public ActionResult DiscountApproval()
+        {
+            return View();
+        }
+
+        public ActionResult CancelRefundApproval()
+        {
+            return View();
+        }
     }
 }

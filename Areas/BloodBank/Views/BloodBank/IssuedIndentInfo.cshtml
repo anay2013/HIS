@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 
-<script src="~/Areas/BloodBank/JsModule/IssuedIndentInfo.js"></script>
+<script src="~/Areas/BloodBank/JsModule/IssuedIndentInfo.js?v1.10"></script>
 <style>
     .select2-container--default .select2-selection--single {
         height: 25px;
@@ -171,14 +171,18 @@
                             <thead style="background: #00a65a;color: #fff;">
                                 <tr>
                                     <th style="width:1%;">#</th>
-                                    <th style="width:10%;">Issue Date</th>
                                     <th style="width:10%;">IPOP No</th>
                                     <th>Patient Name</th>
-                                    <th>Component Name</th>
-                                    <th style="width:1%;">Quantity</th>
                                     <th>Room Full Info</th>
-                                    <th style="width:5%;">Blood Group</th>
+                                    <th style="width:10%;">Issue Date</th>
+                                    <th style="white-space:pre;">Issue By</th>
+                                    <th style="white-space:pre;">Tube No</th>
+                                    <th>Component Name</th>
+                                    <th>Donor Id</th>
+                                    <th style="width:1%;">Quantity</th>
+                                    <th style="width:5%;white-space:pre;">Blood Group</th>
                                     <th style="width:1%;text-align:center">CMD</th>
+                                    <th style="width:1%;text-align:center">Flag</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

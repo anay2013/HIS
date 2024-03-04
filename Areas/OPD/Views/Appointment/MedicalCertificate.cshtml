@@ -104,7 +104,7 @@
                                 <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex;align-items: baseline;">
                                     <button class="btn-warning" id="btnSave" style="width:40%;margin-top: 6%;border:none;height:27px" onclick="InsertMedicalData()"><i class="fa fa-save">&nbsp;</i>Save</button>
                                     <button class="btn-warning" id="btnUpdate" style="width:45%;margin-top: 6%;border:none;height:27px; display:none" onclick="UpdateMedical()"><i class="fa fa-save">&nbsp;</i>Update</button>
-                                    <button class="btn-success" onclick="Printdata()" style="width:30%; margin-left: 6%;border:none;height:27px"><i class="fa fa-print">&nbsp;</i>Print</button>
+                                    @*<button class="btn-success" onclick="Printdata()" style="width:30%; margin-left: 6%;border:none;height:27px"><i class="fa fa-print">&nbsp;</i>Print</button*@
                                 </div>
                             </div>
 
@@ -115,12 +115,13 @@
                                     <table class="table table-bordered" id="tblMedicalCertificate">
                                         <thead>
                                             <tr>
+                                                <th>Action</th>
                                                 <th>UHID NO</th>
                                                 <th>IPD NO</th>
                                                 <th>Chief Complaint</th>
                                                 <th>Remark</th>
                                                 <th>Date</th>
-                                                <th>Action</th>
+                                                <th>CMD</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

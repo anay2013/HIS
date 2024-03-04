@@ -179,7 +179,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 {
                     h.Append("<table style='width:1200px;font-size:30px;font-family:calibri;text-align:left;background:#ececec;'>");
                     h.Append("<tr>");
-                    h.Append("<td colspan='6' style='font-weight:bold;font-size:40px;text-align:center;width:100%;height:30px'>Patient Work Sheet (Internal Paper)</td>");
+                    h.Append("<td colspan='6' style='font-weight:bold;font-size:40px;text-align:center;width:100%;height:30px'>Patient Work Sheet (" + dr["IPOPType"].ToString() + ") </td>");
                     h.Append("</tr>");
                     h.Append("<tr>");
                     h.Append("<td colspan='6' style='font-weight:bold;font-size:40px;text-align:center;width:100%;height:10px'></td>");

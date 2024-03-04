@@ -1,4 +1,4 @@
-﻿<script src="~/Areas/IPD/JsModule/NursingView/_InvestigationBooking.js"></script>
+﻿<script src="~/Areas/IPD/JsModule/NursingView/_InvestigationBooking.js?v1.1"></script>
 <style>
     label.doctor {
         width: 35%;
@@ -7,6 +7,10 @@
         text-align: center;
         padding: 4px;
         color: #fff;
+    }
+
+    .select2-container {
+        position: relative;
     }
 
     hr {
@@ -117,6 +121,10 @@
             cursor: pointer;
         }
 
+    #tblBookingInfo input[type=text] {
+        height: 20px;
+    }
+
     .col-md-3, .col-md-4 {
         padding: 0;
     }
@@ -124,81 +132,110 @@
     .example-box-wrapper {
         margin: 10px 20px;
     }
+    .entryBy {
+        padding: 5px 0px;
+        color: #c37700;
+        font-size: 11px;
+        cursor: pointer;
+    }
+    .entryByName {
+        display: none;
+        position: absolute;
+        background: #fffed7;
+        border: 1px solid #c9c8a1;
+        border-radius: 3px;
+        padding: 3px 5px;
+        left: 30%;
+        margin-top: -2px;
+        z-index: 1111;
+    }
+    .topNavig .col-md-2 {
+        width: 20%;
+    }
 </style>
 <div class="example-box-wrapper">
-        <div class="row">
-            <div class="col-md-4">
-                <div style="display:flex">
-                    <label class="doctor">Doctor </label>
-                    <div style="width:100%">
-                        <select class="form-control" id="ddlDoctor">
-                            <option>Choose Doctor </option>
-                        </select>
-                    </div>
-                </div>
+    <div class="row topNavig" style="margin-bottom:5px">
+        <div class="col-md-2">
+            <label>Doctor </label>
+            <div style="width:100%">
+                <select class="form-control" id="ddlDoctor">
+                    <option>Choose Doctor </option>
+                </select>
             </div>
-            <div class="col-md-4">
-                <div style="display:flex">
-                    <label class="doctor">Category </label>
-                    <div style="width:100%">
-                        <select class="form-control" onchange="GetSubCategory()" id="ddlCategory">
-                            <option>Choose Category </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4" style="margin-left:3px;width: 31.7%;">
-                <div style="display:flex">
-                    <label class="doctor">Sub Category </label>
-                    <div style="width:100%">
-                        <select class="form-control" id="ddlSubCategory" onchange="ItemSearch('Investigation:ItemListBySubCat')">
-                            <option>Choose Sub Category </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <hr />
         </div>
-        <div class="row">
-            <div class="col-md-7" style="padding:0">
-                <div class="table table-responsive">
-                    <div id="ProductList">
-                        <table id="tblItemInfo" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div style="display:flex">
-                                            <input type="text" id="txtDBSearch" style="height:20px;" class="form-control" placeholder="Direct Search.." />
-                                            <input type="text" id="txtFilterSearch" style="height:20px;margin-left: 9px;" class="form-control" placeholder="Filter Item.." />
-                                        </div>
-                                    </th>
-                                    <th>SubCatName</th>
-                                    <th style="width: 1px;">CMD</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="col-md-2" style="width:22%">
+            <label>Category </label>
+            <div style="width:100%">
+                <select class="form-control" onchange="GetSubCategory()" id="ddlCategory">
+                    <option>Choose Category </option>
+                </select>
             </div>
-            <div class="col-md-5" style="padding:0">
-                <div class="table table-responsive">
-                    <div id="ProductList">
-                        <table id="tblBookingInfo" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="width: 1px;">SNo.</th>
-                                    <th>Item Name</th>
-                                    <th style="width: 2%;">IsUrgent</th>
-                                    <th style="width: 1px;">CMD</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+        </div>
+        <div class="col-md-2" style="width:30%">
+            <label>Sub Category </label>
+            <div style="width:100%">
+                <select class="form-control" id="ddlSubCategory" onchange="ItemSearch('Service:ItemListBySubCat')">
+                    <option>Choose Sub Category </option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2" style="width:13%">
+            <label>From</label>
+            <div style="width:100%">
+                <input id="txtFromSearch" type="date" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-2 form-group" style="width:13%">
+            <label>To</label>
+            <div style="width:100%">
+                <input id="txtToSearch" type="date" class="form-control" />
+            </div>
+        </div>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-md-5" style="padding:0">
+            <div class="table table-responsive">
+                <div id="ProductList">
+                    <table id="tblItemInfo" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div style="display:flex">
+                                        <input type="text" id="txtDBSearch" style="height:20px;" class="form-control" placeholder="Direct Search.." />
+                                        <input type="text" id="txtFilterSearch" style="height:20px;margin-left: 9px;" class="form-control" placeholder="Filter Item.." />
+                                    </div>
+                                </th>
+                                <th>SubCatName</th>
+                                <th style="width: 1px;">CMD</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        <div class="col-md-7" style="padding:0">
+            <div class="table table-responsive">
+                <div id="ProductList">
+                    <table id="tblBookingInfo" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 1px;">SNo.</th>
+                                <th>Item Name</th>
+                                <th>Entry Date</th>
+                                <th style="width: 10%;" class="text-right">Qty</th>
+                                <th style="width: 0%;">IsUrgent</th>
+                                <th style="width: 20%;"><input type="text" class="form-control" id="txtRemark" placeholder="Remark.." onkeyup="$('#tblBookingInfo tbody input.remark').val($(this).val())" /></th>
+                                <th style="width: 1px;">CMD</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row" style="margin:10px 0">
         <div class="col-md-3">
             <div style="display:flex;align-items: baseline;">
@@ -227,9 +264,8 @@
                             <tr>
                                 <th>Sr.No.</th>
                                 <th>Date</th>
-                                <th>Item Id</th>
+                                <th>Visit No</th>
                                 <th>Item Name</th>
-                                <th>Qty</th>
                                 <th>Sub Category</th>
                                 <th>Doctor Name</th>
                             </tr>

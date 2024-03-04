@@ -1718,12 +1718,12 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "ServiceReceipt.pdf");
         }
-
-        public FileResult MedicalCertificate(string UHID_No)
+        public FileResult MedicalCertificate(string UHID_No, string Autoid)
         {
             PdfGenerator pdfConverter = new PdfGenerator();
             MedicalCertificateInfo obj = new MedicalCertificateInfo();
             obj.UHID = UHID_No;
+            obj.Auto_id = Convert.ToInt32(Autoid);
             obj.Logic = "OnLoadMedicalCertificatePrint";
             HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("Appointment/OPD_MedicalCertificateQueries", obj);
             DataSet ds = dsResult.ResultSet;

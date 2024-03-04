@@ -1,13 +1,17 @@
 ﻿$(document).ready(function () {
     FillCurrentDate('txtDate');
     $('#tblMedicalCertificate tbody').on('click', '.EditRow', function () {
-        var UhidNo = $(this).closest('tr').find('td:eq(1)').text();
-        EditRowSingleBy(UhidNo);
+        debugger
+        var Autoidd = $(this).closest('tr').find('td:eq(1)').text();
+        var UhidNo = $(this).closest('tr').find('td:eq(2)').text();
+        EditRowSingleBy(Autoidd, UhidNo);
+
     });
 });
-function Printdata() {
+function Printdata(Autoid) {
+    debugger
     var UHIDNo = $("#txtUHIDNo").val();
-    var url = "../Print/MedicalCertificate?UHID_No=" + UHIDNo;
+    var url = "../Print/MedicalCertificate?UHID_No=" + UHIDNo + "&Autoid=" + Autoid;
     window.open(url, '_blank');
 
 }
@@ -68,7 +72,7 @@ function GetMedicalCertificateByUHID() {
     objBO.Remark = '-';
     objBO.login_id = Active.userId;
     objBO.CD_date = '1999-01-01';
-    objBO.Logic = 'OnLoadMedicalCertificatePrint';
+    objBO.Logic = 'OnLoadMedicalCertificate';
     $.ajax({
         method: "POST",
         url: url,
@@ -81,6 +85,7 @@ function GetMedicalCertificateByUHID() {
                     var tbody = "";
                     $.each(data.ResultSet.Table, function (key, val) {
                         tbody += "<tr>";
+                        tbody += '<td><button class="btn-warning" onclick="Printdata(' + val.Auto_id + ')" style="border:none;height:20px;margin-bottom: 3px;">Print</button></td>';
                         tbody += "<td hidden>" + val.Auto_id + "</td>";
                         tbody += "<td>" + val.UHID + "</td>";
                         tbody += "<td>" + val.IPOPD_NO + "</td>";
@@ -88,6 +93,7 @@ function GetMedicalCertificateByUHID() {
                         tbody += "<td>" + val.Remark + "</td>";
                         tbody += "<td>" + val.CD_date + "</td>";
                         tbody += '<td><button class="btn-success EditRow" style="border:none;height:20px;margin-bottom: 3px;">Edit</button></td>';
+
                         tbody += "</tr>";
                     });
                     $('#tblMedicalCertificate tbody').append(tbody);
@@ -144,10 +150,11 @@ function InsertMedicalData() {
     }
 
 }
-function EditRowSingleBy(UhidNo) {
+function EditRowSingleBy(Autoidd, UhidNo) {
+    debugger
     var url = config.baseUrl + "/api/Appointment/OPD_MedicalCertificateQueries";
     var objBO = {};
-    objBO.Auto_id = '0';
+    objBO.Auto_id = Autoidd;
     objBO.UHID = UhidNo;
     objBO.IPOPD_NO = '-';
     objBO.Chief_Complaint = '-';

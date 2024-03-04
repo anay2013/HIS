@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "PackOTReport";
+    ViewBag.Title = "PACReport";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/OT/JsModule/PackOTReport.js"></script>
+<script src="~/Areas/OT/JsModule/PACReport.js"></script>
 <style>
 
 
@@ -34,7 +34,7 @@
         width: 100%;
         background: #fff;
         overflow: overlay;
-        max-height: 500px;
+        max-height: 400px;
         display: block;
     }
 
@@ -68,6 +68,16 @@
         padding-right: 3px;
         text-align: center;
     }
+
+    .tableFixHead {
+        overflow-y: auto;
+        height: 500px;
+    }
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+        }
 </style>
 <div id="page-content">
     <div class="container">
@@ -77,7 +87,7 @@
 
                     <div class="panel">
                         <div class="panel-heading" style="background:#0076d0;padding:4px;">
-                            <h4 class="text-white">Pack OT Report</h4>
+                            <h4 class="text-white">PAC Report</h4>
                         </div>
                         <div class="panel-body" style="background:#fff;height:500px">
 
@@ -109,24 +119,30 @@
                             <hr />
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="scroll">
-                                        <div class="table-responsive" style="margin:0;border: 1px solid #2478a9;">
-                                            <table id="tblPackOTReport" class="table table-bordered" style="margin-bottom:20px">
-                                                <thead style="background: #00a65a;color: #fff;">
-                                                    <tr>
-                                                        <th>IPOPType</th>
-                                                        <th>IPOPTNo</th>
-                                                        <th style="text-align:left">Patient Name</th>
-                                                        <th style="text-align:left"> Age/Gender</th>
-                                                        <th style="text-align:left">Date</th>
-                                                        <th>Amount</th>
-                                                        <th style="text-align:left">Employee Name</th>
-                                                        <th style="text-align:left">Item Name</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
+                                    @*<div class="scroll">*@
+                                    <div class="table-responsive tableFixHead" style="margin:0;border: 1px solid #2478a9;">
+
+                                        <table id="tblPackOTReport" class="table table-bordered" style="margin-bottom:20px">
+                                            <thead style="background: #00a65a;color: #fff;">
+                                                <tr>
+                                                    <th>IPOPType</th>
+                                                    <th>IPOPTNo</th>
+                                                    <th>UHIDNo</th>
+                                                    <th>MobileNo</th>
+                                                    <th style="text-align:left">Doctor Name</th>
+                                                    <th style="text-align:left">Patient Name</th>
+                                                    <th style="text-align:left"> Age/Gender</th>
+                                                    <th style="text-align:left">Address</th>
+                                                    <th style="text-align:left">Employee_Name</th>
+                                                    <th style="text-align:left">Item_Name</th>
+                                                    <th style="text-align:left">Date</th>
+                                                    <th>Amount</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                        @*</div>*@
                                     </div>
                                 </div>
                             </div>

@@ -24,21 +24,22 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
 
         List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
         PdfDocument repDocument = new PdfDocument();
-        public FileResult PrintBill(string _IPDNo, string _ReceiptList, string BillPrintType)
+        public FileResult PrintBill(string _IPDNo, string _ReceiptList, string BillPrintType, string ExcludeAdlItemDiscount)
         {
             _BillPrintType = BillPrintType;
             _IPDNo = UtilityClass.decoding(_IPDNo);
             if (_ReceiptList == null)
-            _ReceiptList = "";
+                _ReceiptList = "";
             _ReceiptList = UtilityClass.decoding(_ReceiptList);
             IPDInfo obj = new IPDInfo();
             obj.IPDNo = _IPDNo;
             obj.from = "1900/01/01";
             obj.to = "1900/01/01";
+            obj.ExcludeAdlItemDiscount = ExcludeAdlItemDiscount;
             obj.Prm1 = _ReceiptList;
             obj.Prm2 = _BillPrintType;
             obj.login_id = "-";
-            obj.Logic = "BillPrinting";
+            obj.Logic = "BillPrinting2";
             HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("IPDBilling/IPD_BillPrint", obj);
             ds = dsResult.ResultSet;
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
@@ -50,10 +51,9 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             PdfHtml htmlBody = new PdfHtml(HtmlBody, null);
             htmlBody.BrowserWidth = 780;
             // htmlBody.RenderWebFonts = true;
-            // htmlBody.FitDestHeight = true;
             htmlBody.FontEmbedding = false;
-            htmlBody.PageCreatingEvent += new  PdfPageCreatingDelegate(htmlToPdfConverter_PageCreatingEvent);
-            htmlBody.PageLayoutingEndedEvent+=new PdfPageLayoutingEndedDelegate(htmlToPdfConverter_PdfPageLayoutingEndedDelegate);
+            htmlBody.PageCreatingEvent += new PdfPageCreatingDelegate(htmlToPdfConverter_PageCreatingEvent);
+            htmlBody.PageLayoutingEndedEvent += new PdfPageLayoutingEndedDelegate(htmlToPdfConverter_PdfPageLayoutingEndedDelegate);
             htmlBody.ImagesCutAllowed = false;
             page1.Layout(htmlBody);
 
@@ -64,7 +64,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
 
         private void htmlToPdfConverter_PdfPageLayoutingEndedDelegate(PdfPageLayoutingEndedParams eventParams)
         {
-             SetFooter(repDocument.Pages[repDocument.Pages.Count-1], "FixAtLastPage", "N/R", false);
+            SetFooter(repDocument.Pages[repDocument.Pages.Count - 1], "FixAtLastPage", "N/R", false);
         }
 
         int count = 1;
@@ -72,23 +72,24 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
         public void htmlToPdfConverter_PageCreatingEvent(PdfPageCreatingParams eventParams)
         {
             PdfPage page1 = eventParams.PdfPage;
-
             ipPageCounter ipc = new ipPageCounter();
             ipc.DeptName = "-";
             ipc.PageIndex = page1.Index;
             pgCounterList.Add(ipc);
             //Set Header
-            if (count==1)
+            if (count == 1)
                 SetHeader1(page1);
             else
                 SetHeader2(page1);
+
             count++;
+
             SetFooter(page1, "", "N/R", false);
 
         }
         private void SetHeader1(PdfPage pdfPage)
         {
-            if(pdfPage != null)
+            if (pdfPage != null)
             {
                 pdfPage.CreateHeaderCanvas(240);
                 string StrhtmlHeader = GetHeaderHTML1();
@@ -115,39 +116,44 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 {
                     if (pdfPage.Footer != null)
                     {
-                        pdfPage.CreateFooterCanvas(250);
+                        pdfPage.CreateFooterCanvas(220);
                         StrhtmlFooter = GetFooterHTML();
 
                         PdfHtml footerHtml = new PdfHtml(0, 0, StrhtmlFooter, null);
                         footerHtml.FitDestHeight = true;
+                        footerHtml.FitDestWidth = true;
                         footerHtml.FontEmbedding = true;
                         pdfPage.Footer.Layout(footerHtml);
 
-                        Font pageNumberFont = new Font(new FontFamily("Arial"), 8, GraphicsUnit.Point); // 1
-                        PdfText pageNumberText;
-                        pageNumberText = new PdfText(500, 200, "Page {CrtPage} of {PageCount}", pageNumberFont); // 2
-                        pdfPage.Footer.Layout(pageNumberText);
+                        //Font pageNumberFont = new Font(new FontFamily("Arial"), 8, GraphicsUnit.Point); // 1
+                        //PdfText pageNumberText;
+                        //pageNumberText = new PdfText(500, 50, "Page {CrtPage} of {PageCount}", pageNumberFont); // 2
+                        //pageNumberText.HorizontalAlign = PdfTextHAlign.Center;
+                        //pageNumberText.EmbedSystemFont = true;
+                        //pdfPage.Footer.Layout(pageNumberText);
                     }
 
                 }
                 else
                 {
-                  
-                        pdfPage.CreateFooterCanvas(150);
 
-                        PdfHtml footerHtml = new PdfHtml(0, 0, StrhtmlFooter, null);
-                        footerHtml.FitDestHeight = true;
-                        footerHtml.FontEmbedding = true;
-                        pdfPage.Footer.Layout(footerHtml);
+                    pdfPage.CreateFooterCanvas(80);
 
-                        Font pageNumberFont = new Font(new FontFamily("Arial"), 8, GraphicsUnit.Point); // 1
-                        PdfText pageNumberText;
-                        pageNumberText = new PdfText(500, 50, "Page {CrtPage} of {PageCount}", pageNumberFont); // 2
-                        pdfPage.Footer.Layout(pageNumberText);
-                    
+                    PdfHtml footerHtml = new PdfHtml(0, 0, StrhtmlFooter, null);
+                    footerHtml.FitDestHeight = true;
+                    footerHtml.FontEmbedding = true;
+                    pdfPage.Footer.Layout(footerHtml);
+
+                    Font pageNumberFont = new Font(new FontFamily("Arial"), 8, GraphicsUnit.Point); // 1
+                    PdfText pageNumberText;
+                    pageNumberText = new PdfText(500, 50, "Page {CrtPage} of {PageCount}", pageNumberFont); // 2
+                    pageNumberText.HorizontalAlign = PdfTextHAlign.Center;
+                    pageNumberText.EmbedSystemFont = true;
+                    pdfPage.Footer.Layout(pageNumberText);
+
                 }
-          
-           
+
+
             }
 
         }
@@ -473,13 +479,10 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
 
 
                 b.Append("</table>");
-
-
-
             }
             return b.ToString();
         }
-        private string GetFooterHTML()
+        private string GetFooterHTMLOld()
         {
             StringBuilder b = new StringBuilder();
             double GrossAmount = 0;
@@ -490,6 +493,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             double ReceivedAmount = 0;
             double PanelApprovedAmount = 0;
             double BalanceAmount = 0;
+            double TotalAmount = 0;
             string DischargeByName = string.Empty;
             foreach (DataRow dr in ds.Tables[4].Rows)
             {
@@ -505,7 +509,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             }
             DischargeByName = ds.Tables[0].Rows[0]["DischargeByName"].ToString();
             //Bottom info			
-            b.Append("<div style='width:100%;float:left;margin-top:5px;border-top:1px solid #000;padding-top:5px'>");
+            b.Append("<div style='width:100%;float:left;margin-top:10px;border-top:1px solid #000;padding-top:5px'>");
             b.Append("<div style='width:60%;float:left'>");
             int Count = 0;
             if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
@@ -539,10 +543,10 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             b.Append("<table style='font-size:40px;float:right' border='0' cellspacing='0'>");
 
             b.Append("<tr style='font-size:20px'>");
-            b.Append("<td colspan='2' style='padding:3px 0;width:55%;text-align:left'><b>Net Amount (a-(b+c)) </b></td>");
+            b.Append("<td colspan='2' style='padding:3px 0;width:55%;text-align:left'><b>Amount </b></td>");
             b.Append("<td style='padding:3px 0;width:10%;text-align:center;border-bottom:1px solid #000'><b> : </b></td>");
             b.Append("<td style='padding:3px 0;width:10%;text-align:center;border-bottom:1px solid #000'><b> Rs. </b></td>");
-            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;border-bottom:1px solid #000'><b>" + NetAmount.ToString("0.00") + "</b></td>");
+            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;border-bottom:1px solid #000'><b>" + TotalAmount.ToString("0.00") + "</b></td>");
             b.Append("</tr>");
 
             b.Append("<tr style='font-size:20px'>");
@@ -600,7 +604,164 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             b.Append("</div>");
             b.Append("</div>");
 
-            b.Append("<div style='width:100%;float:left;margin-top:60px;display:flex;font-size:20px'>");
+            b.Append("<div style='width:100%;float:left;margin-top:40px;display:flex;font-size:20px'>");
+            b.Append("<p style='width:48%;float:left,display:inline-block'>");
+            b.Append("<labe style='text-align:center;'>...............................................<br><b>Patient's/Attendent's Signature</b></label>");
+            b.Append("</p>");
+
+            b.Append("<p style='width:48%;float:right;text-align:right;display:inline-block'>");
+            b.Append("<labe style='float:right;text-align:center;'>............................................<br><b>Authorised Signature</b><br/>" + DischargeByName + "</label>");
+            b.Append("</p>");
+
+            b.Append("</div>");
+            return b.ToString();
+        }
+        private string GetFooterHTML()
+        {
+            StringBuilder b = new StringBuilder();
+            double GrossAmount = 0;
+            double PanelDiscount = 0;
+            double AdlDiscount = 0;
+            double TotalDiscount = 0;
+            double NetAmount = 0;
+            double ReceivedAmount = 0;
+            double PanelApprovedAmount = 0;
+            double BalanceAmount = 0;
+            double Tax = 0;
+            double NetPayable = 0;
+            string DischargeByName = string.Empty;
+            foreach (DataRow dr in ds.Tables[4].Rows)
+            {
+                GrossAmount = Convert.ToDouble(dr["TotalAmount"].ToString());
+                PanelDiscount = Convert.ToDouble(dr["PanelDiscount"].ToString());
+                AdlDiscount = Convert.ToDouble(dr["AdlDiscount"].ToString());
+                TotalDiscount = Convert.ToDouble(dr["TotalDiscount"].ToString());
+                NetAmount = Convert.ToDouble(dr["NetAmount"].ToString());
+                Tax = Convert.ToDouble(dr["Tax"].ToString());
+                NetPayable = Convert.ToDouble(dr["NetPayable"].ToString());
+                ReceivedAmount = Convert.ToDouble(dr["Received"].ToString());
+                PanelApprovedAmount = Convert.ToDouble(dr["PanelApprovedAmount"].ToString());
+                BalanceAmount = Convert.ToDouble(dr["BalanceAmount"].ToString());
+
+            }
+            DischargeByName = ds.Tables[0].Rows[0]["DischargeByName"].ToString();
+            //Bottom info			
+            b.Append("<div style='width:100%;float:left;margin-top:10px;border-top:1px solid #000;padding-top:5px'>");
+            b.Append("<div style='width:50%;float:left'>");
+            int Count = 0;
+            if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
+            {
+                b.Append("<label style='padding:2px 5px;'><b>Advance/Return Details</b></label>");
+                b.Append("<table border='1' style='width:100%;font-size:16px;border-collapse: collapse;margin-top:10px;'>");
+
+                b.Append("<tr>");
+                //b.Append("<th style='width:1%;text-align:left;padding-left:4px;'>S.No.</th>");
+                b.Append("<th style='text-align:center;padding-left:4px;'>Receipt No</th>");
+                b.Append("<th style='text-align:center;padding-left:4px;'>Receipt Date</th>");
+                b.Append("<th style='text-align:right;padding-right:4px;'>Amount</th>");
+                b.Append("<th style='text-align:center;padding-right:4px;'>Pay Mode</th>");
+                b.Append("</tr>");
+                foreach (DataRow dr in ds.Tables[3].Rows)
+                {
+                    Count++;
+                    b.Append("<tr>");
+                    //  b.Append("<td style='padding-left:4px;'>" + Count + "</td>");
+                    b.Append("<td style='text-align:center;white-space: nowrap;padding-left:4px;'>" + dr["ReceiptNo"].ToString() + "</td>");
+                    b.Append("<td style='text-align:center;white-space: nowrap;padding-left:4px;'>" + dr["receiptDate"].ToString() + "</td>");
+                    b.Append("<td style='text-align:right;padding-right:4px;'>" + Convert.ToDecimal(dr["Amount"]).ToString("0.00") + "</td>");
+                    b.Append("<td style='text-align:center;white-space: nowrap;padding-left:4px;'>" + dr["PayMode"].ToString() + "</td>");
+                    b.Append("</tr>");
+                }
+                b.Append("</table>");
+            }
+
+            b.Append("</div>");
+            b.Append("<div style='width:50%;float:right'>");
+            b.Append("<table style='font-size:40px;float:right' border='0' cellspacing='0'>");
+      
+            b.Append("<tr style='font-size:20px'>");
+            b.Append("<td colspan='2' style='width:60%;text-align:left'><b>Gross Amount(a)</b></td>");
+            b.Append("<td style='width:5%;text-align:center'><b> : </b></td>");
+            b.Append("<td style='width:10%;text-align:center'><b> Rs. </b></td>");
+            b.Append("<td style='width:25%;text-align:right;white-space: nowrap;'><b>" + GrossAmount.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+            b.Append("<tr style='font-size:20px'>");
+            b.Append("<td colspan='2' style='width:60%;text-align:left'><b>Panel Discount(b)</b></td>");
+            b.Append("<td style='width:5%;text-align:center'><b> : </b></td>");
+            b.Append("<td style='width:10%;text-align:center'><b> Rs. </b></td>");
+            b.Append("<td style='width:25%;text-align:right;white-space: nowrap;'><b>" + PanelDiscount.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+            b.Append("<tr style='font-size:20px;'>");
+            b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left;'><b>Adl. Discount(c)</b></td>");
+            b.Append("<td style='padding:3px 0;width:5%;text-align:center;border-bottom:1px solid #000'><b> : </b></td>");
+            b.Append("<td style='padding:3px 0;width:10%;text-align:center;border-bottom:1px solid #000'><b> Rs. </b></td>");
+            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;border-bottom:1px solid #000'><b>" + AdlDiscount.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+            b.Append("<tr style='font-size:20px'>");
+            b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left'><b>Total Discount(b+c) </b></td>");
+            b.Append("<td style='padding:3px 0;width:5%;text-align:center'><b> : </b></td>");
+            b.Append("<td style='padding:3px 0;width:10%;text-align:center'><b> Rs. </b></td>");
+            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;'><b>" + TotalDiscount.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+            b.Append("<tr style='font-size:20px'>");
+            b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left'><b>Net Amount(a-(b+c))</b></td>");
+            b.Append("<td style='padding:3px 0;width:5%;text-align:center;border-bottom:1px solid #000'><b> : </b></td>");
+            b.Append("<td style='padding:3px 0;width:10%;text-align:center;border-bottom:1px solid #000'><b> Rs. </b></td>");
+            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;border-bottom:1px solid #000'><b>" + NetAmount.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+            if (Tax != 0)
+            {
+                b.Append("<tr style='font-size:20px'>");
+                b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left'><b>GST(Room Rent)</b></td>");
+                b.Append("<td style='padding:3px 0;width:5%;text-align:center;border-bottom:1px solid #000'><b> : </b></td>");
+                b.Append("<td style='padding:3px 0;width:10%;text-align:center;border-bottom:1px solid #000'><b> Rs. </b></td>");
+                b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;border-bottom:1px solid #000'><b>" + Tax.ToString("0.00") + "</b></td>");
+                b.Append("</tr>");
+            }
+
+            b.Append("<tr style='font-size:20px'>");
+            b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left'><b>Net Payable</b></td>");
+            b.Append("<td style='padding:3px 0;width:5%;text-align:center;border-bottom:1px solid #000'><b> : </b></td>");
+            b.Append("<td style='padding:3px 0;width:10%;text-align:center;border-bottom:1px solid #000'><b> Rs. </b></td>");
+            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;border-bottom:1px solid #000'><b>" + NetPayable.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+
+            b.Append("<tr style='font-size:20px'>");
+            b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left'><b>Received Amount </b></td>");
+            b.Append("<td style='padding:3px 0;width:5%;text-align:center'><b> : </b></td>");
+            b.Append("<td style='padding:3px 0;width:10%;text-align:center'><b> Rs. </b></td>");
+            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;'><b>" + ReceivedAmount.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+            if (PanelApprovedAmount > 0)
+            {
+                b.Append("<tr style='font-size:20px'>");
+                b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left'><b>Panel Approval Amount </b></td>");
+                b.Append("<td style='padding:3px 0;width:5%;text-align:center'><b> : </b></td>");
+                b.Append("<td style='padding:3px 0;width:10%;text-align:center'><b> Rs. </b></td>");
+                b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;'><b>" + PanelApprovedAmount.ToString("0.00") + "</b></td>");
+                b.Append("</tr>");
+            }
+
+            b.Append("<tr style='font-size:20px'>");
+            b.Append("<td colspan='2' style='padding:3px 0;width:60%;text-align:left'><b>Balance Amount </b></td>");
+            b.Append("<td style='padding:3px 0;width:5%;text-align:center'><b> : </b></td>");
+            b.Append("<td style='padding:3px 0;width:10%;text-align:center'><b> Rs. </b></td>");
+            b.Append("<td style='padding:3px 0;width:25%;text-align:right;white-space: nowrap;'><b>" + BalanceAmount.ToString("0.00") + "</b></td>");
+            b.Append("</tr>");
+
+
+            b.Append("</table>");
+            b.Append("</div>");
+            b.Append("</div>");
+
+            b.Append("<div style='width:100%;float:left;margin-top:40px;display:flex;font-size:20px'>");
             b.Append("<p style='width:48%;float:left,display:inline-block'>");
             b.Append("<labe style='text-align:center;'>...............................................<br><b>Patient's/Attendent's Signature</b></label>");
             b.Append("</p>");
@@ -658,11 +819,11 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             b.Append("<tr>");
             b.Append("<td style='width:25%;text-align:left;'><b>GST NO : 09AABCC9314K1ZH</b></td>");
             if (_BillPrintType == "ItemWise")
-            b.Append("<td style='width:50%;text-align:center;font-size:22px;'><b>" + BillType + " Item wise Bill Detail</b></td>");
+                b.Append("<td style='width:50%;text-align:center;font-size:22px;'><b>" + BillType + " Item wise Bill Detail</b></td>");
             if (_BillPrintType == "BillTypeCategorywiseOnly")
-            b.Append("<td style='width:50%;text-align:center;font-size:22px;'><b>" + BillType + " Summary Bill Detail</b></td>");
+                b.Append("<td style='width:50%;text-align:center;font-size:22px;'><b>" + BillType + " Summary Bill Detail</b></td>");
             if (_BillPrintType == "IncludingPackagedItem")
-            b.Append("<td style='width:50%;text-align:center;font-size:22px;'><b>" + BillType + " Package Breakup Detail</b></td>");
+                b.Append("<td style='width:50%;text-align:center;font-size:22px;'><b>" + BillType + " Package Breakup Detail</b></td>");
             b.Append("<td style='width:25%;text-align:right'><b>PAN NO : AABCC9314K</b></td>");
             b.Append("</tr>");
             b.Append("</table>");
@@ -718,7 +879,8 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             b.Append("<td style='width:1%;'><b>:</b></td>");
             b.Append("<td style='width:29%;'>" + DischargeType + "</td>");
             b.Append("</tr>");
-
+            if (Address.Length > 25)
+                Address = Address.Substring(0, 25);
             b.Append("<tr>");
             b.Append("<td style='width:17%;'><b>Address</b></td>");
             b.Append("<td style='width:1%;'><b>:</b></td>");
@@ -818,6 +980,6 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             return h.ToString();
         }
     }
-  
+
 
 }

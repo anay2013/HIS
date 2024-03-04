@@ -65,7 +65,7 @@ function GetPatientDetails() {
     objBO.Prm1 = '-';
     objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'GetPatientInfo';
+    objBO.Logic = 'GetPatientInfoForInit';
     $.ajax({
         method: "POST",
         url: url,

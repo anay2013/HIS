@@ -6,6 +6,11 @@ $(document).ready(function () {
     $('#tblCollect').on('click', function () {
         LabSampleCollection();
     });
+    $(document).on("click", '#testMore', function () {
+        var value = $(this).data('test');
+        $('#modalTestPreview').find('label').text(value);
+        $('#modalTestPreview').modal('show');
+    });
     $('#tblSampleInfoOfPatient tbody').on('click', '#btnHelp', function () {
         var testcode = $(this).closest('tr').find('td:eq(1)').text();
         SampleTakenHelp(testcode);
@@ -14,7 +19,14 @@ $(document).ready(function () {
         var name = $(this).closest('tr').find('td:eq(2)').text();
         var visitno = $(this).closest('tr').find('td:eq(4)').text();
         var age = $(this).closest('tr').find('td:eq(3)').text();
+        var TestList = $(this).closest('tr').find('td:last').text();
         selectRow($(this))
+        var more = "<button id='testMore' class='btn btn-warning btn-xs pull-right' data-test='" + TestList + "'>More</button>";
+        if (TestList.length > 110)
+            $('#txtPatientInfo').html(TestList + more);
+        else
+            $('#txtPatientInfo').html(TestList);
+
         $('#txtPatientName').text(name);
         $('#txtPatientVisitNo').text(visitno);
         $('#txtUHID').text($(this).closest('tr').find('td:eq(6)').text());
@@ -99,6 +111,7 @@ function PendingCollection(logic) {
                         tbody += "<td>" + val.visitNo + "</td>";
                         tbody += "<td style=width:1%><button class='btn btn-success btn-xs'><span class='fa fa-arrow-right'></button></td>";
                         tbody += "<td style='display:none' >" + val.UHID + "</td>";
+                        tbody += "<td style='display:none' >" + val.TestList + "</td>";
                         tbody += "</tr>";
                     })
                     $('#tblPendingCollection tbody').append(tbody);

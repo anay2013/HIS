@@ -35,7 +35,7 @@ function StockInfo(logic) {
                         tbody += "<td class='hide'>" + val.Stock_Id + "</td>";
                         tbody += "<td style='padding: 2px 5px;'>" + count + "</td>";
                         tbody += "<td>" + val.donorName + "</td>";
-                        tbody += "<td>" + val.BloodCollection_Id + "</td>";
+                        tbody += "<td>" + val.Visit_ID + "</td>";
                         tbody += "<td>" + val.ComponentName + "</td>";
                         tbody += "<td>" + val.BagType + "</td>";
                         tbody += "<td>" + val.BBTubeNo + "</td>";

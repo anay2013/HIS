@@ -4,24 +4,30 @@
     searchTable('txtSeachRatePanel', 'tblRatePanelDetails');
     $("select").select2();
     $("#tblRateListInfo tbody").on('keyup', 'input:text', function (e) {
-        if (/[^\d.]/g.test(this.value)) {
-            this.value = this.value.replace(/[^\d.]/g, '');
+        if ($(this).closest('td').index() == 2) {
+            if (/[^\d.]/g.test(this.value)) {
+                this.value = this.value.replace(/[^\d.]/g, '');
+            }
         }
     });
     $("#tblRateListInfo tbody").on('keyup', 'input:text', function () {
         var rate = parseFloat($(this).val());
-        if (rate < 0) {
+        if (rate <= 0) {
             $(this).val('');
         }
     });
     $("#tblRateListInfo tbody").on('click', 'button', function () {
+        debugger
+        var Index = (($(this).hasClass('btn1')) ? 1 : ($(this).hasClass('btn2')) ? 2 : 3)+1;
         var ItemId = $(this).closest('tr').find('td:eq(0)').text();
         var rate = $(this).siblings('input').val();
         $("#tblRateListInfo tbody tr").each(function () {
             if ($(this).find('td:eq(0)').text() == ItemId)
-                $(this).find('input:text').val(rate);
+                $(this).find("td:eq(" + Index +") input").val(rate)
+               // $(this).find('input:text').val(rate);
         });
     });
+   
 });
 
 function Onload() {
@@ -163,9 +169,11 @@ function GetItemRateList() {
                     $.each(data.ResultSet.Table, function (k, v) {
                         if (temp != v.ItemId) {
                             htmldata += '<tr class="itemGroup" style="background:#f7f0cb">';
-                            htmldata += '<td class="hide">' + v.ItemId + '</td>';
+                            htmldata += '<td class="hide">'+ v.ItemId + '</td>';
                             htmldata += '<td colspan="1">' + v.ItemName + '</td>';
-                            htmldata += '<td class="flex"><input  type="text" class="rate"/><button class="btnRate btn btn-warning btn-xs"><i class="fa fa-refresh"></i></button></td>';
+                            htmldata += '<td ><input  type="text" class="rate"/><button class="btn btn-warning btn-xs btn1"><i class="fa fa-refresh"></i></button></td>';
+                            htmldata += '<td ><input  type="text" class="ExtItemCode"/><button class="btn btn-warning btn-xs btn2"><i class="fa fa-refresh"></i></button></td>';
+                            htmldata += '<td ><input  type="text" class="ExtItemName"/><button class="btn btn-warning btn-xs btn3"><i class="fa fa-refresh"></i></button></td>';
                             htmldata += '</tr>';
                             temp = v.ItemId;
                         }
@@ -176,6 +184,10 @@ function GetItemRateList() {
                             htmldata += '<td><input type="text" value="" /></td>';
                         else
                             htmldata += '<td><input type="text" value="' + v.rate + '"/></td>';
+                        htmldata += '<td><input type="text" value="' + v.ext_itemCode + '"/></td>';
+                        htmldata += '<td><input type="text" value="' + v.ext_itemname + '"/></td>';
+
+
 
                         htmldata += '</tr>';
                     });
@@ -202,6 +214,11 @@ function GetItemRateList() {
     });
 }
 function RoomChargesUpdate() {
+    if ($("#ddlRateList option:selected").val() == "Select") {
+        alert('Please select rate list');
+        return;
+    }
+
     var url = config.baseUrl + "/api/EDP/PanelItemRateInsertUpdate";
     var objBO = [];
     $('#tblRateListInfo tbody tr').each(function () {
@@ -212,8 +229,8 @@ function RoomChargesUpdate() {
                     'RateListId': $("#ddlRateList option:selected").val(),
                     'ItemId': $(this).find("td:eq(0)").text(),
                     'rate': $(this).find("td:eq(2) input").val(),
-                    'ItemCode': '-',
-                    'ItemName': '-',
+                    'ItemCode': $(this).find("td:eq(3) input").val(),
+                    'ItemName': $(this).find("td:eq(4) input").val(),
                     'RoomBillCategory': $(this).find("td:eq(1)").text(),
                     'hosp_id': Active.HospId,
                     'login_id': Active.userId,

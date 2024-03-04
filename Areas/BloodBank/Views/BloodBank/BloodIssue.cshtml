@@ -3,10 +3,15 @@
     ViewBag.Title = "BloodIssue";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/BloodBank/JsModule/BloodIssue.js"></script>
+<script src="~/Areas/BloodBank/JsModule/BloodIssue.js?V1.1"></script>
 <style>
     .hold {
         background: #ffc6c6;
+        pointer-events: none;
+    }
+
+    .IsRejected {
+        background: #ffabab;
         pointer-events: none;
     }
 
@@ -157,11 +162,21 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="IndentBy">
-                            <label>Blood Indent By : </label>
-                            <label><input type="radio" name="IndentBy" value="IPD" checked />&nbsp;IPD </label>
-                            <label><input type="radio" name="IndentBy" value="OPD" />&nbsp;OPD </label>
+                            <label style="white-space:pre">Blood Indent By :  </label>
+                            <select id="ddlBloodIndentBy" class="form-control">
+                                <option>ALL</option>
+                                <option>IPD</option>
+                                <option>OPD</option>
+                            </select>
+
+                            <label style="white-space:pre">&nbsp;Status :  </label>
+                            <select id="ddlStatus" class="form-control">
+                                <option value="ALL">ALL</option>
+                                <option value="N" selected>Pending</option>
+                                <option value="X">Rejected</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -170,7 +185,7 @@
                             <input type="date" id="txtFrom" class="form-control" />
                             <label>To : </label>
                             <input type="date" id="txtTo" class="form-control" />
-                            <button class="btn btn-warning" onclick="IndentInfo('IndentInfoForBloodTestByDate')" style="height: 25px;width: 32%;border-radius: 0;"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                            <button class="btn btn-warning" onclick="DonorInfo()" style="height: 25px;width: 32%;border-radius: 0;"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
                         </div>
                     </div>
                 </div>
@@ -181,13 +196,16 @@
                             <thead style="background: #00a65a;color: #fff;">
                                 <tr>
                                     <th style="width:1%;">cmd</th>
-                                    <th style="width:10%;">Date</th>
-                                    <th style="width:10%;">Indent No</th>
-                                    <th style="width:10%;">IPOP No</th>
+                                    <th style="width:7%;">Date</th>
+                                    <th style="width:7%;">Indent No</th>
+                                    <th style="width:8%;">IPOP No</th>
                                     <th>Patient Name</th>
-                                    <th style="width:5%;white-space: pre;">Blood Group No</th>
                                     <th>Component Name</th>
+                                    <th style="text-align:right;width:7%;">Indent Qty</th>
+                                    <th style="text-align:right;width:7%;">Issued Qty</th>
+                                    <th style="text-align:right;width:5%;">Balance</th>
                                     <th>Room Full Info</th>
+                                    <th style="width:1%;">cmd</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -197,23 +215,29 @@
             </div>
             <div class="col-md-12">
                 <div class="section component-section" style="height:217px;">
-                    <label class="title">Stock Info</label>
+                    <div class="title StockInfo">
+                        <label>Stock Qty : <span>0</span></label>&nbsp;|&nbsp;
+                        <label>Balance Qty : <span>0</span></label>&nbsp;|&nbsp;
+                        <label>Selected Qty : <span>0</span></label>
+                        <button class="btn btn-success btn-xs pull-right" onclick="HoldUnHold('UnHold')" style="height: 17px;line-height: 0;"><i class="fa fa-clock-o">&nbsp;</i>Un-Hold</button>
+                        <button class="btn btn-danger btn-xs pull-right" onclick="HoldUnHold('Hold')" style="height: 17px;line-height: 0;"><i class="fa fa-clock-o">&nbsp;</i>Hold</button>
+                        <button class="btn btn-warning btn-xs pull-right" onclick="Issue()" style="height: 17px;line-height: 0;"><i class="fa fa-check-circle">&nbsp;</i>Issue</button>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive vertiscrl" style="margin:0;overflow:auto;height:190px;border: 1px solid #2478a9;">
                                 <table id="tblStockInfo" class="table table-bordered" style="margin-bottom:6px">
                                     <thead style="background: #00a65a;color: #fff;">
                                         <tr>
-                                            <th style="width:1%;">#</th>
+                                            <th style="width:1%;"><input type="checkbox" onchange="$('#tblStockInfo tbody input:checkbox').prop('checked', $(this).is(':checked'));" /></th>
                                             <th style="width:10%;">StockId</th>
-                                            <th>Component Name</th>
+                                            <th style="white-space: pre;width:20%">Component Name</th>
                                             <th style="width: 5%;text-align:right">Qty</th>
                                             <th style="width:16%;">Expiry Date</th>
                                             <th style="width:16%;">Tube No</th>
-                                            <th style="width:5%;">Blood Group</th>
-                                            <th style="width:1%;text-align:center">Issue</th>
-                                            <th style="width:1%;text-align:center">Hold</th>
+                                            <th style="width:5%;white-space: pre;">Blood Group</th>
                                             <th style="width:20%;">Issue To / Hold For</th>
+                                            <th style="white-space:pre;">Donation Id</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -256,7 +280,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                   @Html.Partial("_StockInfo")
+                    @Html.Partial("_StockInfo")
                 </div>
             </div>
         </div>

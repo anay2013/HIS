@@ -5,6 +5,21 @@
 }
 
 <style>
+    #txtPatientInfo button {
+        position: absolute;
+        right: 1%;
+        height: 18px;
+        line-height: 0;
+        margin-top: 4px;
+    }
+
+    #txtPatientInfo {
+        display: block;
+        max-width:540px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     .select-row {
         background: #0076d0 !important;
         color: #fff;
@@ -125,6 +140,11 @@
                                 <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
                                     <label style="white-space:pre">Visit No:</label>&nbsp; <span id="txtPatientVisitNo"></span>
                                 </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
+                                    <label style="white-space:pre">IPD Info:</label>&nbsp; <span id="txtPatientInfo"></span>
+                                </div>
                                 <button class="btn btn-success pull-right" id="tblCollect">Collect</button>
                             </div>
                             @*<div class="col-md-4">
@@ -182,6 +202,23 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalTestPreview" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-xs">
+        <div class="modal-content" style="margin-top:5%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;">
+                <h5 class="text-white">Test List</h5>
+                <button data-dismiss="modal" class="btn btn-danger btn-close btn-xs pull-right" style="margin: -16px 0;height: 16px;line-height: 0;">x</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <label id="lblTestList"></label>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
     ViewBag.Title = "DonorRegistration";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/BloodBank/JsModule/DonorRegistration.js?v1.0"></script>
+<script src="~/Areas/BloodBank/JsModule/DonorRegistration.js?v1.2"></script>
 <style>
     .search-tbl-btn {
         height: 16px !important;
@@ -164,8 +164,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="section" style="height:60px;">
-                    <label class="title">Extraction Details</label>
-                    <div class="flex" style="width:20%;margin: 5px 11px;">
+                    <label class="title">Extraction Details<button class="btn btn-danger btn-xs pull-right" onclick="Clear()"><i class="fa fa-window-restore">&nbsp;</i>New</button></label>
+                    <div class="flex" style="width:25%;margin: 2px 11px;">
                         <label style="white-space:pre">Donation Type : </label>
                         <select id="ddlDonationType" class="form-control">
                             <option value="Whole Blood">Whole Blood</option>
@@ -183,7 +183,7 @@
                             <td><b>:</b></td>
                             <td><input type="text" id="txtDonorId" value="New" readonly="" class="form-control" /></td>
                             @*<td colspan="8"><button onclick="$('#modalDonorSearch').modal('show')" class="btn btn-warning btn-xs"><i class="fa fa-user-circle">&nbsp;</i>Already Donor</button></td>*@
-                            <td colspan="8"><button onclick="$('#modalDonorSearch').modal('show')" class="btn btn-warning btn-xs"><i class="fa fa-user-circle">&nbsp;</i>Already Donor</button></td>
+                            <td colspan="5"><button onclick="$('#modalDonorSearch').modal('show')" class="btn btn-warning btn-xs"><i class="fa fa-user-circle">&nbsp;</i>Already Donor</button></td>                                                      
                         </tr>
                         <tr>
                             <td><b>First Name</b></td>
@@ -236,44 +236,50 @@
                             <td>&nbsp;</td>
                             <td><b>DOB</b></td>
                             <td><b>:</b></td>
-                            <td><input type="date" id="txtDOB" class="form-control" /></td>
+                            <td><input type="date" id="txtDOB" class="form-control" />  <input type="hidden" id="hiddenDOBId" /></td>
                             <td>&nbsp;</td>
                             <td><b>Age</b></td>
                             <td><b>:</b></td>
                             <td>
                                 <div class="flex">
                                     <input type="text" id="txtAge" class="form-control" />
-                                    <div style="width:40%;margin-right: 3px;margin-left: 4px;">
-                                        <select id="ddlTitle" class="border-imp">
-                                            <option value="Male">YRS</option>
+                                    <div style="width:50%;margin-right: 3px;margin-left: 4px;">
+                                        <select id="ddlAgeType" class="border-imp">
+                                            <option value="Years">Years</option>
                                         </select>
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td><b>Relative Name</b></td>
-                            <td><b>:</b></td>
-                            <td><input type="text" id="txtRelativeName" class="form-control" data-imp /></td>
-                            <td>&nbsp;</td>
+                        <tr>                           
                             <td><b>Relation</b></td>
                             <td><b>:</b></td>
                             <td>
-                                <select id="ddlRelation" class="form-control">
-                                    <option>FATHER</option>
-                                    <option>S/O</option>
-                                    <option>W/O</option>
-                                    <option>D/O</option>
-                                    <option>H/O</option>
-                                    <option>C/O</option>
-                                    <option>F/O</option>
-                                    <option>M/O</option>
-                                    <option>BROTHER</option>
-                                    <option>UNCLE</option>
-                                    <option>SISTER</option>
-                                    <option>OTHER</option>
-                                </select>
+                                <div class="flex">
+                                    <div style="width:35%;margin-right: 3px;">
+                                        <select id="ddlRelation" class="form-control">
+                                            <option>FATHER</option>
+                                            <option>S/O</option>
+                                            <option>W/O</option>
+                                            <option>D/O</option>
+                                            <option>H/O</option>
+                                            <option>C/O</option>
+                                            <option>F/O</option>
+                                            <option>M/O</option>
+                                            <option>BROTHER</option>
+                                            <option>UNCLE</option>
+                                            <option>SISTER</option>
+                                            <option>OTHER</option>
+                                        </select>
+                                    </div>
+                                    <input type="text" id="txtRelativeName" placeholder="Relative Name" class="form-control" data-imp />
+                                </div>
+                                
                             </td>
+                            <td>&nbsp;</td>
+                            <td><b>Donate To</b></td>
+                            <td><b>:</b></td>
+                            <td><input type="text" id="txtDonateTo" class="form-control" /></td>
                             <td>&nbsp;</td>
                             <td><b>Blood Group</b></td>
                             <td><b>:</b></td>
@@ -364,7 +370,7 @@
                             <td>&nbsp;</td>
                             <td><b>Temp</b></td>
                             <td><b>:</b></td>
-                            <td class="flex"><input type="text" id="txtTemp" class="form-control" />&nbsp;&#8451;</td>
+                            <td class="flex"><input type="text" id="txtTemp" class="form-control" />&nbsp;F<sup>0</sup></td>
                             <td>&nbsp;</td>
                             <td><b>Pulse</b></td>
                             <td><b>:</b></td>
@@ -406,7 +412,7 @@
                             <td><b>:</b></td>
                             <td colspan="8"><input type="text" id="txtRemark" class="form-control" /></td>
                             <td>
-                                <button class="btn btn-success" id="btnFinalSubmit" onclick="FinalSubmit()" style="width:64%;margin-left:5px"><i class="fa fa-sign-in">&nbsp;</i>Final Submit</button>
+                                <button class="btn btn-success" id="btnFinalSubmit" onclick="FinalSubmit(this)" style="width:64%;margin-left:5px"><i class="fa fa-sign-in">&nbsp;</i>Final Submit</button>
                             </td>
                         </tr>
                     </table>
@@ -434,6 +440,7 @@
                                         <select id="ddlSearchInput" class="form-control">
                                             <option value="ByMobileNo">Mobile No</option>
                                             <option value="ByName">Donor Name</option>
+                                            <option value="ByAadharNo">Aadhar No</option>
                                         </select>
                                     </div>
                                     <input type="text" id="txtSearchValue" style="height: 27px;width: 60%;border-color: #f39c12;" class="form-control text-uppercase bc" placeholder="Search.." autocomplete="off" />
