@@ -5,11 +5,8 @@ $(document).ready(function () {
 
 });
 function VisitNoBySearchdata() {
-    debugger
     $('#tblTestTrackingReport tbody').empty();
-    debugger
-    var url = "http://192.168.0.11/HISWebApi/api/sample/Lab_SampleCollectionQueries";
-    // var url = config.baseUrl + "/api/sample/Lab_SampleCollectionQueries";
+    var url = config.baseUrl + "/api/sample/Lab_SampleCollectionQueries";
     var objBO = {};
     objBO.hosp_id = '-';
     objBO.VisitNo = $("#txtVisitNo").val();

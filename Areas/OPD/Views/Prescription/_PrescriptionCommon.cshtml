@@ -1,13 +1,43 @@
-﻿
-<link href="~/Content/jui/jquery-ui.css" rel="stylesheet" />
-<script src="~/Content/jui/jquery-ui.js"></script>
+﻿<link href="~/Content/jui/jquery-ui.css?v=1.1" rel="stylesheet" />
+    <script src="~/Content/jui/jquery-ui.js?v=1.1"></script>
 
-<script src="~/Areas/OPD/JsModule/Prescription/PrescriptionAdvice.js?ver=1.2"></script>
+
+<script src="~/Areas/OPD/JsModule/Prescription/PrescriptionAdvice.js?ver=1.3"></script>
 <link href="~/Content/css/Accordian.css" rel="stylesheet" />
-<script src="~/Areas/OPD/JsModule/Prescription/CPOE_DoctorTemplate.js?ver=1.2"></script>
-<script src="~/Areas/OPD/JsModule/Prescription/InsertPrescribedItems.js?ver=1.2"></script>
-<script src="~/Areas/OPD/JsModule/Prescription/MedicineTemplate.js?ver=1.2"></script>
+<script src="~/Areas/OPD/JsModule/Prescription/CPOE_DoctorTemplate.js?ver=1.3"></script>
+<script src="~/Areas/OPD/JsModule/Prescription/InsertPrescribedItems.js?ver=1.5"></script>
+<script src="~/Areas/OPD/JsModule/Prescription/MedicineTemplate.js?ver=1.7"></script>
 <style>
+    .medicineConfig input:checked + .slider:before {
+        -webkit-transform: translateX(52px);
+        -ms-transform: translateX(52px);
+        transform: translateX(52px);
+    }
+    .medicineConfig .slider {
+        background: #00a65a !important;
+    }
+    .medicineConfig input:checked + .slider:after {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(6px);
+    }
+    .medicineConfig .switch lbl {
+        display: block;
+        color: #fff;
+        position: absolute;
+        top: 0;
+    }
+    .medicineConfig .switch {
+        width: 109px;
+        height: 17px;
+        padding: 0px 9px;
+    }
+    .medicineConfig .slider.round:before {
+        width: 53px;
+        border-radius: 34px;
+        height: 15px;
+        left: 1px;
+    }
     .itemEdit {
         background: #fff;
         padding: 10px;
@@ -321,7 +351,7 @@
                 /* border-bottom: 0.1px solid #eaeaea; */
             }
 
-    #btnViewPatientInfo {
+    #btnViewPatientInfo, #btnClearAll {
         top: 19px;
         padding: 1px 2px 3px 5px;
         right: 15px;
@@ -512,9 +542,9 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#LaboratoryRadiologyAdvicePackages" class="collapsed" aria-expanded="false">
-                                <span class="circle"><i class="fa fa-plus-circle"></i></span>Laboratory & Radiology Advice & Packages
+                                <span class="circle"><i class="fa fa-plus-circle"></i></span>Laboratory & Radiology
                             </a>
-                            @*<span class="circle-add pull-right" id="T00009"><i class="fa fa-edit"></i></span>*@
+                            <label class="circle-add pull-right" title="Diagnostic Template Info" style="border-color:red !important" onclick="GetDoctorTemplateAndItem('Diagnostic')"><i class="fa fa-plus-circle" style="color:red !important"></i></label>
                         </h4>
                     </div>
                     <div id="LaboratoryRadiologyAdvicePackages" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
@@ -618,7 +648,7 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#PrescribedProcedure" class="collapsed" aria-expanded="false">
                                 <span class="circle"><i class="fa fa-plus-circle"></i></span>Prescribed Procedure
                             </a>
-                            @*<span class="circle-add pull-right"><i class="fa fa-edit"></i></span>*@
+                            <label class="circle-add pull-right" title="Procedure Template Info" style="border-color:red !important" onclick="GetDoctorTemplateAndItem('Procedure')"><i class="fa fa-plus-circle" style="color:red !important"></i></label>
                         </h4>
                     </div>
                     <div id="PrescribedProcedure" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
@@ -658,7 +688,7 @@
                                 <div class="col-md-12">
                                     <div class="search-box" style="display:flex">
                                         <input type="text" class="form-control" id="txtSearchPrescribedMedicine" style="width:70%" placeholder="Search Prescribed Medicine Template" />
-                                        <button id="btnCPOEMediTemp" onclick="GetMedicineTemplate();" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                                        <button id="btnCPOEMediTemp" onclick="GetMedicineTemplate();" class="btn btn-danger"><i class="fa fa-plus"></i></button>
                                         @*<button class="btn btn-warning"><i class="fa fa-heart"></i></button>
                                             <button class="btn btn-primary"><i class="fa fa-stethoscope"></i></button>*@
                                     </div>
@@ -690,14 +720,44 @@
                     </ul>
                     <div class="tab-content">
                         <div id="PatientVisits" class="tab-pane fade in active">
-                            <table id="tblPatientVisits" class="table table-bordered"><tbody></tbody></table>
+                            <table id="tblPatientVisits" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Copy</th>
+                                        <th>App No</th>
+                                        <th>Patient Visits</th>
+                                        <th>CMD</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                             @*<label class="currentVisit">Current Visit <b onclick="AdvicePreview()" style="float:right;color:#a72121;font-size: 15px;" class="fa fa-print"></b></label>*@
                         </div>
                         <div id="menu1" class="tab-pane fade">
-                            <table id="tblIPDDischargeSummary" style="margin-top:10px" class="table table-bordered"><tbody></tbody></table>
+                            <table id="tblIPDDischargeSummary" style="margin-top:10px" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>IPD No</th>
+                                        <th>Admit Date</th>
+                                        <th>Disch. Date</th>
+                                        <th>CMD</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                         <div id="menu2" class="tab-pane fade">
-                            <table id="tblOldHISData" style="margin-top:10px" class="table table-bordered"><tbody></tbody></table>
+                            <table id="tblOldHISData" style="margin-top:10px" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Copy</th>
+                                        <th>App No</th>
+                                        <th>Patient Visits</th>
+                                        <th>CMD</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -714,7 +774,8 @@
                 <div id="PatientVisits1" class="tab-pane fade in active">
                     <div class="">
                         <label style="font-size: 10px;position: relative;-webkit-transform: rotate(-90deg); top: 171px; left: -93px;"> Powered By : Chandan Hospital Ltd.</label>
-                        <button id="btnViewPatientInfo" onclick="$('.OPDPrintPreview-header').slideToggle('slow')" class="btn-warning btn-xs"><i class="fa fa-user">&nbsp;</i></button>
+                        <button id="btnClearAll" style="width: 70px;" onclick="DeleteVisitsInfo()" class="btn-danger btn-xs"><i class="fa fa-trash">&nbsp;</i>Delete</button>
+                        <button id="btnViewPatientInfo" style="margin-right:75px;" onclick="$('.OPDPrintPreview-header').slideToggle('slow')" class="btn-warning btn-xs"><i class="fa fa-user">&nbsp;</i></button>
                         <div class="OPDPrintPreview-header" style="display:none">
                             <div class="row">
                                 <div class="col-md-2">
@@ -827,12 +888,11 @@
                                     <div class="prescribedItem" id="ProvisionalDiagnosisItems">
                                         <TemplateGroup id="T00001">Provisional Diagnosis : </TemplateGroup><br />
                                     </div>
-                                    <div class="prescribedItem" id="PrescribedMedicine" style="border: 1px solid #ddd;padding:5px">
+                                    <div class="prescribedItem medicineConfig" id="PrescribedMedicine" style="border: 1px solid #ddd;padding:5px">
 
                                         <TemplateGroup id="PrescribedMedicine"></TemplateGroup>
-                                        <img src="~/Content/logo/rx.png" style="width:15px;cursor:grabbing" id="imgRx" />
-                                        Database Search :
-                                        <label class="switch"><input type="checkbox" class="IsActive" id="IsDB" checked=""><div class="slider round"></div></label>
+                                        <img src="~/Content/logo/rx.png" style="width:15px;cursor:grabbing" id="imgRx" />                                        
+                                        <label class="switch"><input type="checkbox" class="IsActive" id="IsDB" checked=""><div class="slider round"></div><lbl>Ethical By Salt</lbl></label>
                                         &nbsp;&nbsp;Expand Full Mode : <i class="fa fa-expand expandMedTab" onclick="expandMedicine()"></i>
                                         <table class="table table-bordered MedicineTemplate" id="MedicineTemplatePres" style="font-size: 11px;margin-bottom:0">
                                             <thead>
@@ -876,6 +936,117 @@
                     <div style="text-align:center;z-index:1">
                         <h4 class="pdfViewer">Patient Visits Report</h4>
                         <iframe src="" id="PresPreview" frameborder="0" height="550px" width="100%"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalTemplate2" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 1180px;">
+        <div class="modal-content" style="margin-top: 8%;height:485px">
+            <!-- Modal Header -->
+            <div class="modal-header bg-success" style="background: #007792;color:#fff">
+                <h4 class="modal-title">
+                    <span id="infoTempType"></span>&nbsp;Template Info <span id="txtTempIdLabProc" class="hide"></span>
+                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+                </h4>
+            </div>
+            <style>
+                .itemListTitle {
+                    margin: 0;
+                    background: #007995;
+                    padding: 5px;
+                    font-size: 15px;
+                }
+
+                .searchBox {
+                    height: 19px;
+                    border-radius: 3px;
+                    width: 86%;
+                    margin: 1px 0;
+                }
+            </style>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <input type="button" class="btn btn-warning btn-xs" onclick="ClearTemplateMaster()" value="New" />
+                                <h4 class="text-white pull-right itemListTitle">Template Master</h4>
+                            </div>
+                            <div class="panel-body" style="background:#fff;padding:5px 0;">
+                                <div class="col-md-12">
+                                    <input type="text" id="txtTemplateName" data-imp class="form-control" style="border-radius:0;" autocomplete="off" placeholder="Template Name" />
+                                </div>
+                                <div class="col-md-12" style="margin:5px 0;">
+                                    <div style="display:flex">
+                                        <input type="text" id="txtDescription" class="form-control" style="border-radius:0;border-color:#ddd" autocomplete="off" placeholder="Description" />
+                                        <button class="btn btn-success" onclick="InsertLabAndProcedureTemplate()" style="height:28px;border-radius:0;margin:0" id="btnSaveTemplate">Save</button>
+                                    </div>
+                                </div>
+                                <div class="table table-responsive">
+                                    <div class="scroll" style="height: 300px;">
+                                        <table id="tblLabAndProcTemplateMaster" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Template Name</th>
+                                                    <th>Description</th>
+                                                    <th style="width:22%">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h4 class="text-white itemListTitle">Item List</h4>
+                            </div>
+                            <div class="panel-body" style="background:#fff;padding:0;">
+                                <div class="table table-responsive">
+                                    <div class="scroll" style="height: 370px;">
+                                        <table id="tblItemListForTemplate" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Add</th>
+                                                    <th><input type="text" id="txtSearch1" onkeyup="searchTable('txtSearch1','tblItemListForTemplate')" placeholder="Seach Item Name" class="form-control searchBox" /></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h4 class="text-white itemListTitle">Template Item List</h4>
+                                <button class="btn btn-warning btn-xs pull-right" onclick="UsedMe()" style="margin: -24px 4px;"><i class="fa fa-copy">&nbsp;</i>Use</button>
+                            </div>
+                            <div class="panel-body" style="background:#fff;padding:0;">
+                                <div class="table table-responsive">
+                                    <div class="scroll" style="height: 370px;">
+                                        <table id="tblLinkedItemListForTemplate" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Delete</th>
+                                                    <th><input type="text" id="txtSearch2" onkeyup="searchTable('txtSearch2','tblLinkedItemListForTemplate')" placeholder="Seach Item Name" class="form-control searchBox" /></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1106,10 +1277,11 @@
         <div class="modal-content" style="margin-top: 8%;height:485px">
             <!-- Modal Header -->
             <div class="modal-header bg-success" style="background: #007792;color:#fff">
-                <h4 class="modal-title">
-                    Template Content
+                <h6 class="modal-title">
+                    Note : Printing will work in New HIS IPD Only.
                     <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
-                </h4>
+                    <button type="button" id="btnPrintDiscData" class="btn btn-warning pull-right" onclick="PrintDischarSummary()"><i class="fa fa-print">&nbsp;</i>Print</button>
+                </h6>
             </div>
             <!-- Modal body -->
             <div class="modal-body">

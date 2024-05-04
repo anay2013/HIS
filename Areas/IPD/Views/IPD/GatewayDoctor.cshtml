@@ -5,7 +5,7 @@
 }
 
 <link href="~/Content/css/MenuMaster.css?his-version-1.0" rel="stylesheet" />
-<script src="~/Areas/IPD/JsModule/IPD/IPDDoctorGateway.js"></script>
+<script src="~/Areas/IPD/JsModule/IPD/IPDDoctorGateway.js?v1.1"></script>
 <style>
     #tblAdviceHeader .fa-info {
         font-size: 12px;
@@ -28,7 +28,17 @@
         text-align: left;
         padding: 0 7px;
     }
+    #txtSearchMenu {
+        border: 1px solid #80c5e1;
+        height: 25px;
+        margin: 2px 2px;
+        width: 98%;
+        border-radius: 26px;
+    }
 
+    #menuPanel::-webkit-scrollbar {
+        width: 5px !important;
+    }
         #btnRemarkLog span.count {
             position: absolute;
             padding: 0px 8px;
@@ -69,13 +79,23 @@
     }
 
     #dash-dynamic-section {
-        right: 0;
+        /*right: 0;
         width: 83.5%;
-        float: right;
-        /* background: url(http://192.168.4.10/HIS/Images/patter.jpg); */
+        float: right;    
         margin: 4px 9px;
         height: 80%;
         position: fixed;
+        display: inline-block;
+        border: solid 1px #7ec4df;
+        padding: 0;
+        border-radius: 3px;*/
+
+        right: 13px;
+        width: 81.5%;
+        float: right;        
+        margin: 4px 9px;
+        height: 80%;
+        position: relative;
         display: inline-block;
         border: solid 1px #7ec4df;
         padding: 0;
@@ -628,13 +648,13 @@
         <div class="dash-body">
             <div class="row">
                 <div class="left-panel">
-                    <label>Menu-Section</label>
-                    <div id="menuPanel">
+                    <label><input type="text" id="txtSearchMenu" onkeyup="searchIPDMenu('txtSearchMenu', 'menuPanel')" class="form-control" placeholder="Search Menu.." /></label>
+                    <div id="menuPanel" style="height:75vh;overflow-y:auto;overflow-x:hidden">
 
                     </div>
-                </div>
+                </div>       
                 <div id="dash-dynamic-section">
-                    <label class="title">Menu-Section</label>
+                    @*<label class="title">Menu-Section</label>*@
                     <div id="dash-dynamic">
                         @*@Html.Partial("../NursingView/_MedicineIndent")*@
                     </div>

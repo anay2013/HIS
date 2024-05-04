@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "InvestigationReport";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
@@ -104,11 +103,19 @@
         width: 13%;
     }
 </style>
-<script src="~/Areas/Lab/JsModule/Report/InvestigationReport.js"></script>
+<script src="~/Areas/Lab/JsModule/Report/InvestigationReport.js?v1.1"></script>
 <div id="page-content">
     <div class="container">
         <div class="panel-body">
             <div class="row colnospace" style="background-color:#bddeff;margin-bottom:2px;height:62px;padding:5px;border-radius: 2px;">
+                <div class="col-md-2">
+                    <label>Type</label>
+                    <select id="ddlType" class="form-control">
+                        <option value="ALL">ALL</option>
+                        <option value="IPD">IPD</option>
+                        <option value="OPD">OPD</option>
+                    </select>
+                </div>
                 <div class="col-md-2">
                     <label>From</label>
                     <input type="date" id="txtFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
@@ -117,7 +124,14 @@
                     <label>To</label>
                     <input type="date" id="txtTo" class="form-control" placeholder="to : dd-mm-yyyy" />
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label>Department</label>
+                    <div class="flex">
+                        <select id="ddlDepartment" class="form-control"></select>
+                        <button id="btnSearch2" onclick="ReportInfo()" style="width: 30%;height: 26px;margin-left: 10px;" class="btn btn-success pull-right"><i class="fa fa-search">&nbsp;</i>Search</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <label>Search By</label>
                     <div class="flex">
                         <select id="ddlSeachBy" class="form-control">
@@ -131,19 +145,12 @@
                         <button id="btnSearch1" onclick="ReportInfoBySearchKey()" style="width: 55%;height: 26px;margin-left: 3px;" class="btn btn-success pull-right"><i class="fa fa-search">&nbsp;</i>Search</button>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label>Department</label>
-                    <div class="flex">
-                        <select id="ddlDepartment" class="form-control"></select>
-                        <button id="btnSearch2" onclick="ReportInfo()" style="width: 30%;height: 26px;margin-left: 10px;" class="btn btn-success pull-right"><i class="fa fa-search">&nbsp;</i>Search</button>
-                    </div>
-                </div>
                 @*<div class="col-md-3">
-                        Select<br />
-                        <label><input type="radio" name="reportBy" checked value="TestCategoryWise" />&nbsp;Department</label>
-                        <label><input type="radio" name="reportBy" value="TestWiseReport" />&nbsp;Test Wise</label>
-                        <button id="btnSearch2" onclick="ReportInfo()" style="width: 24%;height: 26px;margin-left: 10px;" class="btn btn-success pull-right"><i class="fa fa-search">&nbsp;</i>Search</button>
-                    </div>*@
+                    Select<br />
+                    <label><input type="radio" name="reportBy" checked value="TestCategoryWise" />&nbsp;Department</label>
+                    <label><input type="radio" name="reportBy" value="TestWiseReport" />&nbsp;Test Wise</label>
+                    <button id="btnSearch2" onclick="ReportInfo()" style="width: 24%;height: 26px;margin-left: 10px;" class="btn btn-success pull-right"><i class="fa fa-search">&nbsp;</i>Search</button>
+                </div>*@
             </div>
             <div class="row colnospace">
                 <div class="scroll" style="height:500px;overflow:auto;border:1px solid #2478a9">
@@ -159,6 +166,7 @@
                                 <th>Referral Name</th>
                                 <th>Department/Test</th>
                                 <th>Source</th>
+                                <th>IPOPType</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

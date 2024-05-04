@@ -98,16 +98,20 @@ $(document).ready(function () {
                 AddNewRow();
             }
         }
-        if ($('input[id=IsDB]').is(':checked') && $(this).closest('td').index() == 0) {
+        //if ($('input[id=IsDB]').is(':checked') && $(this).closest('td').index() == 0) {
+        if ($(this).closest('td').index() == 0) {
             var val = $(this).text();
 
             // SearchPresMedicine(val, 'ETHICAL', this);
-            disableLoading();
+
             var objBO = {};
             objBO.searchKey = $(this).text();
-            objBO.searchType = 'CPOE-Ethical';
+            objBO.searchType = ($('input[id=IsDB]').is(':checked')) ? 'CPOE-Ethical' : 'CPOE-BySalt';
             objBO.PanelId = $('span[data-panelid]').text();
-
+            if ($(this).text().length < 3) {
+                return
+            }
+            disableLoading();
             $(this).autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -131,7 +135,8 @@ $(document).ready(function () {
                     return false;
                 },
                 select: function (event, ui) {
-                    $(this).text(ui.item.value.split('~')[0])
+                    $(this).text(ui.item.value.split('|')[0])
+                    //$(this).text(ui.item.value)
                     $(this).closest('td').next('td').find('label').focus();
                     return false;
                 }
@@ -389,7 +394,7 @@ function SearchMedicine(key, type) {
                 alert("Error");
             };
         },
-        error: function (response) {
+        complete: function (response) {
             loading();
         },
         error: function (response) {

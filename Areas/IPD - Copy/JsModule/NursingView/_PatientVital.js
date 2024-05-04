@@ -59,8 +59,8 @@ function GetVitalSign() {
                     tbody += "<td>" + val.SittingHeight + "</td>";
                     tbody += "<td>" + val.IBW + "</td>";
                     tbody += "<td>" + val.SPO2 + "</td>";
-                    //tbody += "<td>" + val.login_id + "</td>";
-                    //tbody += "<td>" + val.read_date + "</td>";
+                    tbody += "<td>" + val.EntryBy + "</td>";
+                    tbody += "<td>" + val.cr_date + "</td>";
                     tbody += "<td><button onclick=VitalSignForUpdate('" + val.auto_id + "') class='btn-flat btn-warning'>Edit</button></td>";
                     tbody += "</tr>"
                 });

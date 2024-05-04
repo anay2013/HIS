@@ -1,16 +1,22 @@
 ﻿var _AutoId;
 var _TemplateId = null;
 $(document).ready(function () {
+    //$('#dash-dynamic-section .title').removeAttr('style').hide();
     $('#ddlTemplates').empty().append($('<option></option>').val('Select').html('Select')).select2();
     HeaderList('Y');
     TemplateList('Y');
     DischargeSummary();
-    $('#dash-dynamic-section').find('label.title').text('Patient Discharge').show();
+    $('#dash-dynamic-section').find('label.title').text('Patient Discharge').hide();
     $('select').select2();
     CKEDITOR.replace('txtTemplate', {
         enterMode: CKEDITOR.ENTER_BR,
         shiftEnterMode: CKEDITOR.ENTER_P,
     });
+    //CKEDITOR.replace("txtTemplate");
+    //CKEDITOR.editorConfig = function (config) {
+    //    config.removePlugins = 'blockquote,save,flash,iframe,tabletools,pagebreak,templates,about,showblocks,newpage,language,print,div';
+    //    config.removeButtons = 'Print,Form,TextField,Textarea,Button,CreateDiv,PasteText,PasteFromWord,Select,HiddenField,Radio,Checkbox,ImageButton,Anchor,BidiLtr,BidiRtl,Font,Format,Styles,Preview,Indent,Outdent';
+    //};
     $('#ddlTemplates').on('change', function () {
         DischargeSummaryByTemplateId()
     });
@@ -41,6 +47,14 @@ $(document).ready(function () {
         CKEDITOR.instances['txtTemplate'].setData(TemplateContent);
     });
 });
+function ExpandCK() {
+    $('.expandCK .cke_contents').removeAttr('style')
+    $('.ckDiv').toggleClass('expandCK');
+    if ($('.ckDiv').hasClass('expandCK'))
+        $('.expandCK .cke_contents').css('height', '56vh');
+    else
+        $('.expandCK .cke_contents').css('height', '150px');
+}
 function HeaderList(prm) {
     $('#tblHeaderMaster tbody').empty();
     var url = config.baseUrl + "/api/IPDDoctor/IPD_DoctorQueries";
@@ -185,13 +199,13 @@ function GetPreviousDischargeInfo() {
         success: function (data) {
             if (Object.keys(data.ResultSet).length) {
                 var tbody = "";
-                if (Object.keys(data.ResultSet.Table).length) {                 
-                    $.each(data.ResultSet.Table, function (key, val) {                                              
-                        tbody += "<tr>";                                           
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr>";
                         tbody += "<td>" + val.IPDSource + "</td>";
                         tbody += "<td>" + val.IPDNo + "</td>";
-                        tbody += "<td>" + val.AdmitDate  + "</td>";
-                        tbody += "<td>" + val.DischargeDate  + "</td>";
+                        tbody += "<td>" + val.AdmitDate + "</td>";
+                        tbody += "<td>" + val.DischargeDate + "</td>";
                         tbody += "<td>" + val.DoctorName + "</td>";
                         tbody += "<td><button onclick=DischargeTemplateInfo(this) class='btn btn-warning btn-xs edit'><i class='fa fa-sign-in'></i></button></td>";
                         tbody += "</tr>";
@@ -199,7 +213,7 @@ function GetPreviousDischargeInfo() {
                     $('#tblPatientDischargeInfo tbody').append(tbody);
                 }
             }
-        },      
+        },
         error: function (response) {
             alert('Server Error...!');
         }
@@ -363,7 +377,7 @@ function LockUnLockDischargeSummary(logic) {
             contentType: "application/json;charset=utf-8",
             dataType: "JSON",
             success: function (data) {
-                if (data.includes('Success')) {                  
+                if (data.includes('Success')) {
                     if (logic == 'LockDischargeSummary') {
                         $('#btnLock').addClass('lock');
                         $('#btnUnLock').removeClass('lock');
@@ -385,7 +399,7 @@ function LockUnLockDischargeSummary(logic) {
 }
 function expandContent() {
     $('.dischargeSection').slideToggle('slow');
-  //  $(this).parents('.section').slideToggle('slow');
+    //  $(this).parents('.section').slideToggle('slow');
     $('.TemplateInfo').toggleClass('fullHeight');
     $('.vertiscrl').toggleClass('fullHeight');
 }
@@ -447,11 +461,11 @@ function InsertDischargeSummary(logic) {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            if (data.includes('Success')) {               
-                for (instance in CKEDITOR.instances) {                    
+            if (data.includes('Success')) {
+                for (instance in CKEDITOR.instances) {
                     CKEDITOR.instances[instance].updateElement();
                     CKEDITOR.instances[instance].setData('');
-                }                                                        
+                }
                 DischargeSummary();
             }
             else {
@@ -581,7 +595,7 @@ function DischargeTemplateInfo(elem) {
                             tbody += "</tr>";
                             temp = val.HeaderName;
                         }
-                        tbody += "<tr>";                    
+                        tbody += "<tr>";
                         tbody += "<td class='hide'>" + val.HeaderId + "</td>";
                         tbody += "<td class='hide'>" + val.AutoId + "</td>";
                         tbody += "<td>" + val.template_content + "</td>";

@@ -6,6 +6,8 @@
 
 
 
+
+
 <script src="~/Content/cropper/js/cropper.js"></script>
 <script src="~/Content/cropper/js/jquery.canvasCrop.js"></script>
 <link href="~/Content/cropper/css/canvasCrop.css" rel="stylesheet" />
@@ -220,6 +222,7 @@
                                     <th style='white-space:pre'>Doctor Id</th>
                                     <th style='white-space:pre'>Doctor Name</th>
                                     <th>Degree</th>
+                                    <th>Flag</th>
                                     <th style="width:1%">CMD</th>
                                 </tr>
                             </thead>
@@ -247,6 +250,27 @@
                                 <button class="btn btn-success" onclick="UploadSign()"><i class="fa fa-upload">&nbsp;</i>Upload Sign</button>
                             </div>
                             <label class="fileType"><b>Note :</b> file type should be <b class="text-danger">.jpg, .jpeg, .png.</b></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section" style="height:auto;">
+                    <label class="title">Upload Details</label>
+                    <div class="row" style="margin:3px 0 2px 0">
+                        <div class="col-md-12">
+                            <div>
+                                <label style="width: 50px;">Flag: </label>
+                                <input type="radio" id="ddlFlag" name="Flag" value="Y">
+                                <label for="Flag"> Yes </label>
+                                <input type="radio" id="ddlFlag" name="Flag" value="N" style="margin-left:8%">
+                                <label for="Flag"> No </label>
+                                <button class="btn btn-success pull-right" onclick="updatedataFlag()">Update</button>
+                                <br />
+                                <label>Degree: </label>
+                                @*<input type="text" id="txtdegreeUpdate" style="width:84%;height: 25px;border:1px solid #dbdbdb">*@
+                                <textarea id="txtdegreeUpdate" style="width:84%;height: 70px;border:1px solid #dbdbdb"></textarea>
+                            </div>
+
                         </div>
                     </div>
                 </div>

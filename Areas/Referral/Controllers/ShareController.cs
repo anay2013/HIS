@@ -21,6 +21,17 @@ namespace MediSoftTech_HIS.Areas.Referral.Controllers
         {
             return View();
         }
-       
+        public ActionResult RefSharePaymentNew()
+        {
+            return View();
+        }
+        public ActionResult RefShareReportNew()
+        {
+            return View();
+        }
+        public ActionResult ShareDeductionNew()
+        {
+            return View();
+        }
     }
 }

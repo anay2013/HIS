@@ -6,6 +6,29 @@
         border: 0;
         border-top: 1px solid #eee;
     }
+
+    #txtUnMappedAmt {
+        border-radius: 0;
+        border-color: #f39c12;
+        pointer-events: none;
+    }
+
+    #UnMappedSection {
+        margin: 5px;
+    }
+
+        #UnMappedSection .col-md-8 {
+            display: flex;
+            margin-bottom: 0;
+            align-items: end;
+        }
+
+    #btnMap {
+        border-radius: 0;
+        width: 90%;
+        margin: 0;
+        height: 28px;
+    }
     /*.select2-container{
         position:inherit !important;
     }*/
@@ -23,7 +46,7 @@
 
     .amount-section .col-md-2 {
         text-align: center;
-        width: 12%;
+        width: 11%;
         padding: 0px 5px;
     }
 
@@ -129,20 +152,44 @@
         font-size: 13px;
         font-weight: bold;
     }
+
     .bc {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         border-color: #06a08b;
     }
+
     .btnRC {
         height: 30px;
         margin: -1px;
         border-radius: 0;
     }
+
     .finalBill {
         background: #def5f3;
         padding: 11px 5px;
         border: 1px solid #201a132e;
+    }
+
+    .BillStatus {
+        margin: 3px;
+        border-radius: 30px;
+        display: block;
+        padding: 8px 7px;
+        font-size: 11px;
+        color: #fff;
+    }
+
+    .Matched {
+        background: #359f01;
+    }
+
+    .Mismached {
+        background: #c70000;
+    }
+
+    .BillStatus i {
+        font-size: 11px;
     }
 </style>
 <div class="example-box-wrapper">
@@ -165,14 +212,18 @@
             <input type="text" id="txtDiscount" class="form-control" />
         </div>
         <div class="col-md-2">
-            <label>Net Amount</label>
-            <input type="text" id="txtNetAmt" class="form-control" style="background-color: #2b70c7;color: #f4f4f4;" />
+            <label>Tax</label>
+            <input type="text" id="txtTax" class="form-control" style="background-color: #2b70c7;color: #f4f4f4;" />
+        </div>
+        <div class="col-md-2">
+            <label>Net Payable</label>
+            <input type="text" id="txtNetPayable" class="form-control" style="background-color: #2b70c7;color: #f4f4f4;" />
         </div>
         <div class="col-md-2">
             <label>Advance Amount</label>
             <div class="flex">
                 <input type="text" id="txtAdvanceAmt" class="form-control" style="background-color: #2b70c7;color: #f4f4f4;" />
-                <button class="btn btn-info pull-right" id="btnGenerateBill" onclick="$('#modalAdvancePayment').modal('show')" style="border-radius: 0;margin: -2px 0;height: 28px;"><i class="fa fa-plus">&nbsp;</i></button>
+                <button class="btn btn-info pull-right" id="btnGenerateBill1" onclick="$('#modalAdvancePayment').modal('show')" style="border-radius: 0;margin: -2px 0;height: 28px;"><i class="fa fa-plus">&nbsp;</i></button>
             </div>
         </div>
         <div class="col-md-2">
@@ -183,7 +234,7 @@
             <label>Balance Amount</label>
             <input type="text" id="txtBalanceAmt" class="form-control" style="background-color: #2b70c7;color: #f4f4f4;" />
         </div>
-       
+
         <hr />
     </div>
     <div class="row dischargeSection" style="height:50px;padding: 5px 0;">
@@ -194,15 +245,16 @@
                     <label><input type="radio" checked name="billing-type" value="OpenBill" />&nbsp;Open Bill</label>
                     <label><input type="radio" name="billing-type" value="PackagedBill" />&nbsp;Packaged Bill</label>
                     <label><input type="radio" name="billing-type" value="MixedBill" />&nbsp;Mixed Bill</label>
-                    <textarea id="txtRemark" rows="1" style="width: 47%;margin: 0 10px;border-color: #ddd;height: 35px;" class="form-control1" placeholder="Remark.."></textarea>
+                    <textarea id="txtRemark" rows="1" style="width: 47%;margin: 0 10px;border-color: #ddd;height: 35px;" class="form-control1" placeholder="Discount Remark.."></textarea>
                     <button class="btn btn-primary pull-right btnRC" id="btnGenerateBill" onclick="GenerateBill()" style="margin:5px 0;"><i class="fa fa-sign-in">&nbsp;</i>Generate Bill</button>
+                    <label class="BillStatus"><i class="fa">&nbsp;</i><span></span></label>
                 </div>
             </div>
             <div class="row finalBill">
                 <div class="col-md-4">
                     <button class="btn btn-success  btnRC" onclick="MarkDischarge()" id="btnPrintBill"><i class="fa fa-print">&nbsp;</i>Mark Discharged</button>
                 </div>
-            
+
             </div>
         </div>
 
@@ -221,6 +273,7 @@
                             <th class="text-right">Total Discount</th>
                             <th class="text-right">Net Amount</th>
                             <th class="text-right">Round off</th>
+                            <th class="text-right">Tax</th>
                             <th class="text-right">Net Payable</th>
                             <th class="text-right">Received</th>
                             <th class="text-right">Panel Approved</th>
@@ -244,10 +297,12 @@
                 <label style="white-space: pre;">Co-Payment : </label>
                 <input type="text" id="txtCoPayment" class="form-control bc" style="font-size:14px;font-weight:bold" placeholder="0" readonly="readonly" />
                 <label style="white-space: pre;">Discount : </label>
-                <input type="text" id="txtTPADiscount" class="form-control bc" style="font-size:14px;font-weight:bold" placeholder="0" readonly="readonly" />
-
-                <button id="btnSaveApproval" onclick="SaveCloseApproval('SaveApprovalAmount')" class="btn btn-primary btnRC" style="height:28px;width:30%;margin:0 10px;"><i class="fa fa-plus-circle">&nbsp;</i>Save</button>
-                <button id="btnCloseBill" onclick="SaveCloseApproval('CloseBill')" class="btn btn-danger btnRC" style="height:28px;width:52%;"><i class="fa fa-window-close-o">&nbsp;</i>Close Bill</button>
+                <label class="flex" style="width:50%;border: 1px solid #f39c12;">
+                    <button id="btnCalculateDis" style="width:80px;" onclick="ApplyPanelDiscount(this)" class="btn btn-warning btnRC"><i class="fa fa-sign-in">&nbsp;</i>Update</button>
+                    <input type="text" id="txtTPADiscount" class="form-control bc" style="font-size:14px;font-weight:bold;width:57%;border: 1px solid #f39c12;" placeholder="0" readonly="readonly" />
+                </label>
+                <button id="btnSaveApproval" onclick="SaveCloseApproval('SaveApprovalAmount')" class="btn btn-primary btnRC" style="height:28px;width:16%;margin:0 10px;"><i class="fa fa-plus-circle">&nbsp;</i>Save</button>
+                <button id="btnCloseBill" onclick="SaveCloseApproval('CloseBill')" class="btn btn-danger btnRC" style="height:28px;width:25%;"><i class="fa fa-window-close-o">&nbsp;</i>Close Bill</button>
             </div>
         </div>
     </div>
@@ -265,6 +320,13 @@
 
             <!-- Modal body -->
             <div class="modal-body" style="padding:0">
+                <div class="row" id="UnMappedSection">
+                    <div class="col-md-8">
+                        <label style="white-space:pre">Un-Mapped Amount : </label>
+                        <input type="text" id="txtUnMappedAmt" class="form-control" />
+                        <button class="btn btn-warning" onclick="MapIPDAmount()" id="btnMap"><i class="fa fa-sign-in">&nbsp;</i>Map Advance</button>
+                    </div>
+                </div>
                 <div class="row" style="margin:10px 0">
                     <div class="col-md-12">
                         @Html.Partial("_AdvancePayment")

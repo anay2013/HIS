@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "ServiceConsumption";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/OPD/JsModule/ServiceConsumption.js"></script>
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+    .selected {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 32px;
+        /*margin-top: 11%;*/
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+</style>
+<div id="page-content">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="ml15">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h5>Service Consumption</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div style="display:flex">
+                                    <input type="text" id="txtUHIDNo" class="form-control" style="border: 1px solid #86b3de;" placeholder="UHIDNo / IPOPNo / Mobile No" />
+                                    <button style="height:28px;width:30%" class="btn bg-blue bn" onclick="GetSearchData()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:190px;overflow-y:auto; overflow-x:auto;border:1px solid #3498db">
+                                    <table class="table table-bordered" id="tblServiceBooked">
+                                        <thead>
+                                            <tr>
+
+                                                <th style="width:10%">UHID NO</th>
+                                                <th style="width:10%">VisitNo</th>
+                                                <th style="width:10%">Date</th>
+                                                <th style="width:20%">Patient Name</th>
+                                                <th style="width:20%">Item Name</th>
+                                                <th style="text-align:center;width:10%">Amount</th>
+                                                <th style="text-align:center;width:5%">Qty</th>
+                                                <th style="width:5%">Booked</th>
+                                                <th style="width:5%">Cmd</th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Assigned Source</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="table-responsive" style="height:200px;overflow-y:auto; overflow-x:auto;border:1px solid #3498db">
+                                    <table class="table table-bordered" id="tblServiceUsed">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%">UHIDNO</th>
+                                                <th style="width:20%">VisitNo</th>
+                                                <th style="width:20%">Patient Name</th>
+                                                <th style="width:20%">Item Name</th>
+                                                <th style="width:5%;text-align:center">BookedQty</th>
+                                                <th style="width:5%;text-align:center">UsedQty</th>
+                                                <th style="width:5%"></th>
+                                                <th style="width:5%">Cmd</th>
+                                                <th style="width:5%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="table-responsive" style="height:200px;overflow-y:auto; overflow-x:auto;border:1px solid #3498db">
+                                    <table class="table table-bordered" id="tblServiceUsedList">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th style="text-align:center">Used Qty</th>
+                                                <th>Used By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

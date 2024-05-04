@@ -2,7 +2,10 @@
 <script src="~/Areas/IPD/JsModule/NursingView/_NursingBillingView.js"></script>
 <script src="~/Areas/IPD/JsModule/IPD/_IPDCommunication.js"></script>
 <style>
-    label.doctor {
+    .select2-container {
+        position:relative;
+    }
+        label .doctor {
         width: 35%;
         background: #3c8dbc;
         height: 28px;
@@ -248,18 +251,49 @@
                     <table id="tblItemsInfo" class="table table-bordered">
                         <thead>
                             <tr>
-                                <th style="width: 28%;">
-                                    Item Name
-                                </th>
-                                <th style="width: 3%;padding:3.5px !important;text-align:right">
-                                    Qty
-                                </th>
-                                <th style="width: 12%;line-height: 25px;">Doctor Name</th>
-                                <th style="width:2%;text-align: center;"><button onclick="FullPageHeight()" class="btn btn-warning btn-xs"><i class="fa fa-expand">&nbsp;</i></button></th>
+                                <th style="width: 35%;">Item Name</th>
+                                <th style="width: 5%;padding:3.5px !important;text-align:right">Qty</th>
+                                <th style="width: 20%;line-height: 25px;">Doctor Name</th>
+                                <th style="width: 20%;line-height: 25px;">Entry By</th>
+                                <th style="width:10%;text-align: center;"> <button class="btn btn-warning" onclick="ItemsInfoByIPD()" ><i class="fa fa-search">&nbsp;</i>Item</button><button onclick="FullPageHeight()" class="btn btn-warning btn-xs"><i class="fa fa-expand">&nbsp;</i></button></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalSearchItem" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:1020px">
+        <div class="modal-content" style="margin-top: 12%;">
+            <!-- Modal Header -->
+            <div class="modal-header bg-success" style="padding: 2px 10px;background: #2478a9;color:#fff">
+                <p class="modal-title">
+                    Search Item Wise
+                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+                </p>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="padding:0">
+                <div class="row" style="margin:10px 0">
+                    <div class="col-md-2">
+                        <label>From</label>
+                        <input type="date" id="txtSearchFrom" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label>To</label>
+                        <input type="date" id="txtSearchTo" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Choose Item</label>
+                        <select id="ddlSearchItem" class="form-control"></select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-warning" onclick="ItemsInfo('ItemsInfoByItemId')" style="margin-top: 25px;"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                    </div>
                 </div>
             </div>
         </div>

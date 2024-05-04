@@ -103,11 +103,16 @@
         height: 26px;
         border-radius: 2px;
     }
+
+    .panel-heading button {
+        float: right;
+        margin: -24px -1px;
+    }
 </style>
 <div id="page-content">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="ml15">
                     <div class="">
                         <div class="panel">
@@ -142,11 +147,15 @@
                                             <table id="tblPatientInfo" class="table table-bordered">
                                                 <thead>
                                                     <tr>
+
                                                         <th>IPD No</th>
                                                         <th>Patient Name</th>
+                                                        <th>Discharge Type</th>
                                                         <th>Admit Date</th>
-                                                        <th>Upload By</th>
+                                                        @*
+                                                        <th>Upload By</th>*@
                                                         <th>Discharge DateTime</th>
+                                                        <th>CMD</th>
                                                         <th>CMD</th>
                                                     </tr>
                                                 </thead>
@@ -160,7 +169,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="panel">
                     <div class="panel-heading" style="background:#0076d0;padding: 4px;">
                         <h4 class="text-white" style="font-size: 15px;">Upload Case Sheet</h4>
@@ -178,15 +187,15 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="flex">
                                 <label style="white-space:pre">File Rack: </label>
                                 <select id="ddlFileRack" class="form-control"></select>
                                 <button onclick="UpdateRackByIPDNo()" class="btn btn-success btnPDF pull-right" style="width:40%"><i class="fa fa-plus-circle">&nbsp;</i>Update</button>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <button onclick="$('#modalRackMaster').modal('show')" class="btn btn-primary btnPDF pull-right" style="width:47%"><i class="fa fa-plus-circle">&nbsp;</i>Create New Rack</button>
+                        <div class="col-md-5">
+                            <button onclick="$('#modalRackMaster').modal('show')" class="btn btn-primary btnPDF pull-right" style="width:70%"><i class="fa fa-plus-circle">&nbsp;</i>Create New Rack</button>
                         </div>
                         <div class="col-md-12">
                             <a href="#casesheetinfo" class="Casesheet" data-toggle="collapse">Patient Casesheet Info <span>0</span> <i class="fa fa-plus pull-right" data-col>&nbsp;</i></a>
@@ -205,7 +214,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="flex uploadSection">
                                 <label style="white-space:pre">Choose File : </label>
                                 <input type="file" id="uploadFile" accept=".pdf" class="form-control" style="border-radius: 0;border-color: #f39c12;" />
@@ -256,6 +265,93 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modalProcess" id="CaseSheetDetailsProp" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:10%; width:120%; margin-left:-10%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="padding:3px">
+                    <table style="width:70%;font-size:13px;">
+
+                        <tr>
+                            <td style="text-align:left;width:15%;"><label style="color:#fff;">IPDNO &nbsp;:</label></td>
+                            <td style="text-align:left;width:20%;"><label id="txtipno" style="color: #fff;"></label></td>
+                            <td style="text-align:left;width:25%;"><label style="color:#fff;">Patient Name &nbsp;:</label></td>
+                            <td style="text-align:left;width:40%;"><label id="txtpatient" style="color:#fff;"></label></td>
+                        </tr>
+                    </table>
+                    <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
+
+                </div>
+            </div>
+            <div class="modal-body" style="margin-top:-4%;">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Logic</label>
+                        <div class="flex">
+                            <select id="ddlLogic" class="form-control"></select>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Search Name</label>
+                        <div class="flex">
+                            <input type="text" id="txtsearchName" class="form-control" />
+                            <button class="btn btn-success" style="width:30%;border:none;margin-left:12px;height:27px;" onclick="GetAlldataList()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section" style="height:175px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:150px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7; margin-top: 12px;">
+                                        <table class="table table-bordered" id="tblCaseDetails">
+                                            <thead>
+                                                <tr>
+
+                                                    <th style="text-align:center;width:20%">Code</th>
+                                                    <th style="text-align:left;width:70%">Description</th>
+                                                    <th style="text-align:center;width:10%">CMD</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:150px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7; margin-top: 12px;">
+                                        <table class="table table-bordered" id="tblInsertList">
+                                            <thead>
+                                                <tr>
+
+                                                    <th style="text-align:center;width:20%">Code</th>
+                                                    <th style="text-align:left;width:70%">Description</th>
+                                                    <th style="text-align:center;width:10%">Status</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

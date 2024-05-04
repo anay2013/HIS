@@ -3,6 +3,7 @@
     ViewBag.Title = "IPD_OverDuePatientList";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
+<script src="~/Areas/PatientDesk/JsModule/IPD_OverDuePatientList.js"></script>
 <style>
     .box-header {
         padding: 0 17px !important;
@@ -12,98 +13,124 @@
         padding: 2px 10px;
     }
 
-    h4, .h4, h5, .h5, h6, .h6 {
-        margin-top: 2px;
-        margin-bottom: 2px;
-    }
-   .form-group label {
-        font-size: 12px !important;
-        margin: 4px -15px !important;
-    }
 
-    .tableFixHead {
-        overflow-y: auto;
-        height: 500px;
+
+
+
+    .flex {
+        display: flex !important;
+        align-items: center;
     }
 
-        .tableFixHead thead th {
-            position: sticky;
-            top: 0;
-        }
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
 
-    .notification {
-        background-color: #555;
-        color: white;
-        text-decoration: none;
-        padding: 15px 15px;
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
         position: relative;
-        display: inline-block;
-        border-radius: 2px;
     }
 
-        .notification:hover {
-            background: red;
-        }
+    .ml15 {
+        margin-left: 15px;
+    }
 
-        .notification .badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            padding: 5px 10px;
-            border-radius: 50%;
-            background: red;
-            color: white;
-        }
+    #tblReport tbody td {
+        padding: 5px;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
 </style>
 
 <div id="page-content">
-    <script src="~/Areas/PatientDesk/JsModule/IPD_OverDuePatientList.js"></script>
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-purple">
-                    <div class="box-body">
-                        <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
-                            <button class="flex-btn btn-info" style="width:20%;text-align:center">
-                                <span id="txtAutoRefresh" class="badge">
-
-                                </span>
-                            </button>
-                            <input type="text" id="myInput" style="border-color: #00c0ef;" class="form-control bc" placeholder="Search..">
-
+    <div class="container">
+        <div class="ml15">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5> Call OverDue Patient</h5>
+                </div>
+            </div>
+            <div class="panel panel-primary" style="margin-top:-20px">
+                <div class="panel-body">
+                    <div class="row" style="background-color:#f5dbdf;margin-left: 0px;margin-right: 0px;height:70px;padding:7px;">
+                        <div class="col-md-2">
+                            <label>Floor Name</label>
+                            <select id="ddlFloor" class="form-control"></select>
                         </div>
-                        @*<input class="form-control" id="myInput" type="text" placeholder="Search.." />*@
-                        <div class="table-responsive tableFixHead">
-                            <table id="tblPatientList" class="table table-bordered ">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%;text-align:left">SN</th>
-                                        <th style="width:3%;text-align:center">Cmd</th>
-                                        <th style="width:4%;text-align:left">IPDNo</th>
-                                        <th style="width:14%;text-align:left">Patient Name</th>
-                                        <th style="width:5%;text-align:left">Mobile</th>
-                                        <th style="width:12%;text-align:left">DoctorName</th>
-                                        <th style="width:8%;text-align:left">Room Category</th>
-                                        <th style="width:5%;text-align:right">Deposit</th>
-                                        <th style="width:5%;text-align:right">Bill.Amt</th>
-                                        <th style="width:5%;text-align:right">Pymt.Status</th>
-                                        <th style="width:5%;text-align:right">Alert.Amt</th>
-                                        <th style="width:5%;text-align:right">Repeat.Call</th>
-                                        <th style="width:3%;text-align:center">Save</th>
-                                        <th style="width:10%;text-align:center">Last Call</th>
-                                        <th style="width:15%;text-align:left;">Panel Name</th>
-                                        <th style="width:0%;text-align:left;display:none;">Admi tDate</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+
+                        <div class="col-md-3">
+                            <label>Doctor</label>
+                            <div style="display:flex">
+                                <div style="width:310px">
+                                    <select id="ddlDoctor" class="form-control"></select>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <label>Panel Name </label>
+                            <div style="display:flex">
+                                <div style="width:450px">
+                                    <select id="ddlPanel" class="form-control"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="margin-top:24px;">
+                            <div style="display:flex">
+                                <button id="btnAll" style="width:50%;height:27px" onclick="OverDuePatientList()" class="btn btn-success"><i class="fa fa fa-sign-in">&nbsp;Search</i></button>
+                                <button id="btnExecl" style="width:50%;height:27px" onclick="ExcelOverPatient()" class="btn btn-warning"><i class="fa fa fa-file-excel-o">&nbsp;Execl</i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #3498db;margin-top:5px;">
+                                <table id="tblPatientList" class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%;text-align:left">SN</th>
+                                            <th style="width:3%;text-align:center">Cmd</th>
+                                            <th style="width:4%;text-align:left">IPDNo</th>
+                                            <th style="width:14%;text-align:left">Patient Name</th>
+                                            <th style="width:5%;text-align:left">Mobile</th>
+                                            <th style="width:12%;text-align:left">DoctorName</th>
+                                            <th style="width:8%;text-align:left">Room Category</th>
+                                            <th style="width:5%;text-align:right">Deposit</th>
+                                            <th style="width:5%;text-align:right">Bill.Amt</th>
+                                            <th style="width:5%;text-align:right">Pymt.Status</th>
+                                            <th style="width:5%;text-align:right">Alert.Amt</th>
+                                            <th style="width:5%;text-align:right">Repeat.Call</th>
+                                            <th style="width:3%;text-align:center">Save</th>
+                                            <th style="width:10%;text-align:center">Last Call</th>
+                                            <th style="width:15%;text-align:left;">Panel Name</th>
+                                            <th style="width:0%;text-align:left;display:none;">Admi tDate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-
         </div>
-    </section>
+    </div>
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -130,11 +157,8 @@
                             </thead>
                         </table>
                     </div>
-
-
                 </div>
                 <div class="modal-body">
-
                     <table id="tblCallLog" class="table table-bordered">
                         <thead>
                             <tr>
@@ -154,5 +178,6 @@
 
         </div>
     </div>
+
 </div>
 

@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "ReceiptInfo";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/MIS/JsModule/Finance/ReceiptInfo.js"></script>
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+    .selected {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 32px;
+        /*margin-top: 11%;*/
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    #tblDiscountApproval th {
+        /*padding: 2px;*/
+        font-size: 12px;
+        text-align: center;
+    }
+
+    #tblDiscountApproval td {
+        padding: 2px;
+        font-size: 12px;
+        text-align: center;
+    }
+</style>
+<div id="page-content">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="ml15">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h5>Receipt Info</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <div class="col-md-5">
+                                @*<label>UHIDNO/IPOPNO/ReceiptNo</label>*@
+                                <div style="display:flex">
+                                    <input type="text" id="txtSearchUHID" class="form-control" placeholder="Search UHIDNO / IPOPNO / ReceiptNo " />
+                                    <button style="width:20%;height: 28px; margin-left:8px" class="btn btn-warning bn" onclick="GetData('ReceptInfoByNo')"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>From</label>
+                                <input type="date" id="txtFrom" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>To</label>
+                                <div style="display:flex">
+                                    <input type="date" id="txtTo" class="form-control" />
+                                    <button style="width:49%;height:28px; margin-left:8px" class="btn btn-success bn" onclick="GetData('ReceptInfoByDate')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>ByName</label>
+                                <div style="display:flex">
+                                    <input type="text" id="txtByname" class="form-control" placeholder="Search By Name" />
+                                    <button style="width:20%;height:28px; margin-left:8px" class="btn btn-warning bn" onclick="GetData('ReceptInfoByName')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    <button style="width:20%;height:28px; margin-left:8px" class="btn btn-success bn" onclick="DownloadExcelReceipt()"><i class="fa fa-file-excel-o">&nbsp;</i>Execl</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:400px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7;margin-top:3px;">
+                                    <table class="table table-bordered" id="tblReceiptNo">
+                                        <thead>
+                                            <tr>
+
+                                                <th>IPOPType</th>
+                                                <th>IPOPNO</th>
+                                                <th>UHIDNO</th>
+                                                <th>ReceiptType</th>
+                                                <th>ReceiptNo</th>
+                                                <th>ReceiptDate</th>
+                                                <th>Patient Name</th>
+                                                <th>AgeInfo</th>
+                                                <th>PayMode</th>
+                                                <th>Amount</th>
+                                                <th>EntryBy</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+

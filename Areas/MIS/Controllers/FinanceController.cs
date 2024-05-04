@@ -28,5 +28,9 @@ namespace MediSoftTech_HIS.Areas.MIS.Controllers
         {
             return View();
         }
+        public ActionResult ReceiptInfo()
+        {
+            return View();
+        }
     }
 }

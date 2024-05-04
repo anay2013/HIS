@@ -99,15 +99,10 @@ function GetBookingDetails() {
         alert('This Item Already Added');
 }
 function LockPrvDate() {
-    var date = new Date(sessionStorage.getItem('ServerTodayDate'))
-    date.setDate(date.getDate() - 2)
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
-    var today = year + "-" + month + "-" + day;
-    $("#txtFromSearch,#txtToSearch").attr("min", today);
+    $("#txtFromSearch,#txtToSearch").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
 }
 function GetCategory() {
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";

@@ -13,7 +13,7 @@ $(document).ready(function () {
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
-        window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
+        $('#GatewayIframe').prop('src', config.rootUrl + "/OPD/Prescription/" + dashboard).addClass('openFrame');
     });
     $('#tblEmergencyAppList tbody').on('click', '#btnCall', function () {
         var AppId = $(this).closest('tr').find('td:eq(2)').text();
@@ -29,7 +29,7 @@ $(document).ready(function () {
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
-        window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
+        $('#GatewayIframe').prop('src', config.rootUrl + "/OPD/Prescription/" + dashboard).addClass('openFrame');
     });
     $('#tblOtherAppList tbody').on('click', '#btnView', function () {
         var AppId = $(this).closest('tr').find('td:eq(2)').text();
@@ -37,7 +37,7 @@ $(document).ready(function () {
         var dashboard = $(this).data('dashboard');
         selectRow($(this));
         sessionStorage.setItem('AppId', AppId);
-        window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
+        $('#GatewayIframe').prop('src', config.rootUrl + "/OPD/Prescription/" + dashboard).addClass('openFrame');
     });
     $('#tblOtherAppList tbody').on('click', '#btnCall', function () {
         var AppId = $(this).closest('tr').find('td:eq(2)').text();
@@ -107,14 +107,27 @@ function GetDoctorList() {
         },
         complete: function () {
             $('#ddlDoctor').prop('selectedIndex', '0').trigger('change.select2');
-            ViewConsultation();
+            ViewConsultation('ViewConsultationNew');
         },
         error: function (response) {
             alert('Server Error...!');
         }
     });
 }
-function ViewConsultation() {
+function CloseGatewayIframe() {
+    $('#GatewayIframe').removeClass('openFrame')
+}
+function ReloadIframe() {
+    document.getElementById('GatewayIframe').contentWindow.location.reload(true);
+}
+function RemoveSelectedRowOnClose() {
+    $('#tblOtherAppList tbody').find('tr.select-row').find('td:last').find('button:not(#btnView,#btnIn)').remove();
+    var body = $('#tblOtherAppList tbody').find('tr.select-row').clone();
+    $(body).insertBefore($('#tblDoneAppointment tbody').find('tr:first'));
+    $('#tblOtherAppList tbody').find('tr.select-row').remove()
+}
+function ViewConsultation(logic) {
+
     $('#tblEmergencyAppList tbody').empty();
     $('#tblOtherAppList tbody').empty();
     $('#tblDoneAppointment tbody').empty();
@@ -128,7 +141,7 @@ function ViewConsultation() {
     objBO.DoctorId = $('#ddlDoctor option:selected').val();
     objBO.from = $('#txtFromAppDate').val();
     objBO.to = $('#txtToAppDate').val();
-    objBO.Logic = 'ViewConsultationNew';
+    objBO.Logic = logic;
     $.ajax({
         method: "POST",
         url: url,
@@ -271,11 +284,12 @@ function InOutMarking(logic, dashboard) {
                 }
                 if (objBO.Logic == "DoctorRoom_IN") {
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnCall').prop('disabled', true);
-                    $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').prop('disabled', true);
+                    $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').prop('disabled', false);
+                    $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').text('View');
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').removeClass('btnRound*');
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#skill*').hide();
                     sessionStorage.setItem('AppId', _AppId);
-                    window.location.href = config.rootUrl + "/OPD/Prescription/" + dashboard;
+                    $('#GatewayIframe').prop('src', config.rootUrl + "/OPD/Prescription/" + dashboard).addClass('openFrame');
                 }
                 if (objBO.Logic == "DoctorRoom_Absent") {
                     $('#tblEmergencyAppList tbody tr.select-row,#tblOtherAppList tbody tr.select-row').find('#btnIn').prop('disabled', false);

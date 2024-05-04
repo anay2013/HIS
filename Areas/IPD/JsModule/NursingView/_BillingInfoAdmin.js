@@ -6,12 +6,11 @@ $(document).ready(function () {
     _section = 'Billing';
     $('#dash-dynamic-section').find('label.title').text('Patient Billing Info').show();
     $('#txtFrom').attr('value', _AdmitDate.split('T')[0]);
-    FillCurrentDate('txtTo')
     FillCurrentDate('txtSearchFrom')
     FillCurrentDate('txtSearchTo')
-    $('select').select2();
+    FillCurrentDate('txtTo')
+    //$('select').select2();
     SummarisedBilling();
-    GetComSeenCount();
     $('#tblBillingInfo thead').on('change', 'input', function () {
         var val = parseFloat($(this).val()) || 0;
         $(this).parents('table').find('tbody').find('input').val(val);
@@ -35,9 +34,11 @@ $(document).ready(function () {
     });
     $('#tblItemsInfo tbody').on('mouseover', '.entryBy', function () {
         var entryBy = '<b>Entry By : </b>' + $(this).data('entryby');
-        $(this).siblings('span').html(entryBy).show('fast');
+        var billingcategory = '<br/><b>Billing Category : </b>' + $(this).data('billingcategory');
+        var RateListName = '<br/><b>Rate List Name : </b>' + $(this).data('ratelistname');
+        $(this).siblings('span').html(entryBy + billingcategory + RateListName).show('fast');
     }).on('mouseleave', '.entryBy', function () {
-        $(this).siblings('span').empty().hide('fast');
+        $(this).siblings('span').html('').hide('fast');
     });
     $('#tblItemsInfo tbody').on('click', 'button[id=btnItemRemark]', function () {
         _elem = $(this);
@@ -54,6 +55,10 @@ $(document).ready(function () {
     });
     $('#tblItemsInfo tbody').on('click', 'button[id=btnCancelItem]', function () {
         _elem = $(this);
+        $('#modalCancelItem').modal('show');
+    });
+    $(document).on('click', 'button[id=btnCancelAllItem]', function () {
+        _elem = 'Cancel:AllItems';
         $('#modalCancelItem').modal('show');
     });
     $('#tblItemsInfo thead').on('change', 'input[type=checkbox]', function () {
@@ -153,7 +158,6 @@ function CalculateItem(val, elem, logic) {
         $('#tblItemsInfo tbody tr').each(function () {
             if ($(this).find('td:eq(1)').find('input[type=checkbox]').is(':checked')) {
                 $(this).find('td').eq(elem).find('input[type=number]').val(val);
-
                 if (elem == 4) {
                     $(this).find('td').eq(elem + 1).find('input[type=number]').val(0);
                     $(this).find('td').eq(elem + 2).find('input[type=number]').val(0);
@@ -243,13 +247,13 @@ function CalculateItem(val, elem, logic) {
         });
     }
 }
-function GetComSeenCount() {
-    $('#btnRemarkLog .count').empty();
+function ItemsInfoByIPD() {
+    $('#tblItemAlloted tbody').empty();
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
     objBO.hosp_id = '';
     objBO.UHID = '';
-    objBO.IPDNo = _IPDNo;
+    objBO.IPDNo = query()['IPDNo'];
     objBO.DoctorId = '';
     objBO.Floor = '';
     objBO.PanelId = '';
@@ -258,7 +262,7 @@ function GetComSeenCount() {
     objBO.Prm1 = _section;
     objBO.Prm2 = '';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'GetComSeenCount';
+    objBO.Logic = 'ItemsInfoByIPD';
     $.ajax({
         method: "POST",
         url: url,
@@ -266,20 +270,18 @@ function GetComSeenCount() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            if (Object.keys(data.ResultSet).length) {
-                if (Object.keys(data.ResultSet.Table).length) {
-                    $.each(data.ResultSet.Table, function (key, val) {
-                        if (eval(val.pendingSeenCount) == 0) {
-                            $('#btnRemarkLog .count').text(val.pendingSeenCount);
-                            $('#btnRemarkLog .count').removeClass('blinkAnim');
-                        }
-                        else {
-                            $('#btnRemarkLog .count').text(val.pendingSeenCount);
-                            $('#btnRemarkLog .count').addClass('blinkAnim');
-                        }
-                    });
-                }
-            }
+            var tbody = '';
+            var count = 0;
+            $.each(data.ResultSet.Table, function (key, val) {
+                count++;
+                tbody += "<tr>";
+                tbody += "<td><input type='checkbox' /></td>";
+                tbody += "<td>" + val.ItemId + "</td>";
+                tbody += "<td>" + val.ItemName + "</td>";
+                tbody += "</tr>";
+            });
+            $('#tblItemAlloted tbody').append(tbody);
+            $('#modalSearchItem').modal('show');
         },
         error: function (response) {
             alert('Server Error...!');
@@ -310,7 +312,7 @@ function SummarisedBilling() {
         dataType: "JSON",
         success: function (data) {
             console.log(data);
-            if (Object.keys(data.ResultSet).length) {       
+            if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#txtGrossAmt').val(val.GrossAmount);
@@ -337,11 +339,7 @@ function SummarisedBilling() {
                         tbody += "<td>" + val.CatName + "</td>";
                         tbody += "<td class='text-right'>" + val.ItemCount + "</td>";
                         tbody += "<td class='text-right'>" + val.GrossAmount.toFixed(2) + "</td>";
-                        tbody += "<td class='text-right'>" + val.panel_discount.toFixed(2) + "</td>";
-                        tbody += "<td style='padding: 0 6px;display:none;'>";
-                        tbody += "<input type='number' min='0' onchange=RestrictMaxVal(this) onkeyup=CalculateDiscount(this) class='form-control txtAdlDis disabled' value=" + val.adlDisPer + " placeholder='%'/>";
-                        tbody += "<button onclick=Calculation() class='btn btn-primary btn-xs btnAdlDis disabled'>Calculate</button>";
-                        tbody += "</td>";
+                        tbody += "<td class='text-right'>" + val.panel_discount.toFixed(2) + "</td>";                     
                         tbody += "<td class='text-right'>" + val.adl_discount.toFixed(2) + "</td>";
                         tbody += "<td class='text-right'>" + val.Tax.toFixed(2) + "</td>";
                         tbody += "<td class='text-right'>" + val.NetAmount.toFixed(2) + "</td>";
@@ -357,42 +355,13 @@ function SummarisedBilling() {
         }
     });
 }
-function ItemsInfoByIPD() {
-    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
-    var objBO = {};
-    objBO.hosp_id = '';
-    objBO.UHID = '';
-    objBO.IPDNo = query()['IPDNo'];
-    objBO.DoctorId = '';
-    objBO.Floor = '';
-    objBO.PanelId = '';
-    objBO.from = '1900/01/01';
-    objBO.to = '1900/01/01';
-    objBO.Prm1 = _section;
-    objBO.Prm2 = '';
-    objBO.login_id = Active.userId;
-    objBO.Logic = 'ItemsInfoByIPD';
-    $.ajax({
-        method: "POST",
-        url: url,
-        data: JSON.stringify(objBO),
-        contentType: "application/json;charset=utf-8",
-        dataType: "JSON",
-        success: function (data) {
-            $('#ddlSearchItem').empty().append($("<option></option>").val('Select').html('Select')).select2();
-            $.each(data.ResultSet.Table, function (key, val) {
-                $("#ddlSearchItem").append($("<option></option>").val(val.ItemId).html(val.ItemName));
-            });
-            $('#modalSearchItem').modal('show');
-        },
-        error: function (response) {
-            alert('Server Error...!');
-        }
-    });
-}
 function ItemsInfo(cateId) {
     $('#modalSearchItem').modal('hide');
     $('#tblItemsInfo tbody').empty();
+    var itemId = [];
+    $('#tblItemAlloted tbody input:checkbox:checked').each(function () {
+        itemId.push($(this).closest('tr').find('td:eq(1)').text());
+    })
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
     objBO.hosp_id = '';
@@ -404,7 +373,7 @@ function ItemsInfo(cateId) {
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
     objBO.Prm1 = cateId;
-    objBO.Prm2 = $('#ddlSearchItem option:selected').val();
+    objBO.Prm2 = itemId.join('|');
     objBO.login_id = Active.userId;
     objBO.Logic = (cateId == 'ItemsInfoByItemId') ? 'ItemsInfoByItemId' : 'ItemsInfoByCategory';
     $.ajax({
@@ -427,38 +396,26 @@ function ItemsInfo(cateId) {
                             tbody += "</tr>";
                             temp = val.tnxDate;
                         }
-                        tbody += "<tr>";
+                        tbody += "<tr style='background-color:" + val.IsTestApproved + "'>";
                         tbody += "<td style='display:none'>" + val.auto_id + "</td>";
                         tbody += "<td><input type='checkbox'/>";
+                        tbody += "<td>" + val.TnxId + "</td>";
                         if (val.IsIpdPackage == 'Y')
                             tbody += "<td><a data-itemid=" + val.ItemId + " href='#' class='IsPackage'>" + val.ItemName + "</a></td>";
                         else
-                            tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "'></i><span class='entryByName'></span></td>";
+                            tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "' data-ratelistname='" + val.RateListName + "' data-billingcategory='" + val.RoomBillingCategory + "'></i><span class='entryByName'></span></td>";
 
-                        tbody += "<td style='padding: 0 3px;'><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.Qty + "'/></td>";
-                        tbody += "<td style='padding: 0 3px;'><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.GrossAmount + "'/></td>";
-                        tbody += "<td style='padding: 0 3px;display: flex;'>";
-                        tbody += "<input type='number' min='0' readonly='' class='form-control txtAdlDis' value='0' placeholder='%'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>%</button>";
-                        tbody += "</td>";
-                        tbody += "<td style='padding: 0 3px;'>";
-                        tbody += "<div style='padding: 0 3px;display: flex;'>";
-                        tbody += "<input type='number' min='0' class='form-control txtAdlDis' value='" + val.panel_discount + "'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>Rs</button>";
-                        tbody += "</div>";
-                        tbody += "</td>";
-                        tbody += "<td style='padding: 0 3px;display: flex;'>";
-                        tbody += "<input type='number' min='0' readonly='' class='form-control txtAdlDis' value='0' placeholder='%'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>%</button>";
-                        tbody += "</td>";
-                        tbody += "<td style='padding: 0 3px;'>";
-                        tbody += "<div style='display: flex;'>";
-                        tbody += "<input type='number' min='0' class='form-control txtAdlDis' value='" + val.adl_discount + "'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>Rs</button>";
-                        tbody += "</div>";
-                        tbody += "</td>";
-                        //tbody += "<td><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.adl_discount + "'/></td>";
-                        tbody += "<td><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.NetAmount + "'/></td>";
+                        tbody += "<td class='text-right'>" + val.GrossAmount + "</td>";
+                        tbody += "<td class='text-right'>" + val.Qty + "</td>";
+                        tbody += "<td class='text-right'>" + val.panel_discount + "</td>";
+
+                        if (val.adl_discountPerc > 0)
+                            tbody += "<td class='text-right'>" + val.adl_discount + " [" + val.adl_discountPerc.toFixed(2) + " %]" + "</td>";
+                        else
+                            tbody += "<td class='text-right'>" + val.adl_discount + "</td>";
+
+                        tbody += "<td class='text-right'>" + val.NetAmount + "</td>";
+                        tbody += "<td class='text-right'>" + val.Tax + "</td>";
                         tbody += "<td>" + val.doctorName + "</td>";
                         tbody += "<td>";
                         tbody += "<div style='display:flex'>";
@@ -540,42 +497,42 @@ function ResetDiscount() {
         }
     });
 }
-function Calculation() {
+function Calculation(elem) {
+    var elemRow = $(elem).closest('tr');
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
     var objBooking = {};
     var objRateList = [];
-    $('#tblBillingInfo tbody tr').each(function () {
-        objRateList.push({
-            'AutoId': 0,
-            'TnxId': '-',
-            'RateListId': '-',
-            'CatId': $(this).find('td:eq(0)').text(),
-            'ItemId': '-',
-            'RateListName': '-',
-            'ItemSection': $(this).find('td:eq(2)').text(),
-            'IsPackage': '-',
-            'IsRateEditable': 'N',
-            'IsPatientPayable': 'N',
-            'IsDiscountable': 'N',
-            'panel_discount': 0,
-            'panel_rate': 0,
-            'qty': 0,
-            'mrp_rate': 0,
-            'adl_disc_perc': $(this).find('td:eq(6)').find('input').val(),
-            'adl_disc_amount': 0,
-            'net_amount': 0,
-            'IsUrgent': '-',
-            'Remark': '-',
-            'TaxRate': 0,
-            'TaxAmt': 0
-        });
+    var disType = $(elemRow).find('td:eq(6)').find('select option:selected').text();
+    objRateList.push({
+        'AutoId': 0,
+        'TnxId': '-',
+        'RateListId': '-',
+        'CatId': $(elemRow).find('td:eq(0)').text(),
+        'ItemId': '-',
+        'RateListName': '-',
+        'ItemSection': $(elemRow).find('td:eq(2)').text(),
+        'IsPackage': '-',
+        'IsRateEditable': 'N',
+        'IsPatientPayable': 'N',
+        'IsDiscountable': 'N',
+        'panel_discount': 0,
+        'panel_rate': 0,
+        'qty': 0,
+        'mrp_rate': 0,
+        'adl_disc_perc': $(elemRow).find('td:eq(6)').find('input').val(),
+        'adl_disc_amount': 0,
+        'net_amount': 0,
+        'IsUrgent': '-',
+        'Remark': '-',
+        'TaxRate': 0,
+        'TaxAmt': 0
     });
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;
     objBooking.DoctorId = '-';
     objBooking.ipAddress = '-';
     objBooking.login_id = Active.userId;
-    objBooking.Logic = "Adl_Discount:Calculation";
+    objBooking.Logic = (disType == 'Percent') ? "Adl_Discount:ByPercent" : "Adl_Discount:ByAmount";
     var MasterObject = {};
     MasterObject.objBooking = objBooking;
     MasterObject.objRateList = objRateList;
@@ -723,6 +680,65 @@ function DoctorShift() {
         }
     });
 }
+function ItemWiseDiscount(logic) {
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
+    var objBooking = {};
+    var objRateList = [];
+    $('#tblItemsInfo tbody').find('input:checkbox:checked').each(function () {
+        objRateList.push({
+            'AutoId': $(this).closest('tr').find('td:eq(0)').text(),
+            'TnxId': '-',
+            'RateListId': '-',
+            'CatId': $('#ddlModType option:selected').text(),
+            'ItemId': '-',
+            'RateListName': '-',
+            'ItemSection': '-',
+            'IsPackage': '-',
+            'IsRateEditable': 'N',
+            'IsPatientPayable': 'N',
+            'IsDiscountable': 'N',
+            'qty': $('#txtModQty').val(),
+            'mrp_rate': 0,
+            'panel_rate': $('#txtModPanelRate').val(),
+            'panel_discount': 0,
+            'adl_disc_perc': $('#txtModAmtPerc').val(),
+            'adl_disc_amount': $('#txtModAmtPerc').val(),
+            'net_amount': 0,
+            'IsUrgent': '-',
+            'Remark': '-',
+            'TaxRate': 0,
+            'TaxAmt': 0
+        });
+    })
+    objBooking.hosp_id = Active.HospId;
+    objBooking.IPDNo = _IPDNo;
+    objBooking.DoctorId = '-';
+    objBooking.ipAddress = logic;
+    objBooking.login_id = Active.userId;
+    objBooking.Logic = "ItemWiseEditing";
+    var MasterObject = {};
+    MasterObject.objBooking = objBooking;
+    MasterObject.objRateList = objRateList;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(MasterObject),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        traditional: true,
+        success: function (data) {
+            if (data.includes('Success')) {
+                ItemsInfo($('#tblBillingInfo tbody tr.select-row').find('td:eq(0)').text());
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function CancelItem() {
     if ($('#txtCancelRemark').val() == '') {
         alert('Please Provide Remark.');
@@ -731,30 +747,62 @@ function CancelItem() {
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
     var objBooking = {};
     var objRateList = [];
-    objRateList.push({
-        'AutoId': $(_elem).closest('tr').find('td:eq(0)').text(),
-        'TnxId': '-',
-        'RateListId': '-',
-        'CatId': '-',
-        'ItemId': '-',
-        'RateListName': '-',
-        'ItemSection': '-',
-        'IsPackage': '-',
-        'IsRateEditable': 'N',
-        'IsPatientPayable': 'N',
-        'IsDiscountable': 'N',
-        'qty': 0,
-        'mrp_rate': 0,
-        'panel_rate': 0,
-        'panel_discount': 0,
-        'adl_disc_perc': 0,
-        'adl_disc_amount': 0,
-        'net_amount': 0,
-        'IsUrgent': '-',
-        'Remark': $('#txtCancelRemark').val(),
-        'TaxRate': 0,
-        'TaxAmt': 0
-    });
+    if (_elem == 'Cancel:AllItems') {
+        objRateList = [];
+        $('#tblItemsInfo tbody').find('input:checkbox:checked').each(function () {
+            objRateList.push({
+                'AutoId': $(this).closest('tr').find('td:eq(0)').text(),
+                'TnxId': '-',
+                'RateListId': '-',
+                'CatId': '-',
+                'ItemId': '-',
+                'RateListName': '-',
+                'ItemSection': '-',
+                'IsPackage': '-',
+                'IsRateEditable': 'N',
+                'IsPatientPayable': 'N',
+                'IsDiscountable': 'N',
+                'qty': 0,
+                'mrp_rate': 0,
+                'panel_rate': 0,
+                'panel_discount': 0,
+                'adl_disc_perc': 0,
+                'adl_disc_amount': 0,
+                'net_amount': 0,
+                'IsUrgent': '-',
+                'Remark': $('#txtCancelRemark').val(),
+                'TaxRate': 0,
+                'TaxAmt': 0
+            });
+        })
+    }
+    else {
+        objRateList = [];
+        objRateList.push({
+            'AutoId': $(_elem).closest('tr').find('td:eq(0)').text(),
+            'TnxId': '-',
+            'RateListId': '-',
+            'CatId': '-',
+            'ItemId': '-',
+            'RateListName': '-',
+            'ItemSection': '-',
+            'IsPackage': '-',
+            'IsRateEditable': 'N',
+            'IsPatientPayable': 'N',
+            'IsDiscountable': 'N',
+            'qty': 0,
+            'mrp_rate': 0,
+            'panel_rate': 0,
+            'panel_discount': 0,
+            'adl_disc_perc': 0,
+            'adl_disc_amount': 0,
+            'net_amount': 0,
+            'IsUrgent': '-',
+            'Remark': $('#txtCancelRemark').val(),
+            'TaxRate': 0,
+            'TaxAmt': 0
+        });
+    }
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;
     objBooking.DoctorId = '-';
@@ -773,7 +821,14 @@ function CancelItem() {
         traditional: true,
         success: function (data) {
             if (data.includes('Success')) {
-                $(_elem).closest('tr').remove();
+                if (_elem == 'Cancel:AllItems') {
+                    $('#tblItemsInfo tbody').find('input:checkbox:checked').each(function () {
+                        $(this).closest('tr').remove();
+                    })
+                }
+                else
+                    $(_elem).closest('tr').remove();
+
                 $('#modalCancelItem').modal('hide');
             }
             else {
@@ -847,12 +902,25 @@ function SubmitRemark() {
     });
 }
 function RestrictMaxVal(elem) {
-    if (parseFloat($(elem).val()) > 100) {
-        $(elem).css('border-color', 'red');
-        $(elem).val(0);
+    var disType = $(elem).siblings('select option:selected').text();
+    var NetAmount = $(elem).closest('tr').find('td:eq(9)').text();
+    var val = $(elem).val();
+    if (disType == 'Percent') {
+        if (parseFloat($(elem).val()) > 100) {
+            $(elem).css('border-color', 'red');
+            $(elem).val(0);
+        }
+        else
+            $(elem).removeAttr('style');
     }
-    else
-        $(elem).removeAttr('style');
+    else {
+        if (parseFloat(val) > parseFloat(NetAmount)) {
+            $(elem).css('border-color', 'red');
+            $(elem).val(0);
+        }
+        else
+            $(elem).removeAttr('style');
+    }
 }
 function FullPageHeight() {
     $('.catDiv').slideToggle('slow');
@@ -1018,6 +1086,31 @@ function MoveItemToPackage() {
             else {
                 alert(data);
             }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function checkAmount() {
+    var url = config.baseUrl + "/api/Corporate/PanelQuerie";
+    var objBO = {};
+    objBO.PanelId = '-';
+    objBO.UHID = $('#tblAdviceHeader tbody tr:last').find('td:eq(5)').text();
+    objBO.from = '1900/01/01';
+    objBO.ReportType = '-';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'GetAdvanceForBooking';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var Balance = data.ResultSet.Table[0].Balance;
+            $('#amountInfo span:last').text(Balance);
+            $('#amountInfo').toggleClass('grid');
         },
         error: function (response) {
             alert('Server Error...!');

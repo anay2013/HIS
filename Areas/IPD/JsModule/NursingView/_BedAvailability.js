@@ -1,9 +1,9 @@
 ﻿var _tnxid = "";
 var _vacantLogic = "";
 $(document).ready(function () {
-    LoadRoomTypes();   
-    getCurrentDateTime();      
-    $('#tblRoomType tbody').on('click', 'button', function () {        
+    LoadRoomTypes();
+    getCurrentDateTime();
+    $('#tblRoomType tbody').on('click', 'button', function () {
         selectRow(this);
         var RoomType = $(this).closest('tr').find('td:eq(0)').text();
         BedAvailability(RoomType);
@@ -31,11 +31,14 @@ $(document).ready(function () {
         var roomBedName = $(this).closest('li').find('#RoomBedName').text();
         var RoomBillingCategory = $(this).closest('li').find('#RoomBillingCategory').text();
         if (_vacantLogic == 'RoomShifting') {
+            $('#txtRoomBedId').val(roomBedId);
             $('#txtRoomBedId').text(roomBedId);
+            $('#txtRoomBedName').val(roomBedName);
             $('#txtRoomBedName').text(roomBedName);
             $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(9)').text(roomBedName);
             $('ul[id=listBed] li').removeClass('selectedBed');
             $(this).closest('li').addClass('selectedBed');
+            $('#modalBedAvailability').modal('hide');
         }
         if (_vacantLogic == "IPDReg") {
             $('ul[id=listBed] li').removeClass('selectedBed');
@@ -100,12 +103,13 @@ function LoadRoomTypes() {
         dataType: "JSON",
         async: false,
         success: function (data) {
-            if (Object.keys(data.ResultSet).length > 0) {                       
+            if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table5).length) {
                     var tbody = "";
                     var count = 0;
                     var total = 0;
                     var booked = 0;
+                    var HouseKeeping = 0;
                     var reserved = 0;
                     var vacant = 0;
                     $.each(data.ResultSet.Table5, function (key, val) {
@@ -114,12 +118,13 @@ function LoadRoomTypes() {
                         booked += val.booked;
                         reserved += val.reserved;
                         vacant += val.vacant;
+                        HouseKeeping += val.HouseKeeping;
                         tbody += "<tr>";
                         tbody += "<td>" + val.RoomType + "</td>";
                         tbody += "<td class='text-center'>" + val.total + "</td>";
                         tbody += "<td class='text-center'>" + val.booked + "</td>";
                         tbody += "<td class='text-center'>" + val.vacant + "</td>";
-                        tbody += "<td class='text-center'>" + val.vacant + "</td>";
+                        tbody += "<td class='text-center'>" + val.HouseKeeping + "</td>";
                         tbody += "<td><button class='btn btn-warning btn-xs'><i class='fa fa-sign-in'></i></button></td>";
                         tbody += "</tr>";
                     });
@@ -127,12 +132,13 @@ function LoadRoomTypes() {
                     $('#listTotal').find('div.status:eq(0)').find('label.total').find('label').text(total);
                     $('#listTotal').find('div.status:eq(1)').find('label.total').find('label').text(booked);
                     $('#listTotal').find('div.status:eq(2)').find('label.total').find('label').text(vacant);
-                }                
+                    $('#listTotal').find('div.status:eq(3)').find('label.total').find('label').text(HouseKeeping);
+                }
             }
             else {
                 alert('No Record Found..');
             }
-        },        
+        },
         error: function (response) {
             alert('Server Error...!');
         }
@@ -238,9 +244,9 @@ function BedAvailabilityTotal(total) {
                             listBed += "<li data-floor='" + val.FloorName + "' style='pointer-events:none'>";
                         else
                             listBed += "<li data-floor='" + val.FloorName + "'>";
-                        
 
-                        listBed += "<div class='status " + val.roomStatus+"'>";
+
+                        listBed += "<div class='status " + val.roomStatus + "'>";
                         if (val.roomStatus == 'Vacant')
                             listBed += "<img src='" + config.rootUrl + "/Content/logo/bedEmpty.png' />";
                         else if (val.roomStatus == 'Housekeeping')
@@ -249,7 +255,7 @@ function BedAvailabilityTotal(total) {
                             listBed += "<img src='" + config.rootUrl + "/Content/logo/bedPatient.png' />";
 
                         var roomStatus = (val.roomStatus == 'Housekeeping') ? 'House Keeping' : val.roomStatus;
-                        listBed += "<label class=" + val.roomStatus + ">" + roomStatus+ "</label>";
+                        listBed += "<label class=" + val.roomStatus + ">" + roomStatus + "</label>";
                         listBed += "</div>";
 
                         listBed += "<div class='info'>";

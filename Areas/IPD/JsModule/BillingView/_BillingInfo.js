@@ -9,8 +9,8 @@ $(document).ready(function () {
     FillCurrentDate('txtSearchFrom')
     FillCurrentDate('txtSearchTo')
     FillCurrentDate('txtTo')
-    $('select').select2();
-    SummarisedBilling();  
+    //$('select').select2();
+    SummarisedBilling();
     $('#tblBillingInfo thead').on('change', 'input', function () {
         var val = parseFloat($(this).val()) || 0;
         $(this).parents('table').find('tbody').find('input').val(val);
@@ -34,9 +34,11 @@ $(document).ready(function () {
     });
     $('#tblItemsInfo tbody').on('mouseover', '.entryBy', function () {
         var entryBy = '<b>Entry By : </b>' + $(this).data('entryby');
-        $(this).siblings('span').html(entryBy).show('fast');
+        var billingcategory = '<br/><b>Billing Category : </b>' + $(this).data('billingcategory');
+        var RateListName = '<br/><b>Rate List Name : </b>' + $(this).data('ratelistname');
+        $(this).siblings('span').html(entryBy + billingcategory + RateListName).show('fast');
     }).on('mouseleave', '.entryBy', function () {
-        $(this).siblings('span').empty().hide('fast');
+        $(this).siblings('span').html('').hide('fast');
     });
     $('#tblItemsInfo tbody').on('click', 'button[id=btnItemRemark]', function () {
         _elem = $(this);
@@ -53,6 +55,10 @@ $(document).ready(function () {
     });
     $('#tblItemsInfo tbody').on('click', 'button[id=btnCancelItem]', function () {
         _elem = $(this);
+        $('#modalCancelItem').modal('show');
+    });
+    $(document).on('click', 'button[id=btnCancelAllItem]', function () {
+        _elem = 'Cancel:AllItems';
         $('#modalCancelItem').modal('show');
     });
     $('#tblItemsInfo thead').on('change', 'input[type=checkbox]', function () {
@@ -241,7 +247,8 @@ function CalculateItem(val, elem, logic) {
         });
     }
 }
-function ItemsInfoByIPD() {  
+function ItemsInfoByIPD() {
+    $('#tblItemAlloted tbody').empty();
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
     objBO.hosp_id = '';
@@ -262,11 +269,18 @@ function ItemsInfoByIPD() {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {                      
-            $('#ddlSearchItem').empty().append($("<option></option>").val('Select').html('Select')).select2();
+        success: function (data) {
+            var tbody = '';
+            var count = 0;
             $.each(data.ResultSet.Table, function (key, val) {
-                $("#ddlSearchItem").append($("<option></option>").val(val.ItemId).html(val.ItemName));
+                count++;
+                tbody += "<tr>";
+                tbody += "<td><input type='checkbox' /></td>";
+                tbody += "<td>" + val.ItemId + "</td>";
+                tbody += "<td>" + val.ItemName + "</td>";
+                tbody += "</tr>";
             });
+            $('#tblItemAlloted tbody').append(tbody);
             $('#modalSearchItem').modal('show');
         },
         error: function (response) {
@@ -297,7 +311,6 @@ function SummarisedBilling() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
@@ -354,6 +367,10 @@ function SummarisedBilling() {
 function ItemsInfo(cateId) {
     $('#modalSearchItem').modal('hide');
     $('#tblItemsInfo tbody').empty();
+    var itemId = [];
+    $('#tblItemAlloted tbody input:checkbox:checked').each(function () {
+        itemId.push($(this).closest('tr').find('td:eq(1)').text());
+    })
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
     objBO.hosp_id = '';
@@ -365,9 +382,9 @@ function ItemsInfo(cateId) {
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
     objBO.Prm1 = cateId;
-    objBO.Prm2 = $('#ddlSearchItem option:selected').val();
+    objBO.Prm2 = itemId.join('|');
     objBO.login_id = Active.userId;
-    objBO.Logic = (cateId == 'ItemsInfoByItemId') ?'ItemsInfoByItemId': 'ItemsInfoByCategory';
+    objBO.Logic = (cateId == 'ItemsInfoByItemId') ? 'ItemsInfoByItemId' : 'ItemsInfoByCategory';
     $.ajax({
         method: "POST",
         url: url,
@@ -388,42 +405,34 @@ function ItemsInfo(cateId) {
                             tbody += "</tr>";
                             temp = val.tnxDate;
                         }
-                        tbody += "<tr>";
+                        tbody += "<tr style='background-color:" + val.IsTestApproved + "'>";
                         tbody += "<td style='display:none'>" + val.auto_id + "</td>";
                         tbody += "<td><input type='checkbox'/>";
+                        tbody += "<td>" + val.TnxId + "</td>";
                         if (val.IsIpdPackage == 'Y')
                             tbody += "<td><a data-itemid=" + val.ItemId + " href='#' class='IsPackage'>" + val.ItemName + "</a></td>";
-                        else
-                            tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "'></i><span class='entryByName'></span></td>";
+                        else {
+                            if (val.tnxType == "PharmacyItems")
+                                tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "' data-ratelistname='" + val.RateListName + "' data-billingcategory='" + val.RoomBillingCategory + "'></i><span class='entryByName'></span><i class='fa fa-refresh text-primary replacePI pull-right' onclick=PharmacyItems(this) style='margin-right:5px'>&nbsp;</i></td>";
+                           
+                            else
+                                tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "' data-ratelistname='" + val.RateListName + "' data-billingcategory='" + val.RoomBillingCategory + "'></i><span class='entryByName'></span></td>";
+                        }
 
-                        tbody += "<td style='padding: 0 3px;'><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.Qty + "'/></td>";
-                        tbody += "<td style='padding: 0 3px;'><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.GrossAmount + "'/></td>";
-                        tbody += "<td style='padding: 0 3px;display: flex;'>";
-                        tbody += "<input type='number' min='0' readonly='' class='form-control txtAdlDis' value='0' placeholder='%'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>%</button>";
-                        tbody += "</td>";
-                        tbody += "<td style='padding: 0 3px;'>";
-                        tbody += "<div style='padding: 0 3px;display: flex;'>";
-                        tbody += "<input type='number' min='0' class='form-control txtAdlDis' value='" + val.panel_discount + "'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>Rs</button>";
-                        tbody += "</div>";
-                        tbody += "</td>";
-                        tbody += "<td style='padding: 0 3px;display: flex;'>";
-                        tbody += "<input type='number' min='0' readonly='' class='form-control txtAdlDis' value='0' placeholder='%'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>%</button>";
-                        tbody += "</td>";
-                        tbody += "<td style='padding: 0 3px;'>";
-                        tbody += "<div style='display: flex;'>";
-                        tbody += "<input type='number' min='0' class='form-control txtAdlDis' value='" + val.adl_discount + "'/>";
-                        tbody += "<button class='btn btn-primary btn-xs btnAdlDis'>Rs</button>";
-                        tbody += "</div>";
-                        tbody += "</td>";
-                        //tbody += "<td><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.adl_discount + "'/></td>";
-                        tbody += "<td><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.NetAmount + "'/></td>";
+                        tbody += "<td class='text-right'>" + val.GrossAmount + "</td>";
+                        tbody += "<td class='text-right'>" + val.Qty + "</td>";
+                        tbody += "<td class='text-right'>" + val.panel_discount + "</td>";
+
+                        if (val.adl_discountPerc > 0)
+                            tbody += "<td class='text-right'>" + val.adl_discount + " [" + val.adl_discountPerc.toFixed(2) + " %]" + "</td>";
+                        else
+                            tbody += "<td class='text-right'>" + val.adl_discount + "</td>";
+
+                        tbody += "<td class='text-right'>" + val.NetAmount + "</td>";
+                        tbody += "<td class='text-right'>" + val.Tax + "</td>";
                         tbody += "<td>" + val.doctorName + "</td>";
                         tbody += "<td>";
-                        tbody += "<div style='display:flex'>";
-                        tbody += "<button id='btnCancelItem' class='btn btn-danger btn-xs'><i class='fa fa-trash'>&nbsp;</i></button>";
+                        tbody += "<div style='display:flex'>";                      
                         if (val.Remark != null)
                             tbody += "<button data-remark='" + val.Remark + "' id='btnItemRemark' class='btn btn-success btn-xs'><i class='fa fa-comment'>&nbsp;</i></button>";
                         else
@@ -435,6 +444,108 @@ function ItemsInfo(cateId) {
                     });
                     $('#tblItemsInfo tbody').append(tbody);
                 }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function PharmacyItems(elem) {
+    $('#tblPharmacyItems tbody').empty();
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = _IPDNo;
+    objBO.Floor = '';
+    objBO.PanelId = _panelId;
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = 'C00022';
+    objBO.Prm2 = 'ALL';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'Billing:ItemListBySubCat';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            var tbody = '';
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr>";
+                        tbody += "<td>" + val.ItemId + "</td>";
+                        tbody += "<td>" + val.ItemName + "</td>";
+                        tbody += "<td><button style='height: 15px;line-height:0;' onclick=UpdatePharmacyItem('" + val.ItemId+"') class='btn btn-warning btn-xs'><i class='fa fa-sign-in'>&nbsp;</i>Update</button></td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblPharmacyItems tbody').append(tbody);
+                    $('#modalPharmacyItems').modal('show');
+                    $('#autoId').text($(elem).closest('tr').find('td:eq(0)').text());
+                    var info = $(elem).closest('tr').find('td:eq(2)').text() + ' | ' + $(elem).closest('td').text();
+                    $('#piInfo').text(info);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function UpdatePharmacyItem(itemid) {
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
+    var objBooking = {};
+    var objRateList = [];
+    objRateList.push({
+        'AutoId': $('#autoId').text(),
+        'TnxId': '-',
+        'RateListId': '-',
+        'CatId': '-',
+        'ItemId': itemid,
+        'RateListName': '-',
+        'ItemSection': '-',
+        'IsPackage': '-',
+        'IsRateEditable': 'N',
+        'IsPatientPayable': 'N',
+        'IsDiscountable': 'N',
+        'qty': 0,
+        'mrp_rate': 0,
+        'panel_rate': 0,
+        'panel_discount': 0,
+        'adl_disc_perc': 0,
+        'adl_disc_amount': 0,
+        'net_amount': 0,
+        'IsUrgent': '-',
+        'Remark': '-',
+        'TaxRate': 0,
+        'TaxAmt': 0
+    });
+    objBooking.hosp_id = Active.HospId;
+    objBooking.IPDNo = '-';
+    objBooking.DoctorId = '-';
+    objBooking.ipAddress = '-';
+    objBooking.login_id = Active.userId;
+    objBooking.Logic = "UpdatePharmacyItem";
+    var MasterObject = {};
+    MasterObject.objBooking = objBooking;
+    MasterObject.objRateList = objRateList;  
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(MasterObject),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        traditional: true,
+        success: function (data) {
+            if (data.includes('Success')) {
+                $('#modalPharmacyItems').modal('hide');
+            }
+            else {
+                alert(data);
             }
         },
         error: function (response) {
@@ -684,6 +795,65 @@ function DoctorShift() {
         }
     });
 }
+function ItemWiseDiscount(logic) {
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
+    var objBooking = {};
+    var objRateList = [];
+    $('#tblItemsInfo tbody').find('input:checkbox:checked').each(function () {
+        objRateList.push({
+            'AutoId': $(this).closest('tr').find('td:eq(0)').text(),
+            'TnxId': '-',
+            'RateListId': '-',
+            'CatId': $('#ddlModType option:selected').text(),
+            'ItemId': '-',
+            'RateListName': '-',
+            'ItemSection': '-',
+            'IsPackage': '-',
+            'IsRateEditable': 'N',
+            'IsPatientPayable': 'N',
+            'IsDiscountable': 'N',
+            'qty': $('#txtModQty').val(),
+            'mrp_rate': 0,
+            'panel_rate': $('#txtModPanelRate').val(),
+            'panel_discount': 0,
+            'adl_disc_perc': $('#txtModAmtPerc').val(),
+            'adl_disc_amount': $('#txtModAmtPerc').val(),
+            'net_amount': 0,
+            'IsUrgent': '-',
+            'Remark': '-',
+            'TaxRate': 0,
+            'TaxAmt': 0
+        });
+    })
+    objBooking.hosp_id = Active.HospId;
+    objBooking.IPDNo = _IPDNo;
+    objBooking.DoctorId = '-';
+    objBooking.ipAddress = logic;
+    objBooking.login_id = Active.userId;
+    objBooking.Logic = "ItemWiseEditing";
+    var MasterObject = {};
+    MasterObject.objBooking = objBooking;
+    MasterObject.objRateList = objRateList;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(MasterObject),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        traditional: true,
+        success: function (data) {
+            if (data.includes('Success')) {
+                ItemsInfo($('#tblBillingInfo tbody tr.select-row').find('td:eq(0)').text());
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function CancelItem() {
     if ($('#txtCancelRemark').val() == '') {
         alert('Please Provide Remark.');
@@ -692,30 +862,62 @@ function CancelItem() {
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
     var objBooking = {};
     var objRateList = [];
-    objRateList.push({
-        'AutoId': $(_elem).closest('tr').find('td:eq(0)').text(),
-        'TnxId': '-',
-        'RateListId': '-',
-        'CatId': '-',
-        'ItemId': '-',
-        'RateListName': '-',
-        'ItemSection': '-',
-        'IsPackage': '-',
-        'IsRateEditable': 'N',
-        'IsPatientPayable': 'N',
-        'IsDiscountable': 'N',
-        'qty': 0,
-        'mrp_rate': 0,
-        'panel_rate': 0,
-        'panel_discount': 0,
-        'adl_disc_perc': 0,
-        'adl_disc_amount': 0,
-        'net_amount': 0,
-        'IsUrgent': '-',
-        'Remark': $('#txtCancelRemark').val(),
-        'TaxRate': 0,
-        'TaxAmt': 0
-    });
+    if (_elem == 'Cancel:AllItems') {
+        objRateList = [];
+        $('#tblItemsInfo tbody').find('input:checkbox:checked').each(function () {
+            objRateList.push({
+                'AutoId': $(this).closest('tr').find('td:eq(0)').text(),
+                'TnxId': '-',
+                'RateListId': '-',
+                'CatId': '-',
+                'ItemId': '-',
+                'RateListName': '-',
+                'ItemSection': '-',
+                'IsPackage': '-',
+                'IsRateEditable': 'N',
+                'IsPatientPayable': 'N',
+                'IsDiscountable': 'N',
+                'qty': 0,
+                'mrp_rate': 0,
+                'panel_rate': 0,
+                'panel_discount': 0,
+                'adl_disc_perc': 0,
+                'adl_disc_amount': 0,
+                'net_amount': 0,
+                'IsUrgent': '-',
+                'Remark': $('#txtCancelRemark').val(),
+                'TaxRate': 0,
+                'TaxAmt': 0
+            });
+        })
+    }
+    else {
+        objRateList = [];
+        objRateList.push({
+            'AutoId': $(_elem).closest('tr').find('td:eq(0)').text(),
+            'TnxId': '-',
+            'RateListId': '-',
+            'CatId': '-',
+            'ItemId': '-',
+            'RateListName': '-',
+            'ItemSection': '-',
+            'IsPackage': '-',
+            'IsRateEditable': 'N',
+            'IsPatientPayable': 'N',
+            'IsDiscountable': 'N',
+            'qty': 0,
+            'mrp_rate': 0,
+            'panel_rate': 0,
+            'panel_discount': 0,
+            'adl_disc_perc': 0,
+            'adl_disc_amount': 0,
+            'net_amount': 0,
+            'IsUrgent': '-',
+            'Remark': $('#txtCancelRemark').val(),
+            'TaxRate': 0,
+            'TaxAmt': 0
+        });
+    }
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;
     objBooking.DoctorId = '-';
@@ -734,7 +936,14 @@ function CancelItem() {
         traditional: true,
         success: function (data) {
             if (data.includes('Success')) {
-                $(_elem).closest('tr').remove();
+                if (_elem == 'Cancel:AllItems') {
+                    $('#tblItemsInfo tbody').find('input:checkbox:checked').each(function () {
+                        $(this).closest('tr').remove();
+                    })
+                }
+                else
+                    $(_elem).closest('tr').remove();
+
                 $('#modalCancelItem').modal('hide');
             }
             else {
@@ -992,6 +1201,31 @@ function MoveItemToPackage() {
             else {
                 alert(data);
             }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function checkAmount() {
+    var url = config.baseUrl + "/api/Corporate/PanelQuerie";
+    var objBO = {};
+    objBO.PanelId = '-';
+    objBO.UHID = $('#tblAdviceHeader tbody tr:last').find('td:eq(5)').text();
+    objBO.from = '1900/01/01';
+    objBO.ReportType = '-';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'GetCMFundBalance';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var Balance = data.ResultSet.Table[0].Balance;
+            $('#amountInfo span:last').html(Balance);
+            $('#amountInfo').toggleClass('grid');
         },
         error: function (response) {
             alert('Server Error...!');

@@ -1,0 +1,344 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "ReferralWork";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Referral/JsModule/ReferralWork.js"></script>
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 32px;
+        /*margin-top: 11%;*/
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    #tblCheckBillStatus thead th {
+        padding: 4px;
+    }
+
+    #tblCheckBillStatus tbody td {
+        font-size: 12px;
+        padding: 2px;
+    }
+
+    .widthcol {
+        /*width: 150px;*/
+        width: 132px;
+    }
+
+    .flex {
+        display: flex !important;
+    }
+
+    hr {
+        /*margin-top: 35px;*/
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid black;
+        margin-top: 6px;
+    }
+
+    .nav-tabs a {
+        background: #e8e8e8;
+    }
+
+    .section {
+        margin-top: 5px;
+        padding: 1px;
+        border: 1px solid #2478a9;
+        /*height: 370px;*/
+        height: 400px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .title {
+        background: #2478a9;
+        color: #fff;
+        padding: 2px 5px;
+        margin: 0;
+        width: 100%;
+    }
+
+    #tblDoctorReport thead th {
+        font-size: 13px;
+        height: 20px;
+    }
+
+    #tblDoctorReport tbody td {
+        font-size: 12px;
+    }
+
+    #tblPatientReport thead th {
+        height: 20px;
+        font-size: 13px;
+    }
+
+    #tblPatientReport tbody td {
+        font-size: 12px;
+    }
+
+    #tblProReport thead th {
+        height: 20px;
+        font-size: 13px;
+    }
+
+    #tblProReport tbody td {
+        font-size: 12px;
+    }
+
+    .btn-close {
+        right: 5px;
+        opacity: 100%;
+        position: absolute;
+        color: #fff !important;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 0px 6px;
+        background: #b92c02;
+        height: 16px;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+</style>
+
+<div id="page-content">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="ml15">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h5>Referral Work</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2 widthcol">
+                                <label>IP/OP Type</label>
+                                <select id="ddlIPOPtype" class="form-control">
+                                    <option value="ALL">ALL</option>
+                                    <option value="IPD">IPD</option>
+                                    <option value="OPD">OPD</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 widthcol">
+                                <label>From</label>
+                                <input type="date" class="form-control" id="txtfromdate" />
+                            </div>
+                            <div class="col-md-2 widthcol">
+                                <label>To</label>
+                                <input type="date" class="form-control" id="txttodate" />
+                            </div>
+                            <div class="col-md-3" style="width:230px;">
+                                <label>Pro</label>
+                                <select id="ddlProList" class="form-control"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Referral</label>
+                                <div class="flex">
+                                    <div style="width:80%">
+                                        <span style="width:80%">
+                                            <select id="ddlReferral" class="form-control"></select>
+                                        </span>
+                                    </div>
+                                    <input type="button" title="Create New Referral" id="btnSaveReferal" class="btn btn-success bn" style="height:28px" value="Search" onclick="ReferralOpen()" />
+                                </div>
+                            </div>
+                            <button id="btnsubmit" style="margin-top:24PX;height:28px;" class="btn btn-success bn" onclick="GetDataProWise('GetBusiness:ByPro')"><i class="fa fa-search"></i>&nbsp;ProWise</button>
+                            <button id="btnDoctor" style="margin-top:24PX;height:28px;" class="btn btn-warning bn" onclick="GetDataDoctorWise('GetBusiness:ByReferral')"><i class="fa fa-search"></i>&nbsp;Doctor Wise</button>
+                            @*<button id="btnsubmit" style="margin-top:24PX;height:28px;" class="btn btn-success bn" onclick="GetDataPatientWise('GetBusiness:ByPatient')"><i class="fa fa-search"></i>&nbsp;Patient Wise</button>*@
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="nav nav-tabs">
+                                    <li><a style="padding:4px;margin-left:-7px;" href="#ProWiseReport">ProWise</a></li>
+                                    <li><a style="padding: 5px;" href="#DoctorWiseReport">DoctorWise</a></li>
+                                    <li><a style="padding: 5px;" href="#PatientWiseReport">PatientWise</a></li>
+                                </ul>
+                                <button id="btnsubmit" style="margin-top:-3%; float: right;height:28px;" class="btn btn-success bn" onclick="ExcelReferral()"><i class="fa fa-file-excel-o"></i>&nbsp;Execl</button>
+                                <div class="tab-content">
+                                    <div id="ProWiseReport" class="tab-pane fade">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="section" style="margin-left:-10px; margin-right:-10px;margin-top:-10px">
+                                                    <label class="title">Pro Details</label>
+                                                    <div class="table-responsive" style="height:350px;overflow-y:auto;">
+                                                        <table class="table table-bordered" id="tblProReport">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width:20%">Pro Code</th>
+                                                                    <th style="width:70%">Pro Name</th>
+                                                                    <th style="width:10%;text-align:center">Amount</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+
+                                                        </table>
+
+                                                    </div>
+
+                                                    <div style="width:100%; background-color:#b5b1b16b;height:24px;">
+                                                        <div class="flex">
+                                                            <div class="col-md-11">
+                                                                <label style="float:right;margin-right:25px;">Grand Total &nbsp;:</label>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <label id="txttotalPro" style="text-align:center;font-size:16px;"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="DoctorWiseReport" class="tab-pane fade">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="section" style="margin-left: -10px; margin-right:-10px;margin-top:-10px">
+                                                    <label class="title">Doctor Details</label>
+                                                    <div class="table-responsive" style="height:350px;overflow-y:auto;margin-top:1px">
+                                                        <table class="table table-bordered" id="tblDoctorReport">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width:10%">Action</th>
+                                                                    <th style="width:10%">Doctor Code</th>
+                                                                    <th style="width:35%">Doctor Name</th>
+                                                                    <th style="width:35%">Address</th>
+                                                                    <th style="text-align:center;width:10%">Amount</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <div style="width:100%; background-color:#b5b1b16b;height:24px;">
+                                                        <div class="flex">
+                                                            <div class="col-md-11">
+                                                                <label style="float:right;">Grand Total &nbsp;:</label>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <label id="txttotalDoctor" style="float:right; font-size:16px;"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="PatientWiseReport" class="tab-pane fade">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="section" style="margin-left: -10px; margin-right:-10px;margin-top:-10px">
+                                                    <label class="title">Patient Details</label>
+                                                    <div class="table-responsive" style="height:350px;overflow-y:auto;margin-top:1px">
+                                                        <table class="table table-bordered" id="tblPatientReport">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width:10%">IPOPType</th>
+                                                                    <th style="width:40%">PanelName</th>
+                                                                    <th style="width:40%">Patient Name</th>
+                                                                    <th style="width:10%;text-align:center">Amount</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div style="width:100%; background-color:#b5b1b16b;height:24px;">
+                                                        <div class="flex">
+                                                            <div class="col-md-11">
+                                                                <label style="float:right;margin-right:-14px;">Grand Total &nbsp;:</label>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <label id="txttotalPatient" style="float:right;font-size:16px;"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!---Referral Modal---->
+    <div class="modal fade" id="modalReferral" tabindex="-1" role="dialog" aria-labelledby="True">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" style="margin-top:10%;">
+                <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;">
+                    <h5 class="text-white">Add New Referral</h5>
+                    <span data-dismiss="modal" class="btn-close">x</span>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group flex">
+                                <span style="width:26%"><b>Search</b></span>
+                                <span style="width:4%"><b>:</b></span>
+                                <span style="width:60%">
+                                    <input type="text" id="txtSearchReferral" class="form-control text-uppercase border-imp" placeholder="Search Referral" autocomplete="off" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="height:500px;overflow:auto;border:1px solid #009688;padding: 0;">
+                            <table id="tblReferral" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width:1%">Action</th>
+                                        <th style="white-space:nowrap">Referral Code</th>
+                                        <th>Referral Name</th>
+                                        <th>Mobile No</th>
+                                        <th>Degree</th>
+                                        <th>Address</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

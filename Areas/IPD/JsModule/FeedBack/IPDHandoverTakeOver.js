@@ -161,7 +161,7 @@ function InsertIPDHandover() {
     }
     var url = config.baseUrl + "/api/IPDNursing/HandOverTakeOverInsert";
     var objBO = [];
-    $('div#patientList input[type=checkbox]:checked').each(function () {
+    $('div#IPDPatientList input[type=checkbox]:checked').each(function () {
         var elem = this;
         var staffcode = $('#ddlStaff option:selected').val();
         var ShiftName = $('#ddlShift option:selected').text();
@@ -186,7 +186,7 @@ function InsertIPDHandover() {
             'login_id': Active.userId,
             'Logic': 'InsertStaffShift'
         });
-    });
+    });  
     $.ajax({
         method: "POST",
         url: url,

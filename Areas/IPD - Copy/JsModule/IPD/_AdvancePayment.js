@@ -80,11 +80,11 @@ function ReceiptInfo() {
                         $('.advnc-amount-section #txtAdvanceAmt').val(val.AdvanceAmount.toFixed(2));
                         $('.advnc-amount-section #txtCoPay').val(val.CoPay.toFixed(2));
                         $('.advnc-amount-section #txtApprovalAmt').val(val.ApprovalAmount.toFixed(2));
-                        $('.advnc-amount-section #txtBalanceAmt').val(val.BalanceAmount.toFixed(2));
-                 
+                        $('.advnc-amount-section #txtBalanceAmt').val(val.BalanceAmount.toFixed(2));                 
                     });
                 }
             }
+        
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table1).length) {
                     var tbody = '';

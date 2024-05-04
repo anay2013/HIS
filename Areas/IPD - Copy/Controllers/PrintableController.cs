@@ -1,4 +1,5 @@
 ﻿using HIS.Repository;
+using HISWebApi.Models;
 using MediSoftTech_HIS.App_Start;
 using MediSoftTech_HIS.Areas.IPD.Repository;
 using MediSoftTech_HIS.Areas.Lab.Repository;
@@ -145,7 +146,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 b.Append("</div>");
                 b.Append("<div style='width:70%;float:right;'>");
                 b.Append("<h2 style='font-weight:bold;margin:0;text-align:left'>BLOOD REQUISITION FORM</h2>");
-                b.Append("<h3 style='margin:0;text-align:left'>Indent No : IND000023</h3>");
+                b.Append("<h3 style='margin:0;text-align:left'>Indent No : "+ IndentNo + "</h3>");
                 b.Append("</div>");
                 b.Append("</div>");
                 b.Append("<hr/>");
@@ -709,7 +710,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         public FileResult IPDBillSummary(string _IPDNo, string _ReceiptList, string _BillPrintType, string ExcludeAdlItemDiscount)
         {
             IPDBillPrint obj = new IPDBillPrint();
-            return  obj.PrintBill(_IPDNo, _ReceiptList, _BillPrintType, ExcludeAdlItemDiscount);
+            return obj.PrintBill(_IPDNo, _ReceiptList, _BillPrintType, ExcludeAdlItemDiscount);
         }
         public FileResult IPDBillSummary2(string _IPDNo, string _ReceiptList, string _BillPrintType)
         {
@@ -1357,6 +1358,12 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         }
         public FileResult IPDDischargeReport(string _IPDNo)
         {
+            IPDDischargeSummaryPrint obj = new IPDDischargeSummaryPrint();
+            return obj.PrintDischargeReport(_IPDNo,"N");
+        }
+
+        public FileResult IPDDischargeReportOld(string _IPDNo)
+        {
             PdfGenerator pdfConverter = new PdfGenerator();
             IPDInfo obj = new IPDInfo();
             obj.IPDNo = _IPDNo;
@@ -1409,7 +1416,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 DischargeType = dr["DischargeType"].ToString();
                 ContactNo = dr["ContactNo"].ToString();
                 Address = dr["Address"].ToString();
-                DischargeHeader= dr["DischargeReportHeader"].ToString();
+                DischargeHeader = dr["DischargeReportHeader"].ToString();
             }
             h.Append("<div style='height:320px;border-bottom:1px solid #000'></div>");
             h.Append("<table style='width:2080px;padding:10px 0;background:#fff;font-size:42px;text-align:left;border:1px solid #000;margin:0 15px'>");
@@ -1447,7 +1454,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
 
             b.Append("<div style='height:110px;'></div>");
 
-            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>"+ DischargeHeader + "</h2>");
+            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + DischargeHeader + "</h2>");
             b.Append("<table style='padding:10px 0;background:#fff;width:100%;font-size:15px;text-align:left;border:1px solid #000;margin-bottom:-15px;margin-top:0'>");
             b.Append("<tr>");
             b.Append("<td style='width:17%;padding:3px;'><b>UHID</b></td>");
@@ -1538,7 +1545,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.PageMarginLeft = 20;
             pdfConverter.PageMarginRight = 15;
             pdfConverter.PageMarginBottom = 10;
-            pdfConverter.HeaderSource = "IPDDischargeRepo";
+            pdfConverter.HeaderSource = "IPDDischargeReport";
             pdfConverter.PageMarginTop = 10;
             pdfConverter.PageMarginTop = 10;
             pdfConverter.PageName = "A4";
@@ -1757,12 +1764,14 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             return obj.PrintForms(FormList);
         }
 
+
         public FileResult DeathNotification(string IPDNo)
         {
             PdfGenerator pdfConverter = new PdfGenerator();
-            InsertDeathCertificateInfo obj = new InsertDeathCertificateInfo();
+            IPDInfo obj = new IPDInfo();
             obj.IPDNo = IPDNo;
             obj.Logic = "PrintDeathCertificate";
+            obj.login_id = "-";
             HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("IPDNursingService/IPD_PatientQueries", obj);
             DataSet ds = dsResult.ResultSet;
             string _result = string.Empty;
@@ -1811,9 +1820,8 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                         address = dr["address"].ToString();
                         SufferingFrom = dr["SufferingFrom"].ToString();
                         ImmediateCauseOfDeath = dr["ImmediateCauseOfDeath"].ToString();
-                        DateTime deathDateTime = Convert.ToDateTime(dr["DeathDateTime"]);
-                        date = deathDateTime.ToString("dd/MM/yyyy");
-                        time = deathDateTime.ToString("HH:mm");
+                        date = dr["DeathDate"].ToString();
+                        time = dr["DeathTime"].ToString();
                     }
                 }
             }
@@ -1926,6 +1934,605 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "BirthCertificate.pdf");
         }
+        public FileResult SofaScorePrint(string IPDNO, string EntryDate)
+        {
+            PdfGenerator pdfConverter = new PdfGenerator();
+            InSofaScoreQueries obj = new InSofaScoreQueries();
+            obj.ObservationId = "-";
+            obj.Sofasystem = "-";
+            obj.ObservationName = "-";
+            obj.Value = "-";
+            obj.from = "1900-01-01";
+            obj.to = "1900-01-01";
+            obj.Prm1 = IPDNO;
+            obj.Prm2 = EntryDate;
+            obj.Logic = "Get:SofaScoreSheet";
+            HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("IPDNursing/SOFA_ScoreQueries", obj);
+            DataSet ds = dsResult.ResultSet;
+            string _result = string.Empty;
+            StringBuilder b = new StringBuilder();
+            StringBuilder h = new StringBuilder();
+            string MortalityPerc = "";
+            string Score = "";
+            string UHID = "";
+            string IPDNo = "";
+            string patient_name = "";
+            string emp_name = "";
+            string ageInfo = "";
+            string entrydate = "";
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            foreach (DataRow dr in ds.Tables[1].Rows)
+            {
+                MortalityPerc = dr["MortalityPerc"].ToString();
+                Score = dr["Score"].ToString();
+                entrydate = dr["EntryDate"].ToString();
+                UHID = dr["UHID"].ToString();
+                IPDNo = dr["IPDNo"].ToString();
+                patient_name = dr["patient_name"].ToString();
+                emp_name = dr["emp_name"].ToString();
+                ageInfo = dr["ageInfo"].ToString();
+            }
+            b.Append("<div class='row' style='padding:10px'>");
+            b.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
+            b.Append("<h5 style = 'border:1px solid;margin-left:300px;margin-right:130px;text-align: justify ; margin-top:-70px; width:700px;height:60px; padding:10px;'>");
+            b.Append("<table style='width:100%;font-size:16px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;'>");
+            b.Append("<tr>");
+            b.Append("<td><b>Patient Name</b> </td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + patient_name + "</td>");
+            b.Append("<td><b>Age/Gender</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + ageInfo + "</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td><b>UHID No</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + UHID.ToString() + "</td>");
+            b.Append("<td><b>IPD No</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + IPDNo.ToString() + "</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</h5>");
+            b.Append("<h1 style='text-align:center; font-size:25px; color:black;margin-top:2%'><u> SOFA SCORE</u></h1>");
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                b.Append("<table border='1' style='width:98%;text-align:left;border-collapse:collapse;margin-top:-5px;white-space:nowrap;height:300px;background-color:#fff;'>");
+                b.Append("<tr style='background-color:#fff;'>");
+                b.Append("<th colspan='8' style='text-align:center; padding:10px;font-size:20px'><u> SOFA SCORE</u></th>");
+                b.Append("</tr>");
+                // Display dynamic header row outside the loop
+                b.Append("<tr style='color:#000;background-color:#ddd;'>");
 
+                // Display specific columns (Sofa Score, 0, 1, 2, 3, 4)
+                b.Append("<th style='text-align:left; padding:5px;'>Sofa Score</th>");
+                for (int i = 0; i <= 4; i++)
+                {
+                    b.Append("<th style='text-align:center; padding:5px;'>" + i.ToString() + "</th>");
+                }
+                b.Append("<th style='text-align:center; padding:5px;'>Input Value</th>");
+
+                b.Append("<th style='text-align:center; padding:5px;'> Score</th>");
+                b.Append("</tr>");
+
+                //Display data rows
+                foreach (DataRow drr in ds.Tables[0].Rows)
+                {
+                    b.Append("<tr>");
+
+                    // Display specific columns (Sofa Score, 0, 1, 2, 3, 4)
+                    b.Append("<td style='text-align:left; padding:10px;'><strong>" + (drr[3] != null ? drr[2].ToString() : "") + "</strong></td>");
+                    for (int i = 3; i <= 9; i++)
+                    {
+                        b.Append("<td style='text-align:center; padding:10px; " + ((i == 8 || i == 9) ? "font-weight:bold;" : "") + "border: 1px solid #000;'>" + (drr[i] != null ? drr[i].ToString() : "") + "</td>");
+                    }
+                    b.Append("</tr>");
+                }
+            }
+            else
+            {
+                b.Append("<div style='color:red; font-size:18px;'>No data available.</div>");
+            }
+
+            b.Append("<table border='1'style='width:40%;text-align:center;border-collapse:collapse;margin-top:35px;height:300px;background-color:#fff;margin-left:100px'>");
+            b.Append("<thead>");
+            b.Append("<tr style='color:#000;background-color:#ddd;padding:15px'>");
+            b.Append("<th style='padding:8px'> Mortality</th>");
+            b.Append("<th style='padding:8px'>Sofa Score</th>");
+            b.Append("</tr>");
+            b.Append("</thead>");
+            b.Append("<tbody>");
+            b.Append("<tr style='background-color: #fff;'>");
+            b.Append("<td class='button-column'>< 10%</td>");
+            b.Append("<td class='button-column'>0-6</td>");
+            b.Append("</tr>");
+            b.Append("<tr style='background-color: #fff;'>");
+            b.Append("<td class=\"button-column\">15-20%</td>");
+            b.Append("<td class=\"button-column\">7-9</td>");
+            b.Append("</tr>");
+            b.Append("<tr style='background-color: #fff;'>");
+            b.Append("<td class=\"button-column\">40-50%</td>");
+            b.Append("<td class=\"button-column\">10--12</td>");
+            b.Append("</tr>");
+            b.Append("<tr style='background-color: #fff;'>");
+            b.Append("<td class=\"button-column\">50-60%</td>");
+            b.Append("<td class=\"button-column\">13-14</td>");
+            b.Append("</tr>");
+            b.Append("<tr style='background-color: #fff;'>");
+            b.Append("<td class=\"button-column\">>80%</td>");
+            b.Append("<td class=\"button-column\">15</td>");
+            b.Append("</tr>");
+            b.Append("<tr style='background-color: #fff;'>");
+            b.Append("<td class=\"button-column\">>90%</td>");
+            b.Append("<td class=\"button-column\">15-26</td>");
+            b.Append("</tr>");
+            b.Append("</tbody>");
+            b.Append("</table>");
+            b.Append("<table style='background:#f0f0f0;width:40%;font-size:18px;border:0px solid #dcdcdc;float:right;margin-top:-250px;margin-left:-200px'>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'><b>Total Score :</b></td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + Score + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<br>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'><b>Mortality :</b></td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + MortalityPerc + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("<br>");
+            b.Append("<br>");
+
+            b.Append("<table  style='font-size:18px;text-align:left'>");
+            b.Append("<tr>");
+            b.Append("<td><b>Name Of Staff </b></td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td>:</td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td style='text-aligh:left'>" + emp_name + "</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td><b>Signature </b></td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td>:</td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td><b>Date </b></td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td>:</td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td style='text-aligh:left'>" + entrydate + "</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</div>");
+            pdfConverter.Header_Enabled = false;
+            pdfConverter.Footer_Enabled = false;
+            pdfConverter.Header_Hight = 150;
+            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginRight = 10;
+            pdfConverter.PageMarginBottom = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageName = "A4";
+            pdfConverter.PageOrientation = "Portrait";
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "SofaScore.pdf");
+        }
+
+        public FileResult PrintApacheSofaScore(string IPDNO, string EntryDate)
+        {
+            PdfGenerator pdfConverter = new PdfGenerator();
+            InSofaScoreQueries obj = new InSofaScoreQueries();
+            obj.ObservationId = "-";
+            obj.Sofasystem = "-";
+            obj.ObservationName = "-";
+            obj.Value = IPDNO;
+            obj.from = "1900-01-01";
+            obj.to = "1900-01-01";
+            obj.Prm1 = "-";
+            obj.Prm2 = EntryDate;
+            obj.Logic = "PrintApacheSofaScore";
+            HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("IPDNursing/SOFA_ScoreQueries", obj);
+            DataSet ds = dsResult.ResultSet;
+            string _result = string.Empty;
+            StringBuilder b = new StringBuilder();
+            StringBuilder h = new StringBuilder();
+            string UHID = "";
+            string IPDNo = "";
+            string patient_name = "";
+            string emp_name = "";
+            string ageInfo = "";
+            string AGE = "";
+            string GlasgowComaScore = "";
+            string Potassium = "";
+            string IsRenalFailure = "";
+            string Hematocrit = "";
+            string IsChronic = "";
+            string ChronicDisease = "";
+            string TEMP = "";
+            string MAP = "";
+            string HR = "";
+            string RR = "";
+            string FiO2 = "";
+            string Po2 = "";
+            string PCO2 = "";
+            string ArtPH = "";
+            string NA = "";
+            string Cr = "";
+            string HT = "";
+            string WBC = "";
+            string aps_Score = "";
+            string EstMortRate = "";
+            string entryDate = "";
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                UHID = dr["UHID"].ToString();
+                IPDNo = dr["IPDNo"].ToString();
+                patient_name = dr["patient_name"].ToString();
+                emp_name = dr["emp_name"].ToString();
+                ageInfo = dr["ageInfo"].ToString();
+            }
+            foreach (DataRow dr in ds.Tables[1].Rows)
+            {
+                AGE = dr["AGE"].ToString();
+                GlasgowComaScore = dr["GlasgowComaScore"].ToString();
+                Potassium = dr["Potassium"].ToString();
+                IsRenalFailure = dr["IsRenalFailure"].ToString();
+                Hematocrit = dr["Hematocrit"].ToString();
+                IsChronic = dr["IsChronic"].ToString();
+                ChronicDisease = dr["ChronicDisease"].ToString();
+                TEMP = dr["TEMP"].ToString();
+                MAP = dr["MAP"].ToString();
+                HR = dr["HR"].ToString();
+                RR = dr["RR"].ToString();
+                FiO2 = dr["FiO2"].ToString();
+                Po2 = dr["Po2"].ToString();
+                PCO2 = dr["PCO2"].ToString();
+                ArtPH = dr["ArtPH"].ToString();
+                NA = dr["NA"].ToString();
+                Cr = dr["Cr"].ToString();
+                HT = dr["HT"].ToString();
+                WBC = dr["WBC"].ToString();
+                EstMortRate = dr["EstMortRate"].ToString();
+                aps_Score = dr["aps_Score"].ToString();
+                entryDate = dr["entryDate"].ToString();
+            }
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            b.Append("<div class='row' style='padding:10px'>");
+            b.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
+            b.Append("<h5 style = 'border:1px solid;margin-left:200px;text-align: justify ; margin-top:-80px; width:500px;height:60px; padding:10px;'>");
+            b.Append("<table style='width:100%;font-size:14px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;'>");
+            b.Append("<tr>");
+            b.Append("<td><b>Patient Name</b> </td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + patient_name + "</td>");
+            b.Append("<td><b>Age/Gender</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + ageInfo + "</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td><b>UHID No</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + UHID.ToString() + "</td>");
+            b.Append("<td><b>IPD No</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + IPDNo.ToString() + "</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</h5>");
+            b.Append("</div>");
+
+            b.Append("<h1 style='text-align:center; font-size:16px; color:black;margin-top:-10px'><u> Apache Sofa Score</u></h1>");
+            b.Append("<div class='row' style='padding:20px'>");
+
+            b.Append("<div style = 'border: 1px solid #b1aaaa;text-align: justify ; width:53%;height:400px;font-size:18px;margin-top:-10px'>");
+            b.Append("<table width='100%' border='0' style='padding:5px'>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Temperature (°F)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + TEMP + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>MAP (mmHg)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + MAP + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>HR (/min)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + HR + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>RR (/min)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + RR + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>FiO2 &gt;=50%  <b>/</b> FiO2&lt;50%</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + FiO2 + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Arterial pH  <b>/</b> HCO3-</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + ArtPH + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Na+ (mEq/L)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + NA + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>K+ (mEq/L)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + Potassium + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Creatinine (mg/dL) </td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + Cr + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>ARF </td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + IsRenalFailure + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>WBC (x1000/mm3) </td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + HT + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Ht (%) </td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + WBC + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Glasgow (/15)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + GlasgowComaScore + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Age (ans)</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + AGE + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Chronic Disease</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + IsChronic + " <b>/</b> &nbsp;" + ChronicDisease + "</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</div>");
+
+            b.Append("<div style = 'border: 1px solid #b1aaaa;text-align: justify ; width:43%;height:80px;font-size:18px;float:right;margin-top:-352px;background-color:#f3f3f3;'>");
+            b.Append("<table width='100%' border='0' style='padding:5px'>");
+            b.Append("<tr>");
+            b.Append("<td></td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>APACHE II Score</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + aps_Score + " &nbsp; /71</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td style='width:12%;'>Mortality Rate</td>");
+            b.Append("<td style='width:2%;'><b>:</b></td>");
+            b.Append("<td style='width:8%;text-aligh:left'>" + EstMortRate + " &nbsp; %</td>");
+            b.Append("<td style='width:1%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</div>");
+
+            b.Append("<table  style='font-size:16px;text-align:left;margin-top:50px'>");
+            b.Append("<tr>");
+            b.Append("<td><b>Name Of Staff </b></td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td>:</td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td style='text-aligh:left'>" + emp_name + "</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td><b>Signature </b></td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td>:</td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td><b>Date </b></td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td>:</td>");
+            b.Append("<td style='width:5%;'>&nbsp;</td>");
+            b.Append("<td style='text-aligh:left'>" + entryDate + "</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</div>");
+            pdfConverter.Header_Enabled = false;
+            pdfConverter.Footer_Enabled = false;
+            pdfConverter.Header_Hight = 150;
+            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginRight = 10;
+            pdfConverter.PageMarginBottom = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageName = "A4";
+            pdfConverter.PageOrientation = "Portrait";
+
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "ApacheSofaScore.pdf");
+        }
+        public FileResult PrintEstimateForm(string UHIDNO, string estDate)
+        {
+            PdfGenerator pdfConverter = new PdfGenerator();
+            IPD_Estimates objBO = new IPD_Estimates();
+            objBO.hospId = "-";
+            objBO.estDate = estDate;
+            objBO.estimateNo = "-";
+            objBO.uhid = UHIDNO;
+            objBO.patientName = "-";
+            objBO.isActive = '-';
+            objBO.createdBy = "-";
+            objBO.toWhom = "-";
+            objBO.amount = "0";
+            objBO.estContent = "-";
+            objBO.var_list = "-";
+            objBO.result = "-";
+            objBO.Logic = "PrintEstimate";
+            HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("IPDBilling/IPD_EstimateQueries", objBO);
+            DataSet ds = dsResult.ResultSet;
+            string _result = string.Empty;
+            StringBuilder b = new StringBuilder();
+            StringBuilder h = new StringBuilder();
+            string ipopno = "";
+            string Patientname = "";
+            string age = "";
+            string content = string.Empty;
+            string Gender = string.Empty;
+            string EstimateNo = string.Empty;
+            string AccountName = string.Empty;
+            string AccountNo = string.Empty;
+            string BankName = string.Empty;
+            string BankBranch = string.Empty;
+            string IFSCcode = string.Empty;
+            string Company = string.Empty;
+            string MobileNo = string.Empty;
+            string Amount = string.Empty;
+            string toWhom = string.Empty;
+            string estimateNo = string.Empty;
+            string var_list = string.Empty;
+            string Dated = string.Empty;
+
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    AccountName = dr["ac_name"].ToString();
+                    IFSCcode = dr["ac_ifsc"].ToString();
+                    AccountNo = dr["ac_no"].ToString();
+                    BankName = dr["ac_bankName"].ToString();
+                    BankBranch = dr["ac_BranchName"].ToString();
+
+                }
+            }
+            if (ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[1].Rows)
+                {
+                    Patientname = dr["patient_name"].ToString();
+                    Gender = dr["gender"].ToString();
+                    age = dr["ageInfo"].ToString();
+                    ipopno = dr["ipop_no"].ToString();
+                }
+            }
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+            b.Append("<div class='row' style='padding:30px'>");
+            b.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
+            b.Append("<h5 style = 'border:1px solid;margin-left:200px;text-align: justify ; margin-top:-90px; width:500px;height:60px; padding:10px;'>");
+            b.Append("<table style='width:100%;font-size:14px;border:0px solid #dcdcdc;margin-bottom:-15px;'>");
+            b.Append("<tr>");
+            b.Append("<td><b>Patient Name</b> </td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + Patientname + "</td>");
+            b.Append("<td><b>Age/Gender</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + age + "</td>");
+            b.Append("</tr>");
+            b.Append("<tr>");
+            b.Append("<td><b>UHID No</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + UHIDNO.ToString() + "</td>");
+            b.Append("<td><b>IPD No</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + ipopno.ToString() + "</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</h5>");
+
+            if (ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[2].Rows)
+                {
+                    Dated = dr["estDate"].ToString();
+                    EstimateNo = dr["estimateNo"].ToString();
+                    toWhom = dr["toWhom"].ToString();
+                    Amount = dr["amount"].ToString();
+                    content = dr["estContent"].ToString();
+                    foreach (var var1 in dr["var_list"].ToString().Split(','))
+                    {
+                        var oldString = "{<strong>" + var1 + "</strong>}";
+                        var newString = "<strong>" + var1 + "</strong>";
+                        if (var1 == "PatientName")
+                            content = content.Replace(oldString, "<strong>" + Patientname + "</strong>");
+                        if (var1 == "Age")
+                            content = content.Replace(oldString, "<strong>" + age + "</strong>");
+                        if (var1 == "Gender")
+                            content = content.Replace(oldString, "<strong>" + Gender + "</strong>");
+                        if (var1 == "UHIDNO")
+                            content = content.Replace(oldString, "<strong>" + UHIDNO + "</strong>");
+                        if (var1 == "Dated")
+                            content = content.Replace(oldString, "<strong>" + Dated + "</strong>");
+                        if (var1 == "EstimateNo")
+                            content = content.Replace(oldString, "<strong>" + EstimateNo + "</strong>");
+                        if (var1 == "approx(amount)")
+                            content = content.Replace(oldString, "<strong>" + Amount + "</strong>");
+                        if (var1 == "AccountName")
+                            content = content.Replace(oldString, "<strong>" + AccountName + "</strong>");
+                        if (var1 == "AccountNo")
+                            content = content.Replace(oldString, "<strong>" + AccountNo + "</strong>");
+                        if (var1 == "BankName")
+                            content = content.Replace(oldString, "<strong>" + BankName + "</strong>");
+                        if (var1 == "BankBranch")
+                            content = content.Replace(oldString, "<strong>" + BankBranch + "</strong>");
+                        if (var1 == "IFSCcode")
+                            content = content.Replace(oldString, "<strong>" + IFSCcode + "</strong>");
+                    }
+                    b.Append(content);
+                }
+            }
+            b.Append("</div>");
+            pdfConverter.Header_Enabled = false;
+            pdfConverter.Footer_Enabled = true;
+            pdfConverter.Footer_Hight = 17;
+            pdfConverter.Header_Hight = 35;
+            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginRight = 10;
+            pdfConverter.PageMarginBottom = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageName = "A4";
+            pdfConverter.PageOrientation = "Portrait";
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "Estimate.pdf");
+        }
     }
 }

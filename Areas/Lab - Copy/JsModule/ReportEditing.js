@@ -7,6 +7,8 @@ var _testCode;
 var _autoTestId;
 var _observationId;
 var _rowIndex;
+var _elem;
+
 $(document).ready(function () {
 
     CKEDITOR.replace("txtTestComment");
@@ -59,7 +61,7 @@ $(document).ready(function () {
         _autoTestId = $(this).closest('tr').find('td:eq(0)').text();
         _testCode = $(this).closest('tr').find('td:eq(1)').text();
         _observationId = $(this).closest('tr').find('td:eq(2)').text();
-        var comment = $(this).closest('tr').find('td:nth-last-child(3)').html();
+        var comment = $(this).closest('tr').find('td:nth-last-child(4)').html();
         CKEDITOR.instances['txtTestComment'].setData(comment);
         $('#modalTestComment').modal('show');
     });
@@ -541,19 +543,10 @@ function ReportDetail() {
 function FlipLeftBlock() {
     $('#LeftBlock').toggleClass('fliped');
 }
-function SaveTestResultEntry(entrySaveType) {
+function SaveTestResult() {
     var objBO = [];
-    if ($('#ddlApproveByDoctor option:selected').val() == 'Select' && entrySaveType == 'Approved') {
-        alert('Please Select Doctor for Approval');
-        return
-    }
-    if ($('#tblTestInfo tbody').find('input:checkbox').is(':checked').length == 0) {
-        alert('Please Select Any Item');
-        return
-    }
-    var url = config.baseUrl + "/api/sample/Lab_ResultEntry";
     $('#tblTestInfo tbody tr').each(function () {
-        //if ($(this).find('input:checkbox').is(':checked')) {
+        if ($(this).find('td').length > 0) {
             if ($(this).attr('class') == 'Text') {
                 objBO.push({
                     'VisitNo': _VisitNo,
@@ -576,41 +569,122 @@ function SaveTestResultEntry(entrySaveType) {
                     'DoctorSignId': $('#ddlApproveByDoctor option:selected').val(),
                     'EntrySaveType': '-',
                     'login_id': Active.userId,
-                    'EntrySaveType': entrySaveType,
+                    'EntrySaveType': 'Tested',
                     'Logic': 'TestResultEntry'
                 });
             }
             if ($(this).attr('class') == 'Value') {
+                var read1 = $(this).find('td:eq(7)').find('input').val();
+                var read2 = $(this).find('td:eq(8)').find('input.textValue').val();
+                if (read1.trim() != '' || read2.trim() != '') {
+                    objBO.push({
+                        'VisitNo': _VisitNo,
+                        'dispatchLab': Active.HospId,
+                        'SubCat': _SubCat,
+                        'AutoTestId': $(this).find('td:eq(0)').text(),
+                        'TestCode': $(this).find('td:eq(1)').text(),
+                        'ObservationId': $(this).find('td:eq(2)').text(),
+                        'ab_flag': $(this).find('td:eq(9)').text(),
+                        'read_1': $(this).find('td:eq(7)').find('input').val(),
+                        'read_2': $(this).find('td:eq(8)').find('input.textValue').val(),
+                        'test_comment': '-',
+                        'min_value': $(this).find('td:eq(3)').text(),
+                        'max_value': $(this).find('td:eq(4)').text(),
+                        'nr_range': $(this).find('td:eq(16)').text(),
+                        'result_unit': $(this).find('td:eq(5)').text(),
+                        'method_name': $(this).find('td:eq(11)').text(),
+                        'r_type': $(this).attr('class'),
+                        'report_text_content': '-',
+                        'DoctorSignId': $('#ddlApproveByDoctor option:selected').val(),
+                        'EntrySaveType': 'Tested',
+                        'login_id': Active.userId,
+                        'Logic': 'TestResultEntry'
+                    });
+                }
+            }
+        }
+    });
+    if (objBO.length > 0)
+        submitTestResult(objBO, 'Tested')
+}
+function ApproveTestResult() {
+    var objBO = [];
+    if ($('#tblTestInfo tbody').find('input:checkbox').is(':checked').length == 0) {
+        alert('Please Select Test For Approval');
+        return
+    }
+    if ($('#ddlApproveByDoctor option:selected').text() == 'Select') {
+        alert('Please Select Approve By Doctor');
+        return
+    }
+    $('#tblTestInfo tbody tr').each(function () {
+        if ($(this).find('input:checkbox').is(':checked')) {
+            if ($(this).attr('class') == 'Text') {
                 objBO.push({
                     'VisitNo': _VisitNo,
                     'dispatchLab': Active.HospId,
                     'SubCat': _SubCat,
                     'AutoTestId': $(this).find('td:eq(0)').text(),
                     'TestCode': $(this).find('td:eq(1)').text(),
-                    'ObservationId': $(this).find('td:eq(2)').text(),
-                    'ab_flag': $(this).find('td:eq(9)').text(),
-                    'read_1': $(this).find('td:eq(7)').find('input').val(),
-                    'read_2': $(this).find('td:eq(8)').find('input.textValue').val(),
+                    'ObservationId': '-',
+                    'ab_flag': '-',
+                    'read_1': '-',
+                    'read_2': '-',
                     'test_comment': '-',
-                    'min_value': $(this).find('td:eq(3)').text(),
-                    'max_value': $(this).find('td:eq(4)').text(),
-                    'nr_range': $(this).find('td:eq(16)').text(),
-                    'result_unit': $(this).find('td:eq(5)').text(),
-                    'method_name': $(this).find('td:eq(11)').text(),
+                    'min_value': '-',
+                    'max_value': '-',
+                    'nr_range': '-',
+                    'result_unit': '-',
+                    'method_name': '-',
                     'r_type': $(this).attr('class'),
-                    'report_text_content': '-',
+                    'report_text_content': CKEDITOR.instances["txtTestContent" + $(this).find('td:eq(0)').text()].getData(),
                     'DoctorSignId': $('#ddlApproveByDoctor option:selected').val(),
-                    'EntrySaveType': entrySaveType,
+                    'EntrySaveType': '-',
                     'login_id': Active.userId,
+                    'EntrySaveType': 'Approved',
                     'Logic': 'TestResultEntry'
                 });
             }
-        //}
+            if ($(this).attr('class') == 'Value') {
+                var read1 = $(this).find('td:eq(7)').find('input').val();
+                var read2 = $(this).find('td:eq(8)').find('input.textValue').val();
+                if (read1.trim() != '' || read2.trim() != '') {
+                    objBO.push({
+                        'VisitNo': _VisitNo,
+                        'dispatchLab': Active.HospId,
+                        'SubCat': _SubCat,
+                        'AutoTestId': $(this).find('td:eq(0)').text(),
+                        'TestCode': $(this).find('td:eq(1)').text(),
+                        'ObservationId': $(this).find('td:eq(2)').text(),
+                        'ab_flag': $(this).find('td:eq(9)').text(),
+                        'read_1': $(this).find('td:eq(7)').find('input').val(),
+                        'read_2': $(this).find('td:eq(8)').find('input.textValue').val(),
+                        'test_comment': '-',
+                        'min_value': $(this).find('td:eq(3)').text(),
+                        'max_value': $(this).find('td:eq(4)').text(),
+                        'nr_range': $(this).find('td:eq(16)').text(),
+                        'result_unit': $(this).find('td:eq(5)').text(),
+                        'method_name': $(this).find('td:eq(11)').text(),
+                        'r_type': $(this).attr('class'),
+                        'report_text_content': '-',
+                        'DoctorSignId': $('#ddlApproveByDoctor option:selected').val(),
+                        'EntrySaveType': 'Approved',
+                        'login_id': Active.userId,
+                        'Logic': 'TestResultEntry'
+                    });
+                }
+            }
+        }
     });
+    if (objBO.length > 0)
+        submitTestResult(objBO, 'Approved')
+}
+function submitTestResult(objBOData, entrySaveType) {
+    var url = config.baseUrl + "/api/sample/Lab_ResultEntry";
     $.ajax({
         method: "POST",
         url: url,
-        data: JSON.stringify(objBO),
+        data: JSON.stringify(objBOData),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
@@ -635,63 +709,7 @@ function SaveTestResultEntry(entrySaveType) {
         }
     });
 }
-function ApproveTest(elem) {
-    if(confirm('Are you sure to Approve?')) {
-        var objBO = [];
-        var url = config.baseUrl + "/api/sample/Lab_ResultEntry";
-        objBO.push({
-            'VisitNo': _VisitNo,
-            'dispatchLab': Active.HospId,
-            'SubCat': _SubCat,
-            'AutoTestId': 0,
-            'TestCode': $(elem).data('testcode'),
-            'ObservationId': '-',
-            'ab_flag': '-',
-            'read_1': '-',
-            'read_2': '-',
-            'test_comment': '-',
-            'min_value': '-',
-            'max_value': '-',
-            'nr_range': '-',
-            'result_unit': '-',
-            'method_name': '-',
-            'r_type': "Text",
-            'report_text_content': '-',
-            'DoctorSignId': $('#ddlApproveByDoctor option:selected').val(),
-            'EntrySaveType': '-',
-            'login_id': Active.userId,
-            'EntrySaveType': 'Approved',
-            'Logic': 'TestResultEntry'
-        });
-        $.ajax({
-            method: "POST",
-            url: url,
-            data: JSON.stringify(objBO),
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                if (data.includes('Success')) {
-                    ReportDetail();
-                    if (data.split('|')[2] == 'Approved') {
-                        $('#tblReport tbody').find('tr').eq(_rowIndex).css('background', '#bbffc9');
-                    }
-                    if (data.split('|')[2] == 'Tested') {
-                        $('#tblReport tbody').find('tr').eq(_rowIndex).css('background', '#fbc7a9');
-                    }
-                    if (data.split('|')[2] == 'Partialy-Approved') {
-                        $('#tblReport tbody').find('tr').eq(_rowIndex).css('background', '#fbeda9');
-                    }
-                }
-                else {
-                    alert(data)
-                }
-            },
-            error: function (response) {
-                alert('Server Error...!');
-            }
-        });
-    }
-}
+
 function UnApproveTest() {
     if (confirm('Are you sure to Un-Approve?')) {
         var objBO = [];
@@ -939,7 +957,7 @@ function RecordTracking(ObservationId, testCode) {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            DeltaReport(data)
+            console.log(data)
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     var tbody = "";
@@ -975,6 +993,7 @@ function RecordTracking(ObservationId, testCode) {
 
                     });
                     $('#tblTestTrackingReport tbody').append(tbody);
+                    DeltaReport(data)
                 }
 
             }
@@ -1009,6 +1028,7 @@ function RecordTracking(ObservationId, testCode) {
 }
 function DeltaReport(data) {
     $('#tblReportSummary tbody').empty();
+    $('#deltaReport').empty();
     if (Object.keys(data.ResultSet).length > 0) {
         if (Object.keys(data.ResultSet.Table1).length > 0) {
             var tbody = '';
@@ -1032,7 +1052,7 @@ function DeltaReport(data) {
                         if (temp != val.ObservationId) {
                             count++;
                             if (count > 1) {
-                                tbody += "<div class='divChartTemp'><canvas id='chartDelta'></canvas></div>";
+                                tbody = "<div class='divChartTemp'><canvas id='chartDelta'></canvas></div>";
                             }
                             //tbody += "<label class='labelGroup'>" + val.ObservationName + " Report <b class='pull-right'>Ref. Range : " + val.ref_range + "</b></label>";
                             temp = val.ObservationId;
@@ -1042,7 +1062,7 @@ function DeltaReport(data) {
                 }
             }
 
-            tbody += "<div class='divChartTemp'><canvas id='chartDelta'></canvas></div>";
+            tbody = "<div class='divChartTemp'><canvas id='chartDelta'></canvas></div>";
             $('#deltaReport').append(tbody);
 
             var temp1 = '';
@@ -1088,8 +1108,8 @@ function PopulateChart(response, elem) {
     for (var i in response) {
         xValues.push(response[i].result_date);
         TempArr.push(response[i].read_1);
-        minValue = response[i].min_value
-        maxValue = response[i].max_value
+        minValue = parseFloat(response[i].min_value);
+        maxValue = parseFloat(response[i].max_value)
     }
     var config = {
         type: 'line',

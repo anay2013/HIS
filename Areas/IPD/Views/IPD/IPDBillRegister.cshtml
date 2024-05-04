@@ -1,0 +1,173 @@
+﻿
+@{
+    ViewBag.Title = "IPDBillRegister";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+@*<script src="~/Areas/IPD/JsModule/IPD/ClosingPending.js?v1.1"></script>*@
+
+<script src="~/Areas/IPD/JsModule/IPD/IPDBillRegister.js"></script>
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+    .selected {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 32px;
+        /*margin-top: 11%;*/
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .navigation div[class*=col-md-2] {
+        width: 14%;
+        /*//padding: 2px;*/
+    }
+
+    .navigation div[class*=col-md-4] {
+        width: 30%;
+        /*padding: 2px;*/
+    }
+
+    .navigation input {
+        padding: 1px;
+    }
+
+    #tblClosingPending thead th {
+        padding: 4px;
+    }
+</style>
+<div id="page-content">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="ml15">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h5>IPD Bill Register</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row navigation">
+                            <div class="col-md-2">
+                                <label> IPD NO</label>
+                                <div style="display:flex">
+                                    <input type="text" id="txtIPDNo" class="form-control" />
+                                    <button id="btnSearch" style="width:62%;height:28px" class="btn bg-blue bn" onclick="GetDataAllIPDNO()"><i class="fa fa-search"></i>Search</button>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Report Type</label>
+                                <div style="display:flex">
+                                    <select id="ddlReportLogic" class="form-control" style="width:400px">
+                                        <option value="ByBillDate">By Bill Date</option>
+                                        <option value="ByBillClosingDate">By Bill Closing Date</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Floor Name</label>
+                                <select id="ddlFloor" class="form-control border-imp"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label> Panel Name</label>
+                                <div style="display:flex">
+                                    <select id="ddlPanel" class="form-control" style="width:400px"></select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label> From</label>
+                                <label style="margin-left:30%;">To</label>
+                                <div style="display:flex">
+                                    <input type="date" id="txtfromdate" class="form-control" />
+                                    <input type="date" id="txttodate" class="form-control" style="margin-left: 5px;" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Bill Locked</label>
+                                <label style="margin-left:15%;">Bill Closed</label>
+                                <div style="display:flex">
+                                    <select id="ddlLockFlag" class="form-control" style="width: 250px;">
+                                        <option value="ALL">ALL</option>
+                                        <option value="Y">Y</option>
+                                        <option value="N">N</option>
+                                    </select>
+                                    <select id="ddlClosedFlag" class="form-control" style="margin-left:10px;width:250px;">
+                                        <option value="ALL">ALL</option>
+                                        <option value="Y">Y</option>
+                                        <option value="N">N</option>
+                                    </select>
+                                    <button id="btnGet" style="width:30%;height: 28px; margin-left:8px" class="btn btn-warning bn" onclick="GetDataAllClosingPending()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    <button id="btnExecl" style="width:35%; height: 28px;margin-left:8px" class="btn btn-success bn" onclick="DownloadExcelClosing()"><i class="fa fa-file-excel-o">&nbsp;</i>Excel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #3498db">
+                            <table class="table table-bordered" id="tblClosingPending">
+                                <thead>
+                                    <tr>
+                                        <th>UHID</th>
+                                        <th>IPD NO</th>
+                                        <th>Admit Date</th>
+                                        <th>DischargeDate</th>
+                                        <th>Patient Name</th>
+                                        <th>IsCredit</th>
+                                        <th>Total</th>
+                                        <th>Discount</th>
+                                        <th>Net</th>
+                                        <th>Tax</th>
+                                        <th>Payable</th>
+                                        <th>ApprovalAmount</th>
+                                        <th>Advance</th>
+                                        <th>Balance</th>
+                                        <th>BillClosedDate</th>
+                                        <th>BillLocked</th>
+                                        <th>BillClosed</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

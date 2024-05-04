@@ -259,10 +259,24 @@ namespace MediSoftTech_HIS.Areas.Lab.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf("-", b.ToString(), f.ToString(), "ConsentForm.pdf");
         }
-        public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic)
+        public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic,string IsHeader)
         {
             GenReport rep = new GenReport();
+            if(IsHeader!=null && IsHeader=="Y")
+                rep._PrintWithHeader = "Y";
+            else
+                rep._PrintWithHeader = "N";
+
             return rep.PrintLabReport(visitNo, SubCat, TestIds, Logic);
+        }
+        public FileResult PrintAllLabReportIPD(string IPDNo,string IsHeader)
+        {
+            GenReportIPD rep = new GenReportIPD();
+            if (IsHeader != null && IsHeader == "Y")
+                rep._PrintWithHeader = "Y";
+            else
+                rep._PrintWithHeader = "N";
+            return rep.IPDPrintLabReport(IPDNo);
         }
         public FileResult PrintWorkSheet(string visitNo, string SubCat, string TestIds, string Logic)
         {
@@ -290,6 +304,108 @@ namespace MediSoftTech_HIS.Areas.Lab.Controllers
                 Response.AppendHeader("content-disposition", "inline; filename=OutSource.pdf");
                 return new FileStreamResult(dataStream, "application/pdf");
          
+        }
+        public FileResult DeltaReport(string IPDNO, string Testcodevalue, string Testname)
+        {
+            PdfGenerator pdfConverter = new PdfGenerator();
+            InfoDelta obj = new InfoDelta();
+            obj.IPDNo = IPDNO;
+            obj.TestCode = Testcodevalue;
+            obj.UHID = "-";
+            obj.IpOpType = "-";
+            obj.ObservationId = "-";
+            obj.from = "1999/01/01";
+            obj.to = "1999/01/01";
+            obj.Logic = "TestPerformedPivot";
+            HISWebApi.Models.dataSet dsResult = APIProxy.CallWebApiMethod("Lab/Lab_DeltaQueries", obj);
+            DataSet ds = dsResult.ResultSet;
+            string _result = string.Empty;
+            StringBuilder b = new StringBuilder();
+            StringBuilder h = new StringBuilder();
+            string ageInfo = "";
+            string patientname = "";
+            string UHIDno = "";
+            string AdmitDatee = "";
+            string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
+
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+
+                    ageInfo = dr["ageInfo"].ToString();
+                    patientname = dr["patient_name"].ToString();
+                    UHIDno = dr["UHID"].ToString();
+                    AdmitDatee = dr["AdmitDate"].ToString();
+                }
+
+            }
+            b.Append("<div class='row' style='padding:10px;width:100%'>");
+            b.Append("<h2 style='text-align:center; color:black; text-transform:uppercase;width:100%'>Chandan Hospital</h2>");
+            b.Append("<img src='" + imagePath + "' style='width:150px; height:70px;margin-top:-5%' />");
+            b.Append("<p style='font-size:23px; width:98%;display:flex;text-align:center;margin-top:-2%'><span style='width:100%;text-align:center;'><b><u>Delta Report</u></b></span></p>");
+            b.Append("<p style='font-size:17px; width:98%;display:flex;text-align:center;'><span style='width:10%;text-align:left;'><b>TestName :</b></span><span style='width:90%;text-align:left;'>" + Testname.ToString() + "</span></p>");
+
+            b.Append("<p style='font-size:16px; width:98%;display:flex;margin-top:-5px'><span style='width:100%;border-top:1px solid;display:block;'><b></b></span></p>");
+
+            b.Append("<table style='width:98%; font-size:16px;margin-right:20px;margin-top:-6px'>");
+            b.Append("<tr>");
+            b.Append("<td style='width:10%'><b>UHIDNo</b></td>");
+            b.Append("<td></td>");
+            b.Append("<b><td style='width:10%'>" + UHIDno + "</td></b>");
+            b.Append("<td style='width:10%'><b>PatientName</b></td>");
+            b.Append("<td><b></b></td>");
+            b.Append("<b><td style='width:20%'>" + patientname + "</td></b>");
+            b.Append("<td style='width:10%'><b>AgeInfo</b></td>");
+            b.Append("<td><b></b></td>");
+            b.Append("<b><td style='width:15%'>" + ageInfo + "</td></b>");
+            b.Append("<td style='width:10%'><b>AdmitDate</b></td>");
+            b.Append("<td><b></b></td>");
+            b.Append("<b><td style='width:15%'>" + AdmitDatee + "</td></b>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("<p style='font-size:16px; width:98%;display:flex;'><span style='width:100%;border-top:1px solid;display:block;'><b></b></span></p>");
+
+            if (ds.Tables.Count >= 2 && ds.Tables[1].Rows.Count > 0)
+            {
+                b.Append("<table border='1' style='width:98%;font-size:16px;text-align:left;border-collapse:collapse;margin-top:-5px;margin-right:20px;white-space:nowrap;'>");
+                b.Append("<tr>");
+                int counter = 1;
+                foreach (DataColumn dc in ds.Tables[1].Columns)
+                {
+                    b.Append("<th style='text-align:center;font-size:20px'>" + dc.ColumnName.ToString() + "</th>");
+                    counter++;
+                }
+                b.Append("</tr>");
+                foreach (DataRow dr in ds.Tables[1].Rows)
+                {
+                    b.Append("<tr>");
+                    foreach (DataColumn dc in ds.Tables[1].Columns)
+                    {
+                        b.Append("<td style='text-align:center;font-size:20px'>" + dr[dc].ToString().ToString() + "</td>");
+                    }
+                    b.Append("</tr>");
+                }
+                b.Append("</table>");
+            }
+            else
+            {
+
+                b.Append("No data available.");
+            }
+            b.Append("</div>");
+            pdfConverter.Header_Enabled = false;
+            pdfConverter.Footer_Enabled = false;
+            pdfConverter.Header_Hight = 150;
+            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginRight = 10;
+            pdfConverter.Browser_Width = 1200;
+            pdfConverter.PageMarginBottom = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageName = "A4";
+            pdfConverter.PageOrientation = "Landscape";
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "DeltaReport.pdf");
         }
         //public string SaveReport(out string virtualPath, string VisitNo, byte[] pdfByte)
         //{

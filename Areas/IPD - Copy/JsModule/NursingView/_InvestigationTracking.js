@@ -3,10 +3,15 @@ $(document).ready(function () {
     $('#dash-dynamic-section').find('label.title').text('Investigation Tracking').show();
     FillCurrentDate('txtfromdate');
     FillCurrentDate('txtTodate');
+    LockPrvDate();
 });
-
-function InvestigationTracking() {
-    debugger
+function LockPrvDate() {
+    $("#txtfromdate,#txtTodate").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
+}
+function InvestigationTracking() {    
     $('#tblInvestigationTracking tbody').empty();
 
     var url = config.baseUrl + "/api/sample/Lab_SampleCollectionQueries";

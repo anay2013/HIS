@@ -1,16 +1,22 @@
 ﻿var _AutoId;
 var _TemplateId = null;
 $(document).ready(function () {
+    //$('#dash-dynamic-section .title').removeAttr('style').hide();
     $('#ddlTemplates').empty().append($('<option></option>').val('Select').html('Select')).select2();
     HeaderList('Y');
     TemplateList('Y');
     DischargeSummary();
-    $('#dash-dynamic-section').find('label.title').text('Patient Discharge').show();
+    $('#dash-dynamic-section').find('label.title').text('Patient Discharge').hide();
     $('select').select2();
     CKEDITOR.replace('txtTemplate', {
         enterMode: CKEDITOR.ENTER_BR,
         shiftEnterMode: CKEDITOR.ENTER_P,
     });
+    //CKEDITOR.replace("txtTemplate");
+    //CKEDITOR.editorConfig = function (config) {
+    //    config.removePlugins = 'blockquote,save,flash,iframe,tabletools,pagebreak,templates,about,showblocks,newpage,language,print,div';
+    //    config.removeButtons = 'Print,Form,TextField,Textarea,Button,CreateDiv,PasteText,PasteFromWord,Select,HiddenField,Radio,Checkbox,ImageButton,Anchor,BidiLtr,BidiRtl,Font,Format,Styles,Preview,Indent,Outdent';
+    //};
     $('#ddlTemplates').on('change', function () {
         DischargeSummaryByTemplateId()
     });
@@ -41,6 +47,14 @@ $(document).ready(function () {
         CKEDITOR.instances['txtTemplate'].setData(TemplateContent);
     });
 });
+function ExpandCK() {
+    $('.expandCK .cke_contents').removeAttr('style')
+    $('.ckDiv').toggleClass('expandCK');
+    if ($('.ckDiv').hasClass('expandCK'))
+        $('.expandCK .cke_contents').css('height', '56vh');
+    else
+        $('.expandCK .cke_contents').css('height', '150px');
+}
 function HeaderList(prm) {
     $('#tblHeaderMaster tbody').empty();
     var url = config.baseUrl + "/api/IPDDoctor/IPD_DoctorQueries";
@@ -164,7 +178,7 @@ function TemplateList(prm) {
     });
 }
 function GetPreviousDischargeInfo() {
-   $('#tblPatientDischargeInfo tbody').empty();
+    $('#tblPatientDischargeInfo tbody').empty();
     var url = config.baseUrl + "/api/IPDDoctor/IPD_DoctorQueries";
     var objBO = {};
     objBO.hosp_id = '';

@@ -1,0 +1,229 @@
+﻿
+@{
+    ViewBag.Title = "IPD_Estimate";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/IPD/JsModule/IPD/IPD_Estimate.js"></script>
+<style type="text/css">
+    table {
+        margin-bottom: 0;
+    }
+
+    .p {
+        margin: 0 !important
+    }
+
+    .panel {
+        margin-bottom: 5px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 5px 0;
+    }
+
+    .form-group {
+        margin-bottom: 5px;
+    }
+
+    h4, .h4, h5, .h5, h6, .h6 {
+        margin-top: 2px;
+        margin-bottom: 2px;
+        color: #fff;
+        font-size: 15px;
+    }
+
+    .btn-xs {
+        height: 20px
+    }
+
+    .navbar {
+        min-height: 37px;
+        margin-bottom: 2px;
+    }
+
+    .navbar-form {
+        padding: 0;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .multiselect {
+        width: 432px;
+        height: 20px;
+        border: solid 1px #c0c0c0;
+        overflow: auto;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .open > .dropdown-menu {
+        display: block;
+        height: 250px;
+        overflow: scroll;
+        background: #9bcbfb;
+    }
+
+    #cke_1_contents {
+        height: 350px !important;
+    }
+
+    .flex {
+        display: flex;
+        align-items: baseline;
+    }
+
+    .consentName {
+        width: 50%;
+        border-radius: 0;
+        margin-bottom: 6px;
+        border-color: #f39c12;
+    }
+
+    .clear {
+        margin: 0;
+        border-radius: 0;
+        height: 28px;
+        margin-left: 3px;
+    }
+    #btnSubmit {
+        margin: 0;
+        border-radius: 0;
+        height: 28px;
+    }
+    #cke_1_contents {
+        height: 415px !important;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4>Estimate</h4>
+                        </div>
+
+                        <div class="panel-body" style="height:545px;border: 1px solid #86b3de;padding: 4px;">
+                            <div class="row">
+                                <div class="">
+                                    <div class="col-sm-12 form-group">
+                                        <div class="flex">
+                                            <input type="text" id="txtEstimateTemplateName" class="consentName form-control" placeholder="Estimate Template Name" style="width: 411px;"/>
+                                            <button id="btnSubmit" onclick="InsertEstimateTemplateMaster()" class="btn btn-success pull-right" style="margin-top:10px">Submit</button>
+                                            <button onclick="Clear()" class="btn btn-info clear"><i class="fa fa-sign-in">&nbsp;</i>Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="height:320px;overflow:auto;border:1px solid #86b3de;margin-bottom:5px;">
+                                <table class="table table-bordered" id="tblEstimateTemplateMaster">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%">Active</th>
+                                            <th style="width: 15%;">Date</th>
+                                            <th>Estimate Name</th>
+                                            <th style="width:1%">cmd</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="tblEstimateVariable">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:1%">#</th>
+                                            <th>Variable Name</th>
+                                            <th style="width:1%">cmd</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>PatientName</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Age</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Gender</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>UHIDNO</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Dated</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>EstimateNo</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        @*<tr>
+                                                <td>7</td>
+                                                <td>approx(amount)</td>
+                                                <td><input type="checkbox" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>8</td>
+                                                <td>AccountName</td>
+                                                <td><input type="checkbox" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>9</td>
+                                                <td>AccountNo</td>
+                                                <td><input type="checkbox" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>10</td>
+                                                <td>BankName</td>
+                                                <td><input type="checkbox" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>11</td>
+                                                <td>BankBranch</td>
+                                                <td><input type="checkbox" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>12</td>
+                                                <td>IFSCcode</td>
+                                                <td><input type="checkbox" /></td>
+                                            </tr>*@
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="row">
+                    <div class="panel panel-primary" style="height:569px;margin-top: 2px;">
+                        <div class="panel-body">
+                            <div class="col-sm-12 form-group">
+                                <textarea class="form-control" id="txtTemplate1"></textarea>
+                                @*<button id="btnSubmit" onclick="InsertEstimateTemplateMaster()" class="btn btn-success pull-right" style="margin-top:10px">Submit</button>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/ckeditor/ckeditor.js"></script>

@@ -1,12 +1,12 @@
 ﻿$(document).ready(function () {
-    $('.title').hide();
+    $('#dash-dynamic-section').find('label.title').text('Patient Room Shifting').show();
     _vacantLogic = "RoomShifting";
 });
 function IPDRoomShift() {
     var url = config.baseUrl + "/api/IPDNursingService/IPD_RoomAndDoctorShift";
     var objBO = {};
     objBO.IPDNo = _IPDNo;
-    objBO.RoomBedId = $('#txtRoomBedId').text();
+    objBO.RoomBedId = $('#txtRoomBedId').val();
     objBO.RoomBillingCategory = '-';
     objBO.RoomChangeDateTime = $('#txtAdmissionDate').val() + ' ' + $('#txtAdmissionTime').val();
     objBO.login_id = Active.userId;

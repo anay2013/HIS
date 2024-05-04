@@ -4,6 +4,12 @@
 }
 <script src="~/Areas/IPD/JsModule/IPD/BloodRequisition.js"></script>
 <style>
+    #tblPatientInfo thead input {
+        border-radius: 2px;
+        height: 19px;
+        border: none;
+        margin-bottom: 1px; 
+    }
     .personalInfo {
         background: #fffce7;
         pointer-events: none;
@@ -160,9 +166,9 @@
                         <table class="table table-bordered" id="tblPatientInfo">
                             <thead>
                                 <tr>
-                                    <th>IPDNo</th>
+                                    <th><input type="text" id="txtSearch1" class="form-control" onkeyup="searchTable('txtSearch1', 'tblPatientInfo')" placeholder="IPD No.." /></th>
                                     <th style="white-space:pre">Admit Date</th>
-                                    <th style="white-space:pre">Patient Name</th>
+                                    <th><input type="text" id="txtSearch2" class="form-control" onkeyup="searchTable('txtSearch2','tblPatientInfo')" placeholder="Patient Name.." /></th>
                                     <th style="white-space:pre">Doctor Name</th>
                                     <th style="width:1%">CMD</th>
                                 </tr>
@@ -382,16 +388,16 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 form-group">
+                                        <div class="col-md-6 form-group" style="padding:0;">
                                             <div class="flex">
                                                 <label style="white-space:pre">Sign of Doctor : </label>
                                                 <img id="imgDoctorSign" style="width:109px" />
+                                                <button class="btn btn-warning pull-right" onclick="Insert()" type="submit" style="float:right;"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-warning pull-right" onclick="Insert()" type="submit" style="margin: 2px 12px;"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
                         </div>
                     </div>
                     <div id="PrintReport" class="tab-pane fade">

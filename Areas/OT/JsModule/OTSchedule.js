@@ -12,6 +12,41 @@
     DoctorList();
 
 })
+function PatientInfoByUHID() {
+    var url = config.baseUrl + "/api/OT/OTScheduleQueries";
+    var objBO = {};
+    objBO.Prm1 = $('#txtUHID').val();
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Logic = "PatientInfoByUHID";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlDoctor option').each(function () {
+                            if ($(this).val() == val.DoctorId)
+                                $('#ddlDoctor').prop('selectedIndex', '' + $(this).index() + '')
+                        });
+                        $('#txtName').val(val.patient_name);
+                        $('#txtMobile').val(val.mobile_no);
+                    });
+                }
+            }
+            else {
+                alert('No Data Found')
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function OTSchedule() {
     var url = config.baseUrl + "/api/OT/OTScheduleQueries";
     var objBO = {};
@@ -98,7 +133,7 @@ function OTSchedulebyId(autoid) {
                         else {
                             $('#btnConfirm').show();
                             $('#btnCancel').show();
-                        }                                               
+                        }
                         $('#txtUHIDNo').text(val.UHID);
                         $('#txtBookBy').text(val.OTbookedby);
                         $('#txtPatientName').text(val.patientName);
@@ -305,6 +340,10 @@ function OTBooking() {
     }
     if ($('#ddlDoctor option:selected').val() == "Select") {
         alert("Doctor Name is not selected ");
+        return;
+    }
+    if ($('#txtMobile').val() == "") {
+        alert("Please Provide Mobile No");
         return;
     }
     var url = config.baseUrl + "/api/DoctorApp/IPD_OTBookingInsertUpdate";

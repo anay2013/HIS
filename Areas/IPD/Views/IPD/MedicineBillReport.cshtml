@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "MedicineBillReport";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/IPD/JsModule/IPD/MedicineBillReport.js"></script>
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .btn-flat {
+        padding: 5px;
+        border: navajowhite;
+        width: 28%;
+        margin-left: 1%;
+    }
+
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5>Medicine Bill Report</h5>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>From Date</label>
+                            <input type="date" id="txtSearchFrom" class="form-control" />
+                        </div>
+                        <div class="col-md-5">
+                            <label>To Date</label>
+                            <div class="flex">
+                                <input type="date" id="txtSearchTo" class="form-control" />
+                                <button id="btnGet" style="height: 28px;border:none" class="btn btn-success btn-flat" onclick="GetDataMedicineBill()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                <button id="btnExecl" style="height: 28px;border:none" class="btn btn-warning btn-flat" onclick="DownloadExcelBill()"><i class="fa fa-file-excel-o">&nbsp;</i>Execl</button>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #036f98;margin-top:5px">
+                                <table class="table table-bordered" id="tblReport">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%">Bill Date</th>
+                                            <th style="width:10%">UHID</th>
+                                            <th style="width:15%">Patient Name</th>
+                                            <th style="width:10%">Bill No </th>
+                                            <th style="width:15%">Doctor Name</th>
+                                            <th style="width:10%">Panel Name</th>
+                                            <th style="width:10%;text-align:center">Total Bill Amount</th>
+                                            <th style="width:10%;text-align:center">Discount</th>
+                                            <th style="width:10%;text-align:center">Net Bill Amount</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

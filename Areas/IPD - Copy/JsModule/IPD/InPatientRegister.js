@@ -232,20 +232,23 @@ function patientDetails(elem) {
 }
 function Receipt_IPDDischargeReport() {
     var url = "../Print/IPDDischargeReport?_IPDNo=" + _IPDNoForPrint;
-    window.open(url, '_blank');
+    window.location.href = url;   
 }
 function NursingGateway(ipdNo) {
     //SM229 --Nursing Ward 
     var url = "GatewayNursing?mid=SM229&IPDNo=" + ipdNo;
-    window.location.href = url;
+    $('#GatewayIframe').prop('src', url).addClass('openFrame');
 }
 function DoctorGateway(ipdNo) {
     //SM229 --Nursing Ward 
     var url = "GatewayDoctor?mid=SM264&IPDNo=" + ipdNo;
-    window.location.href = url;
+    $('#GatewayIframe').prop('src', url).addClass('openFrame');
 }
 function BillingGateway(ipdNo) {
     //SM229 --Nursing Ward 
     var url = "GatewayBilling?mid=SM263&IPDNo=" + ipdNo;
-    window.location.href = url;
+    $('#GatewayIframe').prop('src', url).addClass('openFrame');    
+}
+function CloseGatewayIframe() {  
+    $('#GatewayIframe').removeClass('openFrame')
 }

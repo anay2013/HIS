@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "ReportEditing";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
@@ -7,16 +6,17 @@
 <script src="~/Areas/Lab/JsModule/ReportEditing.js?v1.0"></script>
 <script src="~/JsModule/mdb.min.js?his-version-1.0"></script>
 <style>
-    #tblTestTrackingReport thead th{
-        white-space:pre;
+
+    #tblTestTrackingReport thead th {
+        white-space: pre;
     }
+
     #tblTestTrackingReport tbody td {
         white-space: pre;
     }
+
     #deltaReport {
-        margin-bottom: 10px;
-        height: 170px;
-        width: 436px;
+        margin-bottom: 5px;
         overflow: auto;
         border: 1px solid #edd0af;
     }
@@ -59,8 +59,7 @@
     }
 
     canvas {
-        width: 100% !important;
-        height: 140px !important;
+        width: 100% !important
     }
 
     #tblTestInfo tbody a {
@@ -68,6 +67,7 @@
         color: #0072c9;
         text-decoration: none;
     }
+
     .fliped {
         backface-visibility: hidden;
         transform: rotateY(180deg);
@@ -75,6 +75,7 @@
         transition: ease 1s;
         -webkit-transition: ease 1s;
     }
+
     .flex {
         display: flex;
     }
@@ -240,7 +241,7 @@
                                             <option selected="selected">Pending</option>
                                             <option>Approved</option>
                                             <option>Tested</option>
-                                            <option>Partialy-Approved</option>                                         
+                                            <option>Partialy-Approved</option>
                                             <option>ALL</option>
                                         </select>
                                     </div>
@@ -268,14 +269,14 @@
                                         <select class="form-control" id="ddldepartment" onchange="GetTestNameByDept()" style="padding:7px">
                                             <option>ALL</option>
                                         </select>
-                                    </div>                                  
+                                    </div>
                                 </div>
                                 <div class="row" style="margin:5px 0">
                                     <div class="col-md-10" style="padding:0">
                                         <select class="form-control" id="ddlTest" style="padding:7px">
-                                            <option>ALL</option>                                    
+                                            <option>ALL</option>
                                         </select>
-                                    </div>                                  
+                                    </div>
                                     <div class="col-md-2">
                                         <button class="btn btn-warning" onclick="LabReporting('ALL:Report')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
                                     </div>
@@ -358,8 +359,9 @@
                                                 <th style='width:3%'>Flag</th>
                                                 <th style='width:13%'>Ref. Range</th>
 
-                                                @*<th style='width:10%'>Method</th>
-                                                    <th style='width:9%'>Mac. Name</th>*@
+                                                @*
+                                                <th style='width:10%'>Method</th>
+                                                <th style='width:9%'>Mac. Name</th>*@
                                                 <th style='width:9%;white-space:pre'>Mac. Reading</th>
                                                 <th style='width:1%'>cmd</th>
                                                 <th style='width:1%;padding: 1px;'><input type="checkbox" checked /></th>
@@ -376,9 +378,9 @@
                                 <div style="width:300px">
                                     <select class="form-control" id="ddlApproveByDoctor"></select>
                                 </div>
-                                <button class="btn btn-warning" onclick="SaveTestResultEntry('Tested')"><i class="fa fa-sign-in">&nbsp;</i>Save</button>
+                                <button class="btn btn-warning" onclick="SaveTestResult()"><i class="fa fa-sign-in">&nbsp;</i>Save</button>
                                 <button class="btn btn-primary"><i class="fa fa-times-circle">&nbsp;</i>Hold</button>
-                                <button class="btn btn-success" onclick="SaveTestResultEntry('Approved')"><i class="fa fa-check-circle">&nbsp;</i>Approve</button>
+                                <button class="btn btn-success" onclick="ApproveTestResult()"><i class="fa fa-check-circle">&nbsp;</i>Approve</button>
                                 <button class="btn btn-danger" onclick="ApprovedTestInfo()"><i class="fa fa-check-circle">&nbsp;</i>Un-Approve</button>
                                 <button class="btn btn-primary" onclick="Print()"><i class="fa fa-print">&nbsp;</i>Print</button>
                                 <button class="btn btn-info" onclick="PrintAll()"><i class="fa fa-print">&nbsp;</i>Print All</button>
@@ -438,14 +440,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div id="deltaReport">
-                            <div class='divChartTemp'>
-                                <canvas id='chartDelta'></canvas>
-                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <table id="tblReportSummary" class="table table-condensed">
                             <thead style="background: #00a65a;color: #fff;">
                                 <tr>

@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 
-<script src="~/Areas/IPD/JsModule/IPD/ClosingPending.js"></script>
+<script src="~/Areas/IPD/JsModule/IPD/ClosingPending.js?v1.1"></script>
 
 <style>
     .panel {
@@ -49,7 +49,7 @@
     }
 
     .navigation div[class*=col-md-2] {
-        width: 16%;
+        width: 14%;
         /*//padding: 2px;*/
     }
 
@@ -88,6 +88,10 @@
                                     </select>
 
                                 </div>
+                            </div>
+                            <div class="col-md-2">
+                                Floor Name
+                                <select id="ddlFloor" class="form-control border-imp"></select>
                             </div>
                             <div class="col-md-2">
                                 Panel Name
@@ -131,7 +135,7 @@
                                         <th>Tax</th>
                                         <th>Payable</th>
                                         <th>Approval Amount</th>
-                                         <th>Advance</th>
+                                        <th>Advance</th>
                                         <th>Balance</th>
                                         <th>BillClosed Date</th>
                                     </tr>

@@ -86,6 +86,7 @@ function DonorInfo() {
                             tbody += "<td style='padding:0px 5px'><button onclick=RejectIndent(this) style='height: 17px;line-height:0;' class='btn btn-danger btn-xs'><i class='fa fa-close'></i></button></td>";
                         else
                             tbody += "<td style='padding:0px 5px'>-</td>";
+                        tbody += "<td class='text-right'>"+val.AmountCharged+"</td>";
                         tbody += "</tr>";
                         count++;
                     });

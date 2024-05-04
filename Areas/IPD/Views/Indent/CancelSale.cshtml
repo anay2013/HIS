@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "CancelSale";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/IPD/JsModule/Indent/CancelSale.js?Anjali"></script>
+<style>
+    .form-control {
+        border-radius: 0;
+    }
+
+    .btn-custom {
+        border-radius: 0;
+        width: 27%;
+        margin: 0;
+        height: 28px;
+    }
+
+    #tblItemInfo td {
+        padding: 5px 5px;
+    }
+
+    #tblPatientInfo th, #tblPatientInfo td {
+        background: #e9e9e9;
+        padding: 2px;
+        border: none;
+        line-height: 21px;
+        font-size: 12px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel">
+                    <div class="panel-body" style="padding:5px 10px">
+                        @*<div class="col-md-12">
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex">
+                                    <input type="text" id="txtIPOPNo" style="border:1px solid #f39c12" class="form-control input_pass" placeholder="Enter IPOP No...">
+                                    <button class="btn btn-warning btn-custom" onclick="GetDataCancelSale()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table table-responsive" style="border:1px solid #337ab7; height:520px;">
+                                    <table id="tblCancelSale" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Sales Invoice No</th>
+                                                <th><input type="text" id="txtpno" placeholder="IpdNo" style="height:20px;margin-bottom:5px; padding:2px;margin-top:3px;" class="form-control" /></th>
+                                                <th><input type="text" id="txtpName" placeholder="Patient Name" style="height:20px;margin-bottom:5px; padding:2px;margin-top:3px" class="form-control" /></th>
+                                                <th>Nos</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-info">
+                    <div class="panel-body" style="background:#fff;padding: 8px 10px;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="background: #e9e9e9;padding:3px;border: 1px solid #e3e3e3;">
+                                    <table class="table" id="tblPatientInfo" style="margin:0">
+                                        <tr>
+                                            <th>PatientName</th>
+                                            <th>:</th>
+                                            <td id="txtPatientName">XXXXXXXXXXXX</td>
+                                            <th>IPOP No</th>
+                                            <th>:</th>
+                                            <td id="txtIPOP">XXXXXXXXXXXX</td>
+                                            <th></th>
+                                            <th></th>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>SaleInvoiceNo</th>
+                                            <th>:</th>
+                                            <td id="txtSaleInvNo">XXXXXXXXXXXX</td>
+                                            <th></th>
+                                            <th></th>
+                                            <td></td>
+                                            <td colspan="3"><button onclick="Auto_SalesCancelAndDebitNote()" class="btn btn-danger pull-right"><i class="fa fa-window-close-o">&nbsp;</i>Cancel</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <hr style="margin:10px" />
+                                <div class="table table-responsive" style="border:1px solid #337ab7; height:435px; margin-bottom:-2px;">
+                                    <table id="tblCancelSaleInfo" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item Name</th>
+                                                <th>Batch No</th>
+                                                <th>Exp Date</th>
+                                                <th class="text-right">Pack Type</th>
+                                                <th class="text-right">Pack Qty</th>
+                                                <th class="text-right">MRP</th>
+                                                <th class="text-right">SV</th>
+                                                <th class="text-right">Qty</th>
+                                                <th class="text-right">USR</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <br />
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

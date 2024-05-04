@@ -290,11 +290,14 @@ function IPD_BillPayment(elem) {
                         var date = new Date();
                         alert('Successfully Uploaded..!');
                         //var FilePath = json.split('|')[1] + "?v=" + date.getMilliseconds();
-                        //window.open(FilePath, '_blank');
-                        $('.colnospace select').prop('selectedIndex', '0').trigger('select2.change()');
-                        $('#txtReferenceNo, #txtTotalReceivable,#txtTotalBadDebt,#txtRemark').val('');
+                        //window.open(FilePath, '_blank');                       
+                        $('#txtReferenceNo').val('');
+                        $('#txtTotalReceivable').val('');
+                        $('#txtTotalBadDebt').val('');
+                        $('#txtRemark').val('');
                         $('#tblSelectBillingInfo tbody').empty();
                         $('#tblBillingInfo tbody input:checkbox').prop('checked', false);
+                        $('.colnospace select').prop('selectedIndex', '0').trigger('select2.change()');
                         $(elem).removeClass('button-loading');
                     }
                     else {

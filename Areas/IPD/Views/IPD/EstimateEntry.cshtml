@@ -1,0 +1,204 @@
+﻿
+@{
+    ViewBag.Title = "EstimateEntry";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Content/ckeditor/ckeditor.js"></script>
+<script src="~/Areas/IPD/JsModule/IPD/EstimateEntry.js"></script>
+<style>
+    .table > thead > tr > th {
+        padding: 2px;
+    }
+
+        .table > thead > tr > th > td {
+            height: 26px;
+            padding: 5px;
+        }
+
+    table {
+        margin-bottom: 0;
+    }
+
+    .p {
+        margin: 0 !important
+    }
+
+    .panel {
+        margin-bottom: 5px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 5px 0;
+    }
+
+    .form-group {
+        margin-bottom: 5px;
+    }
+
+    .btn-xs {
+        height: 20px
+    }
+
+    #cke_1_contents {
+        height: 400px !important;
+    }
+
+    .flex {
+        display: flex;
+        align-items: baseline;
+    }
+
+    .consentName {
+        width: 50%;
+        border-radius: 0;
+        margin-bottom: 6px;
+        border-color: #f39c12;
+    }
+
+    /*.employeeInfo {
+        background: #e4e4e4;
+        border-radius: 3px;
+        padding: 9px;
+        height: 60px;
+        border: 1px solid #ddd;
+    }*/
+    .hide {
+        display: none;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="col-lg-12">
+                <div class="row" style="background-color:#def5f3;margin-bottom:2px;width: 100%;height:62px;margin-left: 0px;padding:5px;border-radius: 2px;margin-top: 2px;border:1px solid #201a132e;">
+                    <div class="flex">
+                        <div class="col-md-3">
+                            <label>UHID NO </label>
+                            <input type="text" name="name" value="" id="txtGetUHID" class="form-control" />
+
+                        </div>
+                        <div class="col-sm-1">
+                            <button style="height:28px;margin-bottom: -55px;margin-left: -21px;width: 50px;" type="button" class="btn btn-warning" onclick="GetEmployeeUHID()" id="btnUHIDNo"><i class="fa fa-sign-in" style="font-size: 15px;">&nbsp;</i></button>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Billing Type</label>
+                            <select id="ddlBillingType" class="form-control" onchange="ShowCalGrid()"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Panel</label>
+                            <select id="ddlPanel" class="form-control"></select>
+                        </div>
+                        <div class="col-md-8">
+                            <label>Template Name</label>
+                            <div class="flex">
+                                <select id="ddlTemplate" class="form-control" onchange="EstimateContentUse()"></select>
+                                <button id="btnSubmit" onclick="InsertEstimateEntry()" style="width: 38%;height: 26px;margin-left: 10px;" class="btn btn-success">Submit</button>
+                                <button id="btnClear" onclick="Clear()" style="width: 38%;height: 26px;margin-left: 10px;" class="btn btn-danger">Clear</button>
+                                <button id="btnPrint" onclick="EstimateEntryPrint1()" style="width: 38%;height: 26px;margin-left: 10px;" class="btn bg-orange waves-effect"><i class="fa fa-print"></i>&nbsp;Print</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="panel panel-primary" style="margin-left: 7px;">
+                        <div class="panel-heading" style="background:#0076d0">
+                            <h6 style="height:5px;margin-top: 5px;">Exist Estimate Entry</h6>
+                        </div>
+                        @*<div class="panel-body" style="padding:10px;">*@
+
+                        @*</div>*@
+                        <div class="flex">
+                            <div class="col-md-12 employeeInfo" id="txtDisplayData" style="margin-top:2px;background-color:#e4e4e4;border: 1px solid #def5f3;padding:5px;">
+                                <div class="row" id="txtdata">
+                                    <div class="col-sm-6">
+                                        <label><b>Name :</b></label>
+                                        <span id="txtName">  </span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label id=""><b>Age :</b></label>
+                                        <span id="txtAge">  </span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label id=""><b>Gender :</b></label>
+                                        <span id="txtGender">  </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label id=""><b>Address :</b></label>
+                                        <span id="txtAddress">  </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="height:420px; border: 1px solid #86b3de;padding: 4px;margin-top: 2px;">
+                            <div class="table-responsive" style="height:180px;overflow:auto;border:1px solid #bddeff;margin-top: -3px;">
+                                <table class="table table-bordered" id="tblEstimateEntryList">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:14%">Date</th>
+                                            <th>EstimateNo</th>
+                                            <th>Billing Type</th>
+                                            <th>Panel</th>
+                                            <th style="width:1%;text-align:center">cmd</th>
+                                            @*<th style="width:1%;text-align:center">View</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="height:207px;overflow:auto;border:1px solid #bddeff;margin-bottom:5px;">
+                                <table class="table table-bordered" id="tblEstimateEntry">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:1%">cmd</th>
+                                            <th style="width:50%">Item Name</th>
+                                            <th style="width:20%">Unit Price</th>
+                                            <th style="width:10%"><input type="text" id="txtTotalDays" placeholder="Quantity" class="form-control" style="width:100px;height:18px;margin-left:4px;" onkeyup="InputValues()" /></th>
+                                            <th style="width:19%">Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                <label style="margin-left:153px"><b>Total :</b></label>
+                                <span id="txttotalSumval">  </span>
+                                <button id="btnSubmit" onclick="UseTable()" class="btn btn-success pull-right" style="margin-top:-2px;float:right">Use</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="ml151">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h5 class="text-white">Estimate Entry</h5>
+                        </div>
+                        <div class="panel-body" style="padding:10px;">
+                            <div class="col-lg-12" style="margin-top:7px;">
+                                <div class="row">
+                                    <div class="panel panel-primary" style="height:552px;width:100%;margin-top: -14px;">
+                                        <div class="col-md-12 form-group" style="margin-top: 3px;">
+                                            <textarea class="form-control" id="txtTemplate1"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

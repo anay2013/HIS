@@ -4,6 +4,7 @@ var _roomNo = '';
 var _IPDNo = '';
 var _deptName = '';
 var _AdmitDate = '';
+var _AdmitDateServer = '';
 var _UHID = '';
 var _sectionForCommunication = '';
 $(document).ready(function () {
@@ -22,7 +23,7 @@ $(document).ready(function () {
     });
 });
 function GoBack() {
-    window.history.back();
+    window.parent.CloseGatewayIframe();
 }
 function loadBody(page) {
     $.ajax({
@@ -106,6 +107,7 @@ function PatientInfoByIPDNo() {
                         _roomNo = val.RoomNo;
                         _UHID = val.UHID;
                         _AdmitDate = val.AdmitDate;
+                        _AdmitDateServer = val.AdmitDateServer;
                         _RoomBillingCategory = val.RoomBillingCategory;
                         $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(3)').text(val.patient_name);
                         $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(6)').text(val.ageInfo);

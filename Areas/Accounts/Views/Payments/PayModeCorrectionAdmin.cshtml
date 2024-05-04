@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "PayModeCorrection";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Accounts/JsModule/Payments/PayModeCorrectionAdmin.js"></script>
+<style>
+    #tblReceiptInfo tbody .form-control, #tblReceiptInfo tbody button {
+        height: 22px;
+        border-radius: 0;
+        border: 1px solid #bfbfbf;
+        padding: 0 4px;
+        margin-bottom: 2px;
+    }
+
+    .canceled {
+        pointer-events: none;
+        opacity: 0.9;
+        background: #ffb6b6;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .info {
+        border: 1px solid #ddd;
+        background: #d2ecff;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+
+        .info table {
+            margin-bottom: 0;
+        }
+
+            .info table td {
+                font-size: 13px;
+                border: none !important;
+                padding: 3px !important;
+                background: #d2ecff;
+            }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white">Pay Mode Correction</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4" style="display:flex">
+                                        <label style="white-space:pre">Receipt No : </label>
+                                        <input type="text" class="form-control"  id="txtReceiptNo" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-warning" onclick="GetPaymentInfo()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="info">
+                                            <table class="table">
+                                                <tr>
+                                                    <td style="width:100px"><b>UHID No</b></td>
+                                                    <td><b>:</b></td>
+                                                    <td id="txtUHID">-</td>
+                                                    <td>&nbsp;</td>
+                                                    <td style="width:100px"><b>IPOP No</b></td>
+                                                    <td><b>:</b></td>
+                                                    <td id="txtIPOPNo">-</td>
+                                                    <td>&nbsp;</td>
+                                                    <td><b>Patient Name</b></td>
+                                                    <td><b>:</b></td>
+                                                    <td id="txtPatientName">-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Receipt Type</b></td>
+                                                    <td><b>:</b></td>
+                                                    <td id="txtReceiptType">-</td>
+                                                    <td>&nbsp;</td>
+                                                    <td><b>Receipt Date</b></td>
+                                                    <td><b>:</b></td>
+                                                    <td id="txtReceiptDate">-</td>
+                                                    <td>&nbsp;</td>
+                                                    <td><b>Total Amount</b></td>
+                                                    <td><b>:</b></td>
+                                                    <td id="txtTotalAmount">-</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="scroll">
+                                            <table id="tblReceiptInfo" class="table table-bordered" style="margin-bottom: 10px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Payment Mode</th>
+                                                        <th>Paid Amount</th>
+                                                        <th>Currency</th>
+                                                        <th>Bank Name</th>
+                                                        <th>Ref No.</th>
+                                                        <th>Machine</th>
+                                                        <th>CMD</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <button class="btn btn-danger pull-left" style="margin: 5px;" onclick="CancelReceipt()"><i class="fa fa-close">&nbsp;</i>Cancel</button>
+                                        <button id="btnSwapAmt" disabled data-logic="SwapAmount" onclick="Correction(this)" style="margin: 5px;" class="btn btn-warning"><i class="fa fa-refresh">&nbsp;</i>Swap Amount</button>
+                                        <label style="margin: 5px;background:#ffb6b6;padding:3px 5px;border-radius:3px">Note :Swap will work when 2 Pay Mode Entry Available.</label>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

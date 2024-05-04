@@ -224,6 +224,7 @@ function getInfo(elem) {
     $('#txtHospital').val('Chandan Hospital(Private) Reg. No. 0915700044');
     $('#txtOtherHospital').val('IPD');
     $('#txtConsultant').val(info.DoctorName);
+    $('#ddlDoctorName').val(info.DoctorId).change();
     $('#tblReportInfo tbody').empty();
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
     var objBO = {};

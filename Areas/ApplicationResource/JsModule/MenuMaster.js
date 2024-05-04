@@ -59,6 +59,7 @@ $(document).ready(function () {
     });
     $('.ddlRole').on('change', function () {
         var roleid = $(this).find('option:selected').val();
+        GetSubMenu(roleid)
         $('.ddlMenu').prop('selectedIndex', '0');
         $('.ddlMenu option').each(function () {
             if ($(this).data('roleid') == roleid) {
@@ -78,7 +79,7 @@ $(document).ready(function () {
         var SubMenuId = $(this).data("submenuid");
         GetSubMenuBySubMenuId(SubMenuId);
     });
-    $("#tblSubMenu tbody").on('click', '.disable', function () {
+    $("#tblSubMenu tbody").on('change', 'input:checkbox', function () {
         var SubMenuId = $(this).data("submenuid");
         var flag = $(this).data("flag");
         UpdateFlag(SubMenuId, flag);
@@ -177,7 +178,7 @@ function GetRole() {
         dataType: "json",
         success: function (data) {
             $("#tblRole tbody").empty();
-            $("#ddlRole").empty().append($('<option>Select Role</option>'));
+            $("#ddlRole").empty().append($('<option value="ALL">ALL</option>'));
             if (data != '') {
                 $.each(data.ResultSet.Table, function (key, val) {
                     $("<tr><td>" + val.role_id + "</td><td>" + val.role_name + "</td><td>" + val.flag + "</td> <td>" + val.cr_date + "</td> <td>" +
@@ -187,7 +188,6 @@ function GetRole() {
                         "</div></td></tr>").appendTo($("#tblRole tbody"));
                     $("#ddlRole").append($("<option></option>").val(val.role_id).html(val.role_name)).select2();
                     GetMainMenu();
-                    GetSubMenu();
                 });
             }
             else {
@@ -195,7 +195,7 @@ function GetRole() {
             };
         },
         complete: function (re) {
-
+            GetSubMenu('GetSubMenu');
         },
         error: function (response) {
             alert('Server Error...!');
@@ -464,11 +464,12 @@ function UpdateMainMenuFlag(MenuId, flag) {
 }
 
 //<<<-------------Sub Menu Master Section------------->>>
-function GetSubMenu() {
-
+function GetSubMenu(logic) {
+    $("#tblSubMenu tbody").empty();
     var url = config.baseUrl + "/api/ApplicationResource/MasterQueries";
     var objBO = {};
-    objBO.Logic = "GetSubMenu";
+    objBO.RoleId = logic;
+    objBO.Logic = (logic == 'GetSubMenu') ? "GetSubMenu" : "GetSubMenuByRoleId";
     $.ajax({
         method: "POST",
         url: url,
@@ -476,16 +477,123 @@ function GetSubMenu() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            if (data) {
-                $("#tblSubMenu tbody").empty();
-                $.each(data.ResultSet.Table, function (key, val) {
-                    $("<tr><td>" + val.sub_menu_id + "</td><td>" + val.menu_name + "</td><td>" + val.sub_menu_name + "</td> <td>" + val.sub_menu_link + "</td> <td><span class='flag'>" + val.disabled_flag + "</span></td> <td>" + val.cr_date + "</td> <td>" +
-                        " <div class='input-group-btn'>" +
-                        " <div class='input-group-btn'>" +
-                        "<span class='btn btn-danger disable' data-submenuid=" + val.sub_menu_id + " data-flag=" + val.disabled_flag + "><i class='fa fa-check'></i></span>" +
-                        "<span class='btn btn-primary edit' data-submenuid=" + val.sub_menu_id + "><i class='fa fa-edit'></i></span>" +
-                        "</div></td></tr>").appendTo($("#tblSubMenu tbody"));
-                });
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    var tbody = '';
+                    var count = 0;
+                    var temp = "";
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        if (temp != val.role_name) {
+                            tbody += "<tr class='bg-warning'>";
+                            tbody += "<td colspan='6'><b>Role : " + val.role_name + "</b></td>";
+                            tbody += "</tr>";
+                            temp = val.role_name;
+                        }
+                        tbody += "<tr>";
+                        tbody += "<td>" + val.sub_menu_id + "</td>";
+                        tbody += "<td>" + val.menu_name + "</td>";
+                        tbody += "<td>" + val.sub_menu_name + "</td>";
+                        tbody += "<td>" + val.sub_menu_link + "</td>";
+                        tbody += "<td>" + val.cr_date + "</td>";
+                        tbody += "<td>";
+
+                        tbody += "<label class='switch'>";
+                        tbody += "<input type='checkbox' data-submenuid=" + val.sub_menu_id + " id='chkActive' " + val.checked + " />";
+                        tbody += "<span class='slider round'></span>";
+                        tbody += "</label>";
+                        tbody += "&nbsp;<button class='btn btn-warning btn-xs edit' data-submenuid=" + val.sub_menu_id + "><i class='fa fa-edit'></i></button>";
+                        tbody += "&nbsp;<button class='btn btn-primary btn-xs edit' onclick=AllotedEmployeeList('" + val.sub_menu_id + "')><i class='fa fa-user-circle'>&nbsp;</i>Alloted</button>";
+
+                        //tbody += "<div class='input-group-btn'>";
+                        //tbody += "<button class='btn btn-danger disable' data-submenuid=" + val.sub_menu_id + " data-flag=" + val.disabled_flag + "><i class='fa fa-check'></i></button>";
+                        //tbody += "<button class='btn btn-primary edit' data-submenuid=" + val.sub_menu_id + "><i class='fa fa-edit'></i></button>";                    
+                        //tbody += "</div>";
+
+                        tbody += "</td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblSubMenu tbody').append(tbody);
+                }
+            }
+            //if (data) {
+
+            //    $.each(data.ResultSet.Table, function (key, val) {
+            //        $("<tr><td>" + val.sub_menu_id + "</td><td>" + val.menu_name + "</td><td>" + val.sub_menu_name + "</td> <td>" + val.sub_menu_link + "</td> <td><span class='flag'>" + val.disabled_flag + "</span></td> <td>" + val.cr_date + "</td> <td>" +
+            //            " <div class='input-group-btn'>" +
+            //            " <div class='input-group-btn'>" +
+            //            "<span class='btn btn-danger disable' data-submenuid=" + val.sub_menu_id + " data-flag=" + val.disabled_flag + "><i class='fa fa-check'></i></span>" +
+            //            "<span class='btn btn-primary edit' data-submenuid=" + val.sub_menu_id + "><i class='fa fa-edit'></i></span>" +
+            //            "</div></td></tr>").appendTo($("#tblSubMenu tbody"));
+            //    });
+            //}
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function DeleteEmpMenuLink() {
+    if (confirm('are you sure?')) {
+        var url = config.baseUrl + "/api/ApplicationResource/InsertModifyMasterDetails";
+        var objBO = {};
+        var emp_codeList = [];
+        $('#tblEmpList tbody tr input:checkbox:checked').each(function () {
+            emp_codeList.push($(this).closest('tr').find('td:eq(0)').text())
+        });
+        if (emp_codeList.length == 0) {
+            alert('Please Select Employee!')
+            return;
+        }
+        objBO.SubMenuId = $('#tblEmpList').data('SubMenuId');
+        objBO.Prm1 = emp_codeList.join('|');
+        objBO.Logic = "DeleteEmpMenuLink";        
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    AllotedEmployeeList(objBO.SubMenuId);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function AllotedEmployeeList(SubMenuId) {
+    $('#tblEmpList tbody').empty();
+    $('#tblEmpList').data('SubMenuId', SubMenuId);
+    var url = config.baseUrl + "/api/ApplicationResource/MasterQueries";
+    var objBO = {};
+    objBO.Logic = "GetEmpListAssignBySubMenu";
+    objBO.SubMenuId = SubMenuId;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    var tbody = '';
+                    var count = 0;
+                    var temp = "";
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr>";
+                        tbody += "<td>" + val.emp_code + "</td>";
+                        tbody += "<td>" + val.emp_name + "</td>";
+                        tbody += "<td>" + val.cr_date + "</td>";
+                        tbody += "<td><input type='checkbox' data-info=''/></td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblEmpList tbody').append(tbody);
+                    $('#modalEmpList').modal('show');
+                }
             }
         },
         error: function (response) {
@@ -544,7 +652,7 @@ function InsertSubMenu() {
                     $("#ddlMenu")[0].selectedIndex = 0;
                     $("#txtSubMenuName").val('');
                     $("#txtSubMenuUrl").val('');
-                    GetSubMenu();
+                    GetSubMenu('GetSubMenu');
                 }
             },
             error: function (response) {
@@ -574,7 +682,7 @@ function UpdateSubMenu(SubMenuId) {
                     $("#ddlMenu")[0].selectedIndex = 0;
                     $("#txtSubMenuName").val('');
                     $("#txtSubMenuUrl").val('');
-                    GetSubMenu();
+                    GetSubMenu('GetSubMenu');
                     $("#btnSaveSubMenu").show();
                     $("#btnUpdateSubMenu").hide();
                 }
@@ -602,9 +710,7 @@ function UpdateFlag(SubMenuId, flag) {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            if (data != '') {
-                GetSubMenu();
-            }
+
         },
         error: function (response) {
             alert('Server Error...!');

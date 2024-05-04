@@ -157,6 +157,14 @@ function GetCurrentDate() {
 
     return today;
 }
+function searchIPDMenu(txt, list) {
+    $('#' + txt).on('keyup', function () {
+        var val = $(this).val().toLocaleLowerCase();
+        $('#' + list + ' button').filter(function () {
+            $(this).toggle($(this).text().toLocaleLowerCase().indexOf(val) > -1);
+        });
+    });
+}
 function query() {
     var vars = [], hash;
     var url = window.location.href.replace('#', '');
@@ -194,7 +202,19 @@ function Properdate(inp_date, seprater) {
 	//else { corr_formate = "1900/01/01"; }
 	return corr_formate;
 }
-
+function DateInProperFormat(inp_date) {
+    debugger;
+    //if (inp_date == "")
+    //    corr_formate = "1900/01/01";
+    //else
+    //    corr_formate = inp_date
+    if (inp_date != "") {
+        var f = inp_date.split('-');
+        corr_formate = f[2] + "-" + f[1] + "-" + f[0];
+    }
+    else { corr_formate = "1900/01/01"; }
+    return corr_formate;
+}
 function ddmmyyToyymmdd(inp_date, seprater) {
 	debugger;
 	//if (inp_date == "")

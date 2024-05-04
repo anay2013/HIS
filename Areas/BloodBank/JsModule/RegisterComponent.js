@@ -39,7 +39,7 @@ function RegisterComponentInfo() {
                         tbody += "<tr>";
                         tbody += "<td>" + counter + "</td>";
                         tbody += "<td>" + val.BloodGroup + "</td>";
-                        tbody += "<td>" + val.BloodCollection_Id + "</td>";
+                        tbody += "<td>" + val.Visit_ID + "</td>";
                         tbody += "<td>" + val.BBTubeNo + "</td>";
                         tbody += "<td>" + val.ComponentName + "</td>";
                         tbody += "<td>" + val.BagType + "</td>";

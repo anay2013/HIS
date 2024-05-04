@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "AppliedServiceChecklist";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/IPD/JsModule/IPD/AppliedServiceChecklist.js"></script>
+
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .btn-flat {
+        padding: 5px;
+        border: navajowhite;
+        width: 28%;
+        margin-left: 1%;
+    }
+
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+    .btn-flat {
+        padding: 5px;
+        border: navajowhite;
+    }
+
+
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+
+
+    .borderhight {
+        border-right: 1px solid black;
+        height: 100%;
+    }
+
+    #tblAppliedChecklistInfo td {
+        font-size: 12px;
+    }
+
+    #tblAppliedChecklistInfo th {
+        font-size: 13px;
+    }
+
+    #tblAppliedChecklist td {
+        font-size: 12px;
+    }
+
+    #tblAppliedChecklist th {
+        font-size: 13px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5>Applied Service Checklist</h5>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>From</label>
+                                    <input type="date" class="form-control" id="txtfromdate" />
+                                </div>
+                                <div class="col-md-7">
+                                    <label>To</label>
+                                    <div class="flex">
+                                        <input type="date" class="form-control" id="txtTodate" />
+                                        <button class="btn-success" type="submit" id="btnGet" style="border:none;height:25px;margin-left:10px; width:40%" onclick="GetDataAppliedServiceCheckInfo()"><i class="fa fa-search">&nbsp;</i>Get</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12" style="margin-top:5px">
+                                    <div class="flex">
+                                        <input type="text" class="form-control" id="txtItemname" placeholder="ItemName" />
+                                        <button class="btn-warning" type="submit" id="btnSearch" style="border:none;height:25px;margin-left:10px; width:35%" onclick="GetDataAppliedSearch()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="table-responsive" style="height:420px;overflow-y:auto; overflow-x:auto;border:1px solid #2478a9;margin-top:5px;">
+                                <table id="tblAppliedChecklist" class="table table-bordered" style="margin-bottom:6px">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%;text-align:center">CMD</th>
+                                            <th style="width:50%;text-align:left">ItemName</th>
+                                            <th style="width:40%; text-align:center">Category</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:510px;overflow-y:auto; overflow-x:auto;border:1px solid #2478a9;width:100%">
+                                        <table id="tblAppliedChecklistInfo" class="table table-bordered" style="margin-bottom:6px;white-space: nowrap;">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:10%;text-align:left">ItemId</th>
+                                                    <th style="width:25%;text-align:left">ItemName</th>
+                                                    <th style="width:25%;text-align:left">Employee Name</th>
+                                                    <th style="width:20%;text-align:left">RoomBillingCategory</th>
+                                                    <th style="width:10%;text-align:left">Date</th>
+                                                    <th style="width:10%;text-align:center">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -2,18 +2,54 @@
 var logic = ''
 var temp = ''
 $(document).ready(function () {
-    //alert("hello");
+    CloseSidebar();
     FillCurrentDate('txtfromdate');
     FillCurrentDate('txttodate');
     GetAllDataBindPanel();
+    FloorAndPanelList();
 });
+function FloorAndPanelList() {
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = '';
+    objBO.Floor = '';
+    objBO.PanelId = '';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = '';
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'FloorAndPanelList';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $('#ddlFloor').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlFloor').append($('<option></option>').val(val.FloorName).html(val.FloorName));
+                    });
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function DownloadExcelClosing() {
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
     objBO.hosp_id = '-';
     objBO.UHID = '-';
     objBO.IPDNo = $('#txtIPDNo').val();
-    objBO.Floor = '-';
+    objBO.Floor = $('#ddlFloor option:selected').val();
     objBO.PanelId = $('#ddlPanel option:selected').val();
     objBO.from = $('#txtfromdate').val();
     objBO.to = $('#txttodate').val();
@@ -28,12 +64,11 @@ function GetDataAllClosingPending() {
     logic = 'ClosingPending:BetweenDate';
     $('#tblClosingPending tbody').empty();
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
-    debugger
     var objBO = {};
     objBO.hosp_id = '-';
     objBO.UHID = '-';
     objBO.IPDNo = $('#txtIPDNo').val();
-    objBO.Floor = '-';
+    objBO.Floor = $('#ddlFloor option:selected').val();
     objBO.PanelId = $('#ddlPanel option:selected').val();
     objBO.from = $('#txtfromdate').val();
     objBO.to = $('#txttodate').val();
@@ -64,8 +99,7 @@ function GetDataAllClosingPending() {
                         }
                         if (val.IsErrorInCredit == "Y")
                             tbody += "<tr style='background:#f59696'>";
-                        else
-                        {
+                        else {
                             if (val.BillClosedDate != null) {
                                 tbody += "<tr style='background:#2cd52e'>";
                             }

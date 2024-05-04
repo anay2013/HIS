@@ -1,5 +1,6 @@
 ﻿var _VisitNo;
 var _SubCat;
+var _ItemId;
 var _selectedTextGroup;
 var _currentSelectedReport;
 var _testCode;
@@ -143,12 +144,13 @@ function LabReporting(logic) {
                         else
                             tbody += "<tr>";
 
-                        tbody += "<td class='hide'>" + val.SubCatId + "</td>";
+                        tbody += "<td class='hide'>" + val.SubCatId + "</td>";                    
                         tbody += "<td>" + val.RegDate + "</td>";
                         tbody += "<td>" + val.VisitNo + "</td>";
                         tbody += "<td style='display:none'>" + val.barcodeNo + "</td>";
-                        tbody += "<td>" + val.testCategory + "</td>";
+                        tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td style=width:1%><button class='btn btn-success btn-xs'><span class='fa fa-arrow-right'></button></td>";
+                        tbody += "<td class='hide'>" + val.ItemId + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblReport tbody').append(tbody);
@@ -247,6 +249,7 @@ function ApprovedTestInfo() {
 }
 function ReportDetail() {
     _SubCat = $(_currentSelectedReport).closest('tr').find('td:eq(0)').text();
+    _ItemId = $(_currentSelectedReport).closest('tr').find('td:last').text();
     _VisitNo = $(_currentSelectedReport).closest('tr').find('td:eq(2)').text();
     $('#tblTestInfo tbody').empty();
     //var url = config.baseUrl + "/api/Lab/LabReporting_Queries";
@@ -260,7 +263,7 @@ function ReportDetail() {
     objBO.BarccodeNo = $('#txtInput').val();
     objBO.TestCategory = '-';
     objBO.AutoTestId = 0;
-    objBO.TestCode = '-';
+    objBO.TestCode = _ItemId;
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Logic = 'ReportDetail';
@@ -296,10 +299,14 @@ function ReportDetail() {
                     var temp = '';
                     $.each(data.ResultSet.Table1, function (key, val) {
                         if (val.r_type == 'Text') {
+                            tbody += "<tr>";
                             if (val.IsTested == 1)
                                 tbody += "<tr style='background:#fbc7a9'>";
-                            else
-                                tbody += "<tr>";
+                            if (val.IsApproved == 1)
+                                tbody += "<tr style='background:#bbffc9'>";
+                            
+                               
+
 
                             tbody += "<td colspan='8'><i onclick=ShowHideEditor(this) class='fa fa-snowflake-o'>&nbsp;</i>" + val.TestName;
                             tbody += "<button data-testcode=" + val.testcode + " onclick=ApproveTest(this) class='btn btn-success btn-xs pull-right'><i class='fa fa-check-circle'>&nbsp;</i>Approve</button>";
@@ -313,133 +320,14 @@ function ReportDetail() {
                             tbody += "<td colspan='8'><textarea id='txtTestContent" + val.AutoTestId + "' class='form-control'></textarea></td>";
                             tbody += "<td class='hide'>" + val.report_content + "</td>";
                             tbody += "</tr>";
-                        } else {
-                            if (val.ObsCount == 1) {
-                                $.each(data.ResultSet.Table2, function (key, val1) {
-                                    if (val.testcode == val1.testcode) {
-                                        tbody += "<tr class=" + val.r_type + ">";
-                                        if (val1.IsTested == 1)
-                                            tbody += "<tr style='background:#fbc7a9' class=" + val.r_type + ">";
-
-                                        if (val1.IsApproved == 1)
-                                            tbody += "<tr style='background:#bbffc9' class=" + val.r_type + ">";
-
-                                        tbody += "<td class='hide'>" + val1.AutoTestId + "</td>";
-                                        tbody += "<td class='hide'>" + val1.testcode + "</td>";
-                                        tbody += "<td class='hide'>" + val1.ObservationId + "</td>";
-                                        tbody += "<td class='hide'>" + val1.min_value + "</td>";
-                                        tbody += "<td class='hide'>" + val1.max_value + "</td>";
-                                        tbody += "<td class='hide'>" + val1.result_unit + "</td>";
-                                        var bgComment = (val1.test_comment != '') ? '#f98a01' : '#b3b0b0';
-                                        if (val1.IsApproved == 1)
-                                            tbody += "<td><i style='background:" + bgComment + "' class='test-comment'>cm</i>" + val1.ObservationName + "<i class='fa fa-check-circle pull-right text-success'></i></td>";
-                                        else
-                                            tbody += "<td><i style='background:" + bgComment + "' class='test-comment'>cm</i>" + val1.ObservationName + "</td>";
-
-                                        tbody += "<td><input type='text' value='" + val1.read_1 + "' data-min='" + val1.min_value + "' data-max='" + val1.max_value + "' class='form-control value'/></td>";
-                                        tbody += "<td>";
-                                        tbody += "<select class='form-control textValue'>";
-
-                                        for (var i = 0; i < val1.DefaultValue.split('|').length; i++)
-                                            tbody += "<option>" + val1.DefaultValue.split('|')[i];
-
-                                        tbody += "</select>";
-                                        tbody += "<input value='" + val1.read_2 + "' class='form-control textValue'/>";
-                                        tbody += "</td>";
-                                        if (val1.ab_flag == 'L')
-                                            tbody += "<td class='lowFlag'>" + val1.ab_flag + "</td>";
-                                        else if (val1.ab_flag == 'H')
-                                            tbody += "<td class='highFlag'>" + val1.ab_flag + "</td>";
-                                        else
-                                            tbody += "<td>" + val1.ab_flag + "</td>";
-
-                                        tbody += "<td>" + val1.min_value + ' - ' + val1.max_value + ' ' + val1.result_unit + "</td>";
-                                        tbody += "<td class='hide'>" + val1.method_name + "</td>";
-                                        tbody += "<td class='hide'>" + val1.mac_name + "</td>";
-                                        tbody += "<td class='hide'>" + val1.mac_reading + "</td>";
-                                        tbody += "<td class='hide'>" + val1.test_comment + "</td>";
-                                        tbody += "<td><button data-testcode=" + val.testcode + " onclick=uploadFile(" + val.AutoTestId + ") class='btn btn-primary btn-xs pull-right'><i class='fa fa-upload'>&nbsp;</i>Add</button></td>";
-                                        tbody += "</tr>";
-                                    }
-                                });
-                            }
-                            else {
-                                tbody += "<tr style='background:#ddd'>";
-                                tbody += "<td colspan='5'>" + val.TestName + "</td>";
-                                tbody += "<td><button data-testcode=" + val.testcode + " onclick=uploadFile(" + val.AutoTestId + ") class='btn btn-primary btn-xs pull-right'><i class='fa fa-upload'>&nbsp;</i>Add</button></td>";
-                                tbody += "</tr>";
-
-                                $.each(data.ResultSet.Table2, function (key, val1) {
-                                    if (val.testcode == val1.testcode) {
-                                        _testcode = val1.testcode;
-                                        if (temp != val1.HeaderName && val1.HeaderName != '-') {
-                                            tbody += "<tr style='background:#f9e7bf'>";
-                                            tbody += "<td colspan='5'>" + val1.HeaderName + "</td>";
-                                            tbody += "<td >-</td>";
-                                            tbody += "</tr>";
-                                            temp = val1.HeaderName;
-                                        }
-                                        tbody += "<tr class=" + val.r_type + ">";
-                                        if (val1.IsTested == 1)
-                                            tbody += "<tr style='background:#fbc7a9' class=" + val.r_type + ">";
-
-                                        if (val1.IsApproved == 1)
-                                            tbody += "<tr style='background:#bbffc9' class=" + val.r_type + ">";
-
-                                        tbody += "<td class='hide'>" + val1.AutoTestId + "</td>";
-                                        tbody += "<td class='hide'>" + val1.testcode + "</td>";
-                                        tbody += "<td class='hide'>" + val1.ObservationId + "</td>";
-                                        tbody += "<td class='hide'>" + val1.min_value + "</td>";
-                                        tbody += "<td class='hide'>" + val1.max_value + "</td>";
-                                        tbody += "<td class='hide'>" + val1.result_unit + "</td>";
-                                        var bgComment = (val1.test_comment != '') ? '#f98a01' : '#b3b0b0';
-
-                                        if (val1.IsApproved == 1)
-                                            tbody += "<td><i style='background:" + bgComment + "' class='test-comment'>cm</i>" + val1.ObservationName + "<i class='fa fa-check-circle pull-right text-success'></i></td>";
-                                        else
-                                            tbody += "<td><i style='background:" + bgComment + "' class='test-comment'>cm</i>" + val1.ObservationName + "</td>";
-
-                                        tbody += "<td><input type='text' value='" + val1.read_1 + "' data-min='" + val1.min_value + "' data-max='" + val1.max_value + "' class='form-control value'/></td>";
-                                        tbody += "<td>";
-                                        tbody += "<select class='form-control textValue'>";
-
-                                        for (var i = 0; i < val1.DefaultValue.split('|').length; i++)
-                                            tbody += "<option>" + val1.DefaultValue.split('|')[i];
-
-                                        tbody += "</select>";
-                                        tbody += "<input value='" + val1.read_2 + "' class='form-control textValue'/>";
-                                        tbody += "</td>";
-                                        if (val1.ab_flag == 'L')
-                                            tbody += "<td class='lowFlag'>" + val1.ab_flag + "</td>";
-                                        else if (val1.ab_flag == 'H')
-                                            tbody += "<td class='highFlag'>" + val1.ab_flag + "</td>";
-                                        else
-                                            tbody += "<td>" + val1.ab_flag + "</td>";
-
-                                        tbody += "<td>" + val1.min_value + ' - ' + val1.max_value + ' ' + val1.result_unit + "</td>";
-                                        tbody += "<td class='hide'>" + val1.method_name + "</td>";
-                                        tbody += "<td class='hide'>" + val1.mac_name + "</td>";
-                                        tbody += "<td class='hide'>" + val1.mac_reading + "</td>";
-                                        tbody += "<td class='hide'>" + val1.test_comment + "</td>";
-                                        tbody += "<td >-</td>";
-                                        tbody += "</tr>";
-                                    }
-
-                                })
-                                if (_testcode == val.testcode) {
-                                    tbody += "<tr style='background:#2478a9'>";
-                                    tbody += "<td colspan='8' style='line-height: 0px;padding: 1px;'></td>";
-                                    tbody += "</tr>";
-                                }
-                            }
-                        }
+                        }                 
                     });
                     $('#tblTestInfo tbody').append(tbody);
                 }
                 $("#ddlApproveByDoctor").empty().append($("<option></option>").val("Select").html("Select")).select2();
                 if (Object.keys(data.ResultSet).length > 0) {
-                    if (Object.keys(data.ResultSet.Table3).length > 0) {
-                        $.each(data.ResultSet.Table3, function (key, value) {
+                    if (Object.keys(data.ResultSet.Table2).length > 0) {
+                        $.each(data.ResultSet.Table2, function (key, value) {
                             $("#ddlApproveByDoctor").append($("<option></option>").val(value.DoctorId).html(value.DoctorName));
                         });
                     }
@@ -565,13 +453,13 @@ function SaveTestResultEntry(entrySaveType) {
         alert('Please Select Doctor for Approval');
         return
     }
-    var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
     $('#tblTestInfo tbody tr').each(function () {
         if ($(this).attr('class') == 'Text') {
             objBO.push({
                 'VisitNo': _VisitNo,
                 'dispatchLab': Active.HospId,
-                'SubCat': _SubCat,
+                'SubCat': $(this).find('td:eq(1)').text(),
                 'AutoTestId': $(this).find('td:eq(0)').text(),
                 'TestCode': $(this).find('td:eq(1)').text(),
                 'ObservationId': '-',
@@ -593,31 +481,6 @@ function SaveTestResultEntry(entrySaveType) {
                 'Logic': 'TestResultEntry'
             });
         }
-        if ($(this).attr('class') == 'Value') {
-            objBO.push({
-                'VisitNo': _VisitNo,
-                'dispatchLab': Active.HospId,
-                'SubCat': _SubCat,
-                'AutoTestId': $(this).find('td:eq(0)').text(),
-                'TestCode': $(this).find('td:eq(1)').text(),
-                'ObservationId': $(this).find('td:eq(2)').text(),
-                'ab_flag': $(this).find('td:eq(9)').text(),
-                'read_1': $(this).find('td:eq(7)').find('input').val(),
-                'read_2': $(this).find('td:eq(8)').find('input.textValue').val(),
-                'test_comment': '-',
-                'min_value': $(this).find('td:eq(3)').text(),
-                'max_value': $(this).find('td:eq(4)').text(),
-                'nr_range': '-',
-                'result_unit': $(this).find('td:eq(5)').text(),
-                'method_name': $(this).find('td:eq(11)').text(),
-                'r_type': $(this).attr('class'),
-                'report_text_content': '-',
-                'DoctorSignId': $('#ddlApproveByDoctor option:selected').val(),
-                'EntrySaveType': entrySaveType,
-                'login_id': Active.userId,
-                'Logic': 'TestResultEntry'
-            });
-        }
     });
     $.ajax({
         method: "POST",
@@ -628,13 +491,13 @@ function SaveTestResultEntry(entrySaveType) {
         success: function (data) {
             if (data.includes('Success')) {
                 ReportDetail();
-                if (entrySaveType == 'Approved' && data.split('|')[2] == 'Approved') {
+                if (data.split('|')[2] == 'Approved') {
                     $('#tblReport tbody').find('tr').eq(_rowIndex).css('background', '#bbffc9');
                 }
-                if (entrySaveType == 'Approved' && data.split('|')[2] == 'Tested') {
+                if (data.split('|')[2] == 'Tested') {
                     $('#tblReport tbody').find('tr').eq(_rowIndex).css('background', '#fbc7a9');
                 }
-                if (entrySaveType == 'Approved' && data.split('|')[2] == 'Partialy-Approved') {
+                if (data.split('|')[2] == 'Partialy-Approved') {
                     $('#tblReport tbody').find('tr').eq(_rowIndex).css('background', '#fbeda9');
                 }
             }
@@ -650,11 +513,11 @@ function SaveTestResultEntry(entrySaveType) {
 function ApproveTest(elem) {
     if (confirm('Are you sure to Approve?')) {
         var objBO = [];
-        var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+        var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
         objBO.push({
             'VisitNo': _VisitNo,
             'dispatchLab': Active.HospId,
-            'SubCat': _SubCat,
+            'SubCat': $(elem).data('testcode'),
             'AutoTestId': 0,
             'TestCode': $(elem).data('testcode'),
             'ObservationId': '-',
@@ -707,13 +570,13 @@ function ApproveTest(elem) {
 function UnApproveTest() {
     if (confirm('Are you sure to Un-Approve?')) {
         var objBO = [];
-        var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+        var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
         $('#tblApproveTestInfo tbody tr').each(function () {
             if ($(this).find('td:eq(0)').find('input:checkbox:checked')) {
                 objBO.push({
                     'VisitNo': _VisitNo,
                     'dispatchLab': Active.HospId,
-                    'SubCat': _SubCat,
+                    'SubCat': $(this).find('td:eq(1)').text(),
                     'AutoTestId': $(this).find('td:eq(1)').text(),
                     'TestCode': '-',
                     'ObservationId': '-',
@@ -769,10 +632,10 @@ function UnApproveTest() {
 }
 function TestComment() {
     var objBO = [];
-    var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
     objBO.push({
         'VisitNo': _VisitNo,
-        'SubCat': _SubCat,
+        'SubCat': _autoTestId,
         'AutoTestId': _autoTestId,
         'TestCode': _testCode,
         'ObservationId': _observationId,

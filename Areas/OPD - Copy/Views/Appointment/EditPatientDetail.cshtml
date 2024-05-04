@@ -1,0 +1,320 @@
+﻿
+@{
+    ViewBag.Title = "EditPatientDetail";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/OPD/JsModule/EditPatientDetail.js?v1.0"></script>
+<style>
+    .loading {
+        border-width: 2px;
+        border-image: url(/images/loading.gif) 60;
+    }
+    .mendatInfo div[class*=col-md] {
+        padding: 0 3px;
+    }
+
+    .form-control {
+        border: 1px solid #e3e3e3;
+        padding: 4px !important;
+        border-radius: 2px;
+    }
+
+    .refundSection {
+        height: 122px;
+        background: #e6f4ff;
+        width: 32%;
+        margin-bottom: 5px;
+    }
+
+    .total {
+        font-size: 12px !important;
+        opacity: 1 !important;
+        background: #ffeaea !important;
+    }
+
+    .btn-flat {
+        padding: 5px;
+        border: navajowhite;
+    }
+
+    .search-section {
+        border: 1px solid #ddd;
+        background: #ffeaea;
+        padding: 5px;
+        line-height: 26px;
+        text-align: center;
+        margin-bottom: 3px;
+    }
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white">Edit Patient Detail</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-4 search-section">
+                                    <div class="flex">
+                                        <input type="text" id="txtUHIDNo" value="CH/19/030649" class="form-control text-uppercase" placeholder="UHID No." />
+                                        <input type="button" id="btnSearch" class="btn-success btn-flat" onclick="GetPatient()" value="Search" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table table-responsive">
+                                            <div class="scroll" style="border: 1px solid #2478a9;height: 150px;">
+                                                <table id="tblDetails" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><input type="checkbox" checked disabled /></th>
+                                                            <th>UHID</th>
+                                                            <th>Patient Name</th>
+                                                            <th>Gender</th>
+                                                            <th>Age</th>
+                                                            <th>Age Type</th>
+                                                            <th>Age Info</th>
+                                                            <th>Mobile No</th>
+                                                            <th>Appoint. No	</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8" style="padding-right: 0px;">
+                                        <div style="background:#e6f4ff;padding:7px 12px;margin-left:0;border:1px solid #d7eaf9">
+                                            <div class="row mendatInfo">
+                                                <div class="col-md-2">
+                                                    <label style="white-space:pre">Title</label>
+                                                    <select class="form-control" id="ddlTitle">
+                                                        <option>Mr.</option>
+                                                        <option>Mrs.</option>
+                                                        <option>Miss.</option>
+                                                        <option>Master.</option>
+                                                        <option>Baby.</option>
+                                                        <option>B/O.</option>
+                                                        <option>Dr.</option>
+                                                        <option>Prof.</option>
+                                                        <option>Madam.</option>
+                                                        <option>Selvi.</option>
+                                                        <option>Selvan.</option>
+                                                        <option>Sister.</option>
+                                                        <option>Mohd.</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label style="white-space:pre">First Name</label>
+                                                    <input type="text" class="form-control" id="txtFirstName" />
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label style="white-space:pre">Last Name</label>
+                                                    <input type="text" class="form-control" id="txtLastName" />
+                                                </div>
+                                                <div class="col-md-4 form-group" style="margin-bottom: 3px;margin-left: 0px;">
+                                                    <label style="white-space:pre">Gender</label>
+                                                    <select class="form-control" id="ddlGender">
+                                                        <option>Male</option>
+                                                        <option>Female</option>
+                                                        <option>Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label style="white-space:pre">DOB</label>
+                                                    <input type="date" class="form-control" id="txtDOB" />
+                                                </div>
+                                                @*<div class="col-md-3">
+                                                        <label style="white-space:pre">Age</label>
+                                                        <input type="text" class="form-control" id="txtAge" />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label style="white-space:pre">Age Type</label>
+                                                        <select class="form-control" id="ddlAgeType">
+                                                            <option>Year</option>
+                                                            <option>Month</option>
+                                                            <option>Days</option>
+                                                        </select>
+                                                    </div>*@
+                                                <div class="col-md-4">
+                                                    <label style="white-space:pre">Mobile No</label>
+                                                    <input type="text" class="form-control" id="txtMobileNo" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 refundSection">
+                                        <div class="form-group" style="margin-bottom:0">
+                                            <div class="col-md-12" style="padding: 0px 5px;">
+                                                <div class="flex">
+                                                    <label style="width:100%;background:#0076d0;text-align:center;color:#fff;padding:5px;"><i class="fa fa-cloud-upload">&nbsp;</i>Consent Upload </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="padding: 16px;">
+                                            <div class="col-md-12">
+                                                <div class="flex">
+                                                    <label style="white-space:pre">Browse : </label>
+                                                    <input type="file" id="uploadFile" class="form-control" />
+                                                    <img id="imgFile" style="display:none" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 text-center">
+                                                <button class="btn btn-success" onclick="Opd_EditPatientDetails(this)" style="margin:10px"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div style="background:#fff;padding:7px 0;margin-left:0;border:1px solid #d7eaf9;height:170px;margin-bottom:10px">
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Country</label>
+                                                <select class="form-control" id="ddlCountry">
+                                                    <option>India</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">State</label>
+                                                <select class="form-control" id="ddlState">
+                                                    <option>Uttar Pradesh</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">City</label>
+                                                <select class="form-control" id="ddlCity">
+                                                    <option>Lucknow</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Address</label>
+                                                <input type="text" class="form-control" id="txtAddress" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Email-Id</label>
+                                                <input type="text" class="form-control" id="txtEmailId" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Membership No.</label>
+                                                <input type="text" class="form-control" id="txtMembershipNo" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Marital Status</label>
+                                                <select class="form-control" id="ddlMarital">
+                                                    <option>Select</option>
+                                                    <option>Married</option>
+                                                    <option>Unmarried</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Religion</label>
+                                                <select class="form-control" id="ddlReligion">
+                                                    <option>Select</option>
+                                                    <option>Hinduism</option>
+                                                    <option>Christianity</option>
+                                                    <option>Shikhism</option>
+                                                    <option>Islam</option>
+                                                    <option>Jainism</option>
+                                                    <option>Buddhism</option>
+                                                    <option>Zoroastrianism</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">ID-Proof No</label>
+                                                <div class="flex">
+                                                    <select class="form-control" id="ddlIdProof">
+                                                        <option>Select</option>
+                                                        <option>AADHAR</option>
+                                                        <option>PAN</option>
+                                                        <option>VOTER</option>
+                                                        <option>PASSPORT</option>
+                                                        <option>RASAN(BPL)</option>
+                                                        <option>RASAN(APL)</option>
+                                                        <option>OTHER</option>
+                                                    </select>
+                                                    <input type="text" class="form-control" placeholder="Id No" id="txtIdNo" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Relation Of</label>
+                                                <div class="flex">
+                                                    <select class="form-control" id="ddlRelationOf">
+                                                        <option>Select</option>
+                                                        <option>FATHER</option>
+                                                        <option>S/O</option>
+                                                        <option>W/O</option>
+                                                        <option>D/O</option>
+                                                        <option>H/O</option>
+                                                        <option>C/O</option>
+                                                        <option>F/O</option>
+                                                        <option>M/O</option>
+                                                        <option>BROTHER</option>
+                                                        <option>UNCLE</option>
+                                                        <option>SISTER</option>
+                                                        <option>OTHER</option>
+                                                    </select>
+                                                    <input type="text" class="form-control" placeholder="Relation Name" id="txtRelationName" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="white-space:pre">Relation Contact</label>
+                                                <input type="text" class="form-control" id="txtRelationContact" placeholder="Relation Contact No." />
+                                            </div>
+                                            <div class="col-md-3 text-center">
+                                                <button class="btn btn-warning" onclick="Opd_EditPatientDetails2()" style="margin:23px"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

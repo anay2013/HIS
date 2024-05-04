@@ -48,6 +48,14 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         {
             return View();
         }
+        public ActionResult InsuranceEntry()
+        {
+            return View();
+        }
+        public ActionResult InsuranceAmountEntry()
+        {
+            return View();
+        }
         public ActionResult BloodRequisition()
         {
             return View();
@@ -65,16 +73,47 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             return View();
         }
 
-        public ActionResult ClosingPending()
-        {
-            return View();
-        }
-
         public ActionResult AllowBillCorrection()
         {
             return View();
         }
         public ActionResult ChangePanel()
+        {
+            return View();
+        }
+
+
+        public ActionResult AppliedServiceChecklist()
+        {
+            return View();
+        }
+
+        public ActionResult CheckBillStatus()
+        {
+            return View();
+        }
+        public ActionResult IPD_Estimate()
+        {
+            return View();
+        }
+        public ActionResult EstimateMaster()
+        {
+            return View();
+        }
+        public ActionResult EstimateEntry()
+        {
+            return View();
+        }
+
+        public ActionResult MedicineBillReport()
+        {
+            return View();
+        }
+        public ActionResult IPDBillRegister()
+        {
+            return View();
+        }
+        public ActionResult DuplicateBillAmount()
         {
             return View();
         }

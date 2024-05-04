@@ -22,7 +22,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
         List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
         public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic)
         {
-            if (Logic =="ByReportEditing")
+            if(Logic =="ByReportEditing")
             {
                 LabReporting obj = new LabReporting();
                 obj.LabCode = "-";
@@ -55,7 +55,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 obj.Logic = "PrintLabReport";
                 dsResult = APIProxy.CallWebApiMethod("Lab/Lab_ReportPrintingQueries", obj);
             }
-            PdfDocument repDocument=new PdfDocument();
+            PdfDocument repDocument =new PdfDocument();
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
             //Geting Distinct department list with NABL Flag to separate the report body for NABLE Logo at header
             var DeptList = dsResult.ResultSet.Tables[2].AsEnumerable().Select(y => new
@@ -110,6 +110,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                                group s by s.DeptName into stugrp
                                let topp = stugrp.Max(x => x.PageIndex)
                                select new { DeptName = stugrp.Key, LastPageIndex = topp };
+
             foreach (var t in lastPageList)
             {
                 if ((t.LastPageIndex - 1) == repDocument.Pages.Count - 1)
@@ -119,8 +120,13 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 }
                 else
                 {
-                    PdfPage lastpdfPage = repDocument.Pages[t.LastPageIndex - 1];
-                    SetFooter(lastpdfPage, "FixAtLastPage", t.DeptName, false);
+                    try
+                    {
+                        PdfPage lastpdfPage = repDocument.Pages[t.LastPageIndex - 1];
+                        SetFooter(lastpdfPage, "FixAtLastPage", t.DeptName, false);
+                    }
+                    catch (Exception) {}
+                  
                 }
             }
             //Out Source Report merging
@@ -133,7 +139,6 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         string LisTestIds = dsResult.ResultSet.Tables[5].Rows[0]["LisTestIds"].ToString();
                         if (LisTestIds.Length > 2)
                         {
-
                             System.Net.WebClient Client = new System.Net.WebClient();
                             string Url = string.Empty;
                             Url = "http://192.168.0.21/Chandan/Design/Lab/labreportnew.aspx?IsPrev=0&testid=" + LisTestIds + "&phead=2";
@@ -162,6 +167,8 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     }
                 }
             }
+
+
             byte[] pdfdata = repDocument.WriteToMemory();
             FileResult fileResult = new FileContentResult(pdfdata, "application/pdf");
             return fileResult;

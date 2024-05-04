@@ -21,29 +21,40 @@
         .button-loading {
             border-width: 2px;
             border-image: url(/images/loading.gif) 60;
+            pointer-events: none;
         }
+
         table {
-            overflow-y: auto;          
+            overflow-y: auto;
         }
+
             table thead th {
                 position: sticky;
                 top: 0;
             }
 
-		#ajaxLoading {
-			z-index: 1;
-			position: absolute;
-			top: 45%;
-			left: 45%;
-			color: #fff;
-			background: #34353ce8;
-			padding: 2px 17px;
-			border-radius: 40px;
-		}
+        .sidebar-submenu {
+            display: block !important;
+        }
 
-		.modal-backdrop {
-			position: inherit;
-		}
+        #ajaxLoading {
+            z-index: 1;
+            position: absolute;
+            top: 45%;
+            left: 45%;
+            color: #fff;
+            background: #34353ce8;
+            padding: 2px 17px;
+            border-radius: 40px;
+        }
+
+        #sidebar-menu::-webkit-scrollbar {
+            width: 5px !important;
+        }
+
+        .modal-backdrop {
+            position: inherit;
+        }
 	</style>
 </head>
 <body class="fixed-header">

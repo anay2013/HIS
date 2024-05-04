@@ -45,6 +45,10 @@ namespace MediSoftTech_HIS.Areas.Lab.Controllers
         {
             return View();
         }
+        public ActionResult OutSourceReportEditing()
+        {
+            return View();
+        }
         public ActionResult UnApproveReport()
         {
             return View();

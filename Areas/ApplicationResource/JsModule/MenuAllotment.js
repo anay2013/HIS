@@ -182,6 +182,7 @@ function GetRoleForMenuAllot() {
         contentType: 'application/json;charset=utf-8',
         dataType: "JSON",
         success: function (data) {
+            console.log(data)
             if (data != '') {
                 $('ul[id=ddRole]').empty();
                 $.each(data.ResultSet.Table1, function (key, val) {

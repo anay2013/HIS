@@ -72,7 +72,7 @@ function PendingCollection(logic) {
     var url = config.baseUrl + "/api/sample/Lab_SampleCollectionQueries";
     var objBO = {};
     objBO.SampleCode = $('#ddlIPOPType option:selected').text();
-    objBO.VisitNo = $('#txtVisitNo').val();
+    objBO.VisitNo = (logic == 'Pending_ByPatientName') ? $('#txtPatientName').val() : $('#txtVisitNo').val();
     objBO.Prm1 = $('#ddlPendCol option:selected').text();
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();

@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "OverALLTDSReceivable";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Accounts/JsModule/CreditControl/OverALLTDSReceivable.js"></script>
+<style>
+    .row.colnospace [class*='col-'] {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+
+    #tblReceivableInfo td, #tblReceivableInfo th {
+        padding-right: 10px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="panel-body">
+            <div class="row colnospace" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-2">
+                    <label>From</label>
+                    <input type="date" id="txtFrom" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label>To</label>
+                    <input type="date" id="txtTo" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label>Choose Panel</label>
+                    <select id="ddlPanel" class="form-control border-imp"><option>Select</option></select>
+                </div>
+                <div class="col-md-3" style="margin-top:25px">
+                    <button id="btnCurrentPatient" onclick="OverALLReceivable()" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Get</button>
+                    <button id="btnExcel" data-logic="Over-ALLReceivable-TDS" onclick="DownloadExcel(this)" class="btn btn-primary"><i class="fa fa-file-excel-o">&nbsp;</i>Download Excel</button>
+                </div>
+            </div>
+            <div class="row colnospace">
+                <div class="scroll" style="margin-bottom: 5px;height:500px;overflow:auto;border: 1px solid #2478a9;">
+                    <table id="tblReceivableInfo" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="2"></th>
+                                <th colspan="3" class="text-center">TDS Receivable</th>
+                                <th colspan="5" class="text-center">TDS Payment</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th>Panel Name</th>
+                                <th class="text-right">Opening</th>
+                                <th class="text-right">IPD</th>
+                                <th class="text-right">OPD</th>
+                                <th class="text-right">Total</th>
+                                <th class="text-right">IPD</th>
+                                <th class="text-right">BadDet(IP)</th>
+                                <th class="text-right">OPD</th>
+                                <th class="text-right">BadDet(OP)</th>
+                                <th class="text-right">Total</th>
+                                <th class="text-right">Closing Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

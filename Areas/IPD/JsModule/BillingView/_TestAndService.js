@@ -88,8 +88,14 @@
         $("#txtDBSearch").focus();
     });
 
-    $('#txtBookingFrom').attr('max', '2024-12-14');
+    LockPrvDate()   
 });
+function LockPrvDate() {
+    $("#txtBookingFrom,#txtBookingTo,#txtFrom,#txtTo").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
+}
 function searchTable12(txt, tbl) {
     $('#' + txt).on('keyup', function () {
         var val = $(this).val().toLocaleLowerCase();

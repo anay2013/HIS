@@ -1,9 +1,9 @@
-﻿
+﻿var _IPDNoForPrint = "";
 $(document).ready(function () {
     $('.OPDPrintPreview .prescribedItem').on('focus', 'input:text', function (e) {
         $(this).select();
     });
-    $('.circle-add').on('click', function () {
+    $('span.circle-add').on('click', function () {
         var templateId = $(this).attr('id');
         $('#ddlDoctorTemplate option').each(function () {
             if ($(this).val() == templateId) {
@@ -14,6 +14,7 @@ $(document).ready(function () {
         $('#modalTemplate').modal('show');
     });
     $('.panel-body').on('click', 'a.fa-trash', function () {
+        var templateId = $(this).data('templateid');
         var templateId = $(this).data('templateid');
         var itemid = $(this).data('itemid');
         if (confirm('Are you sure want to delete this Item from Template..!')) {
@@ -136,7 +137,7 @@ $(document).ready(function () {
         if ($.inArray(template, listArr) > -1) {
             $('textarea[data-id=' + PrevTemplateId + ']').val('');
             var itemName1 = $(this).closest('label').text();
-            var list = "";  
+            var list = "";
             list += " <span id='" + itemId + "'><i class='fa fa-check'>&nbsp;</i>" + itemName1 + "</span>";//create item list
             $('#' + PrevTemplateId).show();//show related template on prev side [default all template hide in prev side]
             if (this.checked)//on check
@@ -270,7 +271,12 @@ $(document).ready(function () {
     });
     $('#tblIPDDischargeSummary tbody').on('click', '.IPDDisList', function () {
         var ipdNo = $(this).closest('tr').find('td:eq(0)').text();
-        DischargeReportContent(ipdNo)
+        var type = $(this).data('type');   
+        if (type == 'OldHIS') {
+            alert('This is Old HIS Data.')
+            $('#btnPrintDiscData').prop('disabled', true);
+        }
+        DischargeReportContent(ipdNo, type)
     });
     navigateControl();
 });
@@ -296,15 +302,15 @@ function FillPreview(PrevTemplateId) {
 
 
 }
-function DischargeReportContent(ipdNo) {
+function DischargeReportContent(ipdNo, logic) {
     $('#tblDischargeReportContent tbody').empty();
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
     var objBO = {};
-    objBO.UHID = '-';
+    objBO.UHID = ipdNo;
     objBO.AppointmentId = '-';
     objBO.prm_1 = ipdNo;
     objBO.DoctorId = '-';
-    objBO.Logic = 'DischargeReportContent';
+    objBO.Logic = (logic == 'NewHIS') ? 'DischargeReportContent' : 'DischargeSummaryOldHIS';
     $.ajax({
         method: "POST",
         url: url,
@@ -331,6 +337,7 @@ function DischargeReportContent(ipdNo) {
                     });
                     $('#tblDischargeReportContent tbody').append(tbody);
                     $('#modalDischargeReportContent').modal('show');
+                    _IPDNoForPrint = ipdNo;
                 }
                 else {
                     alert('No Record Found..');
@@ -642,6 +649,10 @@ function InsertPrescAdvice() {
         }
     });
 }
+function PrintDischarSummary() {
+    var url = config.rootUrl + '/IPD/Print/IPDDischargeReport?_IPDNo=' + _IPDNoForPrint;
+    window.open(url, '_blank');
+}
 function CopyVisitsInfo(OldAppNo) {
     if (confirm('Are you sure to copy Prescription in current Appointment?\nNote : It will delete all Prescription in current Appointment.')) {
         var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
@@ -665,11 +676,47 @@ function CopyVisitsInfo(OldAppNo) {
             contentType: "application/json;charset=utf-8",
             success: function (data) {
                 if (data.includes('Success')) {
-                    window.location.reload();
+                    window.parent.ReloadIframe();
                 }
                 else {
                     alert(data);
-                    window.location.reload();
+                    window.parent.ReloadIframe();
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
+}
+function DeleteVisitsInfo() {
+    if (confirm('Are you sure to Delete All Prescription in current Appointment?')) {
+        var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
+        var objBO = {};
+        objBO.UHID = '-';
+        objBO.app_no = Active.AppId;
+        objBO.DoctorId = '-';
+        objBO.DeptId = '-';
+        objBO.DoctorId_Trf = '-';
+        objBO.caseType = '-';
+        objBO.consultType = '-';
+        objBO.doctor_diagnosis = '-';
+        objBO.doctor_remark = '-';
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'DeleteVisitsInfo';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    window.parent.ReloadIframe();
+                }
+                else {
+                    alert(data);
+                    window.parent.ReloadIframe();
                 }
             },
             error: function (response) {
@@ -701,11 +748,11 @@ function CopyVisitsInfoOldHIS(OldAppNo) {
             contentType: "application/json;charset=utf-8",
             success: function (data) {
                 if (data.includes('Success')) {
-                    window.location.reload();
+                    window.parent.ReloadIframe();
                 }
                 else {
                     alert(data);
-                    window.location.reload();
+                    window.parent.ReloadIframe();
                 }
             },
             error: function (response) {

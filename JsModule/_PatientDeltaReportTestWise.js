@@ -1,7 +1,15 @@
 ﻿$(document).ready(function () {
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')  
+    LockPrvDate()
 });
+function LockPrvDate() {
+    $("#txtFrom,#txtTo").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
+}
+
 function PatientTestInfo() {
     $('#tblTestInfo tbody').empty();
     var url = config.baseUrl + "/api/sample/LabReporting_Queries";

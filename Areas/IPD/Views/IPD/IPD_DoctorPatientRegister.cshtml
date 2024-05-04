@@ -10,7 +10,19 @@
         background: #378a45;
         color: #fff;
     }
+    #GatewayIframe {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
 
+    .openFrame {
+        z-index: 10000;
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
     .slot-selected {
         background: green !important;
     }
@@ -324,4 +336,5 @@
         </div>
     </div>
 </div>
+<iframe id="GatewayIframe" src="#" class="hide1"></iframe>
 <!---Doctor Time Availability Modal---->

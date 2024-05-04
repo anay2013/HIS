@@ -63,28 +63,40 @@ function GetStaffList(name) {
 }
 function GetPatientDetails() {
     $('#IPDPatientList').empty();
-    var url = config.baseUrl + "/api/IPDNursing/GetAdmittedIPDPatient";
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
+    var objBO = {};
+    objBO.IPDNo = '-';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = '-';
+    objBO.Prm2 = '-';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'GetPatientInfoFoIPDHOTO';
     $.ajax({
-        method: "GET",
+        method: "POST",
         url: url,
+        data: JSON.stringify(objBO),
         dataType: "json",
+        contentType: "application/json;charset=utf-8",      
         success: function (data) {
+            var count = 0;
             var html = ""; var room = []; var roomType = [];
             $.each(data.ResultSet.Table, function (key, val) {
                 var r = val.RoomName.split('/');
-                room.push(r[3]);
+                room.push(r.pop());
                 roomType.push(val.RoomType);
-       
-                html += "<div id='patientList' class='section' data-roomtype='" + val.RoomType+"' data-floor='" + r[3] + "'>";
+
+                html += "<div  class='section' data-ipd='" + val.IPDNo + "' data-name='" + val.PatientName + "' data-roomtype='" + val.RoomType + "' data-floor='" + r[3] + "'>";
+                html += "<label style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</label>";
                 html += "<table class='table'>";
                 html += "<tr>";
                 html += "<th>IPD No</th>";
                 html += "<th>:</th>";
-                html += "<td>" + val.IPDNO + "</td>";
+                html += "<td class='res'>" + val.IPDNo + "</td>";
                 html += "<th>&nbsp</th>";
-                html += "<th>Patient Name</th>";
+                html += "<th class='res'>Patient Name</th>";
                 html += "<th>:</th>";
-                html += "<td>" + val.PName + "</td>";
+                html += "<td>" + val.PatientName + "</td>";
                 html += "</tr>";
                 html += "<tr>";
                 html += "<th>Age</th>";
@@ -97,14 +109,14 @@ function GetPatientDetails() {
                 html += "<td>" + val.RoomName + "</td>";
                 html += "</tr>";
                 html += "<tr>";
-                html += "<th>Admitted Under</th>";
+                html += "<th class='res'>Admitted Under</th>";
                 html += "<th>:</th>";
-                html += "<td colspan='5'>" + val.DName + "</td>";
+                html += "<td colspan='5'>" + val.DoctorName + "</td>";
                 html += "</tr>";
                 html += "<tr>";
                 html += "<th>Admit Date</th>";
                 html += "<th>:</th>";
-                html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1>";
+                html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1><span2 style='display:none'>" + val.DoctorId + "</span2><span3 style='display:none'>" + val.FloorName + "</span3>";
                 html += "<span class='text-right' style='margin: -4px 0;float:right'>";
                 html += "<td><input type='checkbox' name='" + val.IPDNO + "' ></td>";
                 html += "</span>";
@@ -112,6 +124,7 @@ function GetPatientDetails() {
                 html += "</tr>";
                 html += "</table>";
                 html += "</div>";
+                count++;
             });
             $('#IPDPatientList').append(html);
             $('#ddlRoom').empty().append($('<option></option>').val('ALL').html('ALL')).select2();

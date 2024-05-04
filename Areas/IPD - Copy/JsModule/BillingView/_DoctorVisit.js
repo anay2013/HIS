@@ -1,15 +1,23 @@
 ﻿var _index;
 $(document).ready(function () {
     $('#dash-dynamic-section').find('label.title').text('Doctor Visit').show();
+    FillCurrentDate('txtDate')
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')
     $('select').select2();
-    GetDoctor();  
+    GetDoctor();
     $('#tblCurrentVisit tbody').on('click', 'button', function () {
         _index = $(this).closest('tr').index();
         BookingInfo($(this).closest('tr').find('td:eq(1)').text());
     });
+    LockPrvDate()
 });
+function LockPrvDate() {
+    $("#txtDate,#txtFrom,#txtTo").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
+}
 function GetDoctor() {
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
     var objBO = {};
@@ -42,7 +50,7 @@ function GetDoctor() {
                     $('#ddlDoctor').prop('selectedIndex', '' + $(this).index() + '').change()
                 }
             });
-            $('#ddlCategory').prop('selectedIndex', '1').change();            
+            $('#ddlCategory').prop('selectedIndex', '1').change();
         },
         error: function (response) {
             alert('Server Error...!');
@@ -77,12 +85,12 @@ function TodayDoctorVisits() {
                     var count = 0;
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;
-                        if (val.Visitstatus!='Pending')
+                        if (val.Visitstatus != 'Pending')
                             tbody += "<tr style='background:#94e7c1'>";
                         else
                             tbody += "<tr>";
 
-                        tbody += "<td>" + count+ "</td>";
+                        tbody += "<td>" + count + "</td>";
                         tbody += "<td style='display:none'>" + val.ItemId + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td>" + val.Visitstatus + "</td>";
@@ -102,7 +110,7 @@ function TodayDoctorVisits() {
         }
     });
 }
-function BookingInfo(itemId) {  
+function BookingInfo(itemId) {
     var url = config.baseUrl + "/api/IPDNursingService/pIPD_ItemsRate";
     var objBO = {};
     objBO.hosp_id = Active.HospId;
@@ -123,10 +131,10 @@ function BookingInfo(itemId) {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {          
+        success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
-                    ItemInsert(JSON.stringify(data.ResultSet.Table[0]));                    
+                    ItemInsert(JSON.stringify(data.ResultSet.Table[0]));
                 }
                 else {
                     alert('This Item has no Rate');
@@ -139,37 +147,44 @@ function BookingInfo(itemId) {
     });
 }
 function ItemInsert(data) {
-    debugger
-    $('#tblCurrentVisit tbody').find('tr:eq(' + _index + ')').find('button').prop('disabled', true);              
-    var url = config.baseUrl +  "/api/IPDNursingService/IPD_NursingItemInsert";
+    $('#tblCurrentVisit tbody').find('tr:eq(' + _index + ')').find('button').prop('disabled', true);
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_NursingItemInsert";
     var objBooking = {};
-    var objRateList = [];   
-        var Info = JSON.parse(data);
-        objRateList.push({
-            'RateListId': Info.RateListId,
-            'ItemId': Info.ItemId,
-            'RateListName': Info.RateListName,
-            'ItemSection': Info.ItemSection,
-            'IsPackage': Info.IsPackage,
-            'Rate': Info.mrp_rate,
-            'panel_discount': Info.panel_discount,
-            'panel_rate': Info.panel_rate,
-            'qty': 1,
-            'adl_disc_perc': 0,
-            'adl_disc_amount': 0,
-            'net_amount': parseFloat(Info.panel_rate) - parseFloat(Info.panel_discount),
-            'IsUrgent':'N'
-        });   
+    var objRateList = [];
+    var Info = JSON.parse(data);
+    objRateList.push({
+        'AutoId': 0,
+        'TnxId': '-',
+        'EntryDateTime': $('#txtDate').val(),
+        'RateListId': Info.RateListId,
+        'CatId': '-',
+        'ItemId': Info.ItemId,
+        'RateListName': Info.RateListName,
+        'ItemSection': Info.ItemSection,
+        'IsPackage': Info.IsPackage,
+        'IsRateEditable': Info.IsRateEditable,
+        'IsPatientPayable': 'N',
+        'IsDiscountable': Info.IsDiscountable,
+        'qty': 1,
+        'mrp_rate': Info.mrp_rate,
+        'panel_rate': Info.panel_rate,
+        'panel_discount': Info.panel_discount,
+        'adl_disc_perc': 0,
+        'adl_disc_amount': 0,
+        'net_amount': parseFloat(Info.panel_rate) - parseFloat(Info.panel_discount),
+        'IsUrgent': 'N',
+        'Remark': Info.Remark
+    });
     objBooking.hosp_id = Active.HospId;
     objBooking.IPDNo = _IPDNo;
     objBooking.DoctorId = $("#ddlDoctor option:selected").val();
     objBooking.ipAddress = '-';
+    objBooking.BillingRole = "Nursing";
     objBooking.login_id = Active.userId;
-    objBooking.BillingRole = "Billing";
     objBooking.Logic = "BookingInfo";
     var MasterObject = {};
     MasterObject.objBooking = objBooking;
-    MasterObject.objRateList = objRateList;  
+    MasterObject.objRateList = objRateList;
     $.ajax({
         method: "POST",
         url: url,
@@ -178,8 +193,8 @@ function ItemInsert(data) {
         dataType: "JSON",
         traditional: true,
         success: function (data) {
-            if (data.includes('Success')) {            
-                GetVisitsBetweenDate();                
+            if (data.includes('Success')) {
+                GetVisitsBetweenDate();
                 $('#tblCurrentVisit tbody').find('tr:eq(' + _index + ')').css('background', '#94e7c1');
                 $('#tblCurrentVisit tbody').find('tr:eq(' + _index + ')').find('td:eq(3)').text('Applied');
             }
@@ -223,16 +238,16 @@ function GetVisitsBetweenDate() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;
                         if (temp != val.tnxDate) {
-                            tbody += "<tr style='background:#f9eec4'>";         
+                            tbody += "<tr style='background:#f9eec4'>";
                             tbody += "<td colspan='4'><b>Applied Date : </b>" + val.tnxDate + "</td>";
                             tbody += "<tr>";
-                            temp= val.tnxDate;
+                            temp = val.tnxDate;
                         }
                         tbody += "<tr>";
                         tbody += "<td>" + count + "</td>";
                         tbody += "<td>" + val.tnxDate + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
-                        tbody += "<td>" + val.DoctorName + "</td>";                                               
+                        tbody += "<td>" + val.DoctorName + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblAppliedVisits tbody').append(tbody);

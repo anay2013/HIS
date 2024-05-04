@@ -2,11 +2,13 @@
 var _doctorId = '';
 var _docName = '';
 var _degree = '';
+var _IsVisibleInLab = '';
 $(document).ready(function () {
     Onload();
     $("#Uploadsign").change(function () {
         readURL(this);
     });
+
 });
 function Onload() {
     $("#ddlDepartment").empty().append($("<option></option>").val("ALL").html("ALL")).select2();
@@ -50,6 +52,7 @@ function GetDoctors() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
+            console.log(data);
             var htmldata = "";
             var temp = "";
             if (Object.keys(data.ResultSet).length > 0) {
@@ -57,7 +60,7 @@ function GetDoctors() {
                     $.each(data.ResultSet.Table, function (k, val) {
                         if (temp != val.DepartmentName) {
                             htmldata += "<tr style='background:#fff9ce'>";
-                            htmldata += "<td colspan='4'><b>" + val.DepartmentName + "</b></td>";
+                            htmldata += "<td colspan='5'><b>" + val.DepartmentName + "</b></td>";
                             htmldata += "</tr>";
                             temp = val.DepartmentName;
                         }
@@ -75,6 +78,7 @@ function GetDoctors() {
 
                         htmldata += "<td>" + val.degree + "</td>";
                         htmldata += "<td class='hide'>" + val.SignId + "</td>";
+                        htmldata += "<td>" + val.IsVisibleInLab + "</td>";
                         htmldata += "<td><button onclick=selectDoctor(this) class='btn btn-warning btn-xs'><i class='fa fa-sign-in'>&nbsp;</i></button></td>";
                         htmldata += "</tr>";
                     });
@@ -97,12 +101,15 @@ function selectDoctor(elem) {
     _docName = $(elem).closest('tr').find('td:eq(2)').text();
     _degree = $(elem).closest('tr').find('td:eq(3)').text();
     _signid = $(elem).closest('tr').find('td:eq(4)').text();
+    _IsVisibleInLab = $(elem).closest('tr').find('td:eq(5)').text();
     $('.docInfo').html('Doctor Name : <span style="color: #14871d;">' + _docName + '</span>').show();
 
     if (sign.length > 6)
         $('#imgSign').prop('src', sign);
     else
         $('#imgSign').prop('src', 'https://exprohelp.com/his/images/uploadIcon.jpg');
+    $('input[name="Flag"][value="' + _IsVisibleInLab + '"]').prop('checked', true);
+    $("#txtdegreeUpdate").val(_degree)
 }
 function UploadSign() {
     var objBO = {};
@@ -165,4 +172,37 @@ function readURL(input) {
         var formData = new FormData();
         var files = $('#uploadSign').get(0).files;
     }
+}
+
+function updatedataFlag() {
+    var url = config.baseUrl + "/api/Lab/mDoctorSignatireQueries";
+    var objBO = {};
+    objBO.signid = '-';
+    objBO.doctorid = _doctorId;
+    objBO.deptid = '-';
+    objBO.prm_1 = $('input[name="Flag"]:checked').val();
+    objBO.prm_2 = $("#txtdegreeUpdate").val();
+    objBO.login_id = '-';
+    objBO.deptid = '-';
+    objBO.Logic = "UpdateFlag";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            alert("Success Update");
+            //if (data.includes('Success')) {
+            //    alert(data);
+
+            //}
+            //else {
+            //    alert(data);
+            //}
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
 }

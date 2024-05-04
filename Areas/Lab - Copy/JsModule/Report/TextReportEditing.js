@@ -1,5 +1,6 @@
 ﻿var _VisitNo;
 var _SubCat;
+var _ItemId;
 var _selectedTextGroup;
 var _currentSelectedReport;
 var _testCode;
@@ -109,7 +110,7 @@ function LabReporting(logic) {
     objBO.SubCat = $('#ddldepartment option:selected').val();
     objBO.TestCategory = '-';
     objBO.AutoTestId = 0;
-    objBO.TestCode = '-';
+    objBO.TestCode = $('#ddlTest option:selected').val();
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Logic = logic;
@@ -147,11 +148,48 @@ function LabReporting(logic) {
                         tbody += "<td>" + val.RegDate + "</td>";
                         tbody += "<td>" + val.VisitNo + "</td>";
                         tbody += "<td style='display:none'>" + val.barcodeNo + "</td>";
-                        tbody += "<td>" + val.testCategory + "</td>";
+                        tbody += "<td>" + val.ItemName + "</td>";
                         tbody += "<td style=width:1%><button class='btn btn-success btn-xs'><span class='fa fa-arrow-right'></button></td>";
+                        tbody += "<td class='hide'>" + val.ItemId + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblReport tbody').append(tbody);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function GetTestNameByDept() {
+    $('#ddlTest').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";
+    var objBO = {};
+    objBO.LabCode = Active.HospId;
+    objBO.IpOpType = '-';
+    objBO.ReportStatus = '-';
+    objBO.VisitNo = '-';
+    objBO.BarccodeNo = '-';
+    objBO.SubCat = $('#ddldepartment option:selected').val();
+    objBO.TestCategory = '-';
+    objBO.AutoTestId = 0;
+    objBO.TestCode = '-';
+    objBO.from = $('#txtFrom').val();
+    objBO.to = $('#txtTo').val();
+    objBO.Logic = 'GetTestNameByDept';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlTest').append($('<option></option>').val(val.testcode).html(val.TestName));
+                    });
                 }
             }
         },
@@ -211,6 +249,7 @@ function ApprovedTestInfo() {
 }
 function ReportDetail() {
     _SubCat = $(_currentSelectedReport).closest('tr').find('td:eq(0)').text();
+    _ItemId = $(_currentSelectedReport).closest('tr').find('td:last').text();
     _VisitNo = $(_currentSelectedReport).closest('tr').find('td:eq(2)').text();
     $('#tblTestInfo tbody').empty();
     //var url = config.baseUrl + "/api/Lab/LabReporting_Queries";
@@ -224,7 +263,7 @@ function ReportDetail() {
     objBO.BarccodeNo = $('#txtInput').val();
     objBO.TestCategory = '-';
     objBO.AutoTestId = 0;
-    objBO.TestCode = '-';
+    objBO.TestCode = _ItemId;
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Logic = 'ReportDetail';
@@ -529,13 +568,13 @@ function SaveTestResultEntry(entrySaveType) {
         alert('Please Select Doctor for Approval');
         return
     }
-    var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
     $('#tblTestInfo tbody tr').each(function () {
         if ($(this).attr('class') == 'Text') {
             objBO.push({
                 'VisitNo': _VisitNo,
                 'dispatchLab': Active.HospId,
-                'SubCat': _SubCat,
+                'SubCat': $(this).find('td:eq(0)').text(),
                 'AutoTestId': $(this).find('td:eq(0)').text(),
                 'TestCode': $(this).find('td:eq(1)').text(),
                 'ObservationId': '-',
@@ -554,31 +593,6 @@ function SaveTestResultEntry(entrySaveType) {
                 'EntrySaveType': '-',
                 'login_id': Active.userId,
                 'EntrySaveType': entrySaveType,
-                'Logic': 'TestResultEntry'
-            });
-        }
-        if ($(this).attr('class') == 'Value') {
-            objBO.push({
-                'VisitNo': _VisitNo,
-                'dispatchLab': Active.HospId,
-                'SubCat': _SubCat,
-                'AutoTestId': $(this).find('td:eq(0)').text(),
-                'TestCode': $(this).find('td:eq(1)').text(),
-                'ObservationId': $(this).find('td:eq(2)').text(),
-                'ab_flag': $(this).find('td:eq(9)').text(),
-                'read_1': $(this).find('td:eq(7)').find('input').val(),
-                'read_2': $(this).find('td:eq(8)').find('input.textValue').val(),
-                'test_comment': '-',
-                'min_value': $(this).find('td:eq(3)').text(),
-                'max_value': $(this).find('td:eq(4)').text(),
-                'nr_range': '-',
-                'result_unit': $(this).find('td:eq(5)').text(),
-                'method_name': $(this).find('td:eq(11)').text(),
-                'r_type': $(this).attr('class'),
-                'report_text_content': '-',
-                'DoctorSignId': $('#ddlApproveByDoctor option:selected').val(),
-                'EntrySaveType': entrySaveType,
-                'login_id': Active.userId,
                 'Logic': 'TestResultEntry'
             });
         }
@@ -614,11 +628,11 @@ function SaveTestResultEntry(entrySaveType) {
 function ApproveTest(elem) {
     if (confirm('Are you sure to Approve?')) {
         var objBO = [];
-        var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+        var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
         objBO.push({
             'VisitNo': _VisitNo,
             'dispatchLab': Active.HospId,
-            'SubCat': _SubCat,
+            'SubCat': $(elem).data('testcode'),
             'AutoTestId': 0,
             'TestCode': $(elem).data('testcode'),
             'ObservationId': '-',
@@ -671,13 +685,13 @@ function ApproveTest(elem) {
 function UnApproveTest() {
     if (confirm('Are you sure to Un-Approve?')) {
         var objBO = [];
-        var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+        var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
         $('#tblApproveTestInfo tbody tr').each(function () {
             if ($(this).find('td:eq(0)').find('input:checkbox:checked')) {
                 objBO.push({
                     'VisitNo': _VisitNo,
                     'dispatchLab': Active.HospId,
-                    'SubCat': _SubCat,
+                    'SubCat': $(this).find('td:eq(1)').text(),
                     'AutoTestId': $(this).find('td:eq(1)').text(),
                     'TestCode': '-',
                     'ObservationId': '-',
@@ -733,10 +747,10 @@ function UnApproveTest() {
 }
 function TestComment() {
     var objBO = [];
-    var url = config.baseUrl + "/api/Lab/Lab_ResultEntry";
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyReportEntry";
     objBO.push({
         'VisitNo': _VisitNo,
-        'SubCat': _SubCat,
+        'SubCat': _autoTestId,
         'AutoTestId': _autoTestId,
         'TestCode': _testCode,
         'ObservationId': _observationId,

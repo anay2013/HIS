@@ -1,0 +1,143 @@
+﻿<script src="~/Areas/IPD/JsModule/BillingView/_BillMismatch.js"></script>
+<style>
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .btn-flat {
+        padding: 2px;
+        border: none;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+       
+        border-radius: 10px;
+        padding: 5px 5px 0px 10px;
+        position: relative;
+    }
+
+    #tblBillMisMatch thead th{
+        padding:5px;
+    }
+
+    #tblBillMisMatch tbody th
+    {
+        padding: 4px;
+    }
+
+    .panel-heading button {
+        float: right;
+        margin: -35px 2px;
+    }
+
+    .text-white {
+        /*color: #fff;
+        margin: 7px 0px;*/
+        color: #fff;
+        margin: 13px 4px;
+    }
+ </style>
+<div class="example-box-wrapper">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive vertiscrl" style="margin-bottom:0;overflow:auto;height:485px;border: 1px solid #2478a9;">
+                <table id="tblBillMisMatch" class="table table-bordered">
+                    <thead style="background: #00a65a;color: #fff;">
+                        <tr>
+
+                            <th style="width:10%">IPDNo</th>
+                            <th style="width:15%">Patient Name</th>
+                            <th style="width:15%">Panel Name</th>
+                            <th style="width:8%;text-align:center">IsCredit</th>
+                            <th style="width:8%;text-align:center">IsBillClosed</th>
+                            <th style="width:8%;text-align:center">IsBillLocked</th>
+                            <th style="width:8%;text-align:center">ItemWiseAmt</th>
+                            <th style="width:8%;text-align:center">Bill Amount</th>
+                            <th style="width:10%;text-align:center">ItemAndBillMismatch</th>
+                            <th style="width:10%;">BillDate</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modalProcess" id="_BillMismatchDetails" tabindex="-1" role="dialog" aria-labelledby="True">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" style="margin-top:25%; width:165%; margin-left:-12%;">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" style="border:1px solid #337ab7eb;height:35px;">
+                        <h5 class="text-white">Bill Mismatch Details</h5>
+                        <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
+
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="section" style="height:175px;">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive" style="height:220px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7;margin-top:-30px;">
+                                            <table class="table table-bordered" id="tblBillMismatchDetails">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th style="width:7%">IPOPType</th>
+                                                        <th style="width:9%">IPOPNo</th>
+                                                        <th style="width:8%">RequestDate</th>
+                                                        <th style="width:15%">RequestTo</th>
+                                                        <th style="width:8%">AppStatus</th>
+                                                        <th style="width:10%">ApprovalType</th>
+                                                        <th style="width:8%">ApproveDate</th>
+                                                        <th style="width:8%">CancelDate</th>
+                                                        <th style="width:12%">UsedBy</th>
+                                                        <th style="width:15%">Remark</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

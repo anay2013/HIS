@@ -3,14 +3,8 @@ var _ipdNo = "";
 var selectedRow;
 $(document).ready(function () {
     CloseSidebar();
-    OverDuePatientList();
-    StartCountDown();
-    $("#myInput").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("#tblPatientList tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
+    FloorAndPanelList();
+    GetDoctorList();
     $(document).on("click", "#tblPatientList button ", function () {
         _ipdNo = $(this).closest("tr").find('td:eq(2)').text();
         if ($(this).text() == "Call") {
@@ -38,50 +32,124 @@ $(document).ready(function () {
 
             $("#pInfo").html(s)
             $('#myModal').modal('show');
-       
+
             CallLog();
         }
         else {
             var MinAlertAmount = $(this).closest("tr").find('input[name="MinAlertAmount"]').val();
             var RepeatCallMinute = $(this).closest("tr").find('input[name="RepeatCallMinute"]').val();
             UpdateTimeAndAmount(MinAlertAmount, RepeatCallMinute);
-    
+
         }
         //let a =tr.find('input[name="fullname"]').val(); -- For Getting Row
     });
 });
-function StartCountDown() {
-    var counter = counterP;
-    var interval = setInterval(function () {
-        counter--;
-        $("#txtAutoRefresh").html(counter);
-        // Display 'counter' wherever you want to display it.
-        if (counter <= 0) {
-            clearInterval(interval);
-            OverDuePatientList();
-            StartCountDown();
-            return;
-        } else {
-            // $('#txtRefDuration').val(counter);
-
-        }
-    }, 1000);
-}
-function OverDuePatientList() {
-    var ct = 1;
-    var TransBo = {};
-    TransBo.IPDNo = "";
-    TransBo.LoginId = Active.userId;
-    TransBo.LoginName = Active.userName;
-    TransBo.Remark = "-";
-    TransBo.Prm1 = "-";
-    TransBo.Logic = "OverDuePatientList";
-    TransBo.OutPutType = "HTML";
-    var url = config.baseUrl + "/api/IPOPAudit/GetOverDuePatientList";
+function FloorAndPanelList() {
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = '';
+    objBO.Floor = '';
+    objBO.PanelId = '';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = '';
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'FloorAndPanelList';
     $.ajax({
         method: "POST",
         url: url,
-        data: JSON.stringify(TransBo),
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $('#ddlFloor').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlFloor').append($('<option></option>').val(val.FloorName).html(val.FloorName));
+                    });
+                }
+            }
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table1).length) {
+                    $('#ddlPanel').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+                    $.each(data.ResultSet.Table1, function (key, val) {
+                        $('#ddlPanel').append($('<option></option>').val(val.PanelId).html(val.PanelName));
+                    });
+                }
+            }
+            //if (Object.keys(data.ResultSet).length) {
+            //    if (Object.keys(data.ResultSet.Table2).length) {
+            //        $('#ddlWard').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+            //        $.each(data.ResultSet.Table2, function (key, val) {
+            //            $('#ddlWard').append($('<option></option>').val(val.RoomTypeId).html(val.RoomTypeName));
+            //        });
+            //    }
+            //}
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function GetDoctorList() {
+    $('#ddlDoctor').empty().select2();
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = '';
+    objBO.Floor = '';
+    objBO.PanelId = '';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = Active.doctorId;
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'GetDoctorForConsult';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#ddlDoctor').append($('<option></option>').val(val.DoctorId).html(val.DoctorName)).change();
+                    });
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function OverDuePatientList() {
+    var ct = 1;
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = '-';
+    objBO.DoctorId = $('#ddlDoctor option:selected').val();
+    objBO.Floor = $('#ddlFloor option:selected').val();
+    objBO.PanelId = $('#ddlPanel option:selected').val();
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = Active.userName;
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'CallOverDuePatientList';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
@@ -91,21 +159,21 @@ function OverDuePatientList() {
                 $.each(data.ResultSet.Table, function (key, val) {
                     htmldata += '<tr style="background-color:' + val.CallStatus + '">';
                     htmldata += '<td style="width:2%;text-align:left">' + ct + '</td>';
-                    htmldata += '<td style="width:3%;text-align:center"><button type="button" class="btn btn-warning btn-block" style="height:18px;font-size:9px;padding:1px" " >Call</button></td>';
+                    htmldata += '<td style="width:3%;text-align:center"><button type="button" class="btn btn-warning btn-block" style="height:20px;font-size:9px;" " >Call</button></td>';
                     htmldata += '<td style="width:4%;text-align:left">' + val.IPDNo + '</td>';
-                    htmldata += '<td style="width:14%;text-align:left">' + val.PatientName + '</td>';
-                    htmldata += '<td style="width:5%;text-align:left">' + val.Mobile + '</td>';
-                    htmldata += '<td style="width:12%;text-align:left">' + val.ConsultantName + '</td>';
-                    htmldata += '<td style="width:8%;text-align:left">' + val.BedCategory + '</td>';
-                    htmldata += '<td style="width:5%;text-align:right">' + val.Deposit + '</td>';
-                    htmldata += '<td style="width:5%;text-align:right">' + val.BillAmt + '</td>';
-                    htmldata += '<td style="width:5%;text-align:right">' + val.ExtraPayment + '</td>';
+                    htmldata += '<td style="width:14%;text-align:left">' + val.patient_name + '</td>';
+                    htmldata += '<td style="width:5%;text-align:left">' + val.mobile_no + '</td>';
+                    htmldata += '<td style="width:12%;text-align:left">' + val.DoctorName + '</td>';
+                    htmldata += '<td style="width:8%;text-align:left">' + val.RoomBillingCategory + '</td>';
+                    htmldata += '<td style="width:5%;text-align:right">' + val.Advance + '</td>';
+                    htmldata += '<td style="width:5%;text-align:right">' + val.BillAmt.toFixed(0) + '</td>';
+                    htmldata += '<td style="width:5%;text-align:right">' + val.ExtraPayment.toFixed(0) + '</td>';
                     htmldata += "<td style='width:5%'><input type='text' name='MinAlertAmount' class='text-center' style='background-color:#d8f1f5;width:100%' value='" + val.MinAlertAmount + "'/></td>";
                     htmldata += "<td style='width:5%'><input type='text' name='RepeatCallMinute' class='text-center' style='background-color:#d8f1f5;width:100%' value='" + val.RepeatCallMinute + "'/></td>";
-                    htmldata += '<td style="width:3%;text-align:center"><button  type="button" class="btn btn-info btn-block" style="height:18px;font-size:9px;padding:1px"">Save</button></td>';
+                    htmldata += '<td style="width:3%;text-align:center"><button  type="button" class="btn btn-info btn-block" style="height:20px;font-size:9px;">Save</button></td>';
                     htmldata += '<td style="width:10%;text-align:center">' + val.lastCallDate + '</td>';
-                    htmldata += '<td style="width:15%;text-align:left;">' + val.Company_Name + '</td>';
-                    htmldata += '<td style="width:0%;text-align:left;display:none;">' + val.DateOfAdmit + '</td>';
+                    htmldata += '<td style="width:15%;text-align:left;">' + val.PanelName + '</td>';
+                    htmldata += '<td style="width:0%;text-align:left;display:none;">' + val.AdmitDate + '</td>';
                     htmldata += '</tr>';
                     ct++;
                 });
@@ -118,21 +186,40 @@ function OverDuePatientList() {
     });
 
 }
+
+function ExcelOverPatient() {
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = '-';
+    objBO.DoctorId = $('#ddlDoctor option:selected').val();
+    objBO.Floor = $('#ddlFloor option:selected').val();
+    objBO.PanelId = $('#ddlPanel option:selected').val();
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = Active.userName;
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'CallOverDuePatientList';
+    objBO.OutPutType = 'Excel';
+    Global_DownloadExcel(url, objBO, "CallOverDuePatientList" + ".xlsx");
+}
 function CallOverDueInsertUpdate() {
     var ct = 1;
-    var TransBo = {};
-    TransBo.IPDNo = _ipdNo;
-    TransBo.LoginId = Active.userId;
-    TransBo.LoginName = Active.userName;
-    TransBo.Remark = $("#txtRemark").val();
-    TransBo.Prm1 = "-";
-    TransBo.Logic = "MarkCallDone";
-    TransBo.OutPutType = "HTML";
-    var url = config.baseUrl + "/api/IPOPAudit/CallOverDueInsertUpdate";
+    var url = config.baseUrl + "/api/Patient/CallOverDueInsertUpdate";
+    var objBO = {};
+    objBO.IpdNo = _ipdNo;
+    objBO.Remark = $("#txtRemark").val();
+    objBO.LoginName = Active.userName;
+    objBO.Prm1 = '-';
+    objBO.MinAlertAmount = '-';
+    objBO.RepeatCallMinute = '0';
+    objBO.Logic = 'MarkCallDone';
     $.ajax({
         method: "POST",
         url: url,
-        data: JSON.stringify(TransBo),
+        data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
@@ -146,22 +233,21 @@ function CallOverDueInsertUpdate() {
 
 }
 function UpdateTimeAndAmount(MinAlertAmount, RepeatCallMinute) {
+    debugger
     var ct = 1;
-    var TransBo = {};
-    TransBo.IPDNo = _ipdNo;
-    TransBo.LoginId = Active.userId;
-    TransBo.LoginName = Active.userName;
-    TransBo.Remark = "";
-    TransBo.Prm1 = "-";
-    TransBo.MinAlertAmount = MinAlertAmount;
-    TransBo.RepeatCallMinute = RepeatCallMinute;
-    TransBo.Logic = "UpdateAmountAndTime";
-    TransBo.OutPutType = "HTML";
-    var url = config.baseUrl + "/api/IPOPAudit/CallOverDueInsertUpdate";
+    var url = config.baseUrl + "/api/Patient/CallOverDueInsertUpdate";
+    var objBO = {};
+    objBO.IpdNo = _ipdNo;
+    objBO.Remark = '-';
+    objBO.LoginName = Active.userName;
+    objBO.Prm1 = '-';
+    objBO.MinAlertAmount = MinAlertAmount;
+    objBO.RepeatCallMinute = RepeatCallMinute;
+    objBO.Logic = 'UpdateAmountAndTime';
     $.ajax({
         method: "POST",
         url: url,
-        data: JSON.stringify(TransBo),
+        data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
@@ -175,36 +261,43 @@ function UpdateTimeAndAmount(MinAlertAmount, RepeatCallMinute) {
 }
 function CallLog() {
     var ct = 1;
-    var TransBo = {};
-    TransBo.IPDNo = _ipdNo;
-    TransBo.LoginId = Active.userId;
-    TransBo.LoginName = Active.userName;
-    TransBo.Remark = "-";
-    TransBo.Prm1 = "-";
-    TransBo.Logic = "GetCallLog";
-    TransBo.OutPutType = "HTML";
-    var url = config.baseUrl + "/api/IPOPAudit/GetOverDuePatientList";
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = _ipdNo;
+    objBO.DoctorId = '';
+    objBO.Floor = '';
+    objBO.PanelId = '';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = Active.userName;
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'GetCallLog';
     $.ajax({
         method: "POST",
         url: url,
-        data: JSON.stringify(TransBo),
+        data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            var htmldata = "";
             $('#tblCallLog tbody').empty();
-            if (data.ResultSet.Table.length > 0) {
-                $.each(data.ResultSet.Table, function (key, val) {
-                    htmldata += '<tr>';
-                    htmldata += '<td style="width:3%;text-align:left">' + ct + '</td>';
-                    htmldata += '<td style="width:5%;text-align:left">' + val.CallDate + '</td>';
-                    htmldata += '<td style="width:15%;text-align:left">' + val.remark + '</td>';
-                    htmldata += '<td style="width:5%;text-align:left">' + val.login_name + '</td>';
-                    htmldata += '</tr>';
-                    ct++;
-                });
-                $('#tblCallLog tbody').append(htmldata);
-
+            if (Object.keys(data.ResultSet).length) {
+                var htmldata = "";
+                if (Object.keys(data.ResultSet.Table).length) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        htmldata += '<tr>';
+                        htmldata += '<td style="width:3%;text-align:left">' + ct + '</td>';
+                        htmldata += '<td style="width:5%;text-align:left" hidden>' + val.IPDNo + '</td>';
+                        htmldata += '<td style="width:5%;text-align:left">' + val.CallDate + '</td>';
+                        htmldata += '<td style="width:15%;text-align:left">' + val.Remark + '</td>';
+                        htmldata += '<td style="width:5%;text-align:left">' + val.login_name + '</td>';
+                        htmldata += '</tr>';
+                        ct++;
+                    });
+                    $('#tblCallLog tbody').append(htmldata);
+                }
             }
         },
         error: function (response) {
@@ -213,3 +306,5 @@ function CallLog() {
     });
 
 }
+
+

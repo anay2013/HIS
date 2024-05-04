@@ -28,5 +28,18 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         {
             return View();
         }
+        public ActionResult IndentBillPosting2()
+        {
+            return View();
+        }
+        public ActionResult MedicineReturn()
+        {
+            return View();
+        }
+
+        public ActionResult CancelSale()
+        {
+            return View();
+        }
     }
 }

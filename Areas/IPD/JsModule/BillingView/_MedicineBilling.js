@@ -12,7 +12,14 @@ $(document).ready(function () {
             $(this).parents('table').find('tbody').find('input[type=checkbox]').prop('checked', false);
     });
     $('#txtSearchIPDNO').val($('#tblAdviceHeader tr:eq(0) td:eq(9)').text());
+    LockPrvDate()   
 });
+function LockPrvDate() {
+    $("#txtFilterFrom,#txtFilterTo").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
+}
 function IPDSalebyIPDNo() {
     $('#tblIPDInfo tbody').empty();
     $('#div#skill .circle').show();

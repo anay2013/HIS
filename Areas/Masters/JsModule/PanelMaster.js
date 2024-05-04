@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     CloseSidebar();
     OnLoad();
     $("#ddlPaymentMode").multiselect({
@@ -46,9 +45,8 @@ function OnLoad() {
         }
     });
 }
-
 function AddUpdatePanel() {
-
+    debugger
     if (confirm("Are you sure to Save ?")) {
         var objBO = {};
         var selfratetypearr = [];
@@ -81,7 +79,6 @@ function AddUpdatePanel() {
         objBO.Fax = $("#txtFaxNo").val();
         objBO.ValidFrom = Properdate($("#txtValidFrom").val());
         objBO.ValidTo = Properdate($("#txtValidTo").val());
-
         objBO.RateListId = $("#ddlRatePanel option:selected").val();
         objBO.CreditLimit = $("#txtCreditLimit").val();
         objBO.TdsPerc = $("#txtTdsPerc").val();
@@ -91,6 +88,7 @@ function AddUpdatePanel() {
         objBO.FollowCuurency = $("#ddlCurrency option:selected").val();
         objBO.AllowPartialPay = $("#ddlAllowPartialPay option:selected").val();
         objBO.login_id = Active.userId;
+        objBO.Aging = $("#txtCreditPeriod").val();
         objBO.HospId = Active.unitId;
         objBO.disch_med_limit = $("#txtDischMedLimit").val();
         if (ValidatePanel()) {
@@ -121,7 +119,6 @@ function AddUpdatePanel() {
         }
     }
 }
-
 function BindPanel(PanelId) {
     var url = config.baseUrl + "/api/master/mPanelQueries";
     var objBO = {};
@@ -169,8 +166,8 @@ function BindPanel(PanelId) {
         }
     });
 }
-
 function EditPanel(element) {
+    debugger
     var PanelId = $(element).closest('tr.select-row').find('td:eq(0)').find('a').data('panelid')
     var url = config.baseUrl + "/api/master/mPanelQueries";
     var objBO = {};
@@ -218,7 +215,7 @@ function EditPanel(element) {
                     $("#ddlCurrency").val(data.ResultSet.Table[0].RateCurrencyCountryID);
                     $("#ddlAllowPartialPay").val(data.ResultSet.Table[0].IsAllowPartialPay);
                     $("#ddlCurrency").val(data.ResultSet.Table[0].Currency);
-
+                    $("#txtCreditPeriod").val(data.ResultSet.Table[0].Aging);
                     $("#btndaddupdate").text('Update');
                     $("#btndaddupdate").val('Update')
 
@@ -233,7 +230,6 @@ function EditPanel(element) {
         }
     });
 }
-
 function ValidatePanel() {
     var panelname = $("#txtPanelName").val();
     var contactperson = $("#txtContactPerson").val();
@@ -260,7 +256,6 @@ function ValidatePanel() {
     //$("#ddlCurrency").prop("selectedIndex", "0").val();
     //$("#ddlAllowPartialPay").prop("selectedIndex", "0").val();
 }
-
 function ClearValues() {
     $("#txtPanelName").val('');
     $("#ddlGroupType").prop("selectedIndex", "0").val();
@@ -282,8 +277,6 @@ function ClearValues() {
     $("#txtCoPaymentIn").val('0');
     $("#ddlCurrency").prop("selectedIndex", "0").val();
     $("#ddlAllowPartialPay").prop("selectedIndex", "0").val();
-
+    $("#txtCreditPeriod").val('0');
     $("#btndaddupdate").text('Save');
 }
-
-

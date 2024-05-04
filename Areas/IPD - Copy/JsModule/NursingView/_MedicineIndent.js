@@ -208,7 +208,7 @@ function SaveIPOPIndent() {
             'item_name': $(this).find('td:nth-child(2)').text(),
             'qty': $(this).find('td:nth-child(3)').text(),
             'login_id': Active.userId,
-            'UHID': $('#tblAdviceHeader tbody').find('tr:eq(5)').find('td:eq(3)').text(),
+            'UHID': $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(5)').text(),
             'pay_type': '-',
             'PanelId': _panelId,
             'panel_name': $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(8)').text(),

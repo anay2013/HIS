@@ -966,7 +966,7 @@ function GetLeaveDetailsOnEdit(doctorId) {
                     htmldata += '<td>' + val.slotTime + '</td>';
                     htmldata += '<td>' + val.attType + '</td>';
                     htmldata += '<td>' + val.status + '</td>';
-                    //htmldata += '<td><a href="javascript:void(0)" onclick=CancelDoctorLeave(' + "'" + val.auto_id + "'" + ')><i class="fa fa-trash fa-lg text-red"></i></a></td>';
+                    htmldata += '<td><a href="javascript:void(0)" onclick=CancelDoctorLeave(' + "'" + val.auto_id + "'" + ')><i class="fa fa-trash fa-lg text-red"></i></a></td>';
                     htmldata += '</tr>';
                 });
                 $('#tblLeaveDetails tbody').append(htmldata);
@@ -1127,7 +1127,7 @@ function CancelDoctorLeave(autoid) {
     objBO.login_id = Active.userId;
     objBO.doctorId = _doctorId;
     objBO.Logic = "CancelDoctorLeave";
-    var url = config.baseUrl + "/api/master/mCancelDoctorLeave";
+    var url = config.baseUrl + "/api/master/mDeleteDoctorSchedule";
     if (confirm("Are you sure to delete schedule ?")) {
         $.ajax({
             method: "POST",
@@ -1243,11 +1243,16 @@ function ValidateField() {
     var title = $("#ddlTitle option:selected").val();
     var doctorname = $("#txtDoctorName").val();
     var doctype = $("#ddlDoctorType option:selected").val();
+    var Department = $("#ddlDepartment option:selected").val();
     var mobile = $("#txtMobile").val();
     var gender = $("#ddlgender option:selected").val();
     var FeeFreq = $("#txtFeeFreq").val();
 
     if (doctype == "0") {
+        alert('Please select doctor type');
+        return false;
+    }
+    if (Department == "0") {
         alert('Please select doctor type');
         return false;
     }

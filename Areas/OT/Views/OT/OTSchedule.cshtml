@@ -229,135 +229,136 @@
             <div class="modal-body" style="background: #ddd;padding: 1px;">
                 <div class="card card-style" style="margin:10px;padding:10px;border-radius:9px;">
                     <div class="row">
-                      <div class="col-md-12">
-                        <div class="">
-                                    <div class="row" style="margin-bottom: 8px;">
-                                        <div class="col-xs-4">OT List</div>
-                                        <div class="col-xs-8"><select id="ddlOTList" class="form-control" onchange="OTScheduleList();"></select></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-4">Date </div>
-                                        <div class="col-xs-8" style="display:flex">
-                                            <input type="date" class="form-control" id="txtDate" />
-                                        </div>
-                                    </div>
-                                    <table class="table-condensed" style="width: 100%;font-size:12px;">
-                                        <tr>
-                                            <th style="width:30%">Search By</th>
-                                            <th style="width:5%">:</th>
-                                            <td style="width:65%" class="flex">
-                                                <input type="text" id="txtUHID" placeholder="UHID/Mobile" style="width:120px;" />
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Doctor</th>
-                                            <th>:</th>
-                                            <td>
-                                                <select id="ddlDoctor" class="form-control"> </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>:</th>
-                                            <td>
-                                                <input type="text" id="txtName" class="form-control" placeholder="Name" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Mobile</th>
-                                            <th>:</th>
-                                            <td>
-                                                <input type="text" id="txtMobile" class="form-control" placeholder="Mobile No." />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Start Time</th>
-                                            <th>:</th>
-                                            <td>
-                                                <select id="txtFromTime" class="form-control">
-                                                    <option>Select</option>
-                                                    <option>01</option>
-                                                    <option>02</option>
-                                                    <option>03</option>
-                                                    <option>04</option>
-                                                    <option>05</option>
-                                                    <option>06</option>
-                                                    <option>07</option>
-                                                    <option>08</option>
-                                                    <option>09</option>
-                                                    <option>10</option>
-                                                    <option>11</option>
-                                                    <option>12</option>
-                                                    <option>13</option>
-                                                    <option>14</option>
-                                                    <option>15</option>
-                                                    <option>16</option>
-                                                    <option>17</option>
-                                                    <option>18</option>
-                                                    <option>19</option>
-                                                    <option>20</option>
-                                                    <option>21</option>
-                                                    <option>22</option>
-                                                    <option>23</option>
-                                                    <option>24</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>End Time</th>
-                                            <th>:</th>
-                                            <td>
-                                                <select id="txtToTime" class="form-control">
-                                                    <option>Select</option>
-                                                    <option>01</option>
-                                                    <option>02</option>
-                                                    <option>03</option>
-                                                    <option>04</option>
-                                                    <option>05</option>
-                                                    <option>06</option>
-                                                    <option>07</option>
-                                                    <option>08</option>
-                                                    <option>09</option>
-                                                    <option>10</option>
-                                                    <option>11</option>
-                                                    <option>12</option>
-                                                    <option>13</option>
-                                                    <option>14</option>
-                                                    <option>15</option>
-                                                    <option>16</option>
-                                                    <option>17</option>
-                                                    <option>18</option>
-                                                    <option>19</option>
-                                                    <option>20</option>
-                                                    <option>21</option>
-                                                    <option>22</option>
-                                                    <option>23</option>
-                                                    <option>24</option>
-                                                </select>
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Remark</th>
-                                            <th>:</th>
-                                            <td>
-                                                <textarea id="txtRemark" class="form-control" placeholder="Remark"></textarea>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Item Required</th>
-                                            <th>:</th>
-                                            <td>
-                                                <textarea id="txtItemRequired" class="form-control" placeholder="Item Required"></textarea>
-                                            </td>
-                                        </tr>
-                                    </table>
+                        <div class="col-md-12">
+                            <div class="">
+                                <div class="row" style="margin-bottom: 8px;">
+                                    <div class="col-xs-4">OT List</div>
+                                    <div class="col-xs-8"><select id="ddlOTList" class="form-control" onchange="OTScheduleList();"></select></div>
                                 </div>
-                        <p class="text-center" style="margin-top: 10px;">
-                                    <a href="#" id="btnGetIPD" onclick="OTBooking()" class="btn btn-info">Book Now</a>
-                                </p>
-                       </div>
+                                <div class="row">
+                                    <div class="col-xs-4">Date </div>
+                                    <div class="col-xs-8" style="display:flex">
+                                        <input type="date" class="form-control" id="txtDate" />
+                                    </div>
+                                </div>
+                                <table class="table-condensed" style="width: 100%;font-size:12px;">
+                                    <tr>
+                                        <th style="width:30%">Search By</th>
+                                        <th style="width:5%">:</th>
+                                        <td style="width:85%" class="flex">
+                                            <input type="text" id="txtUHID" class="form-control" placeholder="UHID/Mobile" style="width:120px;" />
+                                            <button type="button" onclick="PatientInfoByUHID()" class="btn btn-warning">Get</button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Doctor</th>
+                                        <th>:</th>
+                                        <td>
+                                            <select id="ddlDoctor" class="form-control"> </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>:</th>
+                                        <td>
+                                            <input type="text" id="txtName" class="form-control" placeholder="Name" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobile</th>
+                                        <th>:</th>
+                                        <td>
+                                            <input type="text" id="txtMobile" disabled="disabled" class="form-control" placeholder="Mobile No." />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Start Time</th>
+                                        <th>:</th>
+                                        <td>
+                                            <select id="txtFromTime" class="form-control">
+                                                <option>Select</option>
+                                                <option>01</option>
+                                                <option>02</option>
+                                                <option>03</option>
+                                                <option>04</option>
+                                                <option>05</option>
+                                                <option>06</option>
+                                                <option>07</option>
+                                                <option>08</option>
+                                                <option>09</option>
+                                                <option>10</option>
+                                                <option>11</option>
+                                                <option>12</option>
+                                                <option>13</option>
+                                                <option>14</option>
+                                                <option>15</option>
+                                                <option>16</option>
+                                                <option>17</option>
+                                                <option>18</option>
+                                                <option>19</option>
+                                                <option>20</option>
+                                                <option>21</option>
+                                                <option>22</option>
+                                                <option>23</option>
+                                                <option>24</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>End Time</th>
+                                        <th>:</th>
+                                        <td>
+                                            <select id="txtToTime" class="form-control">
+                                                <option>Select</option>
+                                                <option>01</option>
+                                                <option>02</option>
+                                                <option>03</option>
+                                                <option>04</option>
+                                                <option>05</option>
+                                                <option>06</option>
+                                                <option>07</option>
+                                                <option>08</option>
+                                                <option>09</option>
+                                                <option>10</option>
+                                                <option>11</option>
+                                                <option>12</option>
+                                                <option>13</option>
+                                                <option>14</option>
+                                                <option>15</option>
+                                                <option>16</option>
+                                                <option>17</option>
+                                                <option>18</option>
+                                                <option>19</option>
+                                                <option>20</option>
+                                                <option>21</option>
+                                                <option>22</option>
+                                                <option>23</option>
+                                                <option>24</option>
+                                            </select>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Remark</th>
+                                        <th>:</th>
+                                        <td>
+                                            <textarea id="txtRemark" class="form-control" placeholder="Remark"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Item Required</th>
+                                        <th>:</th>
+                                        <td>
+                                            <textarea id="txtItemRequired" class="form-control" placeholder="Item Required"></textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <p class="text-center" style="margin-top: 10px;">
+                                <a href="#" id="btnGetIPD" onclick="OTBooking()" class="btn btn-info">Book Now</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

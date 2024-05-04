@@ -4,6 +4,7 @@
             e.preventDefault();
         }
     }, false);
+    FillCurrentDate('todayDate')
     FillCurrentDate('txtFromSearch')
     FillCurrentDate('txtToSearch')    
     FillCurrentDate('txtFrom')
@@ -98,16 +99,11 @@ function searchTable12(txt, tbl) {
     });
    
 }
-function LockPrvDate() {
-    var date = new Date(sessionStorage.getItem('ServerTodayDate'))
-    date.setDate(date.getDate()-2)
-    var day = date.getDate();
-    var month = date.getMonth()+1;
-    var year = date.getFullYear();
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
-    var today = year + "-" + month + "-" + day;
-    $("#txtFromSearch,#txtToSearch").attr("min", today);
+function LockPrvDate() {    
+    $("#txtFromSearch,#txtToSearch,#txtFrom,#txtTo").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0] );
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
 }
 function GetBookingDetails() {
     _itemId = $('#tblItemInfo tbody').find('tr.selected').find('td:eq(0)').text();

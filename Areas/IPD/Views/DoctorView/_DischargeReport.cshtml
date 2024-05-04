@@ -1,6 +1,26 @@
 ﻿<script src="~/Content/ckeditor/ckeditor.js"></script>
-<script src="~/Areas/IPD/JsModule/DoctorView/_DischargeReport.js"></script>
+<script src="~/Areas/IPD/JsModule/DoctorView/_DischargeReport.js?v1.3"></script>
 <style>
+    .expandCK {
+        z-index: 999999999;
+        position: fixed;
+        margin: 10px 0;
+        width: 84%;
+        top: 108px;
+        right: 4px;
+    }
+
+        .custHeight {
+            height: 55vh !important;
+        }
+    .ckDiv .fa {
+        cursor: pointer;
+        position: absolute;
+        right: 21px;
+        top: 9px;
+        font-size: 16px;
+        color: #0c82c7;
+    }
     hr {
         margin-top: 35px;
         margin-bottom: 5px;
@@ -101,9 +121,13 @@
         margin: 0px 15px;
     }
 
+    #cke_1_contents {
+        height: 150px;
+    }
+
     .dischargeSection {
         margin-top: 10px;
-        border: 1px solid #c0d7e5;
+        /*border: 1px solid #c0d7e5;*/
         height: 98px;
     }
 
@@ -161,7 +185,7 @@
     }
 
     .cke_contents {
-        height: 130px !important;
+        min-height: 100px !important;
     }
 
     #modalHeader, #modalTemplate {
@@ -186,46 +210,46 @@
     </ul>
 
     <div class="tab-content">
+
         <div id="DischargeReportSummary" class="tab-pane fade in active">
             <div class="row dischargeSection" style="height:350px">
-                <div class="" style="height:70px;padding:5px;">
-                    <div class="col-md-4 flex-margin">
-                        <label style="white-space:pre">Report Header : </label>
-                        <select id="ddlReportHeader" class="form-control">
-                            <option>Select Report Header</option>
-                            <option value="1">DISCHARGE SUMMARY</option>
-                            <option value="2">TRANSFER SUMMARY</option>
-                            <option value="3">DEATH SUMMARY</option>
-                            <option value="4">REFERRAL SUMMARY</option>
-                            <option value="5">LAMA SUMMARY</option>
-                            <option value="8">ABSCONDING SUMMARY</option>
-                            <option value="7">CASE SUMMARY</option>
-                        </select>
-                        <button class="btn btn-primary pull-right btnUpdate" onclick="UpdateReportHeader()"><i class="fa fa-sign-in">&nbsp;</i>Save</button>
-                    </div>
-                    <div class="col-md-3 flex-margin">
-                        <label style="white-space:pre">Header : </label>
-                        <select id="ddlHeader" onchange="GetTemplateListByHeader()" class="form-control"></select>
-                    </div>
-                    <div class="col-md-4 flex-margin">
-                        <label style="white-space:pre">Templates : </label>
-                        <select id="ddlTemplates" class="form-control"></select>
-                    </div>
-                    <div class="col-md-12" style="margin:10px 0;">
-                        <textarea class="form-control" id="txtTemplate" placeholder="Describe Test Interpretation here..."></textarea>
-                    </div>
-                    <div class="col-md-12">
-                        <button class="btn btn-primary pull-left" id="btnSave" onclick="InsertDischargeSummary('InsertDischargeSummary')" style="margin:-5px 0;"><i class="fa fa-sign-in">&nbsp;</i>Add Detail</button>
-                        <button class="btn btn-danger pull-left" id="btnLock" onclick="LockUnLockDischargeSummary('LockDischargeSummary')" style="margin:-5px 10px;"><i class="fa fa-lock">&nbsp;</i>Lock</button>
-                        <button class="btn btn-warning pull-right" id="btnSave" onclick="InsertDischargeSummary('UpdateDischargeSummary')" style="margin:-5px 0;"><i class="fa fa-sign-in">&nbsp;</i>Update Detail</button>
-                        <button class="btn btn-info pull-right" style="margin:-4px 5px" onclick="PrintDischargeReport()"><i class="fa fa-print">&nbsp;</i>Discharge Report</button>
-                        <button class="btn btn-success pull-right" id="btnUnLock" onclick="LockUnLockDischargeSummary('UnLockDischargeSummary')" style="margin:-5px 10px;"><i class="fa fa-unlock">&nbsp;</i>Un-Lock</button>
+                <div class="col-md-4 flex-margin">
+                    <label style="white-space:pre">Report Header : </label>
+                    <select id="ddlReportHeader" class="form-control">
+                        <option>Select Report Header</option>
+                        <option value="1">DISCHARGE SUMMARY</option>
+                        <option value="2">TRANSFER SUMMARY</option>
+                        <option value="3">DEATH SUMMARY</option>
+                        <option value="4">REFERRAL SUMMARY</option>
+                        <option value="5">LAMA SUMMARY</option>
+                        <option value="8">ABSCONDING SUMMARY</option>
+                        <option value="7">CASE SUMMARY</option>
+                    </select>
+                    <button class="btn btn-primary pull-right btnUpdate" onclick="UpdateReportHeader()"><i class="fa fa-sign-in">&nbsp;</i>Save</button>
+                </div>
+                <div class="col-md-3 flex-margin">
+                    <label style="white-space:pre">Header : </label>
+                    <select id="ddlHeader" onchange="GetTemplateListByHeader()" class="form-control"></select>
+                </div>
+                <div class="col-md-4 flex-margin">
+                    <label style="white-space:pre">Templates : </label>
+                    <select id="ddlTemplates" class="form-control"></select>
+                </div>
+                <div class="col-md-12 ckDiv" style="margin:10px 0;">
+                    <i class="fa fa-expand" onclick="ExpandCK()"></i>
+                    <textarea class="form-control" id="txtTemplate" placeholder="Describe Test Interpretation here..."></textarea>
+                </div>
+                <div class="col-md-12" style="margin:10px 0;">
+                    <button class="btn btn-primary pull-left" id="btnSave" onclick="InsertDischargeSummary('InsertDischargeSummary')" style="margin:-5px 0;"><i class="fa fa-sign-in">&nbsp;</i>Add Detail</button>
+                    <button class="btn btn-danger pull-left" id="btnLock" onclick="LockUnLockDischargeSummary('LockDischargeSummary')" style="margin:-5px 10px;"><i class="fa fa-lock">&nbsp;</i>Lock</button>
+                    <button class="btn btn-warning pull-right" id="btnSave" onclick="InsertDischargeSummary('UpdateDischargeSummary')" style="margin:-5px 0;"><i class="fa fa-sign-in">&nbsp;</i>Update Detail</button>
+                    <button class="btn btn-info pull-right" style="margin:-4px 5px" onclick="PrintDischargeReport()"><i class="fa fa-print">&nbsp;</i>Discharge Report</button>
+                    <button class="btn btn-success pull-right" id="btnUnLock" onclick="LockUnLockDischargeSummary('UnLockDischargeSummary')" style="margin:-5px 10px;"><i class="fa fa-unlock">&nbsp;</i>Un-Lock</button>
 
-                    </div>
                 </div>
             </div>
             <div class="row TemplateInfo">
-                <div class="table-responsive vertiscrl" style="overflow:auto;height:135px;margin:10px 0;border: 1px solid #2478a9;">
+                <div class="table-responsive vertiscrl" style="padding:0 10px;">
                     <label class="generateBill">Templates Info <button onclick="expandContent()" class="btn btn-warning btn-xs pull-right"><i class="fa fa-expand">&nbsp;</i></button></label>
                     <table id="tblDischargeSummary" class="table table-bordered">
                         <thead style="background: #00a65a;color: #fff;">
@@ -244,7 +268,7 @@
         <div id="PreviousDischargeReports" class="tab-pane fade">
             <div class="row">
                 <div class="col-md-5">
-                    <div class="scroll" style="min-height:430px;overflow:auto;border:1px solid #2492b3">
+                    <div class="scroll" style="min-height:430px;height:430px;overflow:auto;border:1px solid #2492b3">
                         <label class="generateBill">Patient Discharge Info</label>
                         <table id="tblPatientDischargeInfo" class="table table-bordered" style="margin-bottom:0">
                             <thead>
@@ -262,7 +286,7 @@
                     </div>
                 </div>
                 <div class="col-md-7">
-                    <div class="scroll" style="min-height:430px;overflow:auto;border:1px solid #2492b3">
+                    <div class="scroll" style="min-height:430px;height:430px;overflow:auto;border:1px solid #2492b3">
                         <label class="generateBill">Templates Info</label>
                         <table id="tblDischargeTemplateInfo" class="table table-bordered" style="margin-bottom:0">
                             <thead>

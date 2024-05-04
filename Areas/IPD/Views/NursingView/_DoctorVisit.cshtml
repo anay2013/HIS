@@ -1,5 +1,5 @@
 ﻿
-<script src="~/Areas/IPD/JsModule/NursingView/_DoctorVisit.js"></script>
+<script src="~/Areas/IPD/JsModule/NursingView/_DoctorVisit.js?v1.1"></script>
 <style>
     label.doctor {
         width: 35%;
@@ -27,7 +27,8 @@
     .selected {
         background: DodgerBlue !important;
         color: #fff;
-    }  
+    }
+
     .panel-body {
         padding: 15px 15px 0px 20px;
         position: relative;
@@ -47,13 +48,16 @@
         font-size: 12px;
         display: block;
         overflow: auto;
-    }      
+    }
+
     .example-box-wrapper {
         margin: 10px 20px;
     }
+
     .col-md-3, .col-md-4 {
         padding: 0;
     }
+
     .headerInfo {
         margin: 0;
         background: #2478a9;
@@ -73,7 +77,15 @@
                     </select>
                 </div>
             </div>
-        </div>       
+        </div>
+        <div class="col-md-2">
+            <div style="display:flex">
+                <label class="doctor">Date </label>
+                <div style="width:100%">
+                    <input type="date" class="form-control" id="txtDate" />
+                </div>
+            </div>
+        </div>
         <hr />
     </div>
     <div class="row">
@@ -94,7 +106,7 @@
                     </table>
                 </div>
             </div>
-        </div>      
+        </div>
     </div>
     <div class="row" style="margin:10px 0">
         <div class="col-md-3">
@@ -107,7 +119,7 @@
             <div style="display:flex;align-items: center;">
                 <label style="width: 20%;">To : </label>
                 <input type="date" id="txtTo" value="1" class="form-control" style="border-radius:0;border-color:#00a65a" />
-                <button class="btn btn-success" onclick="GetVisitsBetweenDate()" style="height: 28px;margin: 0;border-radius: 0;width: 35%;"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                <button class="btn btn-success" onclick="GetVisitsBetweenDate('-')" style="height: 28px;margin: 0;border-radius: 0;width: 35%;"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
             </div>
         </div>
     </div>
@@ -115,14 +127,14 @@
         <div class="col-md-7" style="padding:0">
             <div class="table table-responsive">
                 <label class="headerInfo">Applied Visits Info</label>
-                <div id="ProductList" style="height:255px">                    
+                <div id="ProductList" style="height:255px">
                     <table id="tblAppliedVisits" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Sr.No.</th>
                                 <th>Date</th>
                                 <th>Item Name</th>
-                                <th>DoctorName</th>                            
+                                <th>DoctorName</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

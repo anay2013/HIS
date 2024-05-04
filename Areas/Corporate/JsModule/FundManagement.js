@@ -44,7 +44,7 @@ function GetFundInfo() {
     var url = config.baseUrl + "/api/Corporate/PanelQuerie";
     var objBO = {};
     objBO.UHID = $('#txtUHID').val();
-    objBO.ReportType='';
+    objBO.ReportType = '';
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Logic = 'GetFundInfo';
@@ -88,14 +88,14 @@ function GetFundInfo() {
 }
 function FUNDEXCEL(elem) {
     $('#tblFundInfo tbody').empty();
-    var url = config.baseUrl + "/api/Corporate/PanelQuerie";
+    var url = config.baseUrl + "/api/Corporate/FundMGM_Queries";
     var objBO = {};
-    objBO.UHID = $('#txtUHID').val();
+    objBO.hospiId = 'CH01';
     objBO.ReportType = 'Excel';
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Logic = 'FUND:EXCEL';
-    Global_DownloadExcel(url, objBO,"FundReport.xlsx", elem);
+    Global_DownloadExcel(url, objBO, "FundReport.xlsx", elem);
 }
 function Global_DownloadExcel(Url, objBO, fileName, elem) {
     $(elem).addClass('loading');
@@ -166,7 +166,7 @@ function selectedPanel(elem) {
     $('.panelInfo').html(panelinfo);
     $('.rightpanel').removeClass('lock');
 
-    
+
 }
 function ValidateUHID() {
     if ($('#txtUHID').val() == '') {
@@ -193,7 +193,7 @@ function ValidateUHID() {
             var PatientInfo = data.ResultSet.Table[0].PatientInfo;
             var Balance = data.ResultSet.Table[0].Balance;
 
-            $('.panelInfo').append(" , Patient Balance : "+ Balance);
+            $('.panelInfo').append(" , Patient Balance : " + Balance);
 
             if (result == 'Y') {
                 $('#PatientInfo').html(PatientInfo);
@@ -269,7 +269,7 @@ function InsertFundManagement() {
     objBO.Prm1 = '-';
     objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = ($('#ddlEntryType option:selected').text() == 'Received') ? 'Insert' : 'Insert:Adjustment';
+    objBO.Logic = $('#ddlEntryType option:selected').val();
     $.ajax({
         method: "POST",
         url: url,

@@ -1,6 +1,7 @@
 ﻿var _index;
 $(document).ready(function () {
     $('#dash-dynamic-section').find('label.title').text('Doctor Visit').show();
+    FillCurrentDate('txtDate')
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')
     $('select').select2();
@@ -9,7 +10,14 @@ $(document).ready(function () {
         _index = $(this).closest('tr').index();
         BookingInfo($(this).closest('tr').find('td:eq(1)').text());
     });
+    LockPrvDate()
 });
+function LockPrvDate() {
+    $("#txtDate,#txtFrom,#txtTo").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
+}
 function GetDoctor() {
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
     var objBO = {};
@@ -147,6 +155,7 @@ function ItemInsert(data) {
     objRateList.push({
         'AutoId': 0,
         'TnxId': '-',
+        'EntryDateTime': $('#txtDate').val(),
         'RateListId': Info.RateListId,
         'CatId': '-',
         'ItemId': Info.ItemId,
@@ -185,7 +194,7 @@ function ItemInsert(data) {
         traditional: true,
         success: function (data) {
             if (data.includes('Success')) {
-                GetVisitsBetweenDate();
+                GetVisitsBetweenDate('Add');
                 $('#tblCurrentVisit tbody').find('tr:eq(' + _index + ')').css('background', '#94e7c1');
                 $('#tblCurrentVisit tbody').find('tr:eq(' + _index + ')').find('td:eq(3)').text('Applied');
             }
@@ -199,7 +208,7 @@ function ItemInsert(data) {
     });
 }
 
-function GetVisitsBetweenDate() {
+function GetVisitsBetweenDate(logic) {
     $('#tblAppliedVisits tbody').empty();
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
     var objBO = {};
@@ -208,8 +217,8 @@ function GetVisitsBetweenDate() {
     objBO.IPDNo = _IPDNo;
     objBO.Floor = '';
     objBO.PanelId = '';
-    objBO.from = $('#txtFrom').val();
-    objBO.to = $('#txtTo').val();
+    objBO.from = (logic == 'Add') ? $('#txtDate').val() : $('#txtFrom').val();
+    objBO.to = (logic == 'Add') ? $('#txtDate').val() : $('#txtTo').val();
     objBO.Prm1 = $('#ddlDoctor option:selected').val();
     objBO.Prm2 = '';
     objBO.login_id = Active.userId;

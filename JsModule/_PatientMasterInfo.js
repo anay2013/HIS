@@ -34,7 +34,10 @@ $(document).ready(function () {
         Clear();
     });
     $('#btnSearchOldPatient').on('click', function () {
-        GetOldPatient();
+        GetOldPatient('GetOldPatient');
+    });
+    $('#btnSearchKiosk').on('click', function () {
+        GetOldPatient('GetOldPatientByKiosk');
     });
     $('select').select2();
     FillCurrentDate("txtAppointmentOn");
@@ -71,6 +74,9 @@ $(document).ready(function () {
     $('#tblOldPatient tbody').on('click', 'button', function () {
         var uhid = $(this).closest('tr').find('td:eq(1)').text();
         $('#BasicInformation').find('.infosection').removeClass('blockInfo');
+        //if (uhid.includes('New'))
+        //    GetOldPatientByUHID(uhid.split('-')[1]);
+        //else
         GetOldPatientByUHID(uhid);
     });
     $('#tblOnlinePatientBooking tbody').on('click', 'button', function () {
@@ -169,7 +175,7 @@ function GetOldPatientByUHID(uhid) {
     var objBO = {};
     var date = new Date();
     objBO.hosp_id = Active.unitId;
-    objBO.UHID = uhid;
+    objBO.UHID = (uhid.includes('New')) ? uhid.split('-')[1] : uhid;
     objBO.MobileNo = '-';
     objBO.SearcKey = '-';
     objBO.SearchValue = '-';
@@ -178,7 +184,7 @@ function GetOldPatientByUHID(uhid) {
     objBO.prm_1 = '-';
     objBO.prm_2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'GetOldPatientByUHID';
+    objBO.Logic = (uhid.includes('New')) ? 'GetOldPatientInfoKiosk' : 'GetOldPatientByUHID';
     $.ajax({
         method: "POST",
         url: url,
@@ -190,7 +196,7 @@ function GetOldPatientByUHID(uhid) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#txtBarcode').val(val.barcodeno);
-                        $('#txtUHID').val(val.UHID);
+                        (uhid.includes('New')) ? $('#txtUHID').val('New') : $('#txtUHID').val(val.UHID);
                         $('#ddlTitle option').map(function () {
                             if ($(this).text() == val.Title) {
                                 $('#ddlTitle').prop('selectedIndex', '' + $(this).index() + '').trigger('change.select2');
@@ -342,7 +348,7 @@ function GetBookingByAppNo(appno) {
         }
     });
 }
-function GetOldPatient() {
+function GetOldPatient(logic) {
     if ($('#txtSearchValue').val() == '') {
         alert('Please Provide Search Value');
         return
@@ -360,7 +366,7 @@ function GetOldPatient() {
     objBO.prm_1 = '-';
     objBO.prm_2 = '-';
     objBO.login_id = Active.userId;
-    objBO.Logic = 'GetOldPatient';
+    objBO.Logic = logic;
     $.ajax({
         method: "POST",
         url: url,

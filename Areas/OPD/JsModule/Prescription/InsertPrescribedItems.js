@@ -1,5 +1,6 @@
-﻿var counterP = 11;
+﻿var counterP = 31;
 var intervalPresc;
+var _tempType = null;
 $(document).ready(function () {
     $('#tblTemplateMaster tbody').on('click', '.fa-edit', function () {
         selectRow($(this));
@@ -16,12 +17,52 @@ $(document).ready(function () {
         var templateId = $(this).data('templateid');
         $('#hiddenTemplateMasterId').text(templateId);
     })
+    $('#tblLabAndProcTemplateMaster tbody').on('click', '.fa-edit', function () {
+        selectRow($(this));
+        var templateId = $(this).data('templateid');
+        var templateName = $(this).closest('tr').find('td:eq(0)').text();
+        var Description = $(this).closest('tr').find('td:eq(1)').text();
+        $('#txtTemplateName').val(templateName);
+        $('#txtDescription').val(Description);
+        $('#btnSaveTemplate').switchClass('btn-success', 'btn-warning').text('Update');
+        $('#txtTempIdLabProc').text(templateId);
+    })
+    $('#tblLabAndProcTemplateMaster tbody').on('click', '.fa-arrow-right', function () {
+        selectRow($(this));
+        var templateId = $(this).data('templateid');
+        $('#txtTempIdLabProc').text(templateId);
+        LabAndProcTempItem();
+    })
+    $('#tblItemListForTemplate tbody').on('click', 'button', function () {
+        var itemId = $(this).closest('tr').find('td:eq(1)').text();
+        InsertLabAndProcedureTempItem(itemId, 'InsertCPOELabProcTempItem')
+    })
+    $('#tblLinkedItemListForTemplate tbody').on('click', 'button', function () {
+        if (confirm('are you sure to delete?')) {
+            var Autoid = $(this).closest('tr').find('td:eq(1)').text();
+            InsertLabAndProcedureTempItem(Autoid, 'DeleteCPOELabProcTempItem')
+        }
+    })
     $('select').on('change', function () {
         var val = $(this).find('option:selected').text();
         $(this).nextAll('input[name=format]').val(val);
     });
     StartCountDown();
 })
+
+function UsedMe() {
+    var list = "";
+    $('#tblLinkedItemListForTemplate tbody tr').each(function () {
+        list += "<span id=" + $(this).find('td:eq(1)').text() + "><i class='fa fa-check'>&nbsp;</i>&nbsp;" + $(this).find('td:eq(2)').text() + "</span>";
+    })
+    if (_tempType == 'Diagnostic') {
+        $('#LaboratoryRadiologyItems').append(list).show();
+    }
+    if (_tempType == 'Procedure') {
+        $('#PrescribedProcedureItems').append(list).show();
+    }
+    $('#modalTemplate2').modal('hide');
+}
 function StartCountDown() {
     var counter = counterP;
     intervalPresc = setInterval(function () {
@@ -35,7 +76,6 @@ function StartCountDown() {
             return;
         } else {
             // $('#txtRefDuration').val(counter);
-
         }
     }, 1000);
 }
@@ -224,6 +264,158 @@ function GetCPOEMedicineTemplateInfo(templateId) {
         }
     });
 }
+function GetDoctorTemplateAndItem(tempType) {
+    _tempType = tempType
+    $('#infoTempType').text(_tempType);
+    $('#tblItemListForTemplate tbody').empty();
+    $('#tblLabAndProcTemplateMaster tbody').empty();
+    $('#tblLinkedItemListForTemplate tbody').empty();
+    var url = config.baseUrl + "/api/Prescription/CPOE_PrescriptionAdviceQueries";
+    var objBO = {};
+    objBO.TemplateType = tempType;
+    objBO.DoctorId = Active.doctorId;
+    objBO.Logic = 'LabAndProcDoctorTemplateItems';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var tbody = "";
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr>";
+                        tbody += "<td>" + val.med_TemplateName + "</td>";
+                        tbody += "<td>" + val.Description + "</td>";
+                        tbody += "<td>";
+                        tbody += "<span data-templateid=" + val.med_TemplateId + " onclick=DeleteMediTemplate('" + val.med_TemplateId + "',this) class='btn-danger fa fa-trash btnTempMaster'></span>&nbsp;";
+                        tbody += "<span data-templateid=" + val.med_TemplateId + " class='btn-warning fa fa-edit btnTempMaster'></span>&nbsp;";
+                        tbody += "<span data-templateid=" + val.med_TemplateId + " class='btn-primary fa fa-arrow-right btnTempMaster'></span>";
+                        tbody += "</td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblLabAndProcTemplateMaster tbody').append(tbody);
+                }
+            }
+            if (Object.keys(data.ResultSet).length > 0) {
+                var tbody1 = "";
+                if (Object.keys(data.ResultSet.Table1).length > 0) {
+                    $.each(data.ResultSet.Table1, function (key, val) {
+                        tbody1 += "<tr>";
+                        tbody1 += "<td><button class='btn btn-warning btn-xs'><i class='fa fa-plus-circle'></i></button></td>";
+                        tbody1 += "<td class='hide'>" + val.ItemId + "</td>";
+                        tbody1 += "<td>" + val.ItemName + "</td>";
+                        tbody1 += "</tr>";
+                    });
+                    $('#tblItemListForTemplate tbody').append(tbody1);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+    $('#modalTemplate2').modal('show');
+}
+function LabAndProcTempItem() {
+    $('#tblLinkedItemListForTemplate tbody').empty();
+    var url = config.baseUrl + "/api/Prescription/CPOE_PrescriptionAdviceQueries";
+    var objBO = {};
+    objBO.TemplateId = $('#txtTempIdLabProc').text();
+    objBO.DoctorId = Active.doctorId;
+    objBO.Logic = 'LabAndProcTempItem';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                var tbody2 = "";
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody2 += "<tr>";
+                        tbody2 += "<td><button class='btn btn-danger btn-xs'><i class='fa fa-trash'></i></button></td>";
+                        tbody2 += "<td class='hide'>" + val.AutoId + "</td>";
+                        tbody2 += "<td>" + val.ItemName + "</td>";
+                        tbody2 += "</tr>";
+                    });
+                    $('#tblLinkedItemListForTemplate tbody').append(tbody2);
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+    $('#modalTemplate2').modal('show');
+}
+function InsertLabAndProcedureTempItem(itemId, logic) {
+    if ($('#txtTempIdLabProc').text() == '' && (logic == 'InsertCPOELabProcTempItem')) {
+        alert('Please Select Template.');
+        return
+    }
+    var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
+    var objBO = {};
+    objBO.DoctorId = Active.doctorId;
+    objBO.TemplateId = $('#txtTempIdLabProc').text();
+    objBO.TemplateName = '-';
+    objBO.ItemId = itemId;
+    objBO.prm_1 = _tempType;
+    objBO.login_id = Active.userId;
+    objBO.Logic = logic;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('success')) {
+                LabAndProcTempItem();
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function InsertLabAndProcedureTemplate() {
+    var url = config.baseUrl + "/api/Prescription/CPOE_InsertUpdateAdviceProcess";
+    var objBO = {};
+    objBO.DoctorId = Active.doctorId;
+    objBO.TemplateId = $('#hiddenTemplateMasterId').text();
+    objBO.TemplateName = $('#txtTemplateName').val();
+    objBO.Description = $('#txtDescription').val();
+    objBO.prm_1 = _tempType;
+    objBO.login_id = Active.userId;
+    objBO.Logic = ($('#btnSaveTemplate').text() == 'Save') ? 'InsertCPOEMedicineTemplate' : 'UpdateCPOEMedicineTemplate';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('success')) {
+                GetDoctorTemplateAndItem(_tempType)
+                ClearTemplateMaster();
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function GetMedicineTemplate() {
     $('#tblTemplateMaster tbody').empty();
     var url = config.baseUrl + "/api/Prescription/CPOE_PrescriptionAdviceQueries";
@@ -267,6 +459,7 @@ function InsertMedicineTemplate() {
     objBO.TemplateId = $('#hiddenTemplateMasterId').text();
     objBO.TemplateName = $('#txtTemplateName').val();
     objBO.Description = $('#txtDescription').val();
+    objBO.prm_1 = 'Medicine';
     objBO.login_id = Active.userId;
     objBO.Logic = ($('#btnSaveTemplate').text() == 'Save') ? 'InsertCPOEMedicineTemplate' : 'UpdateCPOEMedicineTemplate';
     $.ajax({
@@ -308,7 +501,8 @@ function CloseAppointment() {
             success: function (data) {
                 if (data.includes('Successfully')) {
                     alert('Appointment Closed Successfully..');
-                    window.location.href = config.rootUrl + '/OPD/Appointment/OPD_ViewConsultation?mid=SM186';
+                    GoBack();
+
                     sessionStorage.removeItem('AppId');
                 }
                 else {
@@ -344,7 +538,8 @@ function InOutMarking() {
         success: function (data) {
             if (data.includes('Success')) {
                 alert('Appointment Closed Successfully..');
-                window.location.href = config.rootUrl + '/OPD/Appointment/OPD_ViewConsultation?mid=SM186';
+                GoBack();
+                window.parent.RemoveSelectedRowOnClose();
                 sessionStorage.removeItem('AppId');
             }
             else {

@@ -6,6 +6,13 @@
 <script src="~/Areas/Lab/JsModule/LabRegister.js"></script>
 
 <style>
+    .searchBTN {
+        width: 31%;
+        height: 27px;
+        margin: 0;
+        border-radius: 0;
+    }
+
     .consentForm iframe {
         width: 100%;
         height: 400px;
@@ -131,7 +138,20 @@
                                         <div class="form-group flex bc">
                                             <button class="btn btn-success bn" style="">To</button>
                                             <input type="date" id="txtTo" class="form-control" style="width: 86%;  font-size:11px; " />
-                                            <button class="btn btn-warning bn" onclick="LabRegister()" style="width:36%;"><span class="fa fa-sign-in">&nbsp;</span>Get</button>
+                                            <button class="btn btn-warning bn" onclick="LabRegister('LabRegister')" style="width:36%;"><span class="fa fa-sign-in">&nbsp;</span>Get</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="padding:0;margin-top:5px">
+                                        <select class="form-control" id="ddlStatus1" style="padding:7px">
+                                            <option>UHID</option>
+                                            <option>IPD No</option>
+                                            <option>Mobile No</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2" style="padding:0 3px;margin-top:5px">
+                                        <div class="flex">
+                                            <input type="text" id="txtInput" class="form-control" placeholder="Input.." />
+                                            <button class="btn btn-warning searchBTN" onclick="LabRegister('LabRegisterByValue')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +167,7 @@
                                                 <th style="width:9%;">Patient Name</th>
                                                 <th style="width:10%;">Age/Gender</th>
                                                 <th>Test List</th>
+                                                <th style="width:14%;">Room Full Name</th>
                                                 <th style="white-space:pre">Doctor Name</th>
                                                 <th style="white-space:pre">View Consent</th>
                                             </tr>

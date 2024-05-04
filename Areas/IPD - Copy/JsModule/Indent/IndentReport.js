@@ -23,30 +23,42 @@ function GetIndentByIPDNo() {
     IPOP_IndentQueries(IPDNO);
 }
 function GetPatientDetails() {
-    var url = config.baseUrl + "/api/IPDNursing/GetAdmittedIPDPatient";
+    var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = '';
+    objBO.Floor = '';
+    objBO.PanelId = '';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = Active.doctorId;
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'AdmittedListOldAndNew';
     $.ajax({
-        method: "GET",
+        method: "POST",
         url: url,
-        dataType: "json",
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
         success: function (data) {
-            $("#tblAdmittedIPDPatient tbody").empty();
-            if (data != '') {
-                
-                $.each(data.ResultSet.Table, function (key, val) {
-                    $('<tr><td>' + val.IPDNO + '</td><td>' + val.PName + '</td><td>' + val.Patient_ID + '</td>' +
-                        '<td class="btn text-green PatientReport" data-PName="' + val.PName + '" data-Gender="' + val.Gender + '" data-Age="' + val.Age + '" data-AdmitedDate="' + val.AdmitDate + '" data-UHID="' + val.Patient_ID + '"data-IPD="' + val.IPDNO + '"data-RoomNo="' + val.RoomName + '"data-companyname="' + val.Company_Name + '"data-department="' + val.Department + '">' +
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('<tr><td>' + val.IPDNo + '</td><td>' + val.PName + '</td><td>' + val.UHID + '</td>' +
+                            '<td class="btn text-green PatientReport" data-PName="' + val.PName + '" data-Gender="' + val.Gender + '" data-Age="' + val.Age + '" data-AdmitedDate="' + val.AdmitDate + '" data-UHID="' + val.UHID + '"data-IPD="' + val.IPDNo + '"data-RoomNo="' + val.RoomName + '"data-companyname="' + val.Company_Name + '"data-department="' + val.Department + '">' +
                         '<span class="fa fa-arrow-right"></span></td></tr>').appendTo($("#tblAdmittedIPDPatient tbody"));
-                });
+                    });
+                }
             }
-            else {
-                alert("Error");
-            };
         },
         error: function (response) {
             alert('Server Error...!');
         }
     });
 }
+
 function IPOP_IndentQueries(ipop) {
     var url = config.baseUrl + "/api/IPDNursing/IPOP_IndentQueries";
     var objBO = {};

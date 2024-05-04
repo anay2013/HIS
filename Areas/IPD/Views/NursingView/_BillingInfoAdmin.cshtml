@@ -1,10 +1,9 @@
 ﻿<link href="~/Content/css/Anim.css" rel="stylesheet" />
 <script src="~/Areas/IPD/JsModule/NursingView/_BillingInfoAdmin.js"></script>
 <script src="~/Areas/IPD/JsModule/IPD/_IPDCommunication.js"></script>
+
+
 <style>
-    #tblItemsInfo input[type=text], #tblItemsInfo input[type=number] {
-        pointer-events: none;      
-    } 
     label.doctor {
         width: 35%;
         background: #3c8dbc;
@@ -54,20 +53,21 @@
             text-align: center;
             width: 10.5%;
             padding: 0px 5px;
-        }   
-        .panel-body {
-            padding: 15px 15px 0px 20px;
-            position: relative;
         }
+
+
+
+    .panel-body {
+        padding: 15px 15px 0px 20px;
+        position: relative;
+    }
 
     .table {
         width: 100%;
         max-width: 100%;
         margin-bottom: 5px;
     }
-    .select2 {
-        position: relative !important;
-    }
+
     #ProductList {
         border: 1px solid #2478a9;
         width: 99%;
@@ -90,8 +90,8 @@
         width: 99%;
     }
 
-    #tblItemsInfo .txtAdlDis {
-        border-color: #d1d1d1;
+    #tblBillingInfo .txtAdlDis, #tblItemsInfo .txtAdlDis {
+        /*border-color: #d1d1d1;*/
         width: 100%;
         height: 22px;
         font-size: 11px;
@@ -101,16 +101,36 @@
         color: #000;
     }
 
+    #tblBillingInfo select, #tblItemsInfo select {
+        border: none;
+        height: 22px;
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 0;
+        margin: 1px 0px;
+    }
+
+    #tblBillingInfo .calc {
+        border: 1px solid #488acf;
+        display: flex;
+    }
+
+    #tblItemsInfo .calc {
+        color: #484545;
+        border: 1px solid #488acf;
+        display: flex;
+    }
+
     #tblItemsInfo button.btnAdlDis {
         margin: 1px 0;
         border: none;
-        background: #b9b9b9 !important;
+        background: #f39c12 !important;
         border-radius: 0;
-        width: 1%;
+        width: 75%;
     }
 
     .txtAdlDis {
-        border-color: #488acf;
+        /*border-color: #488acf;*/
         width: 100%;
         height: 22px;
         font-size: 11px;
@@ -203,12 +223,14 @@
     #modalPackage table tbody td, #modalPackage table thead th {
         padding: 0 3px !important;
     }
+
     .entryBy {
         padding: 5px 0px;
         color: #c37700;
         font-size: 11px;
         cursor: pointer;
     }
+
     .entryByName {
         display: none;
         position: absolute;
@@ -218,7 +240,42 @@
         padding: 3px 5px;
         left: 30%;
         margin-top: -2px;
-        z-index:1111;
+        z-index: 1111;
+    }
+
+    #amountInfo {
+        border-top: none !important;
+        border: 1px solid #ebebeb;
+        z-index: 1000;
+        display: none;
+        background: #ffffff;
+        border-radius: 3px;
+        position: absolute;
+        right: 73%;
+        top: -10%;
+        width: 147px;
+    }
+
+        #amountInfo span:first-child {
+            color: #fff;
+            background: #06a08b;
+        }
+
+        #amountInfo span:last-child {
+            text-align: center;
+            padding: 1px;
+        }
+
+    .grid {
+        display: grid !important;
+    }
+
+    .select2 {
+        position: relative !important;
+    }
+
+    .amount-section [class*=col-md] {
+        padding: 1px;
     }
 </style>
 <div class="example-box-wrapper">
@@ -251,6 +308,7 @@
             <label>Advance Amount</label>
             <div class="flex">
                 <input type="text" id="txtAdvanceAmt" class="form-control" />
+                <button class="btn btn-primary pull-right" id="btnGenerateBill" onclick="$('#modalAdvancePayment').modal('show')" style="border-radius: 0;margin: -2px 0;height: 28px;"><i class="fa fa-plus">&nbsp;</i></button>
             </div>
         </div>
         <div class="col-md-1">
@@ -261,11 +319,11 @@
             <label>Balance Amount</label>
             <input type="text" id="txtBalanceAmt" class="form-control" />
         </div>
-        <div class="col-md-2" style="width:4%;">
-            <button class="btn btn-warning" data-target="#modalFilterByDate" data-toggle="modal" style="margin:25px 0 0 -10px"><i class="fa fa-calendar">&nbsp;</i></button>
-        </div>
-        <div class="col-md-2" style="width:4%;">
-            <button class="btn btn-warning" onclick="ItemsInfoByIPD()" style="margin-top: 24px;"><i class="fa fa-search">&nbsp;</i>Item</button>
+        <div class="col-md-4" style="width:12%;display:flex">
+            <button class="btn btn-warning" data-target="#modalFilterByDate" data-toggle="modal" style="margin-top:25px"><i class="fa fa-calendar">&nbsp;</i></button>
+            <label id="amountInfo"><span class="text-center">OPD Advance</span><span></span></label>
+            <button style="border: none;font-size: 18px;margin-left:2px;border-radius: 2px;margin-top:25px;padding: 0 9px;" onclick="checkAmount()" class="btn-primary btn-pay-ctrl pull-right"><i class="fa fa-inr">&nbsp;</i></button>
+            <button class="btn btn-warning" style="margin-top:25px;margin-left:2px" onclick="ItemsInfoByIPD()"><i class="fa fa-search">&nbsp;</i>Item</button>
         </div>
         <hr />
     </div>
@@ -281,13 +339,7 @@
                                 <th>Category</th>
                                 <th class="text-right">Qty</th>
                                 <th class="text-right">Gross Amount</th>
-                                <th class="text-right">Panel Discount</th>
-                                <th style="width:11%;padding:0;display:none">
-                                    <div style="display:flex">
-                                        <input type="number" disabled min="0" class="form-control txtAdlDis disabled" value="0" placeholder="%" />
-                                        <button onclick="ResetDiscount();" class="btn btn-danger btn-xs btnAdlDis disabled">Reset Disc.</button>
-                                    </div>
-                                </th>
+                                <th class="text-right">Panel Discount</th>                               
                                 <th class="text-right">Adl. Discount</th>
                                 <th class="text-right">Tax</th>
                                 <th class="text-right">Net Amount</th>
@@ -309,43 +361,34 @@
                         <thead>
                             <tr>
                                 <th style="width:2%"><input type="checkbox"></th>
-                                <th style="width: 28%;">
+                                <th style="width: 10%;padding:3.5px !important;">Visit No</th>
+                                <th style="width: 26%;">
                                     <div style="display:flex">
                                         <button style="width: 20%;float:left;" class="btn btn-warning btn-xs pull-right" data-target="#modalDoctorShift" data-toggle="modal">Shift Dr.</button>
                                         <input type="text" id="txtSearchItem" class="form-control txtAdlDis" style="width:55%;float:right;margin-right:10px;margin-left:3px" placeholder="Search Item..">
-                                    </div>
-                                </th>
-                                <th style="width: 3%;padding:3.5px !important;">
-                                    <div class="header-control" style="padding:5px">
-                                        <input type="checkbox">
+                                        <button onclick="ItemWiseCalculation()" style="width: 23%;" class="btn btn-warning btn-xs pull-right">Calculate</button>
                                     </div>
                                 </th>
                                 <th style="width: 9%;padding:3.5px !important;">
                                     <div class="header-control">
-                                        <input type="checkbox" disabled>
-                                        <input type="number" min="0" class="form-control txtAdlDis" value="0" placeholder="Rate">
-                                        <button class="btn btn-primary btn-xs btnAdlDis">Rs</button>
+                                        <input type="number" id="txtModPanelRate" min="0" class="form-control txtAdlDis" value="0" placeholder="Rate">
+                                        <button class="btn btn-primary btn-xs btnAdlDis" onclick="ItemWiseDiscount('Item:RateUpdate')" style="width: 10%;"><i class="fa fa-sign-in">&nbsp;</i></button>
                                     </div>
                                 </th>
-                                <th style="width: 8%;padding:3.5px !important;">
+                                <th style="width: 7%;padding:3.5px !important;">
                                     <div class="header-control">
-                                        <input type="checkbox" disabled>
-                                        <input type="number" min="0" onkeyup="RestrictMaxVal(this)" onchange="RestrictMaxVal(this)" class="form-control txtAdlDis" value="0" placeholder="%">
-                                        <button onclick="Calculation()" class="btn btn-primary btn-xs btnAdlDis">%</button>
+                                        <input type="number" id="txtModQty" min="0" class="form-control txtAdlDis" value="0" placeholder="Qty">
+                                        <button class="btn btn-primary btn-xs btnAdlDis" onclick="ItemWiseDiscount('Item:QtyUpdate')" style="width: 10%;"><i class="fa fa-sign-in">&nbsp;</i></button>
                                     </div>
                                 </th>
-                                <th style="width: 9%;line-height: 25px;">Panel Discount</th>
-                                <th style="width: 8%;padding:3.5px !important;">
-                                    <div class="header-control">
-                                        <input type="checkbox" disabled>
-                                        <input type="number" min="0" onkeyup="RestrictMaxVal(this)" onchange="RestrictMaxVal(this)" class="form-control txtAdlDis" value="0" placeholder="%">
-                                        <button onclick="Calculation()" class="btn btn-primary btn-xs btnAdlDis">%</button>
-                                    </div>
+                                <th style="width: 9%;line-height: 25px;">Panel Dis.</th>
+                                <th style="padding: 0 6px;width: 13%;">
+                                   Adl. Discount
                                 </th>
-                                <th style="width: 8%;line-height: 25px;">Adl.Discount</th>
-                                <th style="width: 8%;line-height: 25px;">Net Amt</th>
-                                <th style="width: 12%;line-height: 25px;">Doctor Name</th>
-                                <th style="width:2%;text-align: center;"><button onclick="FullPageHeight()" class="btn btn-warning btn-xs"><i class="fa fa-expand">&nbsp;</i></button></th>
+                                <th style="width: 6%;line-height: 25px;text-align:right">Net Amt</th>
+                                <th style="width: 6%;line-height: 25px;text-align:right">Tax</th>
+                                <th style="width: 19%;line-height: 25px;">Doctor</th>
+                                <th style="width:2%;text-align: center;"><div class="flex"><button id="btnCancelAllItem" class="btn btn-danger btn-xs"><i class="fa fa-trash">&nbsp;</i></button>&nbsp;<button onclick="FullPageHeight()" class="btn btn-warning btn-xs"><i class="fa fa-expand">&nbsp;</i></button></div></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -512,7 +555,7 @@
                                                 <th style="width: 14%;">Date</th>
                                                 <th>Item Name</th>
                                                 <th style="width: 1%;" class="text-right">Qty</th>
-                                                <th style="width: 17%;" class="text-right">Net Amount</th>
+                                                <th style="width: 17%;" class="text-right">Item Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -526,23 +569,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modalCommunication" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content" style="margin-top: 20%;">
-            <!-- Modal Header -->
-            <div class="modal-header bg-primary" style="padding: 4px 10px;background: #1d9f8d;">
-                <p class="modal-title">
-                    Communication Log
-                    <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
-                </p>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body" style="padding:0">
-                @Html.Partial("_IPDCommunication");
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="modal fade" id="modalAdvancePayment" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" style="width:750px;">
         <div class="modal-content" style="margin-top: 19.5%;">
@@ -566,8 +593,8 @@
     </div>
 </div>
 <div class="modal fade" id="modalSearchItem" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" style="width:1020px">
-        <div class="modal-content" style="margin-top: 12%;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top: 20%;">
             <!-- Modal Header -->
             <div class="modal-header bg-success" style="padding: 2px 10px;background: #2478a9;color:#fff">
                 <p class="modal-title">
@@ -577,22 +604,39 @@
             </div>
 
             <!-- Modal body -->
-            <div class="modal-body" style="padding:0">
-                <div class="row" style="margin:10px 0">
-                    <div class="col-md-2">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3" style="padding:0 5px">
                         <label>From</label>
                         <input type="date" id="txtSearchFrom" class="form-control" />
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label>To</label>
                         <input type="date" id="txtSearchTo" class="form-control" />
                     </div>
-                    <div class="col-md-6">
-                        <label>Choose Item</label>
-                        <select id="ddlSearchItem" class="form-control"></select>
-                    </div>
+                    @*<div class="col-md-6">
+                            <label>Choose Item</label>
+                            <select id="ddlSearchItem" class="form-control"></select>
+                        </div>*@
                     <div class="col-md-2">
                         <button class="btn btn-warning" onclick="ItemsInfo('ItemsInfoByItemId')" style="margin-top: 25px;"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                    </div>
+                    <div class="col-md-12" style="margin:10px 0;padding:0 5px">
+                        <div class="table table-responsive">
+                            <label class="headerInfo">Item Info <span id="txtPackageName"></span></label>
+                            <div id="ProductList" style="height: 320px;">
+                                <table id="tblItemAlloted" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 1%;"><input type="checkbox" onchange="$('#tblItemAlloted tbody input:checkbox').prop('checked',$(this).is(':checked'))" /></th>
+                                            <th style="width: 10%;">Item Id</th>
+                                            <th><input type="text" id="txtItemSearch" style="color:#000" onkeyup="searchTable('txtItemSearch','tblItemAlloted')" placeholder="Search Item Name.." /></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

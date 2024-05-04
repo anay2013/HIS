@@ -37,7 +37,7 @@ function PatientInfoForInOut() {
     objBO.VisitNo = '-';
     objBO.BarcodeNo = $('#ddlStatus option:selected').val();
     objBO.DispatchLabCode = '-';
-    objBO.TestCode = '-';
+    objBO.TestCode = $('#ddlType option:selected').val();
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Prm1 = $('#ddlCategory option:selected').val();
@@ -83,6 +83,7 @@ function PatientInfoForInOut() {
                         else
                             tbody += "<td>" + val.OutFlag + "</td>";
 
+                        tbody += "<td>" + val.IPOPType + "</td>";
                         tbody += "<td style='display:none'>" + val.VisitNo + "</td>";
                         tbody += "<td style='display:none'>" + val.AutoTestId + "</td>";
                         tbody += "</tr>";

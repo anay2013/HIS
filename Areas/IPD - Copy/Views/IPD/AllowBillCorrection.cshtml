@@ -45,6 +45,10 @@
         font-size: 13px;
         margin-bottom: 2px;
     }
+
+    #tblAllowBillCorrection thead th {
+        padding: 3px;
+    }
 </style>
 <div id="page-content">
     <div class="col-lg-12">
@@ -57,7 +61,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
-                                IPD NO
+                                <label>IPD No</label>
                                 <div style="display:flex">
                                     <label id="xyz" hidden></label>
                                     <input type="text" id="txtIPDNo" class="form-control" style="border: 1px solid #86b3de;" />
@@ -71,7 +75,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="table-responsive" style="height:100px;">
+                                <div class="table-responsive" style="height:86px;border:1px solid #3498db">
                                     <table class="table table-bordered" id="tblAllowBillCorrection">
                                         <thead>
                                             <tr>
@@ -91,6 +95,7 @@
                                                 <th>Balance</th>
                                                 <th>BillClosed Date</th>
                                                 <th>IsBillLocked</th>
+                                                <th>IsBillClosed</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -105,10 +110,52 @@
                     <div class="panel-body" style="height:400px;">
                         <div class="row">
                             <div class="col-md-9">
-                                Remark
+                                <label>Remark</label>
                                 <div style="display:flex">
                                     <textarea name="comment" class="form-control" id="txtRemark" style="border: 1px solid #86b3de;"></textarea>
-                                    <button type="submit" style="height:30px;width:23%;margin-top:3%;margin-left: 15px;" class="btn bg-blue bn" onclick="InsertRemarkIPD()"><i class="fa fa-plus">&nbsp;</i>Allow Bill Correction</button>
+                                    <button type="button" id="btnAllowbillCorrection" style="height:28px;width:23%;margin-top:3%;margin-left: 15px;" class="btn bg-blue bn" onclick="InsertRemarkIPD()"><i class="fa fa-plus">&nbsp;</i>Allow Bill Correction</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top:5px">
+                            <div class="col-md-4">
+                                <label> Search Employee</label>
+                                <div style="display:flex">
+                                    <input class="form-control" type="text" id="txtemployeeName" placeholder="Search Employee" />
+                                    <button type="submit" style="height:27px;width:35%;margin-left: 15px;" class="btn bg-blue" onclick="SearchEmployeeList()"><i class="fa fa-search">&nbsp;</i>Search</button>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label>Employee Name</label>
+                                <div style="display:flex">
+                                    <select id="ddlemployee" class="form-control"></select>
+
+                                    <button type="button" id="btnCorrectionRequest" style="height:27px;width:50%;margin-left: 15px;" class="btn btn-success" onclick="InsertOpenBill()"><i class="fa fa-plus">&nbsp;</i>Open Bill Request</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:225px;border:1px solid #3498db;margin-top:3px">
+                                    <table class="table table-bordered" id="tblCloseBillOpenRequest">
+                                        <thead>
+                                            <tr>
+                                                <th>IPOPType</th>
+                                                <th>IPOPNo</th>
+                                                <th>Employee Code</th>
+                                                <th>Employee Name</th>
+                                                <th>RequestDate</th>
+                                                <th>ApprovalType</th>
+                                                <th>Remark</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

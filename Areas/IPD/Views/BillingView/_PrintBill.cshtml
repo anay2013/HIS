@@ -1,6 +1,27 @@
 ﻿<link href="~/Content/css/MenuMaster.css?his-version-1.0" rel="stylesheet" />
 <script src="~/Areas/IPD/JsModule/BillingView/_PrintBill.js"></script>
 <style>
+    .BillStatus {
+        margin: 3px;
+        width: max-content;
+        border-radius: 30px;
+        display: block;
+        padding: 8px 7px;
+        font-size: 11px;
+        color: #fff;
+    }
+
+    .Matched {
+        background: #359f01;
+    }
+
+    .Mismached {
+        background: #c70000;
+    }
+
+    .BillStatus i {
+        font-size: 11px;
+    }
     #ddlFilterBy {
         border-radius: 0;
         margin-right: 14px;
@@ -117,6 +138,7 @@
 </style>
 <div class="row" style="padding:5px">
     <div class="col-md-12">
+        <label class="BillStatus"><i class="fa">&nbsp;</i><span></span></label>
         <div class="table-responsive vertiscrl" style="margin-bottom:0;overflow:auto;height:350px;border: 1px solid #2478a9;">
             <table id="tblBillInfo" class="table table-bordered">
                 <thead style="background: #00a65a;color: #fff;">
@@ -141,5 +163,6 @@
         <button class="btn btn-success" onclick="BillPrint_IncludingPackagedItem()"><i class="fa fa-print">&nbsp;</i>Item Wise Including Package Items</button>
         <button class="btn btn-info" onclick="BillPrint_DateWise()"><i class="fa fa-check-circle">&nbsp;</i>Date Wise Bill</button>
         <button class="btn btn-warning btnRC" onclick="Receipt_IPDDischargeReport()" id="btnPrintBill"><i class="fa fa-print">&nbsp;</i>Discharge Summary</button>
+        <button class="btn btn-warning btnRC" onclick="PrintAllLabReport()" id="btnPrintBill"><i class="fa fa-print">&nbsp;</i>Print Lab Report</button>
     </div>
 </div>

@@ -53,6 +53,16 @@ function ReceiptInfoByIPDNo() {
                     $('#tblBillInfo tbody').append(tbody);
                 }
             }
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table1).length) {
+                    $.each(data.ResultSet.Table1, function (key, val) {
+                        $('.BillStatus span').text(val.BillStatus);
+                        $('.BillStatus i').addClass((val.BillStatus == 'Mismached') ? 'fa-ban' : 'fa-check-circle');
+                        $('.BillStatus').addClass(val.BillStatus);
+                        (val.BillStatus == 'Mismached') ? $('#btnCloseBill').addClass('disabled') : $('#btnCloseBill').removeClass('disabled');
+                    });
+                }
+            }
         },
         error: function (response) {
             alert('Server Error...!');
@@ -100,5 +110,9 @@ function BillPrint_IncludingPackagedItem() {
 }
 function Receipt_IPDDischargeReport() {
     var url = "../Print/IPDDischargeReport?_IPDNo=" + _IPDNo;
+    window.open(url, '_blank');
+}
+function PrintAllLabReport() {
+    var url = config.rootUrl + "/Lab/print/PrintAllLabReportIPD?IPDNo=" + _IPDNo+"&IsHeader=N";
     window.open(url, '_blank');
 }

@@ -10,7 +10,8 @@ $(document).ready(function () {
     $('select').select2();
     SummarisedBilling();
     GetComSeenCount();
- 
+    FillCurrentDate('txtSearchFrom')
+    FillCurrentDate('txtSearchTo')
     $('#tblItemsInfo tbody').on('mouseover', '.entryBy', function () {
         var entryBy ='<b>Entry By : </b>'+$(this).data('entryby');
         $(this).siblings('span').html(entryBy).show('fast');
@@ -18,7 +19,41 @@ $(document).ready(function () {
         $(this).siblings('span').empty().hide('fast');
     });
     searchTable('txtSearchItem', 'tblItemsInfo');
- });
+});
+function ItemsInfoByIPD() {
+    var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
+    var objBO = {};
+    objBO.hosp_id = '';
+    objBO.UHID = '';
+    objBO.IPDNo = query()['IPDNo'];
+    objBO.DoctorId = '';
+    objBO.Floor = '';
+    objBO.PanelId = '';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm1 = _section;
+    objBO.Prm2 = '';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'ItemsInfoByIPD';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            $('#ddlSearchItem').empty().append($("<option></option>").val('Select').html('Select'));
+            $.each(data.ResultSet.Table, function (key, val) {
+                $("#ddlSearchItem").append($("<option></option>").val(val.ItemId).html(val.ItemName));
+            });
+            $('#ddlSearchItem').select2();
+            $('#modalSearchItem').modal('show');
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function GetComSeenCount() {
     $('#btnRemarkLog .count').empty();
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
@@ -109,6 +144,7 @@ function SummarisedBilling() {
     });
 }
 function ItemsInfo(cateId) {
+   
     $('#tblItemsInfo tbody').empty();
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
@@ -121,9 +157,9 @@ function ItemsInfo(cateId) {
     objBO.from = '1900/01/01';
     objBO.to = '1900/01/01';
     objBO.Prm1 = cateId;
-    objBO.Prm2 = '';
+    objBO.Prm2 = $('#ddlSearchItem option:selected').val();
     objBO.login_id = Active.userId;
-    objBO.Logic = 'ItemsInfoByCategory';
+    objBO.Logic = (cateId == 'ItemsInfoByItemId') ? 'ItemsInfoByItemId' : 'ItemsInfoByCategory';
     $.ajax({
         method: "POST",
         url: url,
@@ -156,6 +192,7 @@ function ItemsInfo(cateId) {
                     $('#tblItemsInfo tbody').append(tbody);
                 }
             }
+            $('#modalSearchItem').modal('hide');
         },
         error: function (response) {
             alert('Server Error...!');

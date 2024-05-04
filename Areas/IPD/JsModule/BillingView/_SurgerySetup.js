@@ -125,7 +125,6 @@ function ItemListBySubCatId() {
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     var tbody = "";
-                    var temp = "";
                     var count = 0;
                     $.each(data.ResultSet.Table, function (key, val) {
                         count++;

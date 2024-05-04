@@ -105,7 +105,7 @@ namespace HIS.Repository
             PdfPage pdfPage = eventParams.PdfPage;
             int pdfPageNumber = eventParams.PdfPageNumber;
             pdfPage.DisplayHeader = true;
-            if ((HeaderSource == "IPDBill" || HeaderSource == "IPDDischargeReport" || pdfPageNumber==1))
+            if ((HeaderSource == "IPDBill" || HeaderSource == "IPDDischargeReport" ))
             {
                 // set the header and footer visibility in first page
                 pdfPage.DisplayHeader = false;

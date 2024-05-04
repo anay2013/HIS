@@ -160,6 +160,96 @@ function InsertSafetyRound(elem) {
 	});
 }
 function GetPatientDetails() {
+    $('#IPDPatientList').empty();
+    var url = config.baseUrl + "/api/IPDNursing/IPD_FeedbackQuesries";
+    var objBO = {};
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'GetPatientInfoForFeedback';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var count = 0;
+            var html = ""; var room = []; var roomType = [];
+            $.each(data.ResultSet.Table, function (key, val) {
+                var r = val.RoomName.split('/');
+                room.push(r.pop());
+                roomType.push(val.RoomType);
+
+                html += "<div  class='section' data-ipd='" + val.IPDNo + "' data-name='" + val.PatientName + "' data-roomtype='" + val.RoomType + "' data-floor='" + r[3] + "'>";
+                html += "<label style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</label>";
+                html += "<table class='table'>";
+                html += "<tr>";
+                html += "<th>IPD No</th>";
+                html += "<th>:</th>";
+                html += "<td>" + val.IPDNo + "</td>";
+                html += "<th>&nbsp</th>";
+                html += "<th>Patient Name</th>";
+                html += "<th>:</th>";
+                html += "<td>" + val.PatientName + "</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<th>Age</th>";
+                html += "<th>:</th>";
+                html += "<td>" + val.Age + "</td>";
+                html += "<td style='display:none'>" + val.Gender + "</td>";
+                html += "<th>&nbsp</th>";
+                html += "<th>Room No</th>";
+                html += "<th>:</th>";
+                html += "<td>" + val.RoomName + "</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<th>Admitted Under</th>";
+                html += "<th>:</th>";
+                html += "<td colspan='5'>" + val.DoctorName + "</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<th>Admit Date</th>";
+                html += "<th>:</th>";
+                html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1><span2 style='display:none'>" + val.DoctorId + "</span2><span3 style='display:none'>" + val.FloorName + "</span3>";
+                html += "<span class='text-right' style='margin: -4px 0;float:right'>";
+              
+                if (val.isMarked=='N')
+                    html += "<button class='btn btn-warning btn-xs pull-right' onclick=QuestForIPDSafetyRound(this)><i class='fa fa-edit'>&nbsp;</i>Check</button>";
+                else
+                    html += "<button class='btn btn-success btn-xs pull-right' onclick=QuestForIPDSafetyRound(this)><i class='fa fa-edit'>&nbsp;</i>Check</button>";
+
+
+                html += "</span>";
+                html += "</td>";
+                html += "</tr>";
+                html += "</table>";
+                html += "</div>";
+                count++;
+            });
+            $('#IPDPatientList').append(html);
+            $('#ddlRoom').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+            var unique = room.filter(function (itm, i, room) {
+                return i == room.indexOf(itm);
+            });
+            for (i = 0; i < unique.length; i++) {
+                var data = '<option>' + unique[i] + '</option>'
+                $('#ddlRoom').append(data);
+            }
+
+            $('#ddlRoomType').empty().append($('<option></option>').val('ALL').html('ALL')).select2();
+            var unique1 = roomType.filter(function (itm, i, room) {
+                return i == roomType.indexOf(itm);
+            });
+            for (i = 0; i < unique1.length; i++) {
+                var data = '<option>' + unique1[i] + '</option>'
+                $('#ddlRoomType').append(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function GetPatientDetails1() {
 	$('#IPDPatientList').empty();
     var url = config.baseUrl + "/api/IPDNursing/PatientListForFeedBack";
     var objBO = {};

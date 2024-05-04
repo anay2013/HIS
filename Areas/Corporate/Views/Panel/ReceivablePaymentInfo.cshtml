@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "ReceivablePaymentInfo";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Corporate/JsModule/ReceivablePaymentInfo.js"></script>
+
+
+
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+    .selected {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 32px;
+        /*margin-top: 11%;*/
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .panel-heading button {
+        float: right;
+        margin: -20px 0px;
+    }
+
+    .text-white {
+        color: #fff;
+        margin: 7px 0px;
+    }
+</style>
+<div id="page-content">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="ml15">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h5>Receivable Payment Info</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label>From</label>
+                                <input type="date" id="txtFrom" class="form-control" />
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label>To</label>
+                                <input type="date" id="txtTo" class="form-control" />
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <button class="btn-flat btn-success" id="btnSave" style="background:#45bb13;padding: 4px 10px;margin-top: 26px;" onclick="ReceivablePaymentInfo('PartyPaymentInfo')"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px #2478a9">
+                                    <table class="table table-bordered" id="tblReceivablePaymentInfo">
+                                        <thead>
+                                            <tr>
+
+                                                <th style="width:5%;padding: 5px;text-align:left">SR.No</th>
+                                                <th style="width:10%;padding: 5px;text-align:left">MasterReceiptNo</th>
+                                                <th style="width:10%;padding: 5px;text-align:left">PayMode</th>
+                                                <th style="width:10%;padding: 5px;text-align:left">Ref.No</th>
+                                                <th style="width:10%;padding: 5px;text-align:left">BankName</th>
+                                                <th style="width:7%;padding: 5px;text-align:center">Amount</th>
+                                                <th style="width:7%;padding: 5px;text-align:left">ChequeDate</th>
+                                                <th style="width:15%;padding: 5px;text-align:left">EmployeeName</th>
+                                                <th style="width:15%;padding: 5px;text-align:left">Remark</th>
+                                                <th style="width:15%;padding: 5px;text-align:left">EntryDate</th>
+                                                <th style="width:5%;padding: 5px;text-align:left">FilePath</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade modalProcess" id="paymentdetailspop" tabindex="-1" role="dialog" aria-labelledby="True">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content" style="margin-top:10%; width:160%; margin-left:-31%;">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h5 class="text-white">Receivable Payment Info Details</h5>
+                                    <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
+
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="section" style="height:175px;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive" style="height:220px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7;margin-top: -10px;">
+                                                        <table class="table table-bordered" id="tblPaymentDetails">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th style="text-align:center;width:10%">IPOPType</th>
+                                                                    <th style="text-align:center;width:10%">IPDNo</th>
+                                                                    <th style="text-align:left;width:25%">Patient Name</th>
+                                                                    <th style="text-align:left;width:15%">Date</th>
+                                                                    <th style="text-align:center;width:10%">Receivable</th>
+                                                                    <th style="text-align:center;width:10%">TDS</th>
+                                                                    <th style="text-align:center;width:10%">IPD_Payment</th>
+                                                                    <th style="text-align:center;width:10%">IPD_BadDet</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

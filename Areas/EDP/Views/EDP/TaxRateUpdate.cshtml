@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewBag.Title = "Tax Rate Update";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/EDP/JsModule/TaxRateUpdate.js"></script>
+
+<style>
+    .btnRate {
+        line-height: 0;
+        height: 18px;
+        margin: 0;
+        border-radius: 0;
+    }
+    #tblItemList input[type=text] {
+        height: 20px;
+        border: 1px solid #bdbdbd;
+        border-radius: 0;
+        text-align:right;
+    }
+    .rate {
+        width: 85%;
+        height: 18px;
+        border: 1px solid #f39c12;
+        border-radius: 0;
+    }
+
+    .section-header {
+        background: #ffffff;
+        min-height: 570px;
+        max-height: 570px;
+        padding: 3px;
+        margin-bottom: 3px;
+        border: 1px solid #2478a9;
+    }
+
+    .title {
+        background: #2478a9;
+        color: #fff;
+        padding: 3px 63px 2px 6px;
+        top: 3px;
+        position: relative;
+    }
+
+        .title:after {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            content: '';
+            border-right: -2px solid transparent;
+            border-left: 25px solid transparent;
+            border-top: 25px solid #fff;
+        }
+
+    .category {
+        font-weight: bold;
+        background: #fafcfe;
+        display: flow-root;
+        border: 1px solid #2478a9;
+    }
+
+    .section {
+        min-height: 142px;
+        max-height: 142px;
+        overflow: auto;
+        margin-bottom: 5px;
+        border: 1px solid #2478a9;
+    }
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    .btn-flat {
+        padding: 2px;
+        border: none;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 30px;
+    }
+
+    .select-row {
+        background: #cfcfcf;
+        color: #000 !important;
+    }
+
+    .bc {
+        border: 1px solid #00a65a;
+        border-radius: 0;
+    }
+</style>
+<div id="page-content">
+    <div class="row">
+        <div class="ml15" style="margin-left:27px;">
+            <div class="category"><span class="title" style="top:0;padding:0px 50px 0px 6px">Panel Rate Link</span></div>
+            <div class="section-header">
+                <div class="row">                 
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label Class="col-sm-2">Category:</label>
+                            <select id="ddlCategory" class="form-control" onchange="BindSubCategory()"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>Sub Category:</label>
+                        <div class="flex">
+                            <select id="ddlSubCategory" class="form-control"></select>
+                            <button style="width:7vmax;border-radius:0;height:27px" class="btn btn-warning" onclick="GetItemList('GetItemList')"><i class="fa fa-search">&nbsp;</i>Search</button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>Item Name </label>
+                        <div class="flex">
+                            <input type="text" class="form-control" id="txtItemName" />
+                            <button style="width:2vmax;border-radius:0;height:27px;margin-right:2px;" class="btn btn-success" onclick="GetItemList('ItemSearch')"><i class="fa fa-search">&nbsp;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="table-responsive tableFixHead" style="height:485px;overflow:auto;border: 1px solid #2478a9;">
+                            <table class="table table-bordered" id="tblItemList">
+                                <thead>
+                                    <tr>
+                                        <th style="width:1%">#</th>
+                                        <th style="width:15%">Item Id</th>
+                                        <th><input type="text" id="txtItemSearch" onkeyup="searchTable('txtItemSearch','tblItemList')" class="form-control" placeholder="Search Item Name.." style="height:19px;margin: 2px 0;width:200px" /></th>
+                                        <th style="width:15%"><input type="text" id="txtTaxRate" disabled onkeyup="$('#tblItemList tbody input:text').val($('#txtTaxRate').val());CheckVal(this)" class="form-control" placeholder="Tax %.." style="height:19px;margin: 2px 0;" /></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="padding:0">                      
+                        <button style="top: 35vh;position:absolute;padding: 0 5px;" id="btnSaveUpdate" class="btn btn-success" onclick="RoomChargesUpdate()"><i class="fa fa-check-circle">&nbsp;</i>Update Rate</button>
+                    </div>
+
+                       
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

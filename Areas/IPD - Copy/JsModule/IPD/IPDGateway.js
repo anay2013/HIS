@@ -4,6 +4,7 @@ var _roomNo = '';
 var _IPDNo = '';
 var _deptName = '';
 var _AdmitDate = '';
+var _AdmitDateServer = '';
 var _UHID = '';
 var _sectionForCommunication = '';
 $(document).ready(function () {
@@ -16,8 +17,8 @@ $(document).ready(function () {
         $(this).addClass('activePage');
     });
 });
-function GoBack() {
-    window.location.href = config.rootUrl + '/IPD/IPD/IPD_NursingPatientRegister?mid=SM260';
+function GoBack() {  
+    window.parent.CloseGatewayIframe();
 }
 function loadBody(page) {
     $.ajax({
@@ -97,6 +98,7 @@ function PatientInfoByIPDNo() {
                         _deptName = val.DepartmentName;
                         _roomNo = val.RoomNo;
                         _AdmitDate = val.AdmitDate;
+                        _AdmitDateServer = val.AdmitDateServer;
                         _UHID = val.UHID;
                         _RoomBillingCategory = val.RoomBillingCategory;
                         $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(3)').text(val.patient_name);
