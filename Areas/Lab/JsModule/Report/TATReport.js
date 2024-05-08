@@ -136,6 +136,7 @@ function SelectRowValue(elem) {
     GetDataTATReportDetails()
 }
 function GetDataTATReportDetails() {
+    debugger
     $('#tblTATDetailsDetails tbody').empty();
     var url = config.baseUrl + "/api/Lab/Lab_TATQueries";
     var objBO = {};
@@ -159,18 +160,25 @@ function GetDataTATReportDetails() {
                 var tbody = "";
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
-                        tbody += "<tr>";
+                        if (val.DelayHrs != '0') {
+                            tbody += "<tr style='background:#ffc0cb;'>";
+                        }
+                        else {
+                            tbody += "<tr>";
+                        }
+
                         tbody += "<td style='width:7%'>" + val.IPOPType + "</td>";
                         tbody += "<td style='width:9%'>" + val.ipop_no + "</td>";
                         //tbody += "<td style='width:9%'>" + val.VisitNo + "</td>";
                         tbody += "<td style='width:10%'>" + val.testCategory + "</td>";
-                        tbody += "<td style='width:15%'>" + val.TestName + "</td>";
+                        tbody += "<td style='width:10%'>" + val.TestName + "</td>";
                         tbody += "<td style='width:12%'>" + val.RegDate + "</td>";
                         tbody += "<td style='width:12%'>" + val.SampleOrInDateTime + "</td>";
                         tbody += "<td style='width:12%'>" + val.ReportDateTime + "</td>";
                         tbody += "<td style='width:12%'>" + val.ApprovedDate + "</td>";
                         tbody += "<td style='width:5%;text-align:center'>" + val.TatHrs + "</td>";
                         tbody += "<td style='width:5%;text-align:center'>" + val.DelayHrs + "</td>";
+                        tbody += "<td style='width:5%;text-align:center'>" + val.OnTime + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblTATDetailsDetails tbody').append(tbody);

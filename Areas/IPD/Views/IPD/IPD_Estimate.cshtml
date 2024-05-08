@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "IPD_Estimate";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
@@ -90,11 +89,13 @@
         height: 28px;
         margin-left: 3px;
     }
+
     #btnSubmit {
         margin: 0;
         border-radius: 0;
         height: 28px;
     }
+
     #cke_1_contents {
         height: 415px !important;
     }
@@ -114,14 +115,14 @@
                                 <div class="">
                                     <div class="col-sm-12 form-group">
                                         <div class="flex">
-                                            <input type="text" id="txtEstimateTemplateName" class="consentName form-control" placeholder="Estimate Template Name" style="width: 411px;"/>
+                                            <input type="text" id="txtEstimateTemplateName" class="consentName form-control" placeholder="Estimate Template Name" style="width: 411px;" />
                                             <button id="btnSubmit" onclick="InsertEstimateTemplateMaster()" class="btn btn-success pull-right" style="margin-top:10px">Submit</button>
                                             <button onclick="Clear()" class="btn btn-info clear"><i class="fa fa-sign-in">&nbsp;</i>Clear</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-responsive" style="height:320px;overflow:auto;border:1px solid #86b3de;margin-bottom:5px;">
+                            <div class="table-responsive" style="height:190px;overflow:auto;border:1px solid #86b3de;margin-bottom:5px;">
                                 <table class="table table-bordered" id="tblEstimateTemplateMaster">
                                     <thead>
                                         <tr>
@@ -174,36 +175,37 @@
                                             <td>EstimateNo</td>
                                             <td><input type="checkbox" /></td>
                                         </tr>
-                                        @*<tr>
-                                                <td>7</td>
-                                                <td>approx(amount)</td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>8</td>
-                                                <td>AccountName</td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>9</td>
-                                                <td>AccountNo</td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>10</td>
-                                                <td>BankName</td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>11</td>
-                                                <td>BankBranch</td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>12</td>
-                                                <td>IFSCcode</td>
-                                                <td><input type="checkbox" /></td>
-                                            </tr>*@
+                                        @*
+                                        <tr>
+                                            <td>7</td>
+                                            <td>approx(amount)</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>*@
+                                        <tr>
+                                            <td>7</td>
+                                            <td>AccountName</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>AccountNo</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>BankName</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>BankBranch</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>IFSCcode</td>
+                                            <td><input type="checkbox" /></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

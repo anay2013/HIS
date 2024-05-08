@@ -188,7 +188,7 @@ function ItemInsert() {
     objBooking.Logic = "Med-Item";
     var MasterObject = {};
     MasterObject.objBooking = objBooking;
-    MasterObject.objRateList = objRateList;
+    MasterObject.objRateList = objRateList;    
     $.ajax({
         method: "POST",
         url: url,

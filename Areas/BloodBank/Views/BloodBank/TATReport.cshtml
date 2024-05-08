@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "TATReport";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/BloodBank/JsModule/TATReport.js"></script>
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 4px 6px;
+        margin-top: 1px;
+    }
+
+    .selected {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 32px;
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    #tblTATReoprt thead th {
+        padding: 3px;
+    }
+
+    #tblTATReoprt tbody td {
+        padding: 3px;
+    }
+</style>
+<div id="page-content">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="ml15">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h5>TAT Report</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>IPOPType</label>
+                                <select id="ddlIPOPType" class="form-control">
+                                    <option value="ALL">ALL</option>
+                                    <option value="OPD">OPD</option>
+                                    <option value="IPD">IPD</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label>From</label>
+                                <input type="date" id="txtfromdate" class="form-control" />
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>To</label>
+                                <input type="date" id="txttodate" class="form-control" />
+
+                            </div>
+                            <div class="col-md-4">
+                                <div style="display:flex">
+                                    <button id="btnSearch" style="width:25%;height:26px;margin-top:25px" class="btn btn-success bn" onclick="tatReport()"><i class="fa fa-search">&nbsp;</i>Search</button>
+                                    <button id="BtnExecl" style="width:25%;height:26px;margin-top:25px; margin-left: 20px;" class="btn btn-warning bn" onclick="ExceltatReport()"><i class="fa fa-file-excel-o">&nbsp;</i>Execl</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #3498db;margin-top: 2px;">
+                                    <table class="table table-bordered" id="tblTATReoprt">
+                                        <thead>
+                                            <tr>
+                                                <th>IPOPType</th>
+                                                <th>IPOPNo</th>
+                                                <th>PatientName</th>
+                                                <th>ComponentName</th>
+                                                <th>IndentNo</th>
+                                                <th style="text-align:center">IndentQty</th>
+                                                <th>IndentDate</th>
+                                                <th>IssueDate</th>
+                                                <th style="text-align:center">TAT(hrs)</th>
+                                                <th style="text-align:center">IssueFlag</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

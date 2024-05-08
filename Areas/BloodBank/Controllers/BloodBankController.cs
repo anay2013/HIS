@@ -58,5 +58,9 @@ namespace MediSoftTech_HIS.Areas.BloodBank.Controllers
         {
             return View();
         }
+        public ActionResult TATReport()
+        {
+            return View();
+        }
     }
 }

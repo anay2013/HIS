@@ -49,12 +49,12 @@ function DownloadExcelClosing() {
     objBO.hosp_id = '-';
     objBO.UHID = '-';
     objBO.IPDNo = $('#txtIPDNo').val();
-    objBO.Floor = $('#ddlFloor option:selected').val();
+    objBO.Floor = '-';
     objBO.PanelId = $('#ddlPanel option:selected').val();
     objBO.from = $('#txtfromdate').val();
     objBO.to = $('#txttodate').val();
-    objBO.Prm1 = $('#ddlLockFlag option:selected').val();
-    objBO.Prm2 = $('#ddlClosedFlag option:selected').val();
+    objBO.Prm1 = '-';
+    objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
     objBO.Logic = $('#ddlReportLogic option:selected').val();
     objBO.OutPutType = 'Excel';

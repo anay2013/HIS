@@ -195,6 +195,7 @@
     <Content Include="Areas\BloodBank\JsModule\ProcessApproval.js" />
     <Content Include="Areas\BloodBank\JsModule\RegisterComponent.js" />
     <Content Include="Areas\BloodBank\JsModule\RegisterDonorInfo.js" />
+    <Content Include="Areas\BloodBank\JsModule\TATReport.js" />
     <Content Include="Areas\BloodBank\JsModule\UnApproveDonation.js" />
     <Content Include="Areas\BloodBank\JsModule\_SDPProcess.js" />
     <Content Include="Areas\BloodBank\JsModule\_StockInfo.js" />
@@ -334,7 +335,6 @@
     <Content Include="Areas\IPD\JsModule\IPD\BloodRequisition.js" />
     <Content Include="Areas\IPD\JsModule\IPD\ChangePanel.js" />
     <Content Include="Areas\IPD\JsModule\IPD\CheckBillStatus.js" />
-    <Content Include="Areas\IPD\JsModule\IPD\ClosingPending.js" />
     <Content Include="Areas\IPD\JsModule\IPD\DuplicateBillAmount.js" />
     <Content Include="Areas\IPD\JsModule\IPD\EstimateEntry.js" />
     <Content Include="Areas\IPD\JsModule\IPD\EstimateMaster.js" />
@@ -413,7 +413,6 @@
     <Content Include="Areas\IPD\Views\IPD\ApprovalCorrection.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\BloodRequisition.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\ChangePanel.cshtml" />
-    <Content Include="Areas\IPD\Views\IPD\ClosingPending.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\GatewayBilling.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\GatewayDoctor.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\GatewayNursing.cshtml" />
@@ -890,6 +889,9 @@
     <Content Include="Areas\Accounts\Views\Tally\ResetTallyTransfer.cshtml" />
     <Content Include="Areas\IPD\Views\IPD\EstimateEntry.cshtml" />
     <Content Include="Areas\Accounts\Views\Payments\PayModeCorrectionAdmin.cshtml" />
+    <Content Include="Areas\IPD\Views\IPD\IPDPatientAnalysis.cshtml" />
+    <Content Include="Areas\BloodBank\Views\BloodBank\TATReport.cshtml" />
+    <Content Include="Areas\Lab\Views\Master\SetDeptSeq.cshtml" />
     <None Include="Connected Services\LISProxy\configuration91.svcinfo" />
     <None Include="Connected Services\LISProxy\configuration.svcinfo" />
     <None Include="Connected Services\LISProxy\Reference.svcmap">

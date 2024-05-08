@@ -26,6 +26,7 @@ function GetData(Logicname) {
         contentType: "application/json;charset=utf-8",
         success: function (data) {
             var tbody = "";
+            var Total = 0;
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
@@ -42,7 +43,13 @@ function GetData(Logicname) {
                         tbody += '<td>' + val.Amount + '</td>';
                         tbody += '<td>' + val.EntryBy + '</td>';
                         tbody += '</tr>';
+                        Total = Total + val.Amount;
                     });
+                    tbody += '<tr style="background-color:lightGreen;font-size:15px;">';
+                    tbody += '<td colspan="9" style="text-align:right;font-weight:bold" >Balance Amount :</td>';
+                    tbody += '<td style="font-weight:bold" > ' + Total+'</td>';
+                    tbody += '<td></td>';
+                    tbody += '</tr>'
                     $('#tblReceiptNo tbody').append(tbody);
 
                 }

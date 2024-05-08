@@ -1,4 +1,5 @@
-﻿var sum = '';
+﻿var sum = 0;
+var _totalSum = '';
 var _content = '';
 var _TemplateId = '';
 var _patient = '';
@@ -10,9 +11,17 @@ $(document).ready(function () {
     BillingTypeList();
     PanelList();
     TemplateList();
+    $('#ddlTemplate').on('change', function () {
+        EstimateContentUse()
+    })
+    DisableDropdowns();
+    $('#tblEstimateEntry thead').on('keyup', 'input[type=text]', function () {
+        var quant = $(this).val();
+        $('#tblEstimateEntry tbody tr').find('td:eq(3) input').val(quant).trigger('keyup');
+    });
 });
 function BillingTypeList() {
-    $("#ddlBillingType").empty().append($("<option></option>").val("Select").html("Select"));
+    $('#ddlBillingType').append($('<option></option>').text('Select').html('Select')).select2();
     var url = config.baseUrl + "/api/IPDBilling/IPD_EstimateTemplateQueries";
     var objBO = {};
     objBO.cr_date = '1900-01-01';
@@ -41,7 +50,7 @@ function BillingTypeList() {
     });
 }
 function PanelList() {
-    $("#ddlPanel").empty().append($("<option></option>").val("Select").html("Select"));
+    $('#ddlPanel').append($('<option></option>').text('Select').html('Select')).select2();
     var url = config.baseUrl + "/api/IPDBilling/IPD_EstimateTemplateQueries";
     var objBO = {};
     objBO.cr_date = '1900-01-01';
@@ -60,7 +69,7 @@ function PanelList() {
         contentType: "application/json;charset=utf-8",
         success: function (data) {
             $.each(data.ResultSet.Table, function (key, val) {
-                $("#ddlPanel").append($("<option></option>").val(val.PanelId).html(val.PanelName));
+                $("#ddlPanel").append($("<option></option>").val(val.PanelName).html(val.PanelName));
             });
         },
         error: function (response) {
@@ -70,7 +79,7 @@ function PanelList() {
     });
 }
 function TemplateList() {
-    $("#ddlTemplate").empty().append($("<option></option>").val("Select").html("Select"));
+    $('#ddlTemplate').append($('<option></option>').val('Select').html('Select')).select2();
     var url = config.baseUrl + "/api/IPDBilling/IPD_EstimateTemplateQueries";
     var objBO = {};
     objBO.cr_date = '1900-01-01';
@@ -89,7 +98,7 @@ function TemplateList() {
         contentType: "application/json;charset=utf-8",
         success: function (data) {
             $.each(data.ResultSet.Table, function (key, val) {
-                $("#ddlTemplate").append($("<option></option>").val(val.TemplateId).html(val.TemplateName));
+                $('#ddlTemplate').append($('<option></option>').val(val.TemplateId).html(val.TemplateName));
                 _TemplateId = val.TemplateId;
             });
         },
@@ -126,12 +135,18 @@ function ShowCalGrid() {
                 tbody += "<tr>";
                 tbody += '<td><a onclick="EstimateRemove(this)"><i class="fa fa-remove" style="font-size:20px;color:red;"></i></a></td>';
                 tbody += "<td>" + val.ItemName + "</td>";
-                tbody += "<td>" + val.unit_price + "</td>";
-                tbody += "<td style='text-align:center'><input type='text' id='txt " + counter + "' onkeyup=Estimatecalvalue(this) style='width:100px;border:1px solid #bddeff;height:19px;' class='form-control'></td>";
-                tbody += "<td id='txttotal' style='width:70px' style='text-align:center'></td>";
+                tbody += "<td><input type='text' value='" + val.unit_price + "' id='txtqty' onkeyup=Estimatecalvalue() style='width:70px;border:1px solid #bddeff;height:19px;' class='form-control'></td>";
+                tbody += "<td style='text-align:center'><input type='text' id='txt " + counter + "' onkeyup=Estimatecalvalue() style='width:100px;border:1px solid #bddeff;height:19px;' class='form-control'></td>";
+                tbody += "<td id='txttotal' style='width:70px;text-align:center' ></td>";
                 tbody += "</tr>";
             });
+            tbody += "<tr class='total'>";
+            tbody += "<td colspan='4' style='text-align:right;id='total'>TOTAL</td>";
+            tbody += "<td style='text-align:center' id='txttotalSumval'>0</td>";
+            tbody += "</tr>";
             $('#tblEstimateEntry tbody').append(tbody);
+            $('#txttotalSumval').text('');
+            $('.txttotal').text('');
         },
         error: function (response) {
             console.error("Error:", response);
@@ -141,74 +156,68 @@ function ShowCalGrid() {
 }
 function UseTable() {
     var tbody = "";
+    tbody += "<div  style='margin-left:34px'><b>BREAKUP :-</b></div>";
     tbody += "<thead>";
     tbody += "<tr>";
-    tbody += "<th style='text-align:left'>Item Name</th>";
-    tbody += "<th>Unit Price</th>";
-    tbody += "<th>Quantity</th>";
-    tbody += "<th style='width:70px'>Total</th>";
+    tbody += "<th style='text-align:left;border:1px solid #000;width:55%;padding-left;6px'>ITEM NAME</th>";
+    tbody += "<th style='border:1px solid #000;padding:5px;width:15%;text-align:right'>UNIT PRICE</th>";
+    tbody += "<th style='border:1px solid #000;padding:5px;width:15%;text-align:right'>QTY</th>";
+    tbody += "<th style='border:1px solid #000;padding:5px;width:15%;text-align:right'>TOTAL</th>";
     tbody += "</tr>";
     tbody += "</thead>";
-    $('#tblEstimateEntry tbody tr').each(function () {
+    $('#tblEstimateEntry tbody tr:not(.total)').each(function () {
         tbody += "<tr>";
-        tbody += "<td>" + $(this).find('td:eq(1)').text() + "</td>";
-        tbody += "<td style='text-align:center;'>" + $(this).find('td:eq(2)').text() + "</td>";
-        tbody += "<td style='text-align:center'>" + $(this).find('td:eq(3) input').val() + "</td>";
-        tbody += "<td style='width:150px;text-align:center'>" + $(this).find('td:eq(4)').text() + "</td>";
+        tbody += "<td style='margin-top:-50px;border:0;padding:0 5px;text-align:left'>" + $(this).find('td:eq(1)').text() + "</td>";
+        tbody += "<td style='text-align:center;border:0;padding:0 5px;text-align:right'>" + $(this).find('td:eq(2) input').val() + "</td>";
+        tbody += "<td style='text-align:center;border:0;padding:0 5px;text-align:right'>" + $(this).find('td:eq(3) input').val() + "</td>";
+        tbody += "<td style='width:150px;text-align:center;border:0;padding:0 5px;text-align:right'>" + $(this).find('td:eq(4)').text() + "</td>";
         tbody += "</tr>";
     });
-    var tblcal = "<div><table style='border-collapse:collapse;width:100%;border:1px solid #fff'>" + tbody + "</table><table><b>Total :</b>" + sum + "</table><hr style='background-color:red'>__________________________________________________________________________________________<hr></div>";
+    tbody += "<tr>";
+    tbody += "<td colspan='3' style='text-align:right;'>TOTAL</td>";
+    tbody += "<td style='text-align:right' id='txttotalSumval'>" + $('#tblEstimateEntry tbody tr.total').find('td:eq(1)').text() + "</td>";
+    tbody += "</tr>";
+    var tblcal = "<div><table style='border:1px solid #000;width:90%;font-size:13px;padding:0 5px;border-collapse:collapse;margin-left:34px'>" + tbody + "</table></div>";
     CKEDITOR.instances['txtTemplate1'].insertHtml(tblcal);
 }
-function Estimatecalvalue(input) {
-    var row = $(input).closest('tr');
-    var dailyTotal = parseFloat(row.find('td:eq(2)').text());
-    var inputVal = parseFloat($(input).val());
-    var total = dailyTotal * inputVal;
-    row.find("#txttotal").text(isNaN(total) ? '' : total);
-    sum = 0;
-    $('#tblEstimateEntry tbody #txttotal').each(function () {
-        var value = parseFloat($(this).text());
-        if (!isNaN(value)) {
-            sum += value;
-        }
-    });
-    $('#txttotalSumval').text(sum);
-}
-$(document).on('blur', 'input[type="text"]', function () {
-    var value = $(this).val().trim();
-    if (value === '') {
-        $(this).val('');
-        $(this).closest('tr').find("#txttotal").text('');
-    }
-});
-function InputValues() {
-    var totalDaysValue = $('#txtTotalDays').val();
-    $("table tbody tr").each(function () {
-        $(this).find("input[type='text']").val(totalDaysValue).trigger('keyup');
+
+function Estimatecalvalue() {
+    var unitPrice = 0;
+    var qty = 0;
+    var total = 0;
+    $('#tblEstimateEntry tbody tr:not(.total)').each(function () {
+        unitPrice = parseFloat($(this).find('td:eq(2) input').val());
+        qty = parseFloat($(this).find('td:eq(3) input').val());
+        $(this).find('td:eq(4)').text(unitPrice * qty);
+        total += parseFloat($(this).find('td:eq(4)').text());
+        $('#txttotalSumval').text(total.toFixed(2));
     });
 }
+
 function EstimateRemove(element) {
     $(element).closest('tr').remove();
-    sum = 0;
+    var sum = 0;
     $('#tblEstimateEntry tbody #txttotal').each(function () {
         var value = parseFloat($(this).text());
         if (!isNaN(value)) {
             sum += value;
         }
     });
-    $('#txttotalSumval').text(sum);
+    $('#txttotalSumval').text(sum.toFixed(2));
 }
+
 function GetEmployeeUHID() {
     $('#btnUHIDNo').prop('disabled', true);
     var url = config.baseUrl + "/api/IPDBilling/IPD_EstimateTemplateQueries";
     var objBO = {};
     objBO.cr_date = '1900-01-01';
     _uhid = $('#txtGetUHID').val();
-    objBO.TemplateName = _uhid;
+    objBO.TemplateName = '-';
     objBO.TemplateContent = '-';
     objBO.var_list = '-';
     objBO.TemplateId = 0;
+    objBO.UHID = _uhid;
+    objBO.estimateNo = '-';
     objBO.login_id = '-';
     objBO.result = '-';
     objBO.Logic = 'GetEstimateUHID';
@@ -232,6 +241,7 @@ function GetEmployeeUHID() {
                     });
                 }
             }
+            enableDropdowns();
         },
         error: function (err) {
             alert('server error');
@@ -286,7 +296,7 @@ function InsertEstimateEntry() {
     var billingType = $('#ddlBillingType option:selected').text();
     var panel = $('#ddlPanel option:selected').text();
     var templateName = $('#ddlTemplate option:selected').text();
-    if (!uhid1 || !billingType || !panel || !templateName || templatecontent.trim() === '' || templateName === 'Select') {
+    if (!uhid1 || billingType === 'Select' || panel === 'Select' || templateName === 'Select' || templatecontent.trim() === '') {
         alert("Please fill in all the required fields.");
         return;
     }
@@ -365,10 +375,12 @@ function EstimateEntryList() {
     var url = config.baseUrl + "/api/IPDBilling/IPD_EstimateTemplateQueries";
     var objBO = {};
     objBO.cr_date = '1900-01-01';
-    objBO.TemplateName = _uhid;
+    objBO.TemplateName = '-';
     objBO.TemplateContent = '-';
     objBO.var_list = '-';
     objBO.TemplateId = 0;
+    objBO.UHID = _uhid;
+    objBO.estimateNo = '-';
     objBO.login_id = '-';
     objBO.result = '-';
     objBO.Logic = 'EstimateEntryGrid';
@@ -394,7 +406,7 @@ function EstimateEntryList() {
                 tbody += "<td class='hide'>" + val.autoId + "</td>";
                 tbody += "<td class='hide'>" + val.estContent + "</td>";
                 tbody += "<td class='hide'>" + val.uhid + "</td>";
-                tbody += '<td class="text-center"><button class="btn btn-primary btn-sm" style="height: 21px;width: 38px;margin-bottom:2px;margin-top:-1px;" onclick=SeEstimateNo("' + val.estimateNo + '");EstimateInfo(this) data-billing="' + val.BillingType + '" data-tempname="' + val.TemplateName + '" data-panel="' + val.Panel + '" ><center style="font-size:11px;margin-top:-5px;margin-left:-1px;">Edit</center></button></td>';
+                tbody += '<td class="text-center"><button class="btn btn-primary btn-sm" style="height: 21px;width: 38px;margin-bottom:2px;margin-top:-1px;" onclick=SeEstimateNo("' + val.estimateNo + '");EstimateInfo(this) data-billing="' + val.BillingType + '" data-tempname="' + val.TemplateId + '" data-panel="' + val.Panel + '" ><center style="font-size:11px;margin-top:-5px;margin-left:-1px;">Edit</center></button></td>';
                 tbody += "</tr>";
             });
             $('#tblEstimateEntryList tbody').append(tbody);
@@ -407,25 +419,25 @@ function EstimateEntryList() {
 }
 function Clear() {
     $('#tblEstimateEntry tbody').empty();
-    $('#ddlBillingType Option:Selected').text('');
-    $('#ddlPanel Option:Selected').text('');
-    $('#ddlTemplate Option:Selected').text('');
-    $('#txttotalSumval').text('');
+    $('#tblEstimateEntryList tbody').empty();
+    $('select').prop('selectedIndex', '0').trigger('change.select2');
     $('#btnUHIDNo').prop('disabled', false);
     CKEDITOR.instances['txtTemplate1'].setData('');
+    DisableDropdowns();
     $('#btnSubmit').text('Submit').addClass('btn-success').removeClass('btn-warning').attr('onclick', 'InsertEstimateEntry()');
-
 }
 function EstimateInfo(elem) {
-    $('#btnSubmit').text('Update').addClass('btn-warning').removeClass('btn-success').attr('onclick', 'UpdatEstimateForm()');
     var content = $(elem).closest('tr').find('td:eq(5)').html();
     var Bilingtype = $(elem).data('billing');
+    var PanelName1 = $(elem).data('panel');
     var Templatename = $(elem).data('tempname');
-    var PanelName = $(elem).data('panel');
-    $('#ddlBillingType Option:Selected').text(Bilingtype)
-    $('#ddlTemplate Option:Selected').text(Templatename);
-    $('#ddlPanel Option:Selected').text(PanelName)
+    $('#ddlBillingType').val(Bilingtype).trigger('change.select2');
+    $('#ddlPanel').val(PanelName1).trigger('change.select2');
+    $('#ddlTemplate').val(Templatename).trigger('change.select2');
+    //$('#txttotalSumval').val(sum);
     CKEDITOR.instances['txtTemplate1'].setData(content);
+    $('#btnSubmit').text('Update').addClass('btn-warning').removeClass('btn-success').attr('onclick', 'UpdatEstimateForm()');
+
 }
 function SeEstimateNo(est) {
     _EstimateNo = est;
@@ -433,4 +445,16 @@ function SeEstimateNo(est) {
 function EstimateEntryPrint1() {
     var url = "../Print/PrintEstimateForm?UHIDNO=" + _uhid + "&estNO=" + _EstimateNo;
     window.open(url, '_blank');
+}
+
+function DisableDropdowns() {
+    $('#ddlBillingType').prop('disabled', true);
+    $('#ddlPanel').prop('disabled', true);
+    $('#ddlTemplate').prop('disabled', true);
+}
+
+function enableDropdowns() {
+    $('#ddlBillingType').prop('disabled', false);
+    $('#ddlPanel').prop('disabled', false);
+    $('#ddlTemplate').prop('disabled', false);
 }

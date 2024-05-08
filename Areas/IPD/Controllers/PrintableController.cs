@@ -2396,10 +2396,12 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         {
             PdfGenerator pdfConverter = new PdfGenerator();
             EstimateTemplate objBO = new EstimateTemplate();
+            objBO.UHID = UHIDNO;
+            objBO.estimateNo = estNO;
             objBO.TemplateId = "0";
-            objBO.TemplateName = UHIDNO;
+            objBO.TemplateName = "-";
             objBO.TemplateContent = "-";
-            objBO.var_list = estNO;
+            objBO.var_list = "-";
             objBO.login_id = "-";
             objBO.result = "-";
             objBO.cr_date = DateTime.Parse("1900-01-01");
@@ -2409,7 +2411,6 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             string _result = string.Empty;
             StringBuilder b = new StringBuilder();
             StringBuilder h = new StringBuilder();
-            string ipopno = "";
             string Patientname = "";
             string age = "";
             string content = string.Empty;
@@ -2428,48 +2429,40 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             string var_list = string.Empty;
             string Dated = string.Empty;
 
-            //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            //{
-            //    foreach (DataRow dr in ds.Tables[0].Rows)
-            //    {
-            //        AccountName = dr["ac_name"].ToString();
-            //        IFSCcode = dr["ac_ifsc"].ToString();
-            //        AccountNo = dr["ac_no"].ToString();
-            //        BankName = dr["ac_bankName"].ToString();
-            //        BankBranch = dr["ac_BranchName"].ToString();
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    AccountName = dr["ac_name"].ToString();
+                    IFSCcode = dr["ac_ifsc"].ToString();
+                    AccountNo = dr["ac_no"].ToString();
+                    BankName = dr["ac_bankName"].ToString();
+                    BankBranch = dr["ac_BranchName"].ToString();
 
-            //    }
-            //}
+                }
+            }
             if (ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[1].Rows)
                 {
                     Patientname = dr["patient_name"].ToString();
                     Gender = dr["gender"].ToString();
-                    age = dr["ageInfo"].ToString();
-                    ipopno = dr["ipop_no"].ToString();
+                    age = dr["age"].ToString();
                 }
             }
-            //string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
-            b.Append("<div class='row' style='padding:30px'>");
-            //b.Append("<img src='" + imagePath + "' style='width:150px; height:70px;' />");
-            b.Append("<h5 style = 'border:1px solid;margin-left:200px;text-align: justify ; margin-top:5px; width:500px;height:55px; padding:7px;'>");
+            b.Append("<div class='row' style='padding:30px;margin-top:110px'>");
+            b.Append("<h5 style = 'border:1px solid;text-align: justify ; margin-top:5px; width:100%;height:25px; padding:7px;'>");
             b.Append("<table style='width:100%;font-size:14px;border:0px solid #dcdcdc;margin-bottom:-15px;'>");
             b.Append("<tr>");
+            b.Append("<td><b>UHID No</b></td>");
+            b.Append("<td><b>:</b></td>");
+            b.Append("<td>" + UHIDNO.ToString() + "</td>");
             b.Append("<td><b>Patient Name</b> </td>");
             b.Append("<td><b>:</b></td>");
             b.Append("<td>" + Patientname + "</td>");
             b.Append("<td><b>Age/Gender</b></td>");
             b.Append("<td><b>:</b></td>");
-            b.Append("<td>" + age + "</td>");
-            b.Append("</tr>");
-            b.Append("<tr>");
-            b.Append("<td><b>UHID No</b></td>");
-            b.Append("<td><b>:</b></td>");
-            b.Append("<td>" + UHIDNO.ToString() + "</td>");
-            b.Append("<td><b>IPD No</b></td>");
-            b.Append("<td><b>:</b></td>");
-            b.Append("<td>" + ipopno.ToString() + "</td>");
+            b.Append("<td>" + age + "/" + Gender + "</td>");
             b.Append("</tr>");
             b.Append("</table>");
             b.Append("</h5>");
@@ -2499,8 +2492,6 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                             content = content.Replace(oldString, "<strong>" + Dated + "</strong>");
                         if (var1 == "EstimateNo")
                             content = content.Replace(oldString, "<strong>" + EstimateNo + "</strong>");
-                        if (var1 == "approx(amount)")
-                            content = content.Replace(oldString, "<strong>" + Amount + "</strong>");
                         if (var1 == "AccountName")
                             content = content.Replace(oldString, "<strong>" + AccountName + "</strong>");
                         if (var1 == "AccountNo")

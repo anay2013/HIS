@@ -99,8 +99,7 @@ function readURL(input) {
 function LabReporting(logic) {
     $('#tblReport tbody').empty();
     $('#tblTestInfo tbody').empty();
-    var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";
-    debugger
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";   
     var objBO = {};
     objBO.LabCode = Active.HospId;
     objBO.IpOpType = $('#ddlIpOpType option:selected').text();
@@ -120,8 +119,7 @@ function LabReporting(logic) {
         data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
-        success: function (data) {
-            console.log(data);
+        success: function (data) {         
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     var tbody = '';

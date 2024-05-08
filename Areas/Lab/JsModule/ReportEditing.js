@@ -428,7 +428,7 @@ function ReportDetail() {
                                         tbody += "<td>" + val1.min_value + ' - ' + val1.max_value + ' ' + val1.result_unit + "</td>";
                                         tbody += "<td class='hide'>" + val1.method_name + "</td>";
                                         tbody += "<td class='hide'>" + val1.mac_name + "</td>";
-                                        tbody += "<td >" + val1.mac_reading + "</td>";
+                                        tbody += "<td >" + val1.mac_reading + "<button data-testcode=" + val.testcode + " onclick=DeltaReportByVisitNo(" + val.testcode + ") class='btn btn-warning btn-xs pull-right'><i class='fa fa-bar-chart'>&nbsp;</i></button></td>";
                                         tbody += "<td class='hide'>" + val1.test_comment + "</td>";
                                         tbody += "<td><button data-testcode=" + val.testcode + " onclick=uploadFile(" + val.AutoTestId + ") class='btn btn-primary btn-xs pull-right'><i class='fa fa-upload'>&nbsp;</i>Add</button></td>";
                                         tbody += "<td class='hide'>" + val1.nr_range + "</td>";
@@ -439,7 +439,8 @@ function ReportDetail() {
                             }
                             else {
                                 tbody += "<tr style='background:#ddd'>";
-                                tbody += "<td colspan='6'>" + val.TestName + "</td>";
+                                tbody += "<td colspan='5'>" + val.TestName + "</td>";
+                                tbody += "<td><button data-testcode=" + val.testcode + " onclick=DeltaReportByVisitNo(" + val.testcode + ") class='btn btn-warning btn-xs pull-right'><i class='fa fa-bar-chart'>&nbsp;</i></button></td>";
                                 tbody += "<td><button data-testcode=" + val.testcode + " onclick=uploadFile(" + val.AutoTestId + ") class='btn btn-primary btn-xs pull-right'><i class='fa fa-upload'>&nbsp;</i>Add</button></td>";
                                 tbody += "<td><input type='checkbox' checked/></td>";
                                 tbody += "</tr>";
@@ -715,7 +716,7 @@ function UnApproveTest() {
         var objBO = [];
         var url = config.baseUrl + "/api/sample/Lab_ResultEntry";
         $('#tblApproveTestInfo tbody tr').each(function () {
-            if ($(this).find('td:eq(0)').find('input:checkbox:checked')) {
+            if ($(this).find('td:eq(0)').find('input:checkbox').is(':checked')) {
                 objBO.push({
                     'VisitNo': _VisitNo,
                     'dispatchLab': Active.HospId,
@@ -741,7 +742,7 @@ function UnApproveTest() {
                     'Logic': 'Un-Approved'
                 });
             }
-        });
+        });       
         $.ajax({
             method: "POST",
             url: url,
@@ -1137,4 +1138,63 @@ function PopulateChart(response, elem) {
         }
     };
     var myLineChart = new Chart(ctxL, config);
+}
+//Delta 2
+function DeltaReportByVisitNo(Testcode) {
+    $('#tblDelta2 thead').empty();
+    $('#tblDelta2 tbody').empty();
+    var url = config.baseUrl + "/api/Lab/Lab_DeltaQueries";
+    var objBO = {};
+    objBO.IpOpType = '-';
+    objBO.IPDNo = _VisitNo;
+    objBO.UHID = '-';
+    objBO.TestCode = Testcode;
+    objBO.ObservationId = '-';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'DeltaReportByVisitNo';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {                 
+            if (Object.keys(data.ResultSet).length == 1)
+                return
+      
+            var thead = "";
+            var tbody = "";            
+            var lblPatientInfo = "";   
+            $.each(data.ResultSet.Table, function (key, val) {
+                lblPatientInfo += "<b>UHID : " + val.UHID + "</b>, ";
+                lblPatientInfo += "<b>Patient Name : " + val.patient_name + "</b>, ";
+                lblPatientInfo += "<b>Age Info : " + val.ageInfo + "</b>, ";
+                lblPatientInfo += "<b>Admit Date : " + val.AdmitDate + "</b>";
+            });
+            var col = Object.keys(data.ResultSet.Table1[0]);          
+            thead += "<tr>";
+            for (var i = 0; i <col.length; i++) { thead += "<th>" + col[i] + "</th>" };   
+            thead += "</tr>";
+            $.each(data.ResultSet.Table1, function (key, val) {
+                tbody += "<tr>";
+                for (var i = 0; i < col.length; i++) {                   
+                    tbody += "<td>" + val[col[i]] + "</td>";                  
+                }          
+                tbody += "</tr>";
+            });
+            $('#tblDelta2 thead').append(thead);
+            $('#tblDelta2 tbody').append(tbody);
+            $('#lblPatientInfo').html(lblPatientInfo);
+            $('#modalDelta2').modal('show');
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function DeltaReportPrint() {
+    var url = config.documentServerUrl + "/Lab/Print/DeltaReport?IPDNO=" + _IPDNo + "&Testcodevalue=" + Testcode + "&Testname=" + Testname;
+    window.open(url, '_blank');
+
 }

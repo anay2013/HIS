@@ -23,6 +23,7 @@ function LockPrvDate() {
     });
 }
 function GetDataDeltaReport() {
+    disableLoading()
     $('#tblDeltaReport tbody').empty();
     var url = config.baseUrl + "/api/Lab/Lab_DeltaQueries";
     var objBO = {};
@@ -52,12 +53,8 @@ function GetDataDeltaReport() {
                         tbody += "<td style='width:10%;text-align:center'><button style='border-radius: 50%;' class='btn btn-warning btn-xs'>" + val.tCount + "</button></td></td>";
                         tbody += "<td style='width:10%; height:20px; width:25px;'><button class='btn btn-success btn-xs' id='DeltaReportIdWise'><i class='fa fa-arrow-circle-right' style='font-size:12px'></i></button></td>";
                         tbody += "</tr>";
-
-
                     });
                     $('#tblDeltaReport tbody').append(tbody);
-
-
                 }
             }
         },

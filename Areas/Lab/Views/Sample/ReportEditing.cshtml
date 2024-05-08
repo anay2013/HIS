@@ -3,10 +3,20 @@
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 
-<script src="~/Areas/Lab/JsModule/ReportEditing.js?v1.0"></script>
+<script src="~/Areas/Lab/JsModule/ReportEditing.js?v1.3"></script>
 <script src="~/JsModule/mdb.min.js?his-version-1.0"></script>
 <style>
-
+    #tblDelta2 tbody td, #tblDelta2 thead th {
+        white-space: pre;
+    }
+    #lblPatientInfo {
+        text-transform: uppercase;
+        background: #ffe8ca;
+        padding: 8px;
+        border-radius: 3px;
+        display: block;
+        border: 1px solid #f3d7b2;
+    }
     #tblTestTrackingReport thead th {
         white-space: pre;
     }
@@ -457,6 +467,31 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalDelta2" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-top:5%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;width:100%">
+                <h5 class="text-white">-</h5>
+                @*<button data-dismiss="modal" class="btn btn-danger btn-close btn-xs pull-right" style="margin: -16px 0;height: 16px;line-height: 0;">x</button>*@
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label id="lblPatientInfo"></label>
+                        <div class="table table-responsive">
+                            <div style="max-height:420px;overflow:auto">
+                                <table id="tblDelta2" class="table table-bordered">
+                                    <thead></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

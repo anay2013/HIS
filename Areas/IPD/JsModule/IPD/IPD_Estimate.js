@@ -34,7 +34,7 @@ function InsertEstimateTemplateMaster() {
     objBO.TemplateName = $('#txtEstimateTemplateName').val();
     objBO.TemplateContent = templatecontent;
     objBO.var_list = varList.join(',');
-    objBO.TemplateId =0;
+    objBO.TemplateId = 0;
     objBO.login_id = Active.userId;
     objBO.result = '-';
     objBO.Logic = 'Insert';
