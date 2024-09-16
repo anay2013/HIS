@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "IPDPatientAnalysis";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/IPD/JsModule/IPD/IPDPatientAnalysis.js"></script>
+<style>
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .navigation div[class*=col-md-2] {
+        width: 10%;
+        padding: 2px;
+    }
+
+    .navigation div[class*=col-md-4] {
+        width: 38%;
+        padding: 2px;
+    }
+
+    .navigation input {
+        padding: 3px;
+    }
+
+    #tblReport thead th {
+        padding: 4px;
+    }
+
+    #tblReport tbody td {
+        padding: 5px;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5>IPD Patient Analysis</h5>
+                </div>
+            </div>
+            <div class="panel panel-primary" style="margin-top:-20px">
+                <div class="panel-body">
+                    <div class="row navigation" style="background-color:#f3dfe3;margin-left: 0px;margin-right: 0px;height:65px;">
+                        <div class="col-md-2" style="width: 12%;">
+                            <label>IPD Status</label>
+                            <select id="ddlIpdStatus" class="form-control">
+                                <option value="ALL">Discharged</option>
+                                <option value="ByAdmitDate">AdmitDate</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="width:12%;">
+                            <label>Floor Name</label>
+                            <select id="ddlFloor" class="form-control border-imp"></select>
+                        </div>
+                        <div class="col-md-3" style="width:22%;">
+                            <label>Panel Name </label>
+                            <div style="display:flex">
+                                <div style="width:282px;">
+                                    <select id="ddlPanel" class="form-control border-imp"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="width:22%;">
+                            <label>Doctor</label>
+                            <div style="display:flex">
+                                <div style="width:282px;">
+                                    <select id="ddlDoctor" class="form-control border-imp"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2" style="width:10%">
+                            <label>From Date</label>
+                            <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                        </div>
+                        <div class="col-md-2" style="width:21%">
+                            <label>To Date</label>
+                            <div style="display:flex">
+                                <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                                <button id="btnAll" style="width:50%;height:27px" onclick="AdmittedPatientAnalysis()" class="btn btn-success"><i class="fa fa fa-sign-in">&nbsp;Search</i></button>
+                                <button id="btnAll" style="width:50%;height:27px" onclick="ExcelPatientAnalysis()" class="btn btn-warning"><i class="fa fa fa-file-excel-o">&nbsp;Execl</i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #3498db;margin-top:5px;">
+                                <table id="tblReport" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+
+                                            <th>UHID</th>
+                                            <th>IPD No</th>
+                                            <th>Patient Name</th>
+                                            <th>Admit Date</th>
+                                            <th>Discharge Date</th>
+                                            <th>Room Name</th>
+                                            <th>Doctor Name</th>
+                                            <th>Panel Name</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

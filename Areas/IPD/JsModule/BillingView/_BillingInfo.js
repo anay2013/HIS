@@ -91,7 +91,15 @@ $(document).ready(function () {
             $(this).closest('tr.group').nextUntil('.group').find('td:eq(1)').find('input[type=checkbox]').prop('checked', false);
 
     });
+    FillCurrentDate('txtTnxDate')
+    LockPrvDate()
 });
+function LockPrvDate() {
+    $("#txtTnxDate").each(function () {
+        $(this).attr("min", _AdmitDateServer.split('T')[0]);
+        $(this).attr("max", sessionStorage.getItem('ServerTodayDate').split('T')[0]);
+    });
+}
 function GetDoctor() {
     var url = config.baseUrl + "/api/IPDNursingService/IPD_PatientQueries";
     var objBO = {};
@@ -414,7 +422,7 @@ function ItemsInfo(cateId) {
                         else {
                             if (val.tnxType == "PharmacyItems")
                                 tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "' data-ratelistname='" + val.RateListName + "' data-billingcategory='" + val.RoomBillingCategory + "'></i><span class='entryByName'></span><i class='fa fa-refresh text-primary replacePI pull-right' onclick=PharmacyItems(this) style='margin-right:5px'>&nbsp;</i></td>";
-                           
+
                             else
                                 tbody += "<td>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "' data-ratelistname='" + val.RateListName + "' data-billingcategory='" + val.RoomBillingCategory + "'></i><span class='entryByName'></span></td>";
                         }
@@ -432,7 +440,7 @@ function ItemsInfo(cateId) {
                         tbody += "<td class='text-right'>" + val.Tax + "</td>";
                         tbody += "<td>" + val.doctorName + "</td>";
                         tbody += "<td>";
-                        tbody += "<div style='display:flex'>";                      
+                        tbody += "<div style='display:flex'>";
                         if (val.Remark != null)
                             tbody += "<button data-remark='" + val.Remark + "' id='btnItemRemark' class='btn btn-success btn-xs'><i class='fa fa-comment'>&nbsp;</i></button>";
                         else
@@ -480,7 +488,7 @@ function PharmacyItems(elem) {
                         tbody += "<tr>";
                         tbody += "<td>" + val.ItemId + "</td>";
                         tbody += "<td>" + val.ItemName + "</td>";
-                        tbody += "<td><button style='height: 15px;line-height:0;' onclick=UpdatePharmacyItem('" + val.ItemId+"') class='btn btn-warning btn-xs'><i class='fa fa-sign-in'>&nbsp;</i>Update</button></td>";
+                        tbody += "<td><button style='height: 15px;line-height:0;' onclick=UpdatePharmacyItem('" + val.ItemId + "') class='btn btn-warning btn-xs'><i class='fa fa-sign-in'>&nbsp;</i>Update</button></td>";
                         tbody += "</tr>";
                     });
                     $('#tblPharmacyItems tbody').append(tbody);
@@ -532,7 +540,7 @@ function UpdatePharmacyItem(itemid) {
     objBooking.Logic = "UpdatePharmacyItem";
     var MasterObject = {};
     MasterObject.objBooking = objBooking;
-    MasterObject.objRateList = objRateList;  
+    MasterObject.objRateList = objRateList;
     $.ajax({
         method: "POST",
         url: url,
@@ -954,6 +962,69 @@ function CancelItem() {
             alert('Server Error...!');
         }
     });
+}
+function UpdateTnxDate() {
+    if (confirm('are you sure?')) {
+        if ($('#piInfo').text().split('|')[0] == '') {
+            alert('Tnx No Not Found')
+            return
+        }
+        var url = config.baseUrl + "/api/IPDBilling/IPD_BillingInsertModifyItems";
+        var objBooking = {};
+        var objRateList = [];
+        objRateList.push({
+            'AutoId': 0,
+            'TnxId': '-',
+            'RateListId': '-',
+            'CatId': '-',
+            'ItemId': '-',
+            'RateListName': '-',
+            'ItemSection': '-',
+            'IsPackage': '-',
+            'IsRateEditable': 'N',
+            'IsPatientPayable': 'N',
+            'IsDiscountable': 'N',
+            'qty': 0,
+            'mrp_rate': 0,
+            'panel_rate': 0,
+            'panel_discount': 0,
+            'adl_disc_perc': 0,
+            'adl_disc_amount': 0,
+            'net_amount': 0,
+            'IsUrgent': '-',
+            'Remark': '-',
+            'TaxRate': 0,
+            'TaxAmt': 0
+        });
+        objBooking.hosp_id = Active.HospId;
+        objBooking.IPDNo = $('#piInfo').text().split('|')[0];
+        objBooking.DoctorId = '-';
+        objBooking.ipAddress = $('#txtTnxDate').val();
+        objBooking.login_id = Active.userId;
+        objBooking.Logic = "UpdateTnxDate";
+        var MasterObject = {};
+        MasterObject.objBooking = objBooking;
+        MasterObject.objRateList = objRateList;
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(MasterObject),
+            contentType: "application/json;charset=utf-8",
+            dataType: "JSON",
+            traditional: true,
+            success: function (data) {
+                if (data.includes('Success')) {
+                    alert(data);
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
 }
 function SubmitRemark() {
     if ($('#txtItemRemark').val() == '') {

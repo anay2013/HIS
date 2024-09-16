@@ -41,7 +41,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
 
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
 
-            PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10,50), PdfPageOrientation.Portrait);
+            PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(40, 10, 10,50), PdfPageOrientation.Portrait);
             string HtmlBody = string.Empty;
             HtmlBody = GetBodyHTML();
 
@@ -111,7 +111,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             if (pdfPage != null)
             {
-                pdfPage.CreateHeaderCanvas(220);
+                pdfPage.CreateHeaderCanvas(255);
                 string StrhtmlHeader = GetHeaderHTML1();
                 PdfHtml headerHtml = new PdfHtml(0, 0, StrhtmlHeader, null);
                 pdfPage.Header.Layout(headerHtml);
@@ -131,21 +131,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
         {
             if(pdfPage != null)
             {
-                //string StrhtmlFooter = string.Empty;
-                //if (FooterType == "Blank")
-                //{
-                //    pdfPage.CreateFooterCanvas(120);
-                //    StrhtmlFooter = "";
-                //}
-                //else
-                //{
-                //    if (!IsLastPage)
-                //        pdfPage.CreateFooterCanvas(120);
-                //    else
-                //        pdfPage.CreateFooterCanvas(185);
-
-                //    StrhtmlFooter = GetFooterHTML();
-                //}
+                pdfPage.CreateFooterCanvas(100);
                 string StrhtmlFooter = "";
                 if (pdfPage.Footer != null)
                 {
@@ -168,7 +154,7 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
             {
                 foreach (DataRow dr in ds.Tables[1].Rows)
                 {
-                    b.Append("<div style='width:100%;margin-top:10px'>");
+                    b.Append("<div style='width:100%;margin-top:10px;font-family:Calibri'>");
                     b.Append("<label style='padding:2px;margin-top:20px'><b>" + dr["HeaderName"].ToString() + "</b><hr/ style='margin:0 0 3px 0;'></label>");
                     b.Append(dr["template_content"].ToString());
                     b.Append("</div>");
@@ -223,9 +209,31 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
                 DischargeHeader = dr["DischargeReportHeader"].ToString();
             }
 
-            b.Append("<div style='height:110px;'></div>");
-            b.Append("<h2 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + DischargeHeader + "</h2>");
-            b.Append("<table style='padding:10px 0;background:#fff;width:100%;font-size:22px;text-align:left;border:1px solid #000;margin-bottom:-15px;margin-top:0'>");
+            b.Append("<div style='height:133px;'>");
+            b.Append("<table style='padding:2px;background:#fff;width:100%;;font-size:18px;text-align:left;margin-top:45px;font-family:Calibri'>");
+            b.Append("<tr>");
+            b.Append("<td style='width:30%;text-align:left;'></td>");
+            b.Append("<td style='width:60%;text-align:left;font-size:32px'><b>" + ds.Tables[2].Rows[0]["Hospital_Name"].ToString() + "</b></td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:30%;text-align:left;'></td>");
+            b.Append("<td style='width:60%;text-align:left;font-size:22px'>" + ds.Tables[2].Rows[0]["Full_Address"].ToString() + "</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:30%;text-align:left;'></td>");
+            b.Append("<td style='width:60%;text-align:left;font-size:22px'>" + ds.Tables[2].Rows[0]["Info"].ToString() + "</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</div>");
+
+            b.Append("<table style='padding:10px 0;background:#fff;width:100%;font-size:22px;text-align:left;border:1px solid #000;margin-bottom:-15px;margin-top:0;font-family:Calibri'>");
+            b.Append("<tr>");
+            b.Append("<td colspan='7' style='width:100%;text-align:center'><h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>" + DischargeHeader + "</h3></td>");
+            b.Append("</tr>");
+
+
             b.Append("<tr>");
             b.Append("<td style='width:20%;padding:3px;'><b>UHID</b></td>");
             b.Append("<td style='width:1%;'><b>:</b></td>");
@@ -339,8 +347,26 @@ namespace MediSoftTech_HIS.Areas.IPD.Repository
                 Address = dr["Address"].ToString();
                 DischargeHeader = dr["DischargeReportHeader"].ToString();
             }
-            h.Append("<div style='height:320px;border-bottom:1px solid #000'></div>");
-            h.Append("<table style='width:2080px;padding:10px 0;background:#fff;font-size:42px;text-align:left;border:1px solid #000;margin:0 15px'>");
+            h.Append("<div style='height:280px;font-family:Calibri'>");
+            h.Append("<table style='padding:2px;background:#fff;width:100%;;font-size:18px;text-align:left;margin-top:70px;font-family:Calibri'>");
+            h.Append("<tr>");
+            h.Append("<td style='width:30%;text-align:left;'></td>");
+            h.Append("<td style='width:60%;text-align:left;font-size:52px'><b>" + ds.Tables[2].Rows[0]["Hospital_Name"].ToString() + "</b></td>");
+            h.Append("</tr>");
+            
+            h.Append("<tr>");
+            h.Append("<td style='width:30%;text-align:left;'></td>");
+            h.Append("<td style='width:60%;text-align:left;font-size:42px'>" + ds.Tables[2].Rows[0]["Full_Address"].ToString() + "</td>");
+            h.Append("</tr>");
+            
+            h.Append("<tr>");
+            h.Append("<td style='width:30%;text-align:left;'></td>");
+            h.Append("<td style='width:60%;text-align:left;font-size:42px'>" + ds.Tables[2].Rows[0]["Info"].ToString() + "</td>");
+            h.Append("</tr>");
+            h.Append("</table>");
+            h.Append("</div>");
+
+            h.Append("<table style='width:2080px;padding:10px 0;background:#fff;font-size:42px;text-align:left;border:1px solid #000;margin:0 15px;font-family:Calibri'>");
             h.Append("<tr>");
             h.Append("<td style='width:17%;padding:3px;'><b>UHID</b></td>");
             h.Append("<td style='width:1%;'><b>:</b></td>");

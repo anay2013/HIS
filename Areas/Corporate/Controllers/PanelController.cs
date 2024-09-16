@@ -61,5 +61,24 @@ namespace MediSoftTech_HIS.Areas.Corporate.Controllers
         {
             return View();
         }
+
+        public ActionResult FundMisMatch()
+        {
+            return View();
+        }
+        public ActionResult RevertPayment()
+        {
+            return View();
+        }
+
+        public ActionResult GenOpdInvoice()
+        {
+            return View();
+        }
+
+        public ActionResult OpdBillDetails()
+        {
+            return View();
+        }
     }
 }

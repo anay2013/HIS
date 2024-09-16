@@ -1,0 +1,303 @@
+﻿<script src="~/Areas/IPD/JsModule/IPD/_DischargeProcess.js?v=1.1"></script>
+<style>
+    .catName {
+        margin: 0;
+        background: #ddd;
+        padding: 5px;
+        border-radius: 4px;
+        margin-left: 25%;
+    }
+
+    #tblPatientInfo tbody td span {
+        color: #fff;
+        border-radius: 30px;
+        background: #40b52c;
+        padding: 0px;
+        width: 37px;
+        display: block;
+        text-align: center;
+        font-size: 11px;
+    }
+
+    #tblPatientInfo tbody button {
+        z-index: 100000
+    }
+
+    #tblPatientInfo thead input {
+        border: 1px solid #edf100;
+        border-radius: 2px;
+        height: 17px;
+        margin-bottom: 1px;
+    }
+
+    .common {
+        /*width: 50%;
+        position: absolute;
+        right: -11px;
+        bottom: 42.67%;*/
+        float: right;
+        /*margin-top: -14.3%;*/
+    }
+
+    #tblComponentsInfo tbody input[type=text] {
+        text-align: right;
+        height: 20px;
+        border-radius: 2px;
+        border: 1px solid #a19943;
+    }
+
+    .RequirementTime .col-md-3 {
+        padding: 0 0 0 7px;
+        width: 19.5%;
+    }
+
+    .section .form-group {
+        margin-bottom: 8px !important;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .bc {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-color: #06a08b;
+    }
+
+    .btnRC {
+        height: 30px;
+        margin: -1px;
+        border-radius: 0;
+    }
+
+    .section {
+        margin-top: 5px;
+        padding: 1px;
+        border: 1px solid #2478a9;
+        height: 150px;
+    }
+
+    .title {
+        background: #2478a9;
+        color: #fff;
+        padding: 2px 5px;
+        margin: 0;
+        width: 100%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: 25px;
+        background-color: #fff;
+        border: 1px solid #dbdbdb;
+        border-radius: 3px;
+    }
+
+    .totalDiv {
+        display: ruby;
+    }
+
+    .total {
+        background: #fff;
+        border: 1px solid #f39c12;
+        border-radius: 23px;
+        width: max-content;
+        padding: 5px 8px;
+        font-size: 12px;
+        margin: 6px 0 6px 11px;
+    }
+
+        .total span {
+            background: #f39c12;
+            color: #fff;
+            border: 1px solid #f39c12;
+            border-radius: 30px;
+            position: relative;
+            padding: 6px;
+            right: -8px;
+            top: 1px;
+        }
+
+    .statusBar {
+        border-bottom: 1px solid #ddd;
+        display: ruby;
+        padding: 7px 0;
+    }
+
+        .statusBar .status {
+            border: 1px dashed #fff;
+            margin: 14px 0;
+            width: 71px;
+            background: #d3d3d3;
+            height: 10px;
+            border-radius: 25px;
+        }
+
+            .statusBar .status span {
+                top: -5px;
+                right: -60px;
+                position: relative;
+                background: #d3d3d3;
+                color: #fff;
+                border-radius: 84px;
+                padding: 10px 7px;
+                font-size: 11px;
+                text-transform: uppercase;
+            }
+
+    .statusDone {
+        background: #0e900c !important;
+    }
+
+        .statusDone span {
+            background: #0e900c !important;
+        }
+
+    #tblRemark tbody td {
+        border: none;
+    }
+
+        #tblRemark tbody td:not(td:first-child) {
+            width: 20%;
+        }
+
+    #tblRemark tbody tr.group b {
+        margin-left: 12px;
+    }
+
+        #tblRemark tbody tr.group b tat {
+            padding: 1px 5px;
+            color: #fff;
+            . background: #e35f5f;
+            border-radius: 41px;
+        }
+
+    .totalDone {
+        border-color: green !important;
+    }
+
+        .totalDone span {
+            border: 1px solid #008000 !important;
+            background: green !important;
+        }
+
+    .Out {
+        background: #0e900c !important;
+    }
+
+        .Out span {
+            background: #0e900c !important;
+        }
+
+    .In {
+        background: #f39c12 !important;
+    }
+
+        .In span {
+            background: #f39c12 !important;
+        }
+
+    .title select {
+        float: right;
+        width: 13%;
+        height: 19px;
+        line-height: 0;
+        padding: 0 2px;
+    }
+
+    .Partial {
+        padding: 0;
+        margin-top: 7px;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="totalDiv">
+            <div class="total">Total Discharge <span>40</span></div>
+            <div class="total">RMO <span>20</span></div>
+            <div class="total">Consultant <span>10</span></div>
+            <div class="total">Medicine <span>05</span></div>
+            <div class="total">Nursing <span>14</span></div>
+            <div class="total">IPD Manager <span>24</span></div>
+            <div class="total">Pharmacy <span>24</span></div>
+            <div class="total">Billing <span>24</span></div>
+            <div class="total">TPA <span>21</span></div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="section" style="height:80vh;">
+            <label class="title" style="display: block;">
+                Patient-Details
+                <select class="form-control" id="ddlFilter" onchange="Filter()"></select>
+                <span class="pull-right">Filter By : &nbsp;</span>
+            </label>
+            <div class="row" style="background-color:#dadbdbf0;padding: 4px 1px 4px;margin-left: 0px;margin-right: 0px;margin-top:2px">
+                <div class="col-md-6">
+                    <label> Panel By</label>
+                    <select class="form-control" id="ddlPanel" onchange="Filter()"></select>
+
+                </div>
+                <div class="col-md-6">
+                    <label> Floor By </label>
+                    <select class="form-control" id="ddlFloor" onchange="floorfilter()()"></select>
+                </div>
+            </div>
+            <div style="height:480px;overflow:auto;margin-top:2px">
+                <table class="table table-bordered" id="tblPatientInfo">
+                    <thead>
+                        <tr>
+                            <th style="white-space:pre"><input type="text" id="txtSeach" onchange="searchTable('txtSeach','tblPatientInfo')" placeholder="Search.." class="form-control" /></th>
+                            <th style="white-space:pre">Patient Name</th>
+                            <th style="white-space:pre">Doctor Name</th>
+                            <th style="white-space:pre">Disch. Date</th>
+                            <th style="white-space:pre">Status</th>
+                            <th style="width:1%">CMD</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section" style="height:355px;">
+                    <label class="title">Discharge Status Remark <span style="color:#fff;font-size:11px;float:right;display:block" id="patientInfo"></span></label>
+                    <div class="row" style="margin:3px 0 2px 0">
+                        <div class="col-md-12">
+                            <div class="statusBar">
+                                <div class="status" data-val="RMO"><span>RMO</span></div>
+                                <div class="status" data-val="Consultant"><span>Con</span></div>
+                                <div class="status" data-val="Medicine"><span>Med</span></div>
+                                <div class="status" data-val="Nursing"><span>Nur</span></div>
+                                <div class="status" data-val="IPD Manager"><span>IPD</span></div>
+                                <div class="status" data-val="Pharmacy"><span>Pha</span></div>
+                                <div class="status" data-val="Billing"><span>Bil</span></div>
+                                <div class="status" data-val="TPA"><span>TPA</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div style="height:275px;overflow:auto;margin-top: 5px;">
+                                <table class="table table-bordered" id="tblRemark">
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-12 Partial">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

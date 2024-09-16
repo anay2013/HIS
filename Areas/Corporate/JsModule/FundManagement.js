@@ -270,6 +270,7 @@ function InsertFundManagement() {
     objBO.Prm2 = '-';
     objBO.login_id = Active.userId;
     objBO.Logic = $('#ddlEntryType option:selected').val();
+    $('#btnSubmit').addClass('button-loading');
     $.ajax({
         method: "POST",
         url: url,
@@ -281,13 +282,16 @@ function InsertFundManagement() {
                 alert(data);
                 Clear()
                 GetFundInfo();
+                $('#btnSubmit').removeClass('button-loading');
             }
             else {
                 alert(data);
+                $('#btnSubmit').removeClass('button-loading');
             };
         },
         error: function (response) {
             alert('Server Error...!');
+            $('#btnSubmit').removeClass('button-loading');
         }
     });
 }

@@ -1,5 +1,5 @@
-﻿$(document).ready(function () {
-
+﻿var tokenNo = "";
+$(document).ready(function () {
     CloseSidebar();
     GetDoctor();
     $('select').select2();
@@ -9,7 +9,7 @@
     $('#tblOPDRegister tbody').on('click', 'button.Reschedule', function () {
         selectRow($(this));
         var doctor = $(this).data('doctorid');
-        var date = $(this).closest('tr').find('td:eq(9)').text();
+        var date = $(this).closest('tr').find('td:eq(7)').text();
         var d = date.split('-');
         var newDate = d[2] + '-' + d[1] + '-' + d[0];
         var doctorName = $(this).closest('tr').find('td:eq(2)').text();
@@ -26,7 +26,6 @@
     });
 
     $('#txtTimeSlotsByDate').on('change', function () {
-
         var date = $(this).val();
         var dr = $('#txtDrTimeSlots').text().split('(');
         var doctor = dr[1].split(')');
@@ -37,7 +36,10 @@
 
     $('.TimeFrame').on('click', 'span.TimeSlot:not([disabled])', function () {
         var time = $(this).text().substring(0, 17);
+        var tokenText = $(this).find('.TimeSlot-Status').text();
+        tokenNo = tokenText.match(/\d+/)[0];
         $('#txtNewAppointmentTime').text(time);
+        $('#txttokenNo').text(tokenNo);
         $('span.TimeSlot:not([disabled])').removeClass('slot-selected');
         $(this).addClass('slot-selected');
     });
@@ -52,6 +54,7 @@
 function DoctorTimeSlots(date, doctor, doctorName, appTime) {
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
     var objBO = {};
+    objBO.to = '1999-01-01';
     objBO.from = date;
     objBO.DoctorId = doctor;
     objBO.Logic = 'DoctorTimeSlots';
@@ -65,24 +68,26 @@ function DoctorTimeSlots(date, doctor, doctorName, appTime) {
         success: function (data) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length) {
+                    $('.TimeSlot2').removeClass('blockUI');
                     $('#modalTimeAvailability .TimeFrame').empty();
                     var slots = "";
-                    //$('#txtDrTimeSlots').text(doctorName);
-                    //$('.TimeSlot-Title input[id=btnReschedule]').data('doctorid', doctor);
+                    $('#txtDrTimeSlots').text(doctorName + '(' + doctor + ')');
                     $('#txtAppointmentTime').text(appTime);
                     $('#txtNewAppointmentTime').text('00.00');
                     $.each(data.ResultSet.Table, function (key, val) {
+
                         if (val.slotStatus == 'Booked') {
-                            slots += "<span class='TimeSlot' disabled>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status'>" + val.slotStatus + "</span></span>";
+                            slots += "<span id='" + val.TokenNo + "' class='TimeSlot' disabled>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status'>" + val.slotStatus + " [" + val.TokenNo + "]" + "</span></span>";
                         }
                         else if (val.slotStatus == 'OnLeave') {
-                            slots += "<span class='TimeSlot' disabled>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status' style='background:#de2424 !important'>" + val.slotStatus + "</span></span>";
+                            slots += "<span id='" + val.TokenNo + "' class='TimeSlot' disabled>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status' style='background:#de2424 !important'>" + val.slotStatus + " [" + val.TokenNo + "]" + "</span></span>";
                         }
                         else if ((val.slotStatus == 'Available') && (val.allowBooking == 1)) {
-                            slots += "<span class='TimeSlot' style='background:#036f98'>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status'>" + val.slotStatus + "</span></span>";
+                            $('.TimeSlot2').addClass('blockUI');
+                            slots += "<span id='" + val.TokenNo + "' class='TimeSlot' style='background:#036f98 !important'>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status'>" + val.slotStatus + " [" + val.TokenNo + "]" + "</span></span>";
                         }
                         else {
-                            slots += "<span disabled class='TimeSlot'>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status'>Time Elapsed</span></span>";
+                            slots += "<span disabled class='TimeSlot'>" + val.Final_InShift + "-" + val.Final_outShift + "<br/><span class='TimeSlot-Status'>Time Elapsed " + val.slotStatus + " [" + val.TokenNo + "]" + " </span></span>";
                         }
                     });
                     $('#modalTimeAvailability .TimeFrame').append(slots);
@@ -107,6 +112,7 @@ function RescheduleBooking() {
         var date = $('#txtTimeSlotsByDate').val();
         var time = $('#txtNewAppointmentTime').text().split('-');
         objBO.app_no = appNo;
+        objBO.prm_1 = tokenNo;
         objBO.AppDate = date;
         objBO.AppInTime = time[0];
         objBO.AppOutTime = time[1];
@@ -120,12 +126,11 @@ function RescheduleBooking() {
             dataType: "JSON",
             async: false,
             success: function (data) {
-
                 if (data.includes('Success')) {
                     alert(data);
                     var d = date.split('-');
                     $('#tblOPDRegister tbody').find('tr.select-row').find('button.Reschedule ').addClass('disabled');
-                    $('#tblOPDRegister tbody').find('tr.select-row').find('td:eq(9)').text(d[2] + '-' + d[1] + '-' + d[0]);
+                    $('#tblOPDRegister tbody').find('tr.select-row').find('td:eq(7)').text(d[2] + '-' + d[1] + '-' + d[0]);
                     $('#tblOPDRegister tbody').find('tr.select-row').find('td:eq(8)').text(time[0].substring(0, 5) + '-' + time[1].substring(0, 5));
                     $('#modalTimeAvailability .TimeFrame').empty();
                     $('#modalTimeAvailability').modal('hide');
@@ -224,6 +229,7 @@ function SearchByKey(elem) {
         dataType: "JSON",
         async: false,
         success: function (data) {
+            console.log(data);
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     var tbody = "";
@@ -243,8 +249,10 @@ function SearchByKey(elem) {
                         tbody += "<td>" + val.AppDate + "</td>";
                         tbody += "<td>" + val.AppTime + "</td>";
                         tbody += "<td class='text-right'>" + val.NetAmount + "</td>";
+                        tbody += "<td class='text-right'>" + val.RegFee + "</td>";
                         tbody += "<td>" + val.TnxId + "</td>";
-                        tbody += "<td>" + val.trnstatus + "</td>";
+                        tbody += "<td hidden>" + val.trnstatus + "</td>";
+                        tbody += "<td>" + val.tnxDate + "</td>";
                         tbody += "<td class='flex'>";
                         if (val.IsReschedule == '1') {
                             tbody += "<button style='margin-right:10px;' data-doctorid=" + val.DoctorId + " class='Reschedule btn-success btn-flat disabled'>Reschedule</button>";
@@ -263,6 +271,8 @@ function SearchByKey(elem) {
 
                         tbody += "<button id='btnPrint' class='btn-info btn-flat " + val.IsTnxId + "' onclick=Receipt('" + val.TnxId + "')>Print</button>";
                         tbody += "</td>";
+                        tbody += "<td>" + val.AppEntryBy + "</td>";
+                        tbody += "<td>" + val.CancelBy + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblOPDRegister tbody').append(tbody);
@@ -333,8 +343,10 @@ function SearchByDate(elem) {
                         tbody += "<td>" + val.AppDate + "</td>";
                         tbody += "<td>" + val.AppTime + "</td>";
                         tbody += "<td class='text-right'>" + val.NetAmount + "</td>";
+                        tbody += "<td class='text-right'>" + val.RegFee + "</td>";
                         tbody += "<td>" + val.TnxId + "</td>";
-                        tbody += "<td>" + val.trnstatus + "</td>";
+                        tbody += "<td hidden>" + val.trnstatus + "</td>";
+                        tbody += "<td>" + val.tnxDate + "</td>";
                         tbody += "<td class='flex'>";
                         if (val.IsReschedule == '1') {
                             tbody += "<button style='margin-right:10px;' data-doctorid=" + val.DoctorId + " class='Reschedule btn-success btn-flat disabled'>Reschedule</button>";
@@ -352,6 +364,7 @@ function SearchByDate(elem) {
                         tbody += "<button id='btnPrint' class='btn-info btn-flat " + val.IsTnxId + "' onclick=Receipt('" + val.TnxId + "')>Print</button>";
                         tbody += "</td>";
                         tbody += "<td>" + val.AppEntryBy + "</td>";
+                        tbody += "<td>" + val.CancelBy + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblOPDRegister tbody').append(tbody);
@@ -374,7 +387,7 @@ function SearchByDate(elem) {
                 if (Object.keys(data.responseJSON.ResultSet.Table).length > 0) {
                     $.each(data.responseJSON.ResultSet.Table, function (key, val) {
                         if (val.IsReschedule == '1')
-                            $('#tblOPDRegister tbody').find('tr:eq(' + key + ')').find('td:eq(0),td:eq(1),td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7),td:eq(8),td:eq(9),td:eq(10),td:eq(11)').addClass('row-green');
+                            $('#tblOPDRegister tbody').find('tr:eq(' + key + ')').find('td:eq(0),td:eq(1),td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7),td:eq(8),td:eq(9),td:eq(10),td:eq(11),td:eq(12)').addClass('row-green');
                     });
                 }
             }
@@ -401,6 +414,8 @@ function ValidateReschedule() {
         return false;
     }
     return true;
+
+
 }
 function DoctorWiseAppointmentCount(elem) {
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";

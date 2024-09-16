@@ -16,5 +16,10 @@ namespace MediSoftTech_HIS.Areas.Referral.Controllers
         {
             return View();
         }
+
+        public ActionResult ReferralDayBook()
+        {
+            return View();
+        }
     }
 }

@@ -233,7 +233,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             StringBuilder f = new StringBuilder();
             f.Append("<table style='width:100%;text-align:right;font-size:22px;font-family:calibri;text-align:center;'>");
             f.Append("<tr>");
-            f.Append("<td style='width:40%;text-align:left'>"+System.DateTime.Now.ToString("dd-mm-yyyy hh:mm tt")+"</td>");
+            f.Append("<td style='width:40%;text-align:left'>"+System.DateTime.Now.ToString("dd-MM-yyyy hh:mm tt")+"</td>");
             f.Append("<td style='width:30%;text-align:left'>Tech..........................</td>");
             f.Append("<td style='width:30%;text-align:left'>Sign..........................</td>");
             f.Append("</tr>");

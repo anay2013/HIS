@@ -1,0 +1,265 @@
+﻿<style>
+    [id*=Step] {
+        display: none;
+    }
+    .info {
+        margin-top: 35px;
+        margin-left: -10px;
+        margin-right: -10px;
+        padding: 2px;
+        border: 1px solid #ddd;
+    }
+
+        .info label.titile {
+            padding: 6px;
+            text-align: center;
+            background: #1a5dd7;
+            color: white;
+            margin-bottom: 0px;
+        }
+
+        .info label {
+            padding: 2px;
+            font-size: 13px;
+            margin: 0
+        }
+
+        .info p {
+            padding: 2px;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 0
+        }
+
+    .profilePhoto {
+        height: 120px;
+        border: 1px solid #ddd;
+        width: 120px;
+    }
+
+    .QRCode {
+        height: 120px;
+        border: 1px solid #ddd;
+        width: 120px;
+    }
+
+    .createAbha {
+        border-radius: 3px;
+        padding: 6px 0;
+        display: flex;
+        background: #ffffff;
+    }
+    #AbhaSuggesionList {
+        overflow: auto;
+        height: 410px;
+        margin-bottom: 0;
+    }
+    #AbhaSuggesionList li {
+        cursor: pointer;
+        color: #0085d3;
+        padding: 2px;
+        font-size: 13px;
+    }
+  
+    #AbhaSuggesionList li:hover {
+       color:green;
+    }
+    .btnProfile {
+        height: 23px;
+        line-height: 1;
+        color: white;
+        background: #17a2b8;
+        border: none;
+        float: right;
+    }
+    #responseMsg {
+        top: 65px;
+        position: absolute;
+        width: max-content;
+        padding: 3px 15px;
+        font-size: 13px;
+        background: #f3f3f3;
+        color: #3f9b3f;
+        margin: 15px;
+        border-radius: 2px;
+        display: none;
+        font-size: 12px;
+        text-align: center;
+    }
+    .visible {
+        display: block !important;
+    }
+    .ProfileLoading {
+        width: 100%;
+        border: 0px solid;
+        margin-bottom: 10px;
+        display: none;
+    }
+
+    .abhaAddress {
+        padding: 2px 0px;
+        background: #f1f1f1;
+        white-space: pre;
+        text-align: center;
+        font-size: 13px;
+        display: block;
+        border-radius: 3px;
+        color: #bd4141;
+    }
+   .suggest {
+        padding: 2px 0px;
+        background: #f1f1f1;
+        white-space: pre;
+        text-align: center;
+        font-size: 13px;
+        display: block;
+        border-radius: 3px;
+        color: #bd4141;
+    }
+    .note  {
+       list-style:none;
+       padding:0;
+       margin:0
+    }
+    .note li{
+        font-size:11px;
+    }
+    .noteTitle {
+        margin: 0;
+        font-size: 12px;
+        text-align: center;
+        display: block;
+        border-bottom: 1px solid #ddd;
+        color: #d50909;
+    }
+   .noteBox {
+        border-radius: 3px;
+        border: 1px solid #ededed;
+        margin-top: 35px;
+        background: #fff5f5;
+    }
+</style>
+<script src="~/Areas/ApplicationResource/JsModule/ABHA_Registration_Aadhar.js"></script>
+<div id="Step1" class="visible">
+    <label class="bg-custom tittle" id="lblTitle">Registration Process : <b class="text-danger">Authentication</b>  <p id="responseMsg"></p></label>
+    <div id="Authentication" class="tabcontent">
+        <div class="col-md-12 flex">
+            <label style="white-space:pre">Aadhar No : </label>
+            <input type="text" id="txtAadhar" value="" class="form-control" style="width:170px" placeholder="Enter Aadhar No." />&nbsp;
+            <button class="btn btn-warning btn-sm" onclick="GetOTP(this)"><i class="fa fa-sign-in">&nbsp;</i>Get OTP</button>&nbsp;
+            <input type="text" id="txtOTP" class="form-control" style="width:95px;margin-left: 50px;" placeholder="Enter OTP" />&nbsp;
+            <button class="btn btn-warning btn-sm" onclick="VerifyOTP(this)"><i class="fa fa-sign-in">&nbsp;</i>Verify</button>
+        </div>
+        <div class="col-md-5 noteBox">
+            <label class="noteTitle tittle-custom text-center">Note</label>
+            <ul class="note">
+                <li>1. Enter Aadhar No.</li>
+                <li>2. Verify OTP By Aadhar Linked Mobile No.</li>
+                <li>3. Enter Mobile No for Create ABHA Address.</li>
+                <li>4. Verify OTP By Mobile No.</li>
+                <li>5. Create Abha Address.</li>
+            </ul>
+        </div>
+    </div>
+    <div id="CheckExistance" class="tabcontent">
+        <div class="col-md-12 flex">
+            <label style="white-space:pre">Mobile No : </label>
+            <input type="text" id="txtMobileNo" value="" class="form-control" style="width:170px" placeholder="Enter Mobile No." />&nbsp;
+            <button class="btn btn-warning btn-sm" onclick="CheckExistance(this)"><i class="fa fa-check-circle">&nbsp;</i>Check</button>&nbsp;
+            <input type="text" id="txtCheckOTP" disabled class="form-control" style="width:95px;margin-left: 50px;" placeholder="Enter OTP" />&nbsp;
+            <button class="btn btn-warning btn-sm" onclick="CreateIfNotExist_VerifyOTP(this)"><i class="fa fa-sign-in">&nbsp;</i>Verify</button>
+        </div>
+    </div>
+    <div id="CreateAbha" class="tabcontent">
+    <div class="row">
+        <div class="col-md-8">          
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="flex">
+                        <label style="white-space:pre">ABHA Address : </label>
+                        <input type="text" id="txtHealthIdNumber" value="" class="form-control" style="width:170px" placeholder="Enter ABHA Address" />&nbsp;
+                        <button class="btn btn-warning btn-sm" style="height: 32px;" onclick="createAbhaAadhaarDetail(this)"><i class="fa fa-check-circle">&nbsp;</i>Create</button>&nbsp;
+                    </div>
+                </div>            
+                <div class="col-md-12">
+                    <div class="row info">
+                        <label class="col-md-12 titile">Ayushman Bharat Health Account (ABHA)</label>
+                        <div class="button-loading ProfileLoading"></div>
+                        <div class="col-md-3" style="margin-top: 5px;">
+                            <img src="#" id="prof_photo" class="profilePhoto" />
+                        </div>
+                        <div class="col-md-5" style="margin-top: 5px;">
+                            <label>Name / नाम </label>
+                            <p id="prof_name">-</p>
+                            <label>ABHA Number / आभा - नम्बर  </label>
+                            <p id="prof_abhanumber">-</p>
+                            <label>ABHA Address / आभा - संख्या  </label>
+                            <p id="prof_abhaaddress">-</p>
+                        </div>
+                        <div class="col-md-3" style="margin-top: 5px;">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuIy6HNc3zXzJ9-y-rNEfnaSdhcgeXytmnQg&s" id="prof_qr" class="QRCode" />
+                        </div>
+                        <div class="col-md-12" style="margin-top:10px">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Gender / लिंग  </label>
+                                    <p id="prof_gender">-</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Date of birth / जन्मतिथि   </label>
+                                    <p id="prof_dob">-</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Mobile / मोबाइल   </label>
+                                    <p id="prof_mobile">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" style="border-left:1px solid #ddd;height:450px">
+            <label class="suggest">ABHA Address Suggestion </label>
+             <ul id="AbhaSuggesionList">                 
+             </ul>
+        </div>
+    </div>
+    </div>   
+</div>
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function NextStep(stepName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(stepName).style.display = "block";
+        var _stepName = (stepName == 'CreateAbha') ? 'Create ABHA' : (stepName == 'CheckExistance') ? 'Check Existance':stepName;
+            $('#lblTitle b').text(_stepName);
+        $('#responseMsg').empty().hide();
+    }
+</script>

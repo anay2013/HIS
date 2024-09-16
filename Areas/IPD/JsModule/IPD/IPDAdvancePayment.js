@@ -269,6 +269,7 @@ function PatientAdvance() {
         var MasterObject = {};
         MasterObject.objBooking = objBooking;
         MasterObject.objPayment = objPayment;
+        $('#btnGenerateBill').addClass('button-loading');
         $.ajax({
             method: "POST",
             url: url,
@@ -287,13 +288,16 @@ function PatientAdvance() {
                     $('.left-section #txtUHID').val('NEW');
                     $('.left-section #txtDOB').val('');
                     ReceiptInfo();
+                    $('#btnGenerateBill').removeClass('button-loading');
                 }
                 else {
                     alert(data);
+                    $('#btnGenerateBill').removeClass('button-loading');
                 }
             },
             error: function (response) {
                 alert('Server Error...!');
+                $('#btnGenerateBill').removeClass('button-loading');
             }
         });
     }

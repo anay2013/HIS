@@ -1,0 +1,712 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "RTFeed_Schedule";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Dietician/JsModule/RTFeed_Schedule.js"></script>
+<script src="~/Areas/Dietician/JsModule/DietSchedule.js?v3.1"></script>
+<style>
+    .NewLabel {
+        background: #d6e9ce;
+        display: flex;
+        height: 28px;
+        padding-right: 5px;
+        margin: 0;
+        align-items: inherit;
+        align-content: center;
+    }
+
+    .totalCount {
+        height: 14px;
+        width: 30px;
+        font-size: 11px;
+        background: #0076d0;
+        color: #fff;
+        border-radius: 40px;
+        text-align: center;
+        padding: 0px;
+        position: absolute;
+        left: 5px;
+        margin-top: -12px;
+    }
+
+    .bgLightGreen {
+        background: #fffee6 !important;
+    }
+
+        .bgLightGreen table td, .bgLightGreen table th {
+            background: #fffee6 !important;
+        }
+
+    .NewPatientBlock {
+        background: #d3a34b;
+        padding: 1px 8px;
+        margin-left: 5px;
+        color: #fff;
+        border-radius: 20px;
+    }
+
+    .dietScheduled {
+        background: #539906;
+        padding: 1px 10px;
+        margin-left: 5px;
+        color: #fff;
+        border-radius: 20px;
+    }
+
+    #tblDietItemDetail tr[class=AddItem] .form-control {
+        height: 25px;
+        margin-bottom: 2px;
+    }
+
+    #tblDietItemDetail tr[class=AddItem] {
+        background: #85bd9e;
+    }
+
+        #tblDietItemDetail tr[class=AddItem] input:disabled {
+            background: #ddd;
+            opacity: 1;
+        }
+
+    #IPDPatientList .table > tbody > tr > td, #IPDPatientList .table > tbody > tr > th, #IPDPatientList .table > tfoot > tr > td, #IPDPatientList .table > tfoot > tr > th,
+    #IPDPatientList .table > thead > tr > td, #IPDPatientList .table > thead > tr > th {
+        font-size: 12px;
+        padding: 4px 2px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: none;
+    }
+
+    #patientInfo tbody td {
+        border: none;
+        font-size: 12px;
+        padding: 4px 0px;
+    }
+
+    .patientInfo {
+        border: 1px solid #efefef;
+        background: #fff8e5;
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+
+    .selected {
+        border-top: 5px groove #26b723 !important;
+    }
+
+    .basic {
+        background: #0cdf7e6b;
+    }
+
+        .basic:nth-child(1) {
+            border-top: 5px solid white;
+            border-bottom: 5px solid white;
+        }
+
+    .request {
+        background: #f7e0e0;
+    }
+
+        .request:nth-child(1) {
+            border-top: 5px solid white;
+        }
+
+    .ambulance {
+        background: #fff4dc;
+    }
+
+    #tblEmployee tbody td {
+        padding: 2px;
+        border: 1px solid #ddd !important;
+    }
+
+    #tblAmbulanceMaster tbody tr
+    .btnDoc {
+        margin: 2px 0px;
+        font-size: 18px;
+        height: 17px;
+        line-height: 17px;
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn-tbl {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .btn-flat {
+        padding: 2px;
+        border: none;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 450px;
+        display: block;
+        margin: 0 0 5px 0;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .note {
+        list-style: disc;
+        color: red;
+        font-size: 11px;
+        font-weight: bold;
+        background: #f7f7f7;
+        border: 1px solid #d86c6c;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 30px;
+    }
+
+    .bc {
+        border: 1px solid #00a65a;
+        border-radius: 0;
+    }
+
+    .section-feedback {
+        border-top: 2px solid #f39c12;
+        background: #fff;
+        padding: 5px;
+        border-radius: 2px;
+        margin: -12px 0px;
+    }
+
+    .section {
+        border-top: 2px solid #0076d0;
+        background: #fff;
+        padding: 5px;
+        border-radius: 2px;
+        margin: 9px 0px;
+    }
+
+        .section table {
+            margin: 0;
+        }
+
+            .section table th {
+                font-weight: bold;
+            }
+
+            .section table th, .section table td {
+                font-size: 12px;
+            }
+
+    h3.modal-schedule {
+        margin: 0;
+        background: #2492b3;
+        color: #ffffff;
+        padding: 4px;
+        font-size: 16px;
+        border-bottom: 1px solid white;
+    }
+
+    #tblSchedule, #tblStatus {
+        margin: 0;
+        border: 1px solid #2492b3;
+        min-height: 130px;
+        max-height: 130px;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .bcc {
+        border: 1px solid #f39c12;
+        border-radius: 0;
+    }
+
+    .btnRate {
+        height: 28px;
+        width: 30%;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .patient-list {
+        border: 1px solid #e9e9e9;
+        margin: 4px 0;
+        background: #f3f3f3;
+        padding: 3px;
+    }
+
+    #tblInfo tr th, #tblInfo tr td {
+        padding: 1px;
+        color: #4b5056;
+        background-color: #d4ecfd;
+    }
+
+    .patient-list label {
+        font-size: 11px;
+    }
+
+    .ratecircle {
+        margin: 5px;
+        border: 2px solid #2f89e7;
+        color: #302f2f;
+        width: 30px;
+        height: 30px;
+        background: #eaffff;
+        border-radius: 40px;
+        line-height: 27px;
+        text-align: center;
+        font-size: 19px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .ratecircle-head {
+        border: 2px solid #e7c82f;
+        color: #ffffff;
+        width: 30px;
+        height: 30px;
+        background: #ff2d2d;
+        border-radius: 40px;
+        line-height: 27px;
+        text-align: center;
+        font-size: 19px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    #tblQuest thead th p {
+        font-size: 9px;
+        text-align: center;
+        margin: 0;
+    }
+
+    #tblQuest tbody th, #tblQuest tbody td {
+        vertical-align: inherit;
+    }
+
+    .Inactive {
+        /*opacity: 0.5;*/
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .overAllRate {
+        width: 40px;
+        background: #1569e7;
+        height: 40px;
+        border-radius: 30px;
+        font-size: 18px;
+        text-align: center;
+        padding: 4px;
+    }
+
+    #IPDPatientList {
+        background: #ddd;
+        min-height: 90%;
+        max-height: 100%;
+        overflow: auto;
+        padding: 0px 5px;
+    }
+
+    span1 {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .dischargeInfo {
+        background: #f3d2d2;
+        width: 100%;
+        padding: 0px 3px;
+    }
+
+    .pfeedbackList {
+        height: 90%
+    }
+
+
+    #totaFilterCount {
+        color: #539906;
+    }
+
+    #patientInfo tbody td {
+        border: none;
+        font-size: 12px;
+        padding: 4px 0px;
+    }
+
+    .patientInfo {
+        border: 1px solid #efefef;
+        background: #e5f2ff;
+        padding: 2px 10px;
+        margin: -2px 10px;
+        width: -webkit-fill-available;
+    }
+
+    .panel-heading button#btndetails {
+        float: right;
+        margin: -16px 2px;
+    }
+
+    .text-white1 {
+        color: #fff;
+        margin: -3px 0px;
+    }
+
+    .sectionid {
+        /* border-top: 2px solid #0076d0; */
+        background: #fff;
+        padding: 5px;
+        border-radius: 2px;
+        margin: 9px 0px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+
+
+            <div class="row">
+                <div class="col-md-5 pfeedbackList">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white text-center">IPD Patient Info</h4>
+
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-xs-3">
+                                <label>Date</label>
+                                <input type="date" id="txtInputDate" onchange="GetPatientDetails()" class="form-control" />
+                            </div>
+                            <div class="col-xs-3">
+                                <label>Filter</label>
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                    <input type="text" id="txtSearchPatient" class="form-control input_pass" value="" placeholder="Search...">
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <label>Floor</label>
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                    <select class="form-control" id="ddlRoom"></select>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <label>Room <span id="totaFilterCount"></span></label>
+                                <div class="fileinput fileinput-new input-group flex">
+                                    <select class="form-control" id="ddlRoomType"></select>
+                                    <label class="NewLabel"><input type="checkbox" name="New" value="New" />New</label>
+                                </div>
+                            </div>
+
+                            <hr />
+                            <div class="table-responsive" style="height:550px;overflow-y:auto; overflow-x:auto;border:1px solid #2492b3;">
+                                <div class="col-md-12" id="IPDPatientList">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7 pfeedbackList">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <h4 class="text-white text-center">RTFeed Schedule</h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-success" style="float:right" id="btnRTFeedLog" type="button" onclick="RTFeedDetailsLog()">
+                                        <i class="fa fa-save"></i>&nbsp;RTFeedLog
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12 patientInfo">
+                                    <table id="patientInfo" class="table" style="margin:0">
+                                        <tr>
+                                            <td><b>IPD No.</b></td>
+                                            <td><b>:</b></td>
+                                            <td id="txtIPDNo"></td>
+                                            <td>&nbsp;</td>
+                                            <td><b>Patient Name</b></td>
+                                            <td><b>:</b></td>
+                                            <td id="txtPatientName"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Age</b></td>
+                                            <td><b>:</b></td>
+                                            <td id="txtAge"></td>
+                                            <td>&nbsp;</td>
+                                            <td><b>Gender</b></td>
+                                            <td><b>:</b></td>
+                                            <td id="txtGender"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Doctor Name</b></td>
+                                            <td><b>:</b></td>
+                                            <td id="txtDoctorId" style="display:none"></td>
+                                            <td id="txtDoctorName"></td>
+                                            <td>&nbsp;</td>
+                                            <td><b>Diet Recommended</b></td>
+                                            <td><b>:</b></td>
+                                            <td><span class='dietScheduled' id="txtDietRecommended"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 22%;"><b>Medical Procedure</b></td>
+                                            <td><b>:</b></td>
+                                            <td style="width: 26%;" id="txtMedicalProcedure"></td>
+                                            <td>&nbsp;</td>
+                                            <td style="width: 22%;"><b>PreExis. Disease</b></td>
+                                            <td><b>:</b></td>
+                                            <td style="width: 26%;" id="txtPreExistingDisease"></td>
+                                            <td style="display:none" id="txtFloorName"></td>
+                                            <td style="display:none" id="txtRoomNo"></td>
+                                            <td style="display:none" id="txtBedNo"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row" style="padding: 5px;">
+                                <div class="col-xs-6">
+                                    <div class="flex">
+                                        <label style="width:71%">RT Feed start Date Time</label>
+                                        @*<label style="width:20%">Hours</label>*@
+                                        <input type="date" id="txtstartDate" class="form-control" style="width:70%;border-color: #f39c12;" />
+                                        <select class="form-control" id="ddlCounthour" style="width:30%;margin-left: -3px;border-color: #f39c12;">
+                                            <option>01</option>
+                                            <option>02</option>
+                                            <option>03</option>
+                                            <option>04</option>
+                                            <option>05</option>
+                                            <option>06</option>
+                                            <option>07</option>
+                                            <option>08</option>
+                                            <option>09</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                            <option>13</option>
+                                            <option>14</option>
+                                            <option>15</option>
+                                            <option>16</option>
+                                            <option>17</option>
+                                            <option>18</option>
+                                            <option>19</option>
+                                            <option>20</option>
+                                            <option>21</option>
+                                            <option>22</option>
+                                            <option>23</option>
+                                            <option>24</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="flex">
+                                        <label style="width:71%">RT Feed End Date Time</label>
+                                        <input type="date" id="txtEndDate" class="form-control" style="width:60%;border-color: #f39c12;" />
+                                        <select class="form-control" id="ddlCounthour1" style="width:30%;margin-left:-3px;margin-right:25px; border-color: #f39c12;">
+                                            <option>01</option>
+                                            <option>02</option>
+                                            <option>03</option>
+                                            <option>04</option>
+                                            <option>05</option>
+                                            <option>06</option>
+                                            <option>07</option>
+                                            <option>08</option>
+                                            <option>09</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                            <option>13</option>
+                                            <option>14</option>
+                                            <option>15</option>
+                                            <option>16</option>
+                                            <option>17</option>
+                                            <option>18</option>
+                                            <option>19</option>
+                                            <option>20</option>
+                                            <option>21</option>
+                                            <option>22</option>
+                                            <option>23</option>
+                                            <option>24</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row" style="padding: 5px;">
+                                <div class="col-xs-6">
+                                    <div class="flex">
+                                        <label style="width:65%">Diet Name</label>
+                                        <select id="ddldiet" class="form-control" style="width:320px"></select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6" style="width: 50%;">
+                                    <div class="flex">
+                                        <label style="width:39%"> Hour Duration </label>
+                                        <input type="text" id="txtHour" class="form-control" style="width:25%;" />
+                                        <button id="btnInsertSchedule" style="height:27px;border-radius: 0;width:29%;margin-left:5px" class="btn btn-warning" onclick="ScheduledList()"><i class="fa fa-sign-in">&nbsp;</i>Schedule</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+
+                            <div class="row" style="background:#2478a9; padding: 3px;width: 100%; margin-left:0;margin-bottom: 1px;color: white;">
+                                <div class="col-md-10">
+                                    <h5>Scheduled Info</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-success" style="float:right;margin-top: 5px;" id="btnsave" type="button" onclick="InsertSchedule()">
+                                        <i class="fa fa-save"></i>&nbsp;Submit
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:345px;overflow-y:auto; overflow-x:auto;border:1px solid #2492b3;">
+                                        <table id="tblScheduledInfo" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:20%">DateTime</th>
+                                                    <th style="width:30%">ItemName</th>
+                                                    <th style="width:48%">Remark</th>
+                                                    <th style="width:2%">Cmd</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade modalProcess" id="RTFeedDetailsLog" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:15%; width:210%; margin-left:-50%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="border:1px solid #337ab7eb;height:30px;">
+                    <h5 class="text-white1">IPD Patient RTFeed Details</h5>
+                    <button data-dismiss="modal" class="btn btn-danger btn-xs" id="btndetails">x</button>
+
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="sectionid" style="height:175px;">
+
+                            <div class="row" style="background-color:#fbced5;padding:10px 0px;margin-top: -45px;height: 40px;width: 100%;margin-left: 0px;">
+                                <div class="col-md-12">
+                                    <table>
+                                        <tr>
+                                            <td style="width:8%"><b>IPD No.</b></td>
+                                            <td style="width:2%"><b>:</b></td>
+                                            <td id="txtIPDNoInfo" style="width:15%"></td>
+                                            <td>&nbsp;</td>
+                                            <td style="width:8%"><b>Patient Name</b></td>
+                                            <td style="width:2%"><b>:</b></td>
+                                            <td id="txtPatientNameInfo" style="width:20%"></td>
+                                            <td>&nbsp;</td>
+                                            <td style="width:8%"><b>Start Date</b></td>
+                                            <td style="width:2%"><b>:</b></td>
+                                            <td id="txtStartdateInfo" style="width:15%"></td>
+                                            <td>&nbsp;</td>
+                                            <td style="width:8%"><b>End Date</b></td>
+                                            <td style="width:2%"><b>:</b></td>
+                                            <td id="txtEnddateInfo" style="width:10%"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:320px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7;margin-top: 5px;">
+                                        <table class="table table-bordered" id="tblIDNOWiseInfo">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 10%;">ServingDateTime</th>
+                                                    <th>DietName</th>
+                                                    <th>ItemName</th>
+                                                    <th>Remark</th>
+                                                    <th>Scheduledate</th>
+                                                    <th style="width:5%;text-align:center">IsFreezed</th>
+                                                    <th>FreezedBy</th>
+                                                    <th>FreezedDate</th>
+                                                    <th style="width:5%;text-align:center">IsLocked</th>
+                                                    <th>LockedBy</th>
+                                                    <th>LockedDate</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

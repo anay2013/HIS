@@ -1,0 +1,105 @@
+﻿<style>
+    .info {
+        margin-top: 11px;
+        width: 610px;
+        left: 0%;
+        position: absolute;
+    }
+
+    .box {
+        display: table-cell;
+        background: #fff;
+        padding: 5px;
+    }
+
+    .info label.titile {
+        padding: 6px;
+        text-align: center;
+        background: #1a5dd7;
+        color: white;
+        margin-bottom: 0px;
+    }
+
+    .info label {
+        padding: 2px;
+        font-size: 13px;
+        margin: 0
+    }
+
+    .info p {
+        padding: 2px;
+        font-size: 13px;
+        font-weight: bold;
+        margin: 0
+    }
+
+    .profilePhoto {
+        height: 120px;
+        border: 1px solid #ddd;
+        width: 120px;
+    }
+
+    .QRCode {
+        height: 120px;
+        border: 1px solid #ddd;
+        width: 120px;
+    }
+
+    .card_action {
+        font-size: 14px;
+    }
+
+        .card_action a {
+            color: #d76a09;
+            margin: 0 11px;
+        }
+</style>
+<script src="~/Areas/ApplicationResource/JsModule/jQuery.print.js"></script>
+<script src="~/Areas/ApplicationResource/JsModule/DASH_AbhaCard.js?v1.5"></script>
+<div class="col-md-12">
+    <div id="printable">
+        <img src="#" id="hidden_card" class="hide" />
+    </div>
+    <div class="row info" id="printable">
+        <div class="card_action">
+            <label class="card_name">Welcome, <span>-</span></label>
+            <a href="#" id="download_ABHA_Card" onclick="GetABHACard('download_ABHA_Card')"><i class="fa fa-download">&nbsp;</i>Download ABHA Card</a>
+            <a href="#" id="print_abha" onclick="GetABHACard('print_abha')"><i class="fa fa-print">&nbsp;</i>Print ABHA</a>
+            <a href="#" id="print_pvc"><i class="fa fa-credit-card">&nbsp;</i>Print PVC</a>
+        </div>
+        <label class="col-md-12 titile">Ayushman Bharat Health Account (ABHA) <br />आयुष्मान भारत स्वास्थ्य  खाता ( आभा )</label>
+        <div class="box">
+            <div class="button-loading ProfileLoading"></div>
+            <div class="col-md-3" style="margin-top: 5px;">
+                <img src="#" id="prof_photo" class="profilePhoto" />
+            </div>
+            <div class="col-md-5" style="margin-top: 5px;">
+                <label>Name / नाम </label>
+                <p id="prof_name">-</p>
+                <label>ABHA Number / आभा - नम्बर  </label>
+                <p id="prof_abhanumber">-</p>
+                <label>ABHA Address / आभा - संख्या  </label>
+                <p id="prof_abhaaddress">-</p>
+            </div>
+            <div class="col-md-3" style="margin-top: 5px;" id="prof_qr">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuIy6HNc3zXzJ9-y-rNEfnaSdhcgeXytmnQg&s" id="prof_qr" class="QRCode" />
+            </div>
+            <div class="col-md-12" style="margin-top:10px">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Gender / लिंग  </label>
+                        <p id="prof_gender">-</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Date of birth / जन्मतिथि   </label>
+                        <p id="prof_dob">-</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Mobile / मोबाइल   </label>
+                        <p id="prof_mobile">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

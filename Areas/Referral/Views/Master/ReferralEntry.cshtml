@@ -1,0 +1,120 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Referral Entry</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="~/JsModule/global.js"></script>
+    <script src="~/Content/js/select2.js"></script>
+    <script src="~/Areas/Referral/JsModule/ReferralEntry.js"></script>
+    <style>
+        #txtLocality {
+            position: relative;
+            top: -34px;
+            width: 93%;
+            border-radius: 0;
+        }
+
+        .locality {
+            margin: -40px 0;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .title {
+            display: block;
+            margin: -2px 2px 2px -13px;
+            padding: 7px;
+            background: #0094ff;
+            color: #fff;
+            position: fixed;
+            width: 95%;
+            text-align: center;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="margin:6px;border: 1px solid #0094ff;">
+        <h3 class="title">Pharma Client Master</h3>
+        <div class="row" style="margin-top:45px">
+
+            <div class="col-sm-4 form-group">
+                <label>Client Type</label>
+                <select id="ddlBusinessType" class="form-control">
+                    <option value="0">--Please Select--</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Doctor" selected>Doctor</option>
+                    <option value="Hospital">Hospital</option>
+                    <option value="Institute">Institute</option>
+                </select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Client / Doctor Name</label>
+                <input type="text" id="txtReferralName" class="form-control border-imp" />
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Degree</label>
+                <select id="ddlDegree" class="form-control border-imp"></select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Speciality</label>
+                <select id="ddlSpeciality" class="form-control"></select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Clinic / Institution Name</label>
+                <input type="text" id="txtClinicName" class="form-control" autocomplete="off" />
+            </div>
+            <div class="col-sm-6 form-group">
+                <label>Address</label>
+                <textarea type="text" id="txtAddress" class="form-control" rows="2" autocomplete="off"></textarea>
+            </div>
+            <div class="col-sm-6 form-group">
+                <label>Locality</label>
+                <div class="locality">
+                    <select id="ddlLocality" class="form-control"></select>
+                    <input type="text" id="txtLocality" class="form-control border-imp" placeholder="Locality" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Country</label>
+                <select id="ddlCountry" class="form-control border-imp" onchange="GetStateByCountry()"></select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>State</label>
+                <select id="ddlState" class="form-control border-imp" onchange="GetCityByState()"></select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>City</label>
+                <select id="ddlCity" class="form-control border-imp"></select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Phone</label>
+                <input type="text" id="txtPhone" class="form-control" autocomplete="off" />
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Mobile</label>
+                <input type="text" id="txtMobile" data-int data-count="10" class="form-control border-imp" autocomplete="off" />
+            </div>
+            <div class="col-sm-4 form-group">
+                <label>Email</label>
+                <input type="text" id="txtEmail" class="form-control" autocomplete="off" />
+            </div>
+            <div class="col-sm-12 form-group text-center">
+                <button type="button" id="btnSaveUpdate" class="btn btn-success" onclick="InsertUpdateReferralMaster()">Save</button>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

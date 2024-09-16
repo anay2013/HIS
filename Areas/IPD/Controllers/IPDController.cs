@@ -117,5 +117,13 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
         {
             return View();
         }
+        public ActionResult IPDPatientAnalysis()
+        {
+            return View();
+        }
+        public ActionResult UnDischargeProcess()
+        {
+            return View();
+        }
     }
 }

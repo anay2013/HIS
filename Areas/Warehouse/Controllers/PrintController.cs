@@ -255,7 +255,7 @@ namespace MediSoftTech_HIS.Areas.Warehouse.Controllers
 			pdfConverter.PageOrientation = "Portrait";
 			return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "Print-Dispatch-Invoice.pdf");
 		}
-		public FileResult PurchaseReport(string ProcName,DateTime from, DateTime to, string CartId, string Category, string ItemIds, string prm_1, string login_id, string Logic)
+        public FileResult PurchaseReport(string ProcName,DateTime from, DateTime to, string CartId, string Category, string ItemIds, string prm_1, string login_id, string Logic)
 		{
 			PdfGenerator pdfConverter = new PdfGenerator();
 			ReportBO obj = new ReportBO();

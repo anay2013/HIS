@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var ackIPDNo = "";
+var noteCount = 0;
+$(document).ready(function () {
     FillCurrentDate('txtInputDate');
     GetPatientDetails();
     $('#txtSearchPatient').on('keyup', function () {
@@ -24,7 +26,7 @@
         _SelectedRoomType = this.value;
         updateFilters();
         totalCount();
-    });      
+    });
 });
 function GetPatientDetails() {
     $('#IPDPatientList').empty();
@@ -43,7 +45,8 @@ function GetPatientDetails() {
         data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
-        success: function (data) {           
+        success: function (data) {
+            console.log(data)
             var count = 0;
             var totalCount = 0;
             var html = ""; var room = []; var roomType = [];
@@ -57,7 +60,7 @@ function GetPatientDetails() {
                     html += "<div style='background:#def3e8' class='section dischargeInfo' data-new='New'  data-ipd='" + val.IPDNo + "' data-name='" + val.PatientName + "' data-roomtype='" + val.RoomType + "' data-floor='" + val.FloorName + "'>";
                 else
                     html += "<div  class='section' data-ipd='" + val.IPDNo + "' data-name='" + val.PatientName + "' data-roomtype='" + val.RoomType + "' data-floor='" + val.FloorName + "'>";
-             
+
                 html += "<label style='display:none'>" + JSON.stringify(data.ResultSet.Table[count]) + "</label>";
                 html += "<table class='table'>";
                 if (val.IsDietscheduled == "N") {
@@ -101,8 +104,15 @@ function GetPatientDetails() {
                 html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1> Discharge : <span1>" + val.DischargeDateTime + "</span1><span2 style='display:none'>" + val.DoctorId + "</span2><span3 style='display:none'>" + val.FloorName + "</span3>";
                 html += "<span class='text-right' style='margin: -4px 0;float:right'>";
                 html += "<button data-ipd=" + val.IPDNo + " class='btn btn-success btn-xs pull-right' onclick=GetPatientInfo(this)><i class='fa fa-eye'>&nbsp;</i>Schedule</button>";
+                if (eval(val.NoteCount) > 0) {
+                    html += "<button data-ipd=" + val.IPDNo + " data-count=" + val.NoteCount + " class='btn btn-danger btn-xs pull-right'' onclick=PatientRemarkInfo(this)><i class='fa fa-comment'>&nbsp;</i>Ack</button>";
+                }
+                else {
+                    html += "<button data-ipd=" + val.IPDNo + " data-count=" + val.NoteCount + "  class='btn btn-default btn-xs pull-right'' onclick=PatientRemarkInfo(this)><i class='fa fa-comment'>&nbsp;</i>Info</button>";
+                }
                 html += "</span>";
                 html += "</td>";
+                html += "<td class='hide'>" + val.Remark + "</td>";
                 html += "</tr>";
                 html += "</tr>";
                 html += "<tr>";
@@ -138,7 +148,96 @@ function GetPatientDetails() {
                 var data = '<option>' + unique1[i] + '</option>'
                 $('#ddlRoomType').append(data);
             }
-            $('#totaFilterCount').text('Total : ' + totalCount);  
+            $('#totaFilterCount').text('Total : ' + totalCount);
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function PatientRemarkInfo(elem) {
+    ackIPDNo = $(elem).data('ipd');
+    noteCount = $(elem).data('count');
+    if (noteCount > 0)
+        $('#btnAckModal').prop('disabled', false);
+    else
+        $('#btnAckModal').prop('disabled', true);
+    $('#tblRemarkInfo tbody').empty();
+    var url = config.baseUrl + "/api/Dietician/diet_DiticianQueries";
+    var objBO = {};
+    objBO.IPDNo = $(elem).data('ipd');
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Prm2 = '-';
+    objBO.Prm1 = '-';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'PatientRemarkInfo';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var tbody = "";
+            var count = 0;
+            var temp = "";
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        count++;
+                        tbody += "<tr>";
+                        tbody += "<td>" + count + "</td>";
+                        tbody += "<td>" + val.Remark + "</td>";
+                        tbody += "<td>" + val.RemBy + "</td>";
+                        tbody += "<td>" + val.RemDate + "</td>";
+                        tbody += "<td>" + val.AckBy + "</td>";
+                        tbody += "<td>" + val.AckDate + "</td>";
+                        tbody += "<td>" + val.TAT + "</td>";
+                        tbody += "</tr>";
+                    });
+                }
+            }
+            $('#tblRemarkInfo tbody').append(tbody);
+            $('#modalAck').modal('show');
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+
+function AckRemark() {
+    var url = config.baseUrl + "/api/Dietician/diet_InsertDietSchedule";
+    var objBO = [];
+    objBO.push({
+        'IPDNo': ackIPDNo,
+        'FloorName': '-',
+        'RoomNo': '-',
+        'BedNo': '-',
+        'ServingDate': '1900/01/01',
+        'DietCategory': '-',
+        'DietId': '-',
+        'ItemId': '-',
+        'qty': '-',
+        'medicalProcedure': '-',
+        'Remark': $('#txtRemark').val(),
+        'login_id': Active.userId,
+        'Logic': 'AckRemarkByIPDNo'
+    });
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('Success')) {
+                alert(data)
+            }
+            else {
+                alert(data)
+            }
         },
         error: function (response) {
             alert('Server Error...!');

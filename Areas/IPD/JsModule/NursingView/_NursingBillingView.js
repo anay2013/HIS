@@ -170,23 +170,24 @@ function ItemsInfo(cateId) {
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     var tbody = '';
-                    var count = 0;
                     var temp = "";
                     $.each(data.ResultSet.Table, function (key, val) {
-                        count++;
                         if (temp != val.tnxDate) {
                             tbody += "<tr style='background:#ddd'>";
                             tbody += "<td colspan='11'><b>" + val.tnxDate + "</b></td>";
                             tbody += "</tr>";
                             temp = val.tnxDate;
                         }
-                        tbody += "<tr>";
-                        tbody += "<td style='display:none'>" + val.auto_id + "</td>";
-                        tbody += "<td>" + val.ItemName + "</td>";
-                        tbody += "<td style='padding: 0 3px;'><input type='number' min='0' readonly='' class='form-control txtAdlDis' value='" + val.Qty + "'/></td>";
-                        tbody += "<td>" + val.doctorName + "</td>";
-                        tbody += "<td>" + val.EntryBy + "</td>";
-                        tbody += "<td></td>";
+                        tbody += "<tr style='background-color:" + val.IsTestApproved + "'>";
+                        tbody += "<td style='width:15%;text-align:left'>" + val.TnxId + "</td>";
+                        if (val.tnxType == "PharmacyItems")
+                            tbody += "<td style='width:40%;text-align:left'>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "' data-ratelistname='" + val.RateListName + "' data-billingcategory='" + val.RoomBillingCategory + "'></i><span class='entryByName'></span><i class='fa fa-refresh text-primary replacePI pull-right' onclick=PharmacyItems(this) style='margin-right:5px'>&nbsp;</i></td>";
+                        else
+                            tbody += "<td style='width:40%;text-align:left'>" + val.ItemName + "<i class='fa fa-user-circle text-warning entryBy pull-right' data-entryby='" + val.EntryBy + "' data-ratelistname='" + val.RateListName + "' data-billingcategory='" + val.RoomBillingCategory + "'></i><span class='entryByName'></span></td>";
+                        tbody += "<td style='width:5%;text-align:center'>"+val.Qty+"</td>";
+                        tbody += "<td style='width:15%;text-align:left'>" + val.doctorName + "</td>";
+                        tbody += "<td style='width:15%;text-align:left'>" + val.EntryBy + "</td>";
+                        tbody += "<td style='width:10%'></td>";
                         tbody += "</tr>";
                     });
                     $('#tblItemsInfo tbody').append(tbody);

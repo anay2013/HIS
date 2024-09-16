@@ -12,8 +12,8 @@ $(document).ready(function () {
 
     FillCurrentDate('hiddenDOBId');
     $('#txtDOB').on('change', function () {
-        var todayDate = new Date($('#hiddenDOBId').val());
-        var dobDate = new Date($(this).val());
+        var todayDate=new Date($('#hiddenDOBId').val());
+        var dobDate  =new Date($(this).val());
         if (dobDate > todayDate) {
             alert('DOB should not be greater than current Date');
             $(this).val('')

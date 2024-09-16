@@ -1,0 +1,84 @@
+﻿
+<script src="~/Areas/IPD/JsModule/NursingView/_ReferPatient.js?v1.1"></script>
+
+<style>
+    /*.custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }*/
+    .example-box-wrapper {
+        margin: 10px 10px;
+    }
+
+    .selected {
+        background: DodgerBlue !important;
+        color: #fff;
+    }
+
+    .panel-body {
+        padding: 15px 15px 0px 20px;
+        position: relative;
+    }
+
+    .select2-container .select2-selection--single {
+        position: relative;
+    }
+
+    hr {
+        /*margin-top: 35px;*/
+        margin-bottom: -10px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .example-box-wrapper {
+        margin: 10px 10px;
+    }
+    
+</style>
+<div class="example-box-wrapper">
+    <div class="row">
+        <div class="col-md-2">
+            <label>Refer Type</label>
+            <select class="form-control" id="ddlReferType">
+                <option>Routine</option>
+                <option>Urgent</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Refer To</label>
+            <select class="form-control" id="ddlDoctor"></select>
+        </div>
+        <div class="col-md-5">
+            <label>Remark</label>
+            <input type="text" class="form-control" id="txtRemark" placeholder="Remark" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn-success" style="width:45%;border:none;height:25px;margin-top: 15%;" onclick="ReferPatient()"><i class="fa fa-sign-in">&nbsp;</i>Refer</button>
+        </div>
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive" style="margin:0;border: 1px solid #2478a9;">
+                <table id="tblReferInfo" class="table table-bordered" style="margin-bottom:20px">
+                    <thead style="background: #00a65a;color: #fff;">
+                        <tr>
+                            <th style="width:10%">RefId</th>
+                            <th>Patient Name</th>
+                            <th style="width:10%">Room Name</th>
+                            <th style="width:10%">Ref Type</th>
+                            <th style="width:10%">Ref To</th>
+                            <th style="width:10%">Ref Date</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

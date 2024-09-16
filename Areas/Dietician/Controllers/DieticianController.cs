@@ -44,5 +44,18 @@ namespace MediSoftTech_HIS.Areas.Dietician.Controllers
         {
             return View();
         }
+        public ActionResult RTFeed_Schedule()
+        {
+            return View();
+        }
+        
+        public ActionResult RTFeed_ScheduleList()
+        {
+            return View();
+        }
+        public ActionResult RTFeed_ScheduleLock()
+        {
+            return View();
+        }
     }
 }

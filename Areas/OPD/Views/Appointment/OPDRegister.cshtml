@@ -1,9 +1,8 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "OPDRegister";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/OPD/JsModule/OPDRegister.js?his-version-1.0"></script>
+<script src="~/Areas/OPD/JsModule/OPDRegister.js?his-version-1.2"></script>
 <style>
     .cancelEntry td {
         background: #ffadad;
@@ -156,6 +155,20 @@
         border-radius: 2px;
         cursor: pointer;
     }
+
+    .TimeSlot2 {
+        line-height: 15px !important;
+        margin: 0 57px !important;
+        padding: 2px 15px !important;
+        background: #036f98 !important;
+        position: absolute;
+        right: -42px;
+    }
+
+    .blockUI {
+        pointer-events: none;
+        opacity: 0.5;
+    }
 </style>
 <div id="page-content">
     <div class="container">
@@ -235,10 +248,13 @@
                                                         <th>App. Date</th>
                                                         <th>App. Time</th>
                                                         <th>Amount</th>
+                                                        <th>Reg.Fee</th>
                                                         <th>Transaction Id</th>
-                                                        <th>Trn Status</th>
+                                                        <th>Date</th>
+                                                        @*<th>Trn Status</th>*@
                                                         <th style="width:1%">Action</th>
                                                         <th>App.Taken By</th>
+                                                        <th>CancelBy</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -267,10 +283,13 @@
                     <div class="col-md-12">
                         <div class="TimeSlot-Title">
                             <span id="txtDrTimeSlots"></span>
+                            <label id="txttokenNo" hidden></label>
                             <input type="date" style="width: 140px;margin:0 20px;" id="txtTimeSlotsByDate" class="form-control" />
                             <span class="timeChoose">Old Time : <span id="txtAppointmentTime"></span></span>
                             <span class="timeChoose" style="background: #1a8407;">New Time : <span id="txtNewAppointmentTime">00:00</span></span>
+
                             <input type="button" style="width: 80px;margin:0 10px;" id="btnReschedule" value="Reschedule" class="btn-success btn-flat" />
+                            @*<span id="1111" class="TimeSlot TimeSlot2" style="background:#036f98 !important">00:00:00-00:00:00<br><span class="TimeSlot-Status">Available</span></span>*@
                         </div>
                         <div class="TimeFrame">
                         </div>

@@ -22,5 +22,10 @@ namespace MediSoftTech_HIS.Areas.OT.Controllers
         {
             return View();
         }
+        public ActionResult SurgeryReport()
+        {
+            return View();
+        }
+
     }
 }

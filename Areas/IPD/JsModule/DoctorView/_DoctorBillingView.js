@@ -6,7 +6,7 @@ $(document).ready(function () {
     _section = 'Billing';
     $('#dash-dynamic-section').find('label.title').text('Patient Billing Info').show();
     $('#txtFrom').attr('value', _AdmitDate.split('T')[0]);
-    FillCurrentDate('txtTo')
+    FillCurrentDate('txtTo');
     $('select').select2();
     SummarisedBilling();
     GetComSeenCount();

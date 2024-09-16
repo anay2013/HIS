@@ -37,5 +37,10 @@ namespace MediSoftTech_HIS.Areas.EDP.Controllers
         {
             return View();
         }
+
+        public ActionResult PrescribedData()
+        {
+            return View();
+        }
     }
 }

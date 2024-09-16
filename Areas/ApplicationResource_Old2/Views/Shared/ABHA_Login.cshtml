@@ -1,0 +1,421 @@
+﻿
+
+<style>
+    ul.steps {
+        padding: 0;
+        list-style: none;
+        margin-bottom: 0;
+    }
+
+    .abhainfo {
+        width: 24%;
+        margin: 10px 4px;
+        border: 1px solid #ddd;
+        padding: 5px 17px;
+        line-height: 25px;
+    }
+
+        .abhainfo img {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            width: 160px;
+            height: 150px;
+        }
+
+    ul.steps li {
+        margin: -2px;
+        padding: 11px 12.7px;
+        display: inline-block;
+        border: 1px solid #e5e5e5;
+        color: #000;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+        ul.steps li label {
+            width: 24px;
+            height: 24px;
+            border-radius: 30px;
+            font-size: 12px;
+            padding: 7px 8px;
+            color: #ffffff;
+            background: #e3e3e3;
+            line-height: 1;
+            margin-bottom: 0;
+            margin-right: 13px;
+        }
+
+    li.activeTab {
+        border-bottom: 3px solid #0085d3 !important;
+    }
+
+        li.activeTab label {
+            background: #0085d3 !important;
+        }
+
+    .mendatory {
+        color: red;
+    }
+
+    #txtAadhar1, #txtAadhar2, #txtAadhar3 {
+        text-align: center;
+        width: 90px;
+        height: 40px;
+        font-size: 16px;
+        margin: 0 6px;
+        font-size: 17px;
+    }
+
+    .tabcontent {
+        padding: 10px;
+    }
+
+    .formLabel {
+        font-weight: bold;
+        white-space: pre;
+        margin-bottom: 0;
+        color: #3c3c3c;
+        font-size: 12px;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .toggleShow {
+        color: #096ea9;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .aadhartext input:focus {
+        outline-style: none;
+        box-shadow: none;
+    }
+
+    .noteIcon {
+        color: #6554c0;
+        font-size: 8px;
+        border: 1px solid;
+        border-radius: 44px;
+        padding: 1px 3px;
+        margin: 2px 4px;
+    }
+
+    .noteLabel {
+        margin-bottom: 0;
+        color: #6554c0;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+        .noteLabel a {
+            font-size: 12px;
+            color: #d95b11;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+    .termsAndCondition {
+        margin-top: 10px;
+        border: 1px solid #e9e9e9;
+        height: 200px;
+        overflow: auto;
+        border-radius: 5px;
+        color: #363535;
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    .validateAadhar {
+        border-color: red;
+        color: red;
+    }
+
+    .acceptTermsCond {
+        border-radius: 5px;
+        margin-top: -3px;
+        border: 1px solid #e9e9e9;
+        padding: 11px 10px 1px 10px;
+        font-size: 17px;
+        color: #096ea9;
+    }
+
+    .captcha {
+        box-shadow: 0px 1px 0px 0px #e9e9e9;
+        border: 1px solid #e7e7e7;
+        border-radius: 5px;
+        margin-top: 20px;
+        padding: 5px;
+    }
+    /*Captcha*/
+    .captchaText {
+        font-family: fantasy;
+        font-size: 25px;
+        font-weight: 700;
+        color: indianred;
+        margin-left: 6px;
+    }
+
+    #txtCaptchaText {
+        border-radius: 5px;
+        height: 40px;
+        border: 1px solid #ddd;
+        margin: 0 18px;
+        padding: 10px;
+    }
+
+    .captchaRefresh {
+        color: cornflowerblue;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .otptext input {
+        text-align: center;
+        width: 55px;
+        height: 40px;
+        font-size: 16px;
+        margin: 0 3px;
+        font-size: 17px;
+    }
+
+    .otptext_cd input {
+        text-align: center;
+        width: 55px;
+        height: 40px;
+        font-size: 16px;
+        margin: 0 3px;
+        font-size: 17px;
+    }
+
+    .otpResend {
+        color: #383838;
+        font-weight: bold;
+        font-size: 13px;
+        display: flex;
+        align-items: baseline;
+        padding: 8px 0px;
+    }
+
+    .btnResend {
+        cursor: pointer;
+        margin: 0 36px;
+        color: red;
+    }
+
+    .mobileInputAuth {
+        border: 1px solid #c9c8c8;
+        border-radius: 5px;
+        padding: 3px;
+        align-items: center;
+    }
+
+        .mobileInputAuth label {
+            background: #e9ecef;
+            padding: 7px 30px;
+            margin: -3px;
+            border-radius: 5px 0 0px 5px;
+        }
+
+        .mobileInputAuth input:focus {
+            outline-style: none;
+            box-shadow: none;
+        }
+
+    .abhaInputAuth {
+        border: 1px solid #c9c8c8;
+        border-radius: 5px;
+        padding: 3px;
+        display: flex;
+        align-items: center;
+    }
+
+        .abhaInputAuth label {
+            background: #e9ecef;
+            padding: 7px 30px;
+            margin: -3px;
+            border-radius: 5px 0 0px 5px;
+        }
+
+    .mobileCheck {
+        background: #bdbdbd;
+        color: #fff;
+        border-radius: 44px;
+        padding: 1px 4px;
+        font-size: 12px;
+        line-height: 19px;
+        margin: 6px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .btnNext {
+        background: #d66025;
+        color: white;
+        border-color: #d66025;
+    }
+
+    .msg1 {
+        font-size: 13px !important;
+        color: #24a724 !important;
+        background: #e9f9e9 !important;
+        padding: 6px 12px !important;
+        border-radius: 3px !important;
+    }
+
+    .btnSubmit {
+        border: 1px solid #ff6c00;
+        color: #ff6c00;
+        background: #fff;
+    }
+
+    .cdVerifyMobileOTP {
+        display: none;
+    }
+
+    .abdmat {
+        font-size: 15px !important;
+        background: #e9ecef;
+        padding: 7px 10px !important;
+        margin: -2px;
+        border-radius: 0px 3px 3px 0px !important;
+    }
+
+    #suggestList {
+        font-size: 13px;
+    }
+
+    .AE_Tittle {
+        color: #ef5e16;
+        text-align: center;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    #btnAE_ViewProfile {
+        border: none;
+        background: #ef5e16;
+    }
+
+    .AE_msg {
+        text-align: center;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .AE_icon {
+        color: #ef5e16;
+        font-size: 34px;
+    }
+</style>
+<script src="~/Areas/ApplicationResource/JsModule/ABHA_Login.js?v1.5"></script>
+<div id="Step1" class="visible">
+    @*<label class="bg-custom tittle" id="lblTitle">Registration Process : <b class="text-danger">Authentication</b>  <p id="responseMsg"></p></label>*@
+    <ul class="steps">
+        <li><a><label>1</label>Mobile number</a></li>
+        <li><a><label>2</label>ABHA number</a></li>
+    </ul>
+    <div id="Mobile" class="tabcontent">
+        <div class="col-md-7">
+            <label class="formLabel">Mobile number <span class="mendatory">*</span></label><br />
+            <label class="mobileInputAuth">
+                <label>+91</label>
+                <input type="text" id="txtValidate_MobileNo" maxlength="10" style="border:none;margin-left: 7px;" placeholder="Mobile number" />
+                <i class="fa fa-check mobileCheck">&nbsp;</i>
+            </label>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="captcha">
+                    <b>Captcha <span class="mendatory">*</span></b><br />
+                    <label class="captchaText">5+7=?</label>
+                    <input type="text" id="txtCaptchaText" placeholder="Enter answer" />
+                    <i class="fa fa-refresh captchaRefresh" onclick="captcha()"></i>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="btn-group pull-right" style="margin-top: 55px;">
+                    <button class="btn btn-default">Cancel</button>&nbsp;
+                    <button onclick="GetOTP(this)" class="btn btn-warning btnNext">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="AuthMobileOTP" class="tabcontent">
+        <div class="row">
+            <div class="col-md-12">
+                <label class="formLabel">Confirm OTP</label><br />
+                <label class="msg">-</label>
+                <div class="flex otptext">
+                    <input type="text" id="txtOTP1" onkeyup="CheckOTPDigit(this)" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" class="form-control" />&nbsp;
+                    <input type="text" id="txtOTP2" onkeyup="CheckOTPDigit(this)" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" class="form-control" />&nbsp;
+                    <input type="text" id="txtOTP3" onkeyup="CheckOTPDigit(this)" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" class="form-control" />&nbsp;
+                    <input type="text" id="txtOTP4" onkeyup="CheckOTPDigit(this)" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" class="form-control" />&nbsp;
+                    <input type="text" id="txtOTP5" onkeyup="CheckOTPDigit(this)" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" class="form-control" />&nbsp;
+                    <input type="text" id="txtOTP6" onkeyup="CheckOTPDigit(this)" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" class="form-control" />&nbsp;
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="otpResend flex">
+                    <label class="formLabel">Didn’t receive OTP?</label>
+                    <label class="btnResend" onclick="GetOTP(this)">Resend OTP</label>
+                    <label><span class="timer"></span> remaining</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button onclick="VerifyOTP(this)" class="btn btn-warning btnNext pull-right">Next</button>
+        </div>
+    </div>
+    <div id="abhaInfo" class="tabcontent">
+        <div class="row abhaList">
+            <div class="col-md-3 abhainfo">
+                <img src="" />
+                <b>Nitin Kumar</b><br />
+                <span class="text-success"><i class="fa fa-check-circle-o">&nbsp;</i>Verified</span><br />
+                ABHA Number<br />
+                <b>91-0000-0000-0000</b><br />
+                ABHA Address<br />
+                <b>nitin03.34@sbx</b>
+                <button class="btn btn-warning btn-block">View Profile</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalABHAExist" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:360px;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" style="padding:20px;">
+                <label class="AE_Tittle"> <i class="fa fa-check-circle-o AE_icon"></i><br />ABHA Account Exist</label>
+                <p class="AE_msg">
+                    We have found an ABHA xx-xxxx-xxxx-<span>xxxx</span> against the  Aadhaar number provided by you.
+                </p>
+                <button id="btnAE_ViewProfile" onclick="ExistingABHAUserLogin()" class="btn btn-danger btn-block">View Profile</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function NextStep(stepName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(stepName).style.display = "block";
+        var _stepName = (stepName == 'CreateAbha') ? 'Create ABHA' : (stepName == 'CheckExistance') ? 'Check Existance' : stepName;
+        $('#lblTitle b').text(_stepName);
+        $('#responseMsg').empty().hide();
+    }
+</script>

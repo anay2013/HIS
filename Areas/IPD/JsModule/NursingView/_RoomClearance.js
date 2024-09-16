@@ -29,8 +29,7 @@ function Loaddata() {
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
-                        debugger
-                        if (val.IsActive == 'Y') {
+                       if (val.IsActive == 'Y') {
                             $('#ddlRoomStatus').val(data.ResultSet.Table[0].roomStatus);
                             $(':button[type="submit"]').prop('disabled', false);
 
@@ -50,12 +49,10 @@ function Loaddata() {
     });
 }
 function UpdateRoomStatus() {
-    debugger
     if ($("#ddlRoomStatus").val() == "0") {
         alert("please Select Room Status");
         $("#ddlRoomStatus").focus();
         return
-
     }
     var isConfirmed = confirm('Are you sure you want to Update the data?');
     if (isConfirmed) {

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "DietSchedule";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
@@ -373,7 +372,7 @@
         color: #539906;
     }
 </style>
-<script src="~/Areas/Dietician/JsModule/DietSchedule.js?v3.1"></script>
+<script src="~/Areas/Dietician/JsModule/DietSchedule.js?v3.5"></script>
 <script src="~/Areas/Dietician/JsModule/_partialDietSchedule.js?v3.1"></script>
 <div id="page-content">
     <dsiv class="container">
@@ -415,6 +414,39 @@
             </div>
         </div>
     </dsiv>
+</div>
+<div class="modal fade" id="modalAck" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md" style="width:821px">
+        <div class="modal-content" style="margin-top:10%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;">
+                <h5 class="text-white">Diet Acknowledge Remark</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button onclick="AckRemark()" id="btnAckModal" class="btn btn-warning btn-xs">Acknowledge</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-xs pull-right">Close</button>
+                    </div>
+                    <div class="col-md-12">
+                        <table id="tblRemarkInfo" class="table table-bordered" style="margin-bottom:6px">
+                            <thead style="background: #00a65a;color: #fff;">
+                                <tr>
+                                    <th style="width:1%">#</th>
+                                    <th>Remark</th>
+                                    <th>Remark By</th>
+                                    <th>Remark Date</th>
+                                    <th>Ack By</th>
+                                    <th>Ack Date</th>
+                                    <th>TAT(Hours)</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="modal fade" id="modalSchedule" role="dialog" aria-labelledby="True">
     <div class="modal-dialog modal-md">

@@ -1,0 +1,161 @@
+﻿
+
+@{
+    ViewBag.Title = "GenOpdInvoice";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Corporate/JsModule/GenOpdInvoice.js"></script>
+<style>
+    .panel {
+        margin-bottom: 2px !important;
+        margin-left: 2px !important;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .panel-body {
+        padding: 2px 1px;
+        margin-top: 1px;
+    }
+
+    .selected {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 12px;
+        border-radius: 0;
+        height: 28px;
+        /*margin-top: 11%;*/
+    }
+
+    .btn-add {
+        border: none;
+        padding: 6px;
+        margin-left: 1px;
+    }
+
+    .btn {
+        border: none;
+        padding: 1px 9px;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    #billid {
+        /* border: 1px solid black; */
+        width: 100%;
+        color: white;
+        /* background-color: #86b3de; */
+        margin-top: 5px;
+        margin-bottom: 1px;
+        background: #2478a9;
+        padding: 2px;
+    }
+
+
+
+    #btnGen {
+        background-color: #ddd;
+        border: none;
+        color: black;
+        padding: 6px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 16px;
+    }
+
+        #btnGen:hover {
+            background-color: lightgreen;
+        }
+
+    .btnclass {
+        background-color: #ddd;
+        border: none;
+        color: black;
+        padding: 6px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        border-radius: 4px;
+    }
+    .btnclass2 {
+        background-color: orange;
+        border: none;
+        color: black;
+        padding: 6px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 4px 2px;
+        border-radius: 4px;
+    }
+</style>
+<div id="page-content">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="ml15">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h5>Generate OPD Invoice</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Select Month</label>
+                                <div style="display:flex">
+                                    <input type="month" id="txtMonth" class="form-control" style="border: 1px solid #86b3de;" />
+                                    <button style="height:28px;width:30%" class="btn bg-blue bn" onclick="GetList()"><i class="fa fa-search">&nbsp;</i>Get</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:400px;overflow-y:auto; overflow-x:auto;border:1px solid #3498db;margin-top: 5px;">
+                                    <table class="table table-bordered" id="tblReport">
+                                        <thead>
+                                            <tr>
+                                                <th>Party Name</th>
+                                                <th style='text-align:center;width:15%'>Amount</th>
+                                                <th style="width:15%;text-align:center">Cmd</th>
+                                                <th style="width:15%;text-align:center">Bill No</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+
+                                <div style="width:100%; background-color:lightgreen;height:24px;">
+                                    <div class="flex">
+                                        <div class="col-md-6">
+                                            <label style="float:right;margin-right:-35px;">Grand Total &nbsp;:</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label id="txttotal" style="font-size:16px;float:right;margin-right: 10px;"></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

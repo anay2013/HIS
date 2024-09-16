@@ -55,7 +55,7 @@ function GetDataCanelRefundApproval() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         if (temp != val.PanelName) {
                             tbody += "<tr style='background:#d3d0d0;'>";
-                            tbody += "<td colspan='19' style='font-size:13px; text-align:left;'><b>" + val.PanelName + "</b></td>";
+                            tbody += "<td colspan='20' style='font-size:13px; text-align:left;'><b>" + val.PanelName + "</b></td>";
                             tbody += "</tr>";
                             temp = val.PanelName
                         }
@@ -77,6 +77,7 @@ function GetDataCanelRefundApproval() {
                         tbody += "<td hidden>" + val.CancelConfirmRemark + "</td>";
                         tbody += "<td style='width:10%;'><a href='#' class='CancelRefundApprovalDetails' style='color: blue;'>" + val.ipop_no + "</a></td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.tnxDate + "</td>";
+                        tbody += "<td style='width:10%;text-align:left'>" + val.UHID + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.patient_name + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.tnxType + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.DoctorName + "</td>";
@@ -91,6 +92,7 @@ function GetDataCanelRefundApproval() {
                         tbody += "<td style='width:10%;text-align:left'>" + val.CancelDate + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.CancelReason + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.CancelAgainst + "</td>";
+                        tbody += "<td>" + val.EmpName + "</td>";
                         tbody += "<td style='width:10%'>" + val.IsCredit + "</td>";
                         tbody += "<td style='width:6%'><button class='btn btn-success btn-xs' id='CancelRefundApproval'>Approve</button></td>";
                         tbody += "</tr>";

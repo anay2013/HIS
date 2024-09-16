@@ -102,7 +102,7 @@ function ReportInfo() {
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
     objBO.Prm1 = $('#ddlType option:selected').val();
-    objBO.Prm2 = '-';
+    objBO.Prm2 = $('#ddlStatus option:selected').val();
     objBO.Logic = 'TestWiseReport';
     $.ajax({
         method: "POST",
@@ -166,20 +166,20 @@ function ReportList(data, Logic) {
     var visitNo = "";
     var testCategory = "";
     $.each(data.ResultSet.Table, function (key, val) {
+
         if (visitNo != val.VisitNo) {
-            tbody += "<tr style='background:#f7ecd3' class='pt'>";
+            count = 0;
+            tbody += "<tr style='background:#f7ecd3' class='pt r'>";
             tbody += "<td>" + val.UHID + "</td>";
             tbody += "<td>" + val.VisitNo + "</td>";
             tbody += "<td>" + val.VisitDate + "</td>";
             tbody += "<td>" + val.patient_name + "</td>";
             tbody += "<td>" + val.ageInfo + "</td>";
             tbody += "<td>" + val.DoctorName + "</td>";
-            tbody += "<td>" + val.ref_name + "</td>";
-            tbody += "<td><input type='checkbox' name='pgroup'/>&nbsp;Select All&nbsp;&nbsp;<button data-header='N' onclick=PrintInHouse(this) class='btn btn-success btnPrint btn-xs'>Print Report</button>&nbsp;<button data-header='Y' onclick=PrintInHouse(this) class='btn btn-warning btnPrint btn-xs'>Print With Header</button></td>";
+            tbody += "<td>" + val.ref_name + "</td>";   
+            tbody += "<td><input type='checkbox' name='pgroup'/>&nbsp;Select All&nbsp;&nbsp;<button data-header='N' onclick=PrintInHouse(this) class='btn btn-success btnPrint btn-xs'>Print Report</button>&nbsp;<button data-header='Y' onclick=PrintInHouse(this) class='btn btn-warning btnPrint btn-xs'>Print With Header</button>&nbsp;&nbsp;<button data-header='Y' onclick=PrintTestedLabReport(this) class='btn btn-primary btnPrint btn-xs'>Print Provisional</button></td>";
             // tbody += "<td><input type='checkbox' name='pgroup'/>&nbsp;Select All&nbsp;&nbsp;<button onclick=PrintInHouse(this) class='btn btn-success btnPrint btn-xs'>Print In-House</button>&nbsp;&nbsp;<button onclick=PrintOutSource(this) class='btn btn-warning btnPrint btn-xs'>Print Out Source</button></td>";
             tbody += "<td>";
-            if (val.IsLocalTest == 'Out-Source' && val.RepStatus != 'Approved')
-                tbody += "<button data-header='Y' style='WIDTH: 100%;' onclick=ManualApprove('" + val.VisitNo + "') class='btn btn-warning btnPrint1 btn-xs pull-right'>Refresh</button>";
             tbody += "</td>";
             tbody += "<td></td>";
             tbody += "</tr>";
@@ -208,10 +208,15 @@ function ReportList(data, Logic) {
         tbody += "</div>";
         tbody += "</td>";
         tbody += "<td>" + val.IsLocalTest + "</td>";
-        tbody += "<td>" + val.IPOPType + "</td>";
+        tbody += "<td>" + val.IPOPType;
+        if (val.IsLocalTest == 'Out-Source' && val.RepStatus != 'Approved')
+            tbody += "<button id='btnRefresh' data-header='Y' style='height: 17px;line-height: 0;' onclick=ManualApprove('" + val.VisitNo + "') class='btn btn-warning btnPrint1 btn-xs pull-right'><i class='fa fa-refresh'></i></button>";
+
+        tbody +=  "</td>";
         tbody += "</tr>";
+       
     });
-    $("#tblReport tbody").append(tbody);
+    $("#tblReport tbody").append(tbody);  
 }
 function ManualApprove(visitNo) {
     if (confirm('Are you sure?')) {
@@ -251,6 +256,19 @@ function PrintInHouse(elem) {
         TestIds.push($(this).data('ids'));
     });
     var Logic = 'ByFinalPrint';
+    var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Source=In-House&Logic=" + Logic + "&IsHeader=" + IsHeader;
+    window.open(url, '_blank');
+}
+function PrintTestedLabReport(elem) {
+    var visitNo = $(elem).closest('tr').find('td:eq(1)').text();
+    var SubCat = 'ALL';
+    var TestIds = [];
+    var IsHeader = $(elem).data('header');
+    TestIds = [];
+    $("#tblReport tbody tr:not(.g,.pt) input:checkbox:checked").each(function () {
+        TestIds.push($(this).data('ids'));
+    });
+    var Logic = 'ByTestedLabReport';
     var url = config.rootUrl + "/Lab/print/PrintLabReport?visitNo=" + visitNo + "&SubCat=" + SubCat + "&TestIds=" + TestIds.join() + "&Source=In-House&Logic=" + Logic + "&IsHeader=" + IsHeader;
     window.open(url, '_blank');
 }

@@ -1,31 +1,35 @@
 ﻿var temp = "";
+var TxidList = [];
 $(document).ready(function () {
     FillCurrentDate("txtfromdate");
     FillCurrentDate("txttodate");
     CloseSidebar();
 
-    $('#tblDiscountApproval tbody').on('click', '#DiscountApproval', function () {
-        TnxIdd = $(this).closest('tr').find('td:eq(0)').text();
-        Remark = $(this).closest('tr').find('td:eq(1)').text();
-        PopOpen(TnxIdd)
-        $("#TnxIdd").val(TnxIdd);
-        $("#txtRemark").text(Remark);
+    $("#chkallshift").change(function () {
+        if (this.checked) {
+            $(".shiftchk").each(function () {
+                this.checked = true;
+                $("#btnDiscountApproval").prop("disabled", false);
+            })
+        }
+        else {
+            $("#btnDiscountApproval").prop("disabled", true);
+            $(".shiftchk").each(function () {
+                this.checked = false;
 
-
+            })
+        }
+    });
+    $('#tblDiscountApproval tbody').change('.shiftchk', function () {
+        $("#btnDiscountApproval").prop("disabled", false);
     });
     $('#tblDiscountApproval tbody').on('click', '.DiscountApprovalDetails', function (event) {
         event.preventDefault();
-        debugger;
         var ipop_no = $(this).closest('tr').find('td:eq(2)').text().trim();
         DetailsPopOpen(ipop_no);
     });
 
 });
-
-function PopOpen(ipopno) {
-    $('#DiscountApprovalPop').modal('show');
-
-}
 function GetDataApprovalOrCancel() {
     if ($('#ddlType').val() === 'Select') {
         alert('Please Select Type');
@@ -57,7 +61,7 @@ function GetDataApprovalOrCancel() {
                     $.each(data.ResultSet.Table, function (key, val) {
                         if (temp != val.PanelName) {
                             tbody += "<tr style='background:#d3d0d0;'>";
-                            tbody += "<td colspan='18' style='font-size:13px; text-align:left;'><b>" + val.PanelName + "</b></td>";
+                            tbody += "<td colspan='20' style='font-size:13px; text-align:left;'><b>" + val.PanelName + "</b></td>";
                             tbody += "</tr>";
                             temp = val.PanelName
                         }
@@ -76,11 +80,12 @@ function GetDataApprovalOrCancel() {
                         else {
                             tbody += "<tr>";
                         }
-                        //tbody += "<tr>";
-                        tbody += "<td hidden>" + val.TnxId + "</td>";
+                        tbody += '<td style="width:5%;text-align:center;"><input id="chkshift"  value="' + val.TnxId + '" type="checkbox" class="shiftchk"></td>';
+                        // tbody += "<td hidden>" + val.TnxId + "</td>";
                         tbody += "<td hidden>" + val.DiscountConfirmRemark + "</td>";
                         tbody += "<td style='width:10%;'><a href='#' class='DiscountApprovalDetails' style='color: blue;'>" + val.ipop_no + "</a></td>";
-                        tbody += "<td style='width:20%;text-align:left'>" + val.tnxDate + "</td>";
+                        tbody += "<td style='width:10%;text-align:left'>" + val.tnxDate + "</td>";
+                        tbody += "<td style='width:100%;text-align:left'>" + val.UHID + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.patient_name + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.tnxType + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.DoctorName + "</td>";
@@ -94,11 +99,9 @@ function GetDataApprovalOrCancel() {
                         tbody += "<td style='width:10%;text-align:left'>" + val.discountBy + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.discountType + "</td>";
                         tbody += "<td style='width:10%;text-align:left'>" + val.discountReason + "</td>";
-                        tbody += "<td style='width:10%'>" + val.IsCredit + "</td>";
-                        tbody += "<td style='width:10%'><button class='btn btn-success btn-xs' id='DiscountApproval'>Approve</button></td>";
+                        tbody += "<td>" + val.EmpName + "</td>";
+                        tbody += "<td>" + val.IsCredit + "</td>";
                         tbody += "</tr>";
-
-
                     });
                     $('#tblDiscountApproval tbody').append(tbody);
 
@@ -111,8 +114,13 @@ function GetDataApprovalOrCancel() {
         }
     });
 }
+function PopOpen() {
+    $('#DiscountApprovalPop').modal('show');
+    $('#tblDiscountApproval tbody tr input:checkbox:checked').each(function () {
+        TxidList.push($(this).val());
+    });
+}
 function Approvedata(action) {
-    debugger;
     var confirmationMessage;
     var isConfirmed;
     if (action === 'Approve') {
@@ -124,13 +132,12 @@ function Approvedata(action) {
     }
     isConfirmed = confirm(confirmationMessage);
     if (isConfirmed) {
-        var txtid = $("#TnxIdd").val();
         var url = config.baseUrl + "/api/IPOPAudit/DiscountOrCancelApproval";
         var objBO = {};
         objBO.auto_id = '-';
         objBO.hosp_id = '-';
         objBO.ipop_no = '-';
-        objBO.TnxId = txtid;
+        objBO.TnxId = TxidList.join('|');;
         objBO.isDiscountConfirm = action;
         objBO.discountConfirmBy = Active.userId;
         objBO.discountConfirmDate = $("#txtfromdate").val();
@@ -150,15 +157,17 @@ function Approvedata(action) {
             contentType: "application/json;charset=utf-8",
             success: function (data) {
                 if (data.includes('Success')) {
-                    //alert(data);
+                    alert(data);
                     $('#txtRemark').val('');
-                    if (txtid != null && txtid !== "") {
-                        var $cell = $("#tblDiscountApproval tbody td:contains('" + txtid + "')");
-                        var $row = $cell.closest('tr');
-                        $row.remove();
-                    }
+                    if (TxidList.length > 0) {
+                        TxidList.forEach(function (txtid) {
+                            var $row = $("#tblDiscountApproval tbody tr").has("input:checkbox[value='" + txtid + "']");
+                            $row.remove();
 
-                } else {
+                        });
+                    }
+                }
+                else {
                     alert(data);
                 }
             },

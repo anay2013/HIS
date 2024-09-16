@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "AuditServiceCharge";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Accounts/JsModule/AuditServiceCharge.js"></script>
+<style>
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .navigation div[class*=col-md-2] {
+        width: 10%;
+        padding: 2px;
+    }
+
+    .navigation div[class*=col-md-4] {
+        width: 38%;
+        padding: 2px;
+    }
+
+    .navigation input {
+        padding: 3px;
+    }
+
+    #tblReport thead th {
+        padding: 4px;
+    }
+
+    #tblReport tbody td {
+        padding: 3px;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ml15">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h5>Audit Service Charge</h5>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary" style="margin-top:-20px">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>From Date</label>
+                                    <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>To Date</label>
+                                    <div style="display:flex">
+                                        <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                                        <button id="btnAll" style="width:50%;height:27px" onclick="GetReports()" class="btn btn-success">Search</button>
+                                        <button id="btnexcel" style="width:50%;height:27px" onclick="DownloadExcels()" class="btn btn-warning">Excel</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label></label>
+                                    <button id="btnPartyExcel" style="height:27px;float: right;margin-top: 4%;" onclick="PartyWiseExcel()" class="btn bg-blue bn">Party Wise Excel</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #3498db;margin-top:5px;">
+                                        <table id="tblReport" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>PrimaryGroup</th>
+                                                    <th>SecondryGroup</th>
+                                                    <th style='text-align:right;width: 10%;'>TaxableValue</th>
+                                                    <th style='text-align:right;width: 10%;'>TaxAmount</th>
+                                                    <th style='text-align:right;width: 10%;'>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+
+                                    <div style="width:100%; background-color:lightgreen;height:24px;">
+                                        <div class="flex">
+
+                                            <div class="col-md-8">
+                                                <label style="float:right;">Grand Total &nbsp;:</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label id="txtTaxableValue" style="font-size:16px;float:right;margin-right:10%;"></label>
+
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label id="txtTaxAmount" style="font-size:16px;float:right;"></label>
+                                            </div>
+                                            <div class="col-md-1">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

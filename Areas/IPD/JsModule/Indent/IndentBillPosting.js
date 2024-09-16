@@ -270,6 +270,10 @@ function PostBill() {
         alert('Unit Name Not Found.');
         return
     }
+    if ($('#txtSaleInvNo').text() == '') {
+        alert('Sale Inv No Not Found.');
+        return
+    }
     if ($('input[name=payMode]:eq(2)').is(':checked')) {
         var refNo = $('#txtRefNo').val();
         if (refNo == '') {
@@ -373,6 +377,8 @@ function PostBill() {
             _inv_no = prm;
             alert(data);
             IndentBills();
+            BillPaymentInfo = [];
+            $('#txtSaleInvNo').text('')
         },
         error: function (response) {
             alert('Server Error...!');

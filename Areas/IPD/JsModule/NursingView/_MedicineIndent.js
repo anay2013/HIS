@@ -3,6 +3,11 @@ $(document).ready(function () {
     $('#dash-dynamic-section').find('label.title').text('Medicine-Indent Section').show();
     GetDoctor();
     GetNurseDetails();
+    if (_IsDischarged == 'Y')
+        $('#dash-dynamic').addClass('blocked');
+    else
+        $('#dash-dynamic').removeClass('blocked');
+
     $('#txtSearchProduct').keydown(function (e) {
         var tbody = $('#tblnavigate').find('tbody');
         var selected = tbody.find('.selected');

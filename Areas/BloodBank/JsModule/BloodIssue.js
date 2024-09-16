@@ -1,6 +1,6 @@
-﻿var _IPOPNo, _IPOPType, _IndentNo, _PatientName, _IndentAutoId,_IndentItemId,_IndentQty;
+﻿var _IPOPNo, _IPOPType, _IndentNo, _PatientName, _IndentAutoId, _IndentItemId, _IndentQty;
 $(document).ready(function () {
-    
+
     FillCurrentDate('txtFrom')
     FillCurrentDate('txtTo')
     $('#tblDonorInfo tbody').on('click', 'button.get', function () {
@@ -26,12 +26,18 @@ $(document).ready(function () {
         _PatientName = PatientName;
         StockInfo($(this));
     });
-    $('#tblStockInfo').on('change','input:checkbox', function () {
+    $('#tblStockInfo').on('change', 'input:checkbox', function () {
         $('.StockInfo').find('label:last span').text($('#tblStockInfo tbody input:checkbox:checked').length);
+        $('#tblStockInfo tbody tr').each(function () {
+            if ($(this).find('input:checkbox').is(':checked'))
+                $(this).addClass('bg-success')
+            else
+                $(this).removeClass('bg-success')
+        });
     });
     DonorInfo();
 });
-function DonorInfo() {   
+function DonorInfo() {
     $('.StockInfo').find('label span').text(0);
     $('#tblStockInfo input:checkbox').prop('checked', false)
     $('#tblStockInfo tbody').empty();
@@ -74,7 +80,7 @@ function DonorInfo() {
                         tbody += "<td>" + val.IndentDate + "</td>";
                         tbody += "<td>" + val.IndentNo + "</td>";
                         tbody += "<td>" + val.IPOPNo + "</td>";
-                        tbody += "<td>" + val.PatientName + "</td>";              
+                        tbody += "<td>" + val.PatientName + "</td>";
                         tbody += "<td>" + val.ComponentName + "</td>";
                         tbody += "<td class='text-right'>" + val.IndentQty + "</td>";
                         tbody += "<td class='text-right'>" + val.IssueQuantity + "</td>";
@@ -86,7 +92,7 @@ function DonorInfo() {
                             tbody += "<td style='padding:0px 5px'><button onclick=RejectIndent(this) style='height: 17px;line-height:0;' class='btn btn-danger btn-xs'><i class='fa fa-close'></i></button></td>";
                         else
                             tbody += "<td style='padding:0px 5px'>-</td>";
-                        tbody += "<td class='text-right'>"+val.AmountCharged+"</td>";
+                        tbody += "<td class='text-right'>" + val.AmountCharged + "</td>";
                         tbody += "</tr>";
                         count++;
                     });
@@ -99,7 +105,7 @@ function DonorInfo() {
         }
     });
 }
-function StockInfo(elem) {  
+function StockInfo(elem) {
     $('#tblStockInfo tbody').empty();
     $('#tblIssuedBloodIndent tbody').empty();
     var url = config.baseUrl + "/api/BloodBank/BB_SelectQueries";
@@ -238,7 +244,7 @@ function Issue() {
             alert('Plese Choose Stock.')
             return
         }
-        var IQty = parseInt( $('.StockInfo').find('label:eq(1) span').text())
+        var IQty = parseInt($('.StockInfo').find('label:eq(1) span').text())
         var SQty = parseInt($('.StockInfo').find('label:last span').text())
         if (SQty > IQty) {
             alert('Select Qty Should not be greater than Balance Qty');
@@ -255,7 +261,7 @@ function Issue() {
         objBO.Prm1 = _IPOPNo + ' : ' + _PatientName;
         objBO.Prm2 = _IndentAutoId;
         objBO.login_id = Active.userId;
-        objBO.Logic = "Issue";    
+        objBO.Logic = "Issue";
         $.ajax({
             method: "POST",
             url: url,
@@ -319,7 +325,7 @@ function HoldUnHold(logic) {
                 if (data.includes('Success')) {
                     alert('Successfully ' + logic + '');
                     $('#tblDonorInfo tbody tr.select-row').find('button.get').click();
-                    stockId = [];                 
+                    stockId = [];
                     $('.StockInfo').find('label:last span').text(0);
                     $('#tblStockInfo tbody input:checkbox').prop('checked', false)
                 }

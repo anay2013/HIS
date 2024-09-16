@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "PayModeCorrection";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
@@ -70,7 +69,7 @@
                                 <div class="row">
                                     <div class="col-md-4" style="display:flex">
                                         <label style="white-space:pre">Receipt No : </label>
-                                        <input type="text" class="form-control"  id="txtReceiptNo" />
+                                        <input type="text" class="form-control" id="txtReceiptNo" />
                                     </div>
                                     <div class="col-md-4">
                                         <button class="btn btn-warning" onclick="GetPaymentInfo()"><i class="fa fa-sign-in">&nbsp;</i>Get</button>
@@ -128,7 +127,7 @@
                                         </div>
                                         <button class="btn btn-danger pull-left" style="margin: 5px;" onclick="CancelReceipt()"><i class="fa fa-close">&nbsp;</i>Cancel</button>
                                         <button id="btnSwapAmt" disabled data-logic="SwapAmount" onclick="Correction(this)" style="margin: 5px;" class="btn btn-warning"><i class="fa fa-refresh">&nbsp;</i>Swap Amount</button>
-                                        <label style="margin: 5px;background:#ffb6b6;padding:3px 5px;border-radius:3px">Note :Swap will work when 2 Pay Mode Entry Available.</label>                                        
+                                        <label style="margin: 5px;background:#ffb6b6;padding:3px 5px;border-radius:3px">Note :Swap will work when 2 Pay Mode Entry Available.</label>
                                     </div>
                                 </div>
                             </div>

@@ -71,20 +71,22 @@ function ReceiptInfoByIPDNo() {
 }
 function BillPrint_CategoryWiseOnlyBill() {
     var ExcludeDiscount = $('input[name=ExcludeDiscount]').is(':checked') ? 'Y' : 'N';
+    var ExcludeCategory = $('input[name=ExcludeCategory]').is(':checked') ? 'Y' : 'N';
     var strReceiptList = [];
     $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
         strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
     });
-    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=CategorywiseOnly&ExcludeAdlItemDiscount=" + ExcludeDiscount;
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=CategorywiseOnly&ExcludeAdlItemDiscount=" + ExcludeDiscount + "&ExcludeCategory=" + ExcludeCategory;
     window.open(url, '_blank');
 }
 function BillPrint_ItemWise() {
     var strReceiptList = [];
     var ExcludeDiscount = $('input[name=ExcludeDiscount]').is(':checked') ? 'Y' : 'N';
+    var ExcludeCategory = $('input[name=ExcludeCategory]').is(':checked') ? 'Y' : 'N';
     $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
         strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
     });
-    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=ItemWise&ExcludeAdlItemDiscount=" + ExcludeDiscount;
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=ItemWise&ExcludeAdlItemDiscount=" + ExcludeDiscount + "&ExcludeCategory=" + ExcludeCategory;
     window.open(url, '_blank');
 
     //var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(_BillNo) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=ItemWise";
@@ -92,20 +94,22 @@ function BillPrint_ItemWise() {
 }
 function BillPrint_DateWise() {
     var ExcludeDiscount = $('input[name=ExcludeDiscount]').is(':checked') ? 'Y' : 'N';
+    var ExcludeCategory = $('input[name=ExcludeCategory]').is(':checked') ? 'Y' : 'N';
     var strReceiptList = [];
     $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
         strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
     });
-    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=DateWise&ExcludeAdlItemDiscount=" + ExcludeDiscount;
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=DateWise&ExcludeAdlItemDiscount=" + ExcludeDiscount + "&ExcludeCategory=" + ExcludeCategory;
     window.open(url, '_blank');
 }
 function BillPrint_IncludingPackagedItem() {
     var ExcludeDiscount = $('input[name=ExcludeDiscount]').is(':checked') ? 'Y' : 'N';
+    var ExcludeCategory = $('input[name=ExcludeCategory]').is(':checked') ? 'Y' : 'N';
     var strReceiptList = [];
     $('#tblBillInfo tbody').find('input:checkbox:checked').each(function () {
         strReceiptList.push($(this).closest('tr').find('td:eq(1)').text());
     });
-    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=IncludingPackagedItem&ExcludeAdlItemDiscount=" + ExcludeDiscount;
+    var url = "../Print/IPDBillSummary?_ReceiptList=" + window.btoa(strReceiptList.join(',')) + "&_IPDNo=" + window.btoa(_IPDNo) + "&_BillPrintType=IncludingPackagedItem&ExcludeAdlItemDiscount=" + ExcludeDiscount + "&ExcludeCategory=" + ExcludeCategory;
     window.open(url, '_blank');
 }
 function Receipt_IPDDischargeReport() {

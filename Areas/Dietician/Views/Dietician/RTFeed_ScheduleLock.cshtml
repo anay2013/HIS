@@ -1,0 +1,175 @@
+﻿
+@{
+    ViewBag.Title = "RTFeed_ScheduleLock";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Dietician/JsModule/RTFeed_ScheduleLock.js"></script>
+<style>
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    .panel-body {
+        padding: 4px 5px;
+        position: relative;
+    }
+
+    #formList .formInfo {
+        margin-top: 2px;
+        width: 95%;
+        border: 1px solid #ddd;
+        padding: 2px;
+        margin-left: 11px;
+        background: #f5f2f2;
+    }
+
+    #formList label.formName {
+        width: 60%;
+        background: #ddd;
+        padding: 9px;
+        color: #842407;
+    }
+
+    #formList label.DetailsImg {
+        padding: 2px;
+        font-size: 11px;
+        margin-right: 5px;
+    }
+
+    #formList button {
+        position: absolute;
+        right: 5px;
+        top: 0px;
+    }
+
+    hr {
+        margin-top: 2px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 28px;
+    }
+
+    .text-white {
+        color: #fff;
+        margin: 1px 0px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    #tblDietdetails thead th {
+        padding: 4px;
+    }
+
+    #tblDietdetails tbody td {
+        padding: 4px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white">RTFeed Schedule List</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label>Select Date</label>
+                                    <div class="flex">
+                                        <input type="date" id="txtDate" class="form-control" />
+                                        <button class="btn btn-success bn" style="border:none;width: 25%;" onclick="GetAllRTFeedList()">
+
+                                            <i class="fa fa-search"></i>&nbsp;Get
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div> <hr /></div>
+                            <div class="panel-body" style="height:580px;overflow-y:scroll;padding: 5px 10px;border: 1px solid #cdc7b2;">
+                                <div class="row" id="formList">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding:3px;">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h4 class="text-white">RTFeed Schedule Lock</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="flex">
+                                        <button class="btn btn-success bn" style="border:none;" id="btnLock" onclick="UpdateLockData()">
+                                            <i class="fa fa-lock"></i>&nbsp;Lock
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="flex">
+                                        <button class="btn btn-warning bn" style="border:none;float:right;margin-left: 50%;" id="btnprint" onclick="PrintData()">
+                                            <i class="fa fa-print"></i>&nbsp;Print
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label id="txtrowdate" hidden></label>
+                                    <div class="table-responsive" style="height:635px;overflow-y:auto; overflow-x:auto;border:1px solid #2492b3;">
+                                        <table id="tblDietdetails" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:10%">IPDNO</th>
+                                                    <th style="width:20%">Patient Name</th>
+                                                    <th style="width:20%">Diet Name</th>
+                                                    <th style="width:20%">Item Name</th>
+                                                    <th style="width:20%">Remark</th>
+                                                    <th style="width:5%">Locked</th>
+                                                    <th style="width:5%">Freezed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -20,9 +20,9 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
         string _IsNABL = string.Empty;
         public string _PrintWithHeader = "N";
         List<ipPageCounter> pgCounterList = new List<ipPageCounter>();
-        public FileResult PrintLabReport(string visitNo, string SubCat,string TestIds,string Logic)
+        public FileResult PrintLabReport(string visitNo, string SubCat, string TestIds, string Logic)
         {
-            if(Logic =="ByReportEditing")
+            if (Logic == "ByReportEditing")
             {
                 LabReporting obj = new LabReporting();
                 obj.LabCode = "-";
@@ -33,7 +33,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 obj.BarccodeNo = "-";
                 obj.TestCategory = "-";
                 obj.AutoTestId = 0;
-                obj.TestCode = "-";
+                obj.TestCode = TestIds;
                 obj.from = Convert.ToDateTime("1900/01/01");
                 obj.to = Convert.ToDateTime("1900/01/01");
                 obj.Logic = "PrintLabReport";
@@ -55,7 +55,23 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 obj.Logic = "PrintLabReport";
                 dsResult = APIProxy.CallWebApiMethod("Lab/Lab_ReportPrintingQueries", obj);
             }
-            PdfDocument repDocument =new PdfDocument();
+            if (Logic == "ByTestedLabReport")
+            {
+                ReportPrintingInfo obj = new ReportPrintingInfo();
+                obj.LabCode = "-";
+                obj.PanelId = "-";
+                obj.DoctorId = "-";
+                obj.VisitNo = visitNo;
+                obj.TestCategory = "-";
+                obj.TestIds = TestIds;
+                obj.from = "1900/01/01";
+                obj.to = "1900/01/01";
+                obj.Prm1 = "-";
+                obj.Prm2 = "-";
+                obj.Logic = "PrintTestedLabReport";
+                dsResult = APIProxy.CallWebApiMethod("Lab/Lab_ReportPrintingQueries", obj);
+            }
+            PdfDocument repDocument = new PdfDocument();
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
             //Geting Distinct department list with NABL Flag to separate the report body for NABLE Logo at header
             var DeptList = dsResult.ResultSet.Tables[2].AsEnumerable().Select(y => new
@@ -64,17 +80,17 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 IsNABL = y.Field<string>("IsNABL"),
                 SeqNo = y.Field<Int64>("SeqNo"),
                 RowNo = y.Field<Int64>("RowNo"),
-            }).ToList().OrderBy(y =>y.SeqNo).GroupBy(x => new { x.SubCatName, x.IsNABL});
+            }).ToList().OrderBy(y => y.SeqNo).GroupBy(x => new { x.SubCatName, x.IsNABL });
             foreach (var dept in DeptList)
             {
                 _Deptname = dept.First().SubCatName;
-                _IsNABL= dept.First().IsNABL;
-                PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10, 30), PdfPageOrientation.Portrait);
+                _IsNABL = dept.First().IsNABL;
+                PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(40, 10, 10, 40), PdfPageOrientation.Portrait);
                 string HtmlBody = string.Empty;
-                HtmlBody = GetBodyHTML(_Deptname, dsResult.ResultSet,_IsNABL);
+                HtmlBody = GetBodyHTML(_Deptname, dsResult.ResultSet, _IsNABL);
                 Int64 LastRow = DeptList.Last().First().RowNo;
                 //  Manging below Line /**** End Of Report ***/ at the last line in whole report  
-                if(LastRow == dept.First().RowNo)
+                if (LastRow == dept.First().RowNo)
                 {
                     StringBuilder seo = new StringBuilder();
                     seo.Append("<br/><table style='width:100%;text-align:right;font-family:calibri;text-align:center;border: 1px solid black;'>");
@@ -125,12 +141,12 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         PdfPage lastpdfPage = repDocument.Pages[t.LastPageIndex - 1];
                         SetFooter(lastpdfPage, "FixAtLastPage", t.DeptName, false);
                     }
-                    catch (Exception) {}
-                  
+                    catch (Exception) { }
+
                 }
             }
             //Out Source Report merging
-            if (dsResult.ResultSet.Tables.Count>5)
+            if (dsResult.ResultSet.Tables.Count > 5)
             {
                 if (dsResult.ResultSet.Tables[5].Rows.Count > 0)
                 {
@@ -141,7 +157,11 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         {
                             System.Net.WebClient Client = new System.Net.WebClient();
                             string Url = string.Empty;
-                            Url = "http://192.168.0.21/Chandan/Design/Lab/labreportnew.aspx?IsPrev=0&testid=" + LisTestIds + "&phead=2";
+                            if (_PrintWithHeader == "Y")
+                                Url = "http://192.168.0.21/Chandan/Design/Lab/labreportnew.aspx?IsPrev=0&testid=" + LisTestIds + "&phead=1";
+                            else
+                                Url = "http://192.168.0.21/Chandan/Design/Lab/labreportnew.aspx?IsPrev=0&testid=" + LisTestIds + "&phead=2";
+
                             var bytes = Client.DownloadData(Url);
                             PdfDocument OutSourceDoc = PdfDocument.FromStream(new MemoryStream(bytes));
                             repDocument.AddDocument(OutSourceDoc);
@@ -151,7 +171,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 }
             }
             //Out Source Report merging
-            if(dsResult.ResultSet.Tables.Count > 6)
+            if (dsResult.ResultSet.Tables.Count > 6)
             {
                 if (dsResult.ResultSet.Tables[6].Rows.Count > 0)
                 {
@@ -190,7 +210,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             if (pdfPage != null)
             {
                 pdfPage.CreateHeaderCanvas(200);
-                string StrhtmlHeader = GetHeaderHTML(_Deptname, dsResult.ResultSet,_IsNABL);
+                string StrhtmlHeader = GetHeaderHTML(_Deptname, dsResult.ResultSet, _IsNABL);
                 PdfHtml headerHtml = new PdfHtml(0, 0, StrhtmlHeader, null);
                 pdfPage.Header.Layout(headerHtml);
             }
@@ -231,7 +251,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 }
             }
         }
-        private string GetBodyHTML(string DepartmentName, DataSet ds,string IsNABL)
+        private string GetBodyHTML(string DepartmentName, DataSet ds, string IsNABL)
         {
             string _result = string.Empty;
             string temp = "-";
@@ -246,7 +266,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 r_type = y.Field<string>("r_type"),
                 samp_type = y.Field<string>("samp_type"),
                 Interpretation = y.Field<string>("Interpretation"),
-                AddedReportPath= y.Field<string>("AddedReportPath"),
+                AddedReportPath = y.Field<string>("AddedReportPath"),
                 IsPageBreak = y.Field<string>("IsPageBreak"),
                 IsLocalTest = y.Field<Int64>("IsLocalTest")
             }).OrderBy(y => y.TestSeqNo).ToList();
@@ -259,7 +279,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     {
                         if (dr.r_type != "Text")
                         {
-                            b.Append("<table border='0' style='font-family:Arial;width:100%;font-size:14px;border-collapse:collapse;margin-top:-10px;'>");
+                            b.Append("<table border='0' style='font-family:Calibri;width:100%;font-size:14px;border-collapse:collapse;margin-top:-10px;font-family:Calibri'>");
                             b.Append("<tr>");
                             b.Append("<th style='width:35%;text-align:left;padding-left:4px;'>Test Name</th>");
                             b.Append("<th style='width:18%;text-align:left;padding-right:4px;'>Result</th>");
@@ -287,7 +307,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         test_comment = y.Field<string>("test_comment")
 
                     }).OrderBy(y => y.ObsSeqNo).ToList();
-                    if(ObsCount==1)
+                    if (ObsCount == 1)
                     {
                         foreach (var obj1 in ObsDetail)
                         {
@@ -331,7 +351,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                                     b.Append("<td colspan='5'>" + ImagePageList + "</td>");
                                     b.Append("</tr>");
                                 }
-                                catch (Exception ex) {  }
+                                catch (Exception ex) { }
                             }
                             if (!string.IsNullOrEmpty(dr.Interpretation))
                             {
@@ -360,7 +380,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         b.Append("<tr>");
                         b.Append("<td colspan='5' style='padding-left:10px;line-height:10px'></td>");
                         b.Append("</tr>");
-                        if(dr.r_type!= "Text")
+                        if (dr.r_type != "Text")
                         {
                             b.Append("<tr>");
                             b.Append("<td colspan='5' style='background:#ddd;text-align:left;padding-left:4px;'><b>" + dr.TestName + " </b>, <span style='font-size:11px'>" + dr.samp_type + "</span>" + "</td>");
@@ -382,7 +402,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             }
                             else
                             {
-                        
+
                                 b.Append("<tr style='vertical-align:top'>");
                                 b.Append("<td style='width:35%;text-align:left;padding-left:4px;'>" + obj1.ObservationName + "</td>");
                                 if (obj1.ab_flag == "L" || obj1.ab_flag == "H")
@@ -411,7 +431,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             }
                         }
                         //Code To Add Pdf as Image after conversion
-                        if (dr.IsLocalTest==1 && dr.AddedReportPath.Length > 5)
+                        if (dr.IsLocalTest == 1 && dr.AddedReportPath.Length > 5)
                         {
                             PDFUtility pdfUtility = new PDFUtility();
                             string ImagePageList = pdfUtility.ConvertPdfToImageTags(dr.AddedReportPath);
@@ -454,9 +474,9 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                         b.Append("<td colspan='5' style='text-align:left;padding-left:4px;'>" + dr.report_content + "</td>");
                         b.Append("</tr>");
 
-                        if(dr.IsPageBreak=="Y")
-                        b.Append("<div style='page-break-after:always;'> </div>");
-                        
+                        if (dr.IsPageBreak == "Y")
+                            b.Append("<div style='page-break-after:always;'> </div>");
+
                     }
                 }
             }
@@ -464,9 +484,9 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             string t = b.ToString();
             return b.ToString();
         }
-        public string GetHeaderHTML(string DepartmentName, DataSet ds,string IsNABL)
+        public  string GetHeaderHTML(string DepartmentName, DataSet ds, string IsNABL)
         {
-           StringBuilder h = new StringBuilder();
+            StringBuilder h = new StringBuilder();
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -474,7 +494,26 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     if (_PrintWithHeader == "N")
                     {
 
-                        h.Append("<table style='width:1200px;height:190px; font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
+                        h.Append("<div style='height:50px;font-family:Calibri'>");
+                        h.Append("<table style='padding:2px;background:#fff;width:100%;;font-size:18px;text-align:left;margin-top:45px;font-family:Calibri'>");
+                        h.Append("<tr>");
+                        h.Append("<td style='width:35%;text-align:left;'></td>");
+                        h.Append("<td style='width:68%;text-align:left;font-size:32px'><b>" + ds.Tables[0].Rows[0]["Hospital_Name"].ToString() + "</b></td>");
+                        h.Append("</tr>");
+
+                        h.Append("<tr>");
+                        h.Append("<td style='width:35%;text-align:left;'></td>");
+                        h.Append("<td style='width:65%;text-align:left;font-size:22px'>" + ds.Tables[0].Rows[0]["Full_Address"].ToString() + "</td>");
+                        h.Append("</tr>");
+
+                        h.Append("<tr>");
+                        h.Append("<td style='width:35%;text-align:left;'></td>");
+                        h.Append("<td style='width:65%;text-align:left;font-size:22px'>" + ds.Tables[0].Rows[0]["Info"].ToString() + "</td>");
+                        h.Append("</tr>");
+                        h.Append("</table>");
+                        h.Append("</div>");
+
+                        h.Append("<table style='width:1200px;font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
                         h.Append("<tr>");
                         h.Append("<td style='width:20%'>");
                         h.Append("</td>");
@@ -597,9 +636,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     h.Append("</tr>");
                     h.Append("</table>");
                 }
-
             }
-
             h.Append("<hr/>");
             h.Append("<div style='text-align:center;margin-top:5px;font-size:30px;font-weight:bold;width:100%;'>" + DepartmentName + " REPORT</div>");
             return h.ToString();
@@ -643,8 +680,8 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 f.Append("<table style='width:100%;text-align:right;font-family:calibri;text-align:center;border: 1px solid black;'>");
                 f.Append("<tr>");
                 string Note = @"Facilities: Pathology, Bedside Sample Collection, Health Check-ups, Digital X-Ray, ECG (Bedside also), Allergy Testing, Test And Health Check-ups, Ultrasonography, Sonomammography,
-Bone Mineral Density(BMD), Doppler Studies, 2D Echo, CT Scan, MRI, Blood Bank, TMT, EEG, PFT, OPG, Endoscopy, Digital Mammography, Electromyography (EMG), Nerve Condition
-Velocity(NCV), Audiometry, Brainstem Evoked Response Audiometry(BERA), Colonoscopy, Ambulance Services, Online Booking Facilities for Diagnostics, Online Report Viewing * ";
+                Bone Mineral Density(BMD), Doppler Studies, 2D Echo, CT Scan, MRI, Blood Bank, TMT, EEG, PFT, OPG, Endoscopy, Digital Mammography, Electromyography (EMG), Nerve Condition
+                Velocity(NCV), Audiometry, Brainstem Evoked Response Audiometry(BERA), Colonoscopy, Ambulance Services, Online Booking Facilities for Diagnostics, Online Report Viewing * ";
 
                 f.Append("<tr>");
                 f.Append("<td colspan='3' style='font-size:16px'>" + Note + " </td>");

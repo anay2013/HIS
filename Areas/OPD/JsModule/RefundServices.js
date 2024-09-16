@@ -147,6 +147,12 @@ function Opd_ServiceRefund() {
             var itemid = $(this).find('td:eq(0)').text();
             item.push(itemid);
         });
+        if (item.length == 0) {
+            alert('Please Select Item.');
+            return
+        }
+
+
         objBO.ItemIdList = item.join(',');
         objBO.amount = $('#txtTotal').val();
         objBO.PayMode = $('#ddlPayMode option:selected').text();
@@ -180,7 +186,7 @@ function Opd_ServiceRefund() {
     }
 }
 function Receipt(tnxid) {
-    var url = config.documentServerUrl+ "/Print/ServiceReceipt?TnxId=" + tnxid;
+    var url = config.documentServerUrl + "/Print/ServiceReceipt?TnxId=" + tnxid;
     window.open(url, '_blank');
 }
 function Validation() {
@@ -189,23 +195,29 @@ function Validation() {
     var PayMode = $('#ddlPayMode option:selected').text();
     var Panel = $('#tblDetails tbody tr').find('td:eq(7)').text();
 
-    if (Panel == 'CASH') {
-        if (Total <= 0) {
-            alert('Please Choose Refund Amount..');
-            return false;
-        }
-        if (PayMode == 'Pay Mode') {
-            $('#ddlPayMode').focus();
-            alert('Please Choose Pay Mode..');
-            return false;
-        }
+    if (PayMode == 'Pay Mode') {
+        $('#ddlPayMode').focus();
+        alert('Please Choose Pay Mode..');
+        return false;
     }
-    else if (Panel != 'CASH') {
-        if (Total <= 0) {
-            alert('Please Choose Refund Amount..');
-            return false;
-        }
-    }
+
+    //if (Panel == 'CASH') {
+    //    if (Total <= 0) {
+    //        alert('Please Choose Refund Amount..');
+    //        return false;
+    //    }
+    //    if (PayMode == 'Pay Mode') {
+    //        $('#ddlPayMode').focus();
+    //        alert('Please Choose Pay Mode..');
+    //        return false;
+    //    }
+    //}
+    //else if (Panel != 'CASH') {
+    //    if (Total <= 0) {
+    //        alert('Please Choose Refund Amount..');
+    //        return false;
+    //    }
+    //}
     if (Remark == '') {
         $('#txtRemark').focus();
         alert('Please Provide Cancellation Remark..');

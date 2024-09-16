@@ -216,7 +216,7 @@ function FillSwipeMachines() {
 function MarkIndentReceived() {
     var url = config.PharmacyWebAPI_baseUrl + "/api/sales/GetSalesInvoice_Info";
     var objBO = {};
-    objBO.unit_id = 'MS-H0085';
+    objBO.unit_id = Active.userId;
     objBO.Sales_Inv_No = $('#txtSaleInvNo').text();
     objBO.order_no = $('#txtOrderNo').text();
     objBO.logic = 'MarkIndentReceived';

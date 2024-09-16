@@ -187,16 +187,15 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                 b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>IPD No.</b></td>");
                 b.Append("<td style='width:1%'><b>:</b></td>");
                 b.Append("<td style='text-align:left;width:15%'>" + dr["IPOPNo"].ToString() + "</td>");
-
-                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>RoomWard</b></td>");
-                b.Append("<td style='width:1%'><b>:</b></td>");
-                b.Append("<td style='text-align:left;width:15%'>" + dr["RoomType"].ToString() + "</td>");
                 b.Append("</tr>");
 
-                b.Append("<tr style='padding:3px;' colspan='6'>");
+                b.Append("<tr style='padding:3px;' >");
                 b.Append("<td style='text-align:left;font-weight:bold; width:15%'><b>Address</b></td>");
                 b.Append("<td style='width:1%'><b>:</b></td>");
                 b.Append("<td style='text-align:left; width:30%'>" + dr["address"].ToString() + "</td>");
+                b.Append("<td style='text-align:left;font-weight:bold;width:15%'><b>Room Detail</b></td>");
+                b.Append("<td style='width:1%'><b>:</b></td>");
+                b.Append("<td style='text-align:left;width:15%' colspan='3'>" + dr["roomFullName"].ToString() + "</td>");
 
                 b.Append("</tr>");
                 b.Append("</table>");
@@ -707,10 +706,10 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "StaffAlloted.pdf");
         }
-        public FileResult IPDBillSummary(string _IPDNo, string _ReceiptList, string _BillPrintType, string ExcludeAdlItemDiscount)
+        public FileResult IPDBillSummary(string _IPDNo, string _ReceiptList, string _BillPrintType, string ExcludeAdlItemDiscount, string ExcludeCategory)
         {
             IPDBillPrint obj = new IPDBillPrint();
-            return obj.PrintBill(_IPDNo, _ReceiptList, _BillPrintType, ExcludeAdlItemDiscount);
+            return obj.PrintBill(_IPDNo, _ReceiptList, _BillPrintType, ExcludeAdlItemDiscount, ExcludeCategory);
         }
         public FileResult IPDBillSummary2(string _IPDNo, string _ReceiptList, string _BillPrintType)
         {
@@ -2450,7 +2449,29 @@ namespace MediSoftTech_HIS.Areas.IPD.Controllers
                     age = dr["age"].ToString();
                 }
             }
-            b.Append("<div class='row' style='padding:30px;margin-top:110px'>");
+
+            b.Append("<div style='height:125x;'>");
+            b.Append("<table style='padding:2px;background:#fff;width:100%;;font-size:18px;text-align:left;margin-top:30px'>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:35%;text-align:left;'></td>");
+            b.Append("<td style='width:65%;text-align:left;font-size:18px'>" + ds.Tables[3].Rows[0]["Hospital_Name"].ToString() + "</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:35%;text-align:left;'></td>");
+            b.Append("<td style='width:65%;text-align:left;font-size:13px'>" + ds.Tables[3].Rows[0]["Full_Address"].ToString() + "</td>");
+            b.Append("</tr>");
+
+            b.Append("<tr>");
+            b.Append("<td style='width:35%;text-align:left;'></td>");
+            b.Append("<td style='width:65%;text-align:left;font-size:13px'>" + ds.Tables[3].Rows[0]["Info"].ToString() + "</td>");
+            b.Append("</tr>");
+            b.Append("</table>");
+            b.Append("</div>");
+
+
+            b.Append("<div class='row' style='padding:30px;'>");
             b.Append("<h5 style = 'border:1px solid;text-align: justify ; margin-top:5px; width:100%;height:25px; padding:7px;'>");
             b.Append("<table style='width:100%;font-size:14px;border:0px solid #dcdcdc;margin-bottom:-15px;'>");
             b.Append("<tr>");

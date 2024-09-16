@@ -1,0 +1,482 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "DischargeProcessTAT";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/IPD/JsModule/IPD/DischargeProcessTAT.js?v1.anjali"></script>
+<style>
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .navigation div[class*=col-md-2] {
+        width: 10%;
+        padding: 2px;
+    }
+
+    .navigation div[class*=col-md-4] {
+        width: 38%;
+        padding: 2px;
+    }
+
+    .navigation input {
+        padding: 3px;
+    }
+
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    #tblReportInfo thead th {
+    }
+
+    .catName {
+        margin: 0;
+        background: #ddd;
+        padding: 5px;
+        border-radius: 4px;
+        margin-left: 25%;
+    }
+
+    #tblPatientInfo tbody td span {
+        color: #fff;
+        border-radius: 30px;
+        background: #40b52c;
+        padding: 0px;
+        width: 37px;
+        display: block;
+        text-align: center;
+        font-size: 11px;
+    }
+
+    #tblPatientInfo tbody button {
+        z-index: 100000
+    }
+
+    #tblPatientInfo thead input {
+        border: 1px solid #edf100;
+        border-radius: 2px;
+        height: 17px;
+        margin-bottom: 1px;
+    }
+
+    .common {
+        /*width: 50%;
+        position: absolute;
+        right: -11px;
+        bottom: 42.67%;*/
+        float: right;
+        /*margin-top: -14.3%;*/
+    }
+
+    #tblComponentsInfo tbody input[type=text] {
+        text-align: right;
+        height: 20px;
+        border-radius: 2px;
+        border: 1px solid #a19943;
+    }
+
+    .RequirementTime .col-md-3 {
+        padding: 0 0 0 7px;
+        width: 19.5%;
+    }
+
+    .section .form-group {
+        margin-bottom: 8px !important;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .bc {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-color: #06a08b;
+    }
+
+    .btnRC {
+        height: 30px;
+        margin: -1px;
+        border-radius: 0;
+    }
+
+    .section {
+        margin-top: -30px;
+        padding: 1px;
+        border: 1px solid #2478a9;
+        height: 150px;
+    }
+
+    .title {
+        background: #2478a9;
+        color: #fff;
+        padding: 2px 5px;
+        margin: 0;
+        width: 100%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: 25px;
+        background-color: #fff;
+        border: 1px solid #dbdbdb;
+        border-radius: 3px;
+    }
+
+    .totalDiv {
+        display: ruby;
+    }
+
+    .total {
+        background: #fff;
+        border: 1px solid #f39c12;
+        border-radius: 23px;
+        width: max-content;
+        padding: 5px 8px;
+        font-size: 12px;
+        margin: 6px 0 6px 11px;
+    }
+
+        .total span {
+            background: #f39c12;
+            color: #fff;
+            border: 1px solid #f39c12;
+            border-radius: 30px;
+            position: relative;
+            padding: 6px;
+            right: -8px;
+            top: 1px;
+        }
+
+    .statusBar {
+        border-bottom: 1px solid #ddd;
+        display: ruby;
+        padding: 7px 0;
+    }
+
+        .statusBar .status {
+            border: 1px dashed #fff;
+            margin: 14px 0;
+            width: 71px;
+            background: #d3d3d3;
+            height: 10px;
+            border-radius: 25px;
+        }
+
+            .statusBar .status span {
+                top: -5px;
+                right: -60px;
+                position: relative;
+                background: #d3d3d3;
+                color: #fff;
+                border-radius: 84px;
+                padding: 10px 7px;
+                font-size: 11px;
+                text-transform: uppercase;
+            }
+
+    .statusDone {
+        background: #0e900c !important;
+    }
+
+        .statusDone span {
+            background: #0e900c !important;
+        }
+
+    #tblRemark tbody td {
+        border: none;
+    }
+
+        #tblRemark tbody td:not(td:first-child) {
+            width: 20%;
+        }
+
+    #tblRemark tbody tr.group b {
+        margin-left: 12px;
+    }
+
+        #tblRemark tbody tr.group b tat {
+            padding: 1px 5px;
+            color: #fff;
+            . background: #e35f5f;
+            border-radius: 41px;
+        }
+
+    .totalDone {
+        border-color: green !important;
+    }
+
+        .totalDone span {
+            border: 1px solid #008000 !important;
+            background: green !important;
+        }
+
+    .Out {
+        background: #0e900c !important;
+    }
+
+        .Out span {
+            background: #0e900c !important;
+        }
+
+    .In {
+        background: #f39c12 !important;
+    }
+
+        .In span {
+            background: #f39c12 !important;
+        }
+
+    .title select {
+        float: right;
+        width: 13%;
+        height: 19px;
+        line-height: 0;
+        padding: 0 2px;
+    }
+
+    .panel-heading button {
+        float: right;
+        margin: -26px 0px;
+    }
+
+    .text-white {
+        color: #fff;
+        margin: 7px 0px;
+    }
+
+    #tblReportInfo thead th {
+        padding: 5px;
+    }
+
+    #tblReport thead th {
+        padding: 4px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;">
+                                <h4 class="text-white" style="font-size: 15px;">DischargeProcessTAT</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row" style="background-color:#f3ccd3cc;margin-left: 0px;margin-right: 0px;height:65px;padding: 4px;">
+                                    <div class="col-md-3" style="width:30%">
+                                        <label>From Date</label>
+                                        <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                                    </div>
+                                    <div class="col-md-3" style="width:30%">
+                                        <label>To Date</label>
+                                        <input type="date" id="txtSearchTo" class="form-control" placeholder="from : dd-mm-yyyy" />
+                                    </div>
+                                    <div class="col-md-6" style="width:40%">
+                                        <label>Panel</label>
+                                        <div style="display:flex">
+                                            <select class="form-control" id="ddlpayment">
+                                                <option value="ALL">ALL</option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Credit">Credit</option>
+
+                                            </select>
+                                            <button id="btnAll" style="width:50%;height:27px" onclick="GetListData()" class="btn btn-success"><i class="fa fa-search">&nbsp;Get</i></button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #3498db;margin-top:5px;">
+                                            <table id="tblReport" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:8%;text-align:center;">Sr.No</th>
+                                                        <th>Section</th>
+                                                        <th style="text-align:center;width:15%">IPDCount</th>
+                                                        <th style="text-align:center;width:22%">TotalTime (hrs)</th>
+                                                        <th style='text-align:center;width:20%'>AvgTotal (hrs)</th>
+                                                        <th style="width:8%;text-align:center;">Cmd</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel">
+                    <div class="panel-heading" style="background:#0076d0;">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 class="text-white" style="font-size: 15px;">DischargeProcessTATDetails</h4>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="flex">
+                                    <label style="width:85px;color:white;margin-left:51%;margin-top:5px">Item Found :</label>
+                                    <input class="btn btn-warning btn-xs" id="txtcountRow" style="width:50px;float:right;border-radius:10px;margin-top:5px" />
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-body" style="background:#fff;padding:4px 5px;height:84vh">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="flex">
+                                    @*<label style="width:20%; padding:1px">IPDNO</label>*@
+                                    <input class="form-control" id="txtipdno" type="text" placeholder="Search IPDNO.." />
+                                    <button class=" btn btn-warning" id="btnSearch" onclick="SearchIPDNO()" style="width: 35%;height:27px"><i class="fa fa-search"></i>&nbsp;Search</button>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="flex">
+                                    <label style="width: 15%; padding:1px">Search</label>
+                                    <input class="form-control" type="text" id="txtSearchtable" placeholder="Search data.." style="border:1px solid #0076d0" />
+                                    <button class=" btn btn-success" id="btnexecl" onclick="ExcelDownloads()" style="width:20%;height:28px"><i class="fa fa-file-excel-o"></i>&nbsp;Excel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive" style="height:500px;overflow-y:auto;border:1px solid #3498db;margin-top:2px">
+                                    <table id="tblReportInfo" class="table table-bordered sortable">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%;">IPDNo</th>
+                                                <th>PatientName</th>
+                                                <th style="width:8%;">Gender</th>
+                                                <th style="width:14%;">AdmitDate</th>
+                                                <th style="width:14%;">DischargeDate</th>
+                                                <th style="width:14%;">Init DateTime</th>
+                                                <th style="width:14%;">End DateTime</th>
+                                                <th style="text-align:center;width:5%;">Hrs</th>
+                                                <th style="width:6%;text-align:center;">Cmd</th>
+                                                <th style="width:5%;text-align:center;">Action</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modalProcess" id="GetPatient" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:20%;width: 125%;margin-left: 0%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5 class="text-white">Patient Details </h5>
+                    <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="section" style="height:355px;">
+                                    <div class="panel-heading" style="background:#0076d0;">
+                                        <h4 class="title" style="font-size: 15px;">
+                                            Discharge Status Remark
+                                            &nbsp;
+                                            <span style="color:#fff;font-size:11px;float:right;display:block;margin-left:5px" id="patientName"></span>
+                                            <span style="color:#fff;font-size:11px;float:right;display:block;margin-left:5px" id="patientInfo"></span>
+
+                                        </h4>
+                                    </div>
+
+                                    <div class="row" style="margin:3px 0 2px 0">
+                                        <div class="col-md-12">
+                                            <div class="statusBar">
+                                                <div class="status" data-val="RMO"><span>RMO</span></div>
+                                                <div class="status" data-val="Consultant"><span>Con</span></div>
+                                                <div class="status" data-val="Medicine"><span>Med</span></div>
+                                                <div class="status" data-val="Nursing"><span>Nur</span></div>
+                                                <div class="status" data-val="IPD Manager"><span>IPD</span></div>
+                                                <div class="status" data-val="Pharmacy"><span>Pha</span></div>
+                                                <div class="status" data-val="Billing"><span>Bil</span></div>
+                                                <div class="status" data-val="TPA"><span>TPA</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div style="height:275px;overflow:auto;margin-top: 5px;">
+                                                <table class="table table-bordered" id="tblRemark">
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 Partial">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

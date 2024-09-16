@@ -19,7 +19,6 @@
 });
 
 function OnLoad() {
-    //ddlRatePanel
     var url = config.baseUrl + "/api/master/mPanelQueries";
     var objBO = {};
     objBO.Logic = "OnLoad";
@@ -46,7 +45,6 @@ function OnLoad() {
     });
 }
 function AddUpdatePanel() {
-    debugger
     if (confirm("Are you sure to Save ?")) {
         var objBO = {};
         var selfratetypearr = [];
@@ -89,6 +87,9 @@ function AddUpdatePanel() {
         objBO.AllowPartialPay = $("#ddlAllowPartialPay option:selected").val();
         objBO.login_id = Active.userId;
         objBO.Aging = $("#txtCreditPeriod").val();
+        objBO.PanelHead = $("#ddlPanelHead option:selected").val();
+        objBO.OPD_BillingCycle = $("#ddlBillingCycle option:selected").val();
+        objBO.share_payDiscPerc = $("#txtdiscountperc").val();
         objBO.HospId = Active.unitId;
         objBO.disch_med_limit = $("#txtDischMedLimit").val();
         if (ValidatePanel()) {
@@ -167,7 +168,6 @@ function BindPanel(PanelId) {
     });
 }
 function EditPanel(element) {
-    debugger
     var PanelId = $(element).closest('tr.select-row').find('td:eq(0)').find('a').data('panelid')
     var url = config.baseUrl + "/api/master/mPanelQueries";
     var objBO = {};
@@ -180,6 +180,7 @@ function EditPanel(element) {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
+            console.log(data);
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $("#hidPanelId").val(data.ResultSet.Table[0].PanelId);
@@ -216,9 +217,11 @@ function EditPanel(element) {
                     $("#ddlAllowPartialPay").val(data.ResultSet.Table[0].IsAllowPartialPay);
                     $("#ddlCurrency").val(data.ResultSet.Table[0].Currency);
                     $("#txtCreditPeriod").val(data.ResultSet.Table[0].Aging);
+                    $("#ddlPanelHead").val(data.ResultSet.Table[0].PanelHead);
+                    $("#ddlBillingCycle").val(data.ResultSet.Table[0].OPD_BillingCycle);
+                    $("#txtdiscountperc").val(data.ResultSet.Table[0].share_payDiscPerc);
                     $("#btndaddupdate").text('Update');
                     $("#btndaddupdate").val('Update')
-
                 }
             }
             else {
@@ -279,4 +282,7 @@ function ClearValues() {
     $("#ddlAllowPartialPay").prop("selectedIndex", "0").val();
     $("#txtCreditPeriod").val('0');
     $("#btndaddupdate").text('Save');
+    $("#ddlBillingCycle").prop("selectedIndex", "0").val();
+    $("#ddlPanelHead").prop("selectedIndex", "0").val();
+    $("#txtdiscountperc").val('0');
 }

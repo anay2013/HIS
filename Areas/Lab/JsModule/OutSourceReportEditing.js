@@ -390,7 +390,7 @@ function ReportDetail() {
                             tbody += "<td><input type='checkbox' checked/></td>";
                             tbody += "</tr>";
                         } else {
-                            if (val.ObsCount == 1) {                               
+                            if (val.ObsCount == 1) {
                             }
                             else {
                                 tbody += "<tr style='background:#fff'>";
@@ -398,7 +398,7 @@ function ReportDetail() {
                                 tbody += "<td><button data-testcode=" + val.testcode + " onclick=uploadFile(" + val.AutoTestId + ") class='btn btn-primary btn-xs pull-right'><i class='fa fa-upload'>&nbsp;</i>Add</button></td>";
                                 tbody += "<td><input type='checkbox' checked/></td>";
                                 tbody += "</tr>";
-                              
+
                                 if (_testcode == val.testcode) {
                                     tbody += "<tr style='background:#fff'>";
                                     tbody += "<td colspan='8' style='line-height: 0px;padding: 1px;'></td>";
@@ -408,7 +408,7 @@ function ReportDetail() {
                         }
                     });
                     $('#tblTestInfo tbody').append(tbody);
-                }        
+                }
                 CKEditor();
             }
         },
@@ -816,7 +816,7 @@ function GetAllDepartment() {
                 }
             }
             if (Object.keys(data.ResultSet).length) {
-                if (Object.keys(data.ResultSet.Table1).length) {                   
+                if (Object.keys(data.ResultSet.Table1).length) {
                     $.each(data.ResultSet.Table1, function (key, val) {
                         $('#ddlLab').append($('<option></option>').val(val.LabCode).html(val.LabName));
                     });
@@ -1031,4 +1031,34 @@ function PopulateChart(response, elem) {
         }
     };
     var myLineChart = new Chart(ctxL, config);
+}
+function ResetPathData() {
+    var url = config.baseUrl + "/api/Lab/mDoctorSignatireInsertUpdate";
+    var objBO = {};
+    objBO.signid = _autoTestId;
+    objBO.doctorid = "-";
+    objBO.doctorname = '-';
+    objBO.degree = '-';
+    objBO.signvirtualpath = '-';
+    objBO.signphysicalpath = '-';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'EditReportPath';
+    $.ajax({
+        method: "POST",
+        url: url,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        data: JSON.stringify(objBO),
+        success: function (data) {
+            if (data.includes('Success')) {
+                alert(data);
+                $('#btnReset').prop('disabled', true);
+
+            }
+            else {
+                alert(data);
+            }
+        }
+    });
+
 }

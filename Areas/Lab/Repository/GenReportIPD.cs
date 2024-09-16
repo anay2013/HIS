@@ -71,7 +71,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 {
                     _Deptname = dept.First().SubCatName;
                     _IsNABL = dept.First().IsNABL;
-                    PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10, 30), PdfPageOrientation.Portrait);
+                    PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(40, 10, 10, 40), PdfPageOrientation.Portrait);
                     string HtmlBody = string.Empty;
                     HtmlBody = GetBodyHTML(_Deptname, dsResult.ResultSet, _IsNABL);
                     Int64 LastRow = DeptList.Last().First().RowNo;
@@ -262,7 +262,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     {
                         if (dr.r_type != "Text")
                         {
-                            b.Append("<table border='0' style='font-family:Arial;width:100%;font-size:14px;border-collapse:collapse;margin-top:-10px;'>");
+                            b.Append("<table border='0' style='font-family:Calibri;width:100%;font-size:14px;border-collapse:collapse;margin-top:-10px;'>");
                             b.Append("<tr>");
                             b.Append("<th style='width:35%;text-align:left;padding-left:4px;'>Test Name</th>");
                             b.Append("<th style='width:18%;text-align:left;padding-right:4px;'>Result</th>");
@@ -275,6 +275,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                     }
                     Int64 AutoTestId = dr.AutoTestId;
                     Int64 ObsCount = dr.ObsCount;
+
                     var ObsDetail = ds.Tables[4].AsEnumerable().Where(x => x.Field<Int64>("AutoTestId") == AutoTestId).Select(y => new
                     {
                         ObservationName = y.Field<string>("ObservationName"),
@@ -476,14 +477,33 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                 {
                     if (_PrintWithHeader == "N")
                     {
+                        h.Append("<div style='height:50px;font-family:Calibri'>");
+                        h.Append("<table style='padding:2px;background:#fff;width:100%;;font-size:18px;text-align:left;margin-top:45px;font-family:Calibri'>");
+                        h.Append("<tr>");
+                        h.Append("<td style='width:30%;text-align:left;'></td>");
+                        h.Append("<td style='width:60%;text-align:left;font-size:32px'><b>" + ds.Tables[0].Rows[0]["Hospital_Name"].ToString() + "</b></td>");
+                        h.Append("</tr>");
 
-                        h.Append("<table style='width:1200px;height:190px; font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
+                        h.Append("<tr>");
+                        h.Append("<td style='width:30%;text-align:left;'></td>");
+                        h.Append("<td style='width:60%;text-align:left;font-size:22px'>" + ds.Tables[0].Rows[0]["Full_Address"].ToString() + "</td>");
+                        h.Append("</tr>");
+
+                        h.Append("<tr>");
+                        h.Append("<td style='width:30%;text-align:left;'></td>");
+                        h.Append("<td style='width:60%;text-align:left;font-size:22px'>" + ds.Tables[0].Rows[0]["Info"].ToString() + "</td>");
+                        h.Append("</tr>");
+                        h.Append("</table>");
+                        h.Append("</div>");
+
+
+                        h.Append("<table style='width:1200px;font-size:25px;float:left;margin-top:-12px;padding:8px;font-family:calibri'>");
                         h.Append("<tr>");
                         h.Append("<td style='width:20%'>");
                         h.Append("</td>");
 
                         h.Append("<td style='width:55%'>");
-                        h.Append("<div style='text-align:left;width:auto;float:left;width:100%;'>");
+                        h.Append("<div style='text-align:left;width:auto;float:left;width:100%;font-family:Calibri'>");
                         h.Append("<h2 style='font-weight:bold;margin:0'></h2>");
                         h.Append("<span style='text-align:left;'></span><br/>");
                         h.Append("<span style='text-align:left;'></span><br/>");
@@ -496,6 +516,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
                             string NABLLogo = System.Web.HttpContext.Current.Server.MapPath(@"/images/NABL.jpg");
                             h.Append("<img src=" + NABLLogo + " style='width:80px;height:80px' />");
                         }
+
                         h.Append("</td>");
                         h.Append("<td style='width:15%'>");
                         h.Append("</td>");
@@ -604,7 +625,7 @@ namespace MediSoftTech_HIS.Areas.Lab.Repository
             }
 
             h.Append("<hr/>");
-            h.Append("<div style='text-align:center;margin-top:5px;font-size:30px;font-weight:bold;width:100%;'>" + DepartmentName + " REPORT</div>");
+            h.Append("<div style='font-family:Calibri;text-align:center;margin-top:5px;font-size:30px;font-weight:bold;width:100%;'>" + DepartmentName + " REPORT</div>");
             return h.ToString();
         }
         private string GetFooterHTML(string DepartmentName, DataSet ds, bool IsLastPage)

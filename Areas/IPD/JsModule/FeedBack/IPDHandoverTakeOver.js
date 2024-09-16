@@ -186,7 +186,7 @@ function InsertIPDHandover() {
             'login_id': Active.userId,
             'Logic': 'InsertStaffShift'
         });
-    });  
+    });   
     $.ajax({
         method: "POST",
         url: url,

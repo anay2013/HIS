@@ -20,5 +20,9 @@ namespace MediSoftTech_HIS.Areas.Referral.Controllers
         {
             return View();
         }
+        public ActionResult ReferralEntry()
+        {
+            return View();
+        }
     }
 }

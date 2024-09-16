@@ -1,5 +1,4 @@
-﻿
-var logic = ''
+﻿var logic = ''
 var temp = ''
 $(document).ready(function () {
     CloseSidebar();
@@ -49,19 +48,19 @@ function DownloadExcelClosing() {
     objBO.hosp_id = '-';
     objBO.UHID = '-';
     objBO.IPDNo = $('#txtIPDNo').val();
-    objBO.Floor = '-';
+    objBO.Floor = $('#ddlFloor option:selected').val();
     objBO.PanelId = $('#ddlPanel option:selected').val();
     objBO.from = $('#txtfromdate').val();
     objBO.to = $('#txttodate').val();
-    objBO.Prm1 = '-';
-    objBO.Prm2 = '-';
+    objBO.Prm1 = $('#ddlLockFlag option:selected').val();
+    objBO.Prm2 = $('#ddlClosedFlag option:selected').val();
     objBO.login_id = Active.userId;
-    objBO.Logic = $('#ddlReportLogic option:selected').val();
+    objBO.Logic = logic;
     objBO.OutPutType = 'Excel';
     Global_DownloadExcel(url, objBO, "BillRegister" + ".xlsx");
 }
 function GetDataAllClosingPending() {
-    logic = 'ClosingPending:BetweenDate';
+    logic = $('#ddlReportLogic option:selected').val();
     $('#tblClosingPending tbody').empty();
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
@@ -75,7 +74,7 @@ function GetDataAllClosingPending() {
     objBO.Prm1 = $('#ddlLockFlag option:selected').val();
     objBO.Prm2 = $('#ddlClosedFlag option:selected').val();
     objBO.login_id = Active.userId;
-    objBO.Logic = $('#ddlReportLogic option:selected').val();
+    objBO.Logic = logic;
     $.ajax({
         method: "POST",
         url: url,
@@ -83,7 +82,6 @@ function GetDataAllClosingPending() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             if (Object.keys(data.ResultSet).length) {
                 var tbody = "";
                 if (Object.keys(data.ResultSet.Table).length) {
@@ -165,7 +163,6 @@ function GetDataAllIPDNO() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             if (Object.keys(data.ResultSet).length) {
                 var tbody = "";
                 if (Object.keys(data.ResultSet.Table).length) {
@@ -224,7 +221,6 @@ function GetDataAllIPDNO() {
     });
 }
 function GetAllDataBindPanel() {
-    logic = 'LoadPanel';
     var url = config.baseUrl + "/api/IPDBilling/IPD_BillingQuerries";
     var objBO = {};
     objBO.hosp_id = '-';
@@ -245,7 +241,6 @@ function GetAllDataBindPanel() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             if (Object.keys(data.ResultSet).length) {
                 if (Object.keys(data.ResultSet.Table).length) {
                     $('#ddlPanel').append($('<option></option>').val('ALL').html('ALL')).select2();
@@ -261,4 +256,3 @@ function GetAllDataBindPanel() {
         }
     });
 }
-

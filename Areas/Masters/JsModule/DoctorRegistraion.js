@@ -395,6 +395,7 @@ function AddUpdateDoctorProfile1() {
     }
 }
 function AddUpdateDoctorProfile() {
+    debugger
     if (ValidateField()) {
         var url = config.baseUrl + "/api/master/mInsertUpdateDoctor";
         var objBO = {};
@@ -428,6 +429,7 @@ function AddUpdateDoctorProfile() {
         objBO.feefreq = $("#txtFeeFreq").val();
         objBO.floorno = $("#ddlFloorNo option:selected").text();
         objBO.roomno = $("#txtRoomNo").val();
+        objBO.OnlineDoctorFee = $("#txtfees").val();
         objBO.patientduration = $("#ddlDuration option:selected").val();
         objBO.ImageName = _doctorId + '.jpg';
         objBO.virtual_path = "-";
@@ -686,6 +688,7 @@ function EditDoctor(DoctorId) {
                     $("#txtFeeFreq").val(val.fee_freq);
                     $("#txtDesignation").val(val.Designation);
                     $("#txtDegreeDes").val(val.degree2);
+                    $("#txtfees").val(val.OnlineDoctorFee);
                     $("input[name=Emrgavail][value=" + val.emergency_availability + "]").prop('checked', 'checked');
                     $("input[name=docshare][value=" + val.share_flag + "]").prop('checked', 'checked');
                     $("input[name=onlineAppoint][value=" + val.online_appointment + "]").prop('checked', 'checked');

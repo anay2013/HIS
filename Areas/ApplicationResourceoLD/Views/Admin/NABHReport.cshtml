@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "NABHReport";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/ApplicationResource/JsModule/NABHReport.js"></script>
+<style>
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    .panel-body {
+        padding: 4px 5px;
+        position: relative;
+    }
+
+
+    hr {
+        margin-top: 8px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 28px;
+    }
+
+    .text-white {
+        color: #fff;
+        margin: 1px 0px;
+    }
+
+    #tblReport thead th {
+        padding: 3px;
+    }
+
+    #tblReport tbody td {
+        padding: 3px;
+        font-size: 12px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding:3px;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="text-white">NABH Report</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>From Date</label>
+                                    <div class="flex">
+                                        <input type="date" id="txtFromDate" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>To Date</label>
+                                    <div class="flex">
+                                        <input type="date" id="txtToDate" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>Report Type</label>
+                                    <div class="flex">
+                                        <select id="ddlReport" class="form-control">
+                                            <option value="Select">Select</option>
+                                            <option value="DoctorAppointment:WaitingTime">OPD Waiting Time</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label></label>
+                                    <div class="flex">
+                                        @*<button class="btn btn-success bn" style="border:none;margin-top: 5px;" id="btnsearch" onclick="GetAllNABHReport()">
+                                            <i class="fa fa-search"></i>&nbsp;Search
+                                        </button>*@
+                                        <button class="btn btn-warning bn" style="border:none;margin-top: 5px; margin-left: 10px;" id="btnsearch" onclick="GetExeclNABHReport()">
+                                            <i class="fa fa-file-excel-o"></i>&nbsp;Execl
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+                            @*<div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:500px;overflow-y:auto; overflow-x:auto;border:1px solid #2492b3;">
+                                        <table id="tblReport" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>UHIDNo</th>
+                                                    <th>App_No</th>
+                                                    <th>Patient Name</th>
+                                                    <th>Gender</th>
+                                                    <th>AgeInfo</th>
+                                                    <th>DepartmentName</th>
+                                                    <th>DoctorName</th>
+                                                    <th>AppDateTime</th>
+                                                    <th>BookingDateTime</th>
+                                                    <th>InTime</th>
+                                                    <th>WaitingTime</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -2,12 +2,11 @@
     CloseSidebar();
     Onload();
     $('#txtSeachItems').on('keyup', function () {
-        debugger;
         var val = $(this).val().toLowerCase();
         $('#tblItemDetails tbody tr').filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(val) > -1);
         });
-    });   
+    });
 });
 function Onload() {
     var url = config.baseUrl + "/api/master/mLabItemQueries";
@@ -106,7 +105,7 @@ function AddUpdateCreateItem() {
             url: url,
             data: JSON.stringify(objBO),
             dataType: "json",
-            contentType: "application/json;charset=utf-8",          
+            contentType: "application/json;charset=utf-8",
             success: function (data) {
                 var autoid = 0;
                 var splitval = data.split('|');
@@ -119,7 +118,7 @@ function AddUpdateCreateItem() {
                     autoid = splitval[2];
                     BindItems(autoid);
                     alert('Item Updated successfully');
-                   
+
                 }
                 else {
                     alert(data);
@@ -130,6 +129,33 @@ function AddUpdateCreateItem() {
             }
         });
     }
+}
+function ActiveStatus(autoId) {
+    var objBO = {};
+    var url = config.baseUrl + "/api/master/mLabItemInsertUpdate";
+    objBO.autoid = autoId;
+    objBO.subcatid = "-";
+    objBO.itemname = "-";
+    objBO.cptcodes = "-";
+    objBO.isdiscountable = "-";
+    objBO.isshareble = "-";
+    objBO.itemtype = "-";
+    objBO.login_id = Active.userId;
+    objBO.hosp_id = Active.unitId;
+    objBO.Logic = "ActiveStatus";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
 }
 function BindItems(id) {
     var url = config.baseUrl + "/api/master/mLabItemQueries";
@@ -213,7 +239,7 @@ function EditItem(element) {
         success: function (data) {
             debugger;
             if (Object.keys(data.ResultSet).length > 0) {
-                if (Object.keys(data.ResultSet.Table).length > 0) {                         
+                if (Object.keys(data.ResultSet.Table).length > 0) {
                     $("#txtItemName").val(data.ResultSet.Table[0].ItemName);
                     $("#txtCptCods").val(data.ResultSet.Table[0].CPT_Code);
                     $("#hidautoid").val(data.ResultSet.Table[0].auto_id);
@@ -223,12 +249,12 @@ function EditItem(element) {
                     }
                     else {
                         $("#ddlSharable").val(0);
-                    }                    
+                    }
                     $("#btndaddupdate").text('Update');
-                    $("#btndaddupdate").val('Update');                    
+                    $("#btndaddupdate").val('Update');
                     $("#ddlCategory").val(data.ResultSet.Table[0].CatID);
                     $('#ddlCategory').trigger('change');
-                    $("#ddlSubCategory").val(data.ResultSet.Table[0].subCatId).prop('selected', true);                    
+                    $("#ddlSubCategory").val(data.ResultSet.Table[0].subCatId).prop('selected', true);
                 }
                 else {
                     MsgBox('No Data Found');
@@ -246,6 +272,7 @@ function EditItem(element) {
 function SearchItems() {
     var url = config.baseUrl + "/api/master/mLabItemQueries";
     var objBO = {};
+    objBO.autoid = $("#ddlActive option:selected").val();
     objBO.catid = $("#ddlCategory option:selected").val();
     objBO.subcatid = $("#ddlSubCategory option:selected").val();
     objBO.Logic = "SearchItems";
@@ -291,7 +318,15 @@ function SearchItems() {
                         else {
                             htmldata += '<td>No</td>';
                         }
+
+                        htmldata += "<td>";
+                        htmldata += "<label class='switch'>";
+                        htmldata += "<input type='checkbox' data-logic='ActiveAmbulanceStatus' onchange=ActiveStatus(" + v.auto_id + ") class='IsActive' id='chkActive' " + v.checked + ">";
+                        htmldata += "<span class='slider round'></span>";
+                        htmldata += "</label>";
+                        htmldata += "</td>";
                         htmldata += '</tr>';
+
                     });
                     $("#tblItemDetails tbody").append(htmldata);
                 }
@@ -316,9 +351,9 @@ function DownloadExcel() {
 }
 function validateItems() {
     var category = $("#ddlCategory option:selected").val();
-    var subcategory = $("#ddlSubCategory option:selected").val();   
+    var subcategory = $("#ddlSubCategory option:selected").val();
     var itemname = $("#txtItemName").val();
-   
+
 
     if (category == "All") {
         alert('Please select category instead of "All" ');
@@ -331,7 +366,7 @@ function validateItems() {
     if (itemname == "") {
         alert('Please enter ItemName');
         return false;
-    }   
+    }
     return true;
 }
 function ClearValues() {

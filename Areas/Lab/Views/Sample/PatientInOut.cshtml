@@ -159,6 +159,7 @@
                                                 <th style="width:19%;">Item Name</th>
                                                 <th style="width:10%;">Department</th>
                                                 <th style="width: 10%;">In</th>
+                                                <th style="width: 10%;">Hold</th>
                                                 <th style="width: 10%;">Out</th>
                                                 <th style="width: 10%;">Type</th>
                                             </tr>
@@ -174,4 +175,21 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="modalHold" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="margin-top:70%;">
+            <div class="panel-heading" style="background:#0076d0;padding:1px 5px;">
+                <h5 class="text-white">Hold Patient</h5>
+                <button data-dismiss="modal" class="btn btn-danger btn-close btn-xs pull-right" style="float: right;margin: -16px 0;height: 16px;line-height: 0;">x</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <textarea id="txtHoldRemark" class="form-control" placeholder="Remark"></textarea>
+                        <button class="btn btn-danger" onclick="LabPatientHold()" style="margin-top:10px;"><i class="fa fa-times">&nbsp;</i>Hold Patient</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

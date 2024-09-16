@@ -26,6 +26,15 @@ $(document).ready(function () {
         var value = $(this).find('option:selected').text();
         $(this).siblings('input:text').val(value);
     });
+    $("#tblReport tbody").on('mouseover', '.VisitNo', function () {
+        $(this).closest('td').append('<div class="colDate"></div>')
+        InOutDateCollection(this)
+        $(this).closest('td').find('.colDate').show();
+    }).on('mouseout', '.VisitNo', function () {
+        InOutDateCollection(this)
+        $(this).closest('td').find('.colDate').remove();
+        $(this).closest('td').find('.colDate').hide();
+    });
     $("#tblReport tbody").on("click", 'button', function () {
         _rowIndex = $(this).closest('tr').index();
         selectRow($(this));
@@ -72,9 +81,117 @@ $(document).ready(function () {
             $(this).closest('tr').find('td:eq(9)').text('N'); $(this).closest('tr').find('td:eq(9)').removeAttr('class');
         }
     });
-
+    $("#tblTestInfo tbody").on('click', 'a', function () {
+        var testCode = $(this).closest('tr').find('td:last').text();
+        RecordTracking('-', testCode);
+        $('#modalDelta').modal('show')
+    });
     GetAllDepartment();
 });
+
+function InOutDateCollection(elem) {
+    $(elem).siblings('div.colDate').html('');
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";
+    var objBO = {};
+    objBO.LabCode = Active.HospId;
+    objBO.IpOpType = '-';
+    objBO.ReportStatus = '-';
+    objBO.VisitNo = $(elem).text();
+    objBO.BarccodeNo = $(elem).text();
+    objBO.SubCat = '-';
+    objBO.TestCategory = '-';
+    objBO.AutoTestId = 0;
+    objBO.TestCode = '-';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'InOutDateCollection';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $(elem).siblings('div.colDate').html('<b>In : </b>' + val.InDate + '<b>, Out : </b>' + val.OutDate);
+                    });
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function RecordTracking(ObservationId, testCode) {
+    $('#tblTestTrackingReport tbody').empty();
+    var url = config.baseUrl + "/api/sample/Lab_SampleCollectionQueries";
+    // var url = config.baseUrl + "/api/sample/Lab_SampleCollectionQueries";
+    var objBO = {};
+    objBO.hosp_id = '-';
+    objBO.VisitNo = $('#tblReport tbody').find('tr.select-row').find('td:eq(2)').text();
+    objBO.BarcodeNo = '-';
+    objBO.SampleCode = '-';
+    objBO.TestCode = testCode;
+    objBO.from = '1999-01-01';
+    objBO.to = '1999-01-01';
+    objBO.Prm1 = ObservationId;
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'RecordTrackingByTestCode';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data)
+            if (Object.keys(data.ResultSet).length) {
+                if (Object.keys(data.ResultSet.Table).length) {
+                    var tbody = "";
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr>";
+                        tbody += "<td>" + val.IPOPType + "</td>";
+                        tbody += "<td>" + val.barcodeNo + "</td>";
+                        tbody += "<td>" + val.RegDate + "</td>";
+                        tbody += "<td>" + val.ItemId + "</td>";
+                        tbody += "<td>" + val.ItemName + "</td>";
+                        tbody += "<td>" + val.testCategory + "</td>";
+                        tbody += "<td>" + val.samp_code + "</td>";
+                        tbody += "<td>" + val.sample_collect_date + "</td>";
+                        tbody += "<td>" + val.sample_collect_by + "</td>";
+                        tbody += "<td>" + val.SampleDistributedDate + "</td>";
+                        tbody += "<td>" + val.SampleDistributedBy + "</td>";
+                        tbody += "<td>" + val.dispatch_date + "</td>";
+                        tbody += "<td>" + val.SampleDispatchBy + "</td>";
+                        tbody += "<td>" + val.DispatchReceivedTime + "</td>";
+                        tbody += "<td>" + val.DispatchReceivedBy + "</td>";
+                        tbody += "<td>" + val.LabReceivedDate + "</td>";
+                        tbody += "<td>" + val.LabReceivedBy + "</td>";
+                        tbody += "<td>" + val.max_reptime + "</td>";
+                        tbody += "<td>" + val.DelivaryTime + "</td>";
+                        tbody += "<td>" + val.ApprovedDate + "</td>";
+                        tbody += "<td>" + val.ApproveBy + "</td>";
+                        tbody += "<td>" + val.IsSampleRequired + "</td>";
+                        tbody += "<td>" + val.IsLocalTest + "</td>";
+                        tbody += "<td>" + val.IsCancelled + "</td>";
+                        tbody += "<td>" + val.r_type + "</td>";
+                        tbody += "<td>" + val.InOutStatus + "</td>";
+                        tbody += "</tr>";
+
+                    });
+                    $('#tblTestTrackingReport tbody').append(tbody);
+                }
+
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function uploadFile(autoTestId) {
     _autoTestId = autoTestId;
     $('#modalUploadDocument').modal('show');
@@ -99,7 +216,7 @@ function readURL(input) {
 function LabReporting(logic) {
     $('#tblReport tbody').empty();
     $('#tblTestInfo tbody').empty();
-    var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";   
+    var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";
     var objBO = {};
     objBO.LabCode = Active.HospId;
     objBO.IpOpType = $('#ddlIpOpType option:selected').text();
@@ -112,14 +229,15 @@ function LabReporting(logic) {
     objBO.TestCode = $('#ddlTest option:selected').val();
     objBO.from = $('#txtFrom').val();
     objBO.to = $('#txtTo').val();
-    objBO.Logic = logic;
+    objBO.Logic = ($('#ddlStatus1 option:selected').text() == 'Patient Name') ? 'ByPatientName:Report' : logic;
     $.ajax({
         method: "POST",
         url: url,
         data: JSON.stringify(objBO),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
-        success: function (data) {         
+        success: function (data) {
+            console.log(data);
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     var tbody = '';
@@ -142,11 +260,11 @@ function LabReporting(logic) {
                         else
                             tbody += "<tr>";
 
-                        tbody += "<td class='hide'>" + val.SubCatId + "</td>";                    
+                        tbody += "<td class='hide'>" + val.SubCatId + "</td>";
                         tbody += "<td>" + val.RegDate + "</td>";
-                        tbody += "<td>" + val.VisitNo + "</td>";
+                        tbody += "<td><a href='#' class='VisitNo'>" + val.VisitNo + "</a></td>";
                         tbody += "<td style='display:none'>" + val.barcodeNo + "</td>";
-                        tbody += "<td>" + val.ItemName + "</td>";
+                        tbody += (eval(val.IsUrgent) > 0) ? "<td><i class='urgent'>U</i>&nbsp;" + val.ItemName + "" : "<td>" + val.ItemName;
                         tbody += "<td style=width:1%><button class='btn btn-success btn-xs'><span class='fa fa-arrow-right'></button></td>";
                         tbody += "<td class='hide'>" + val.ItemId + "</td>";
                         tbody += "</tr>";
@@ -248,7 +366,7 @@ function ApprovedTestInfo() {
 function ReportDetail() {
     _SubCat = $(_currentSelectedReport).closest('tr').find('td:eq(0)').text();
     _ItemId = $(_currentSelectedReport).closest('tr').find('td:last').text();
-    _VisitNo = $(_currentSelectedReport).closest('tr').find('td:eq(2)').text();
+    _VisitNo = $(_currentSelectedReport).closest('tr').find('td:eq(2) a').text();
     $('#tblTestInfo tbody').empty();
     //var url = config.baseUrl + "/api/Lab/LabReporting_Queries";
     var url = config.baseUrl + "/api/Lab/Lab_RadiologyQueries";
@@ -302,15 +420,13 @@ function ReportDetail() {
                                 tbody += "<tr style='background:#fbc7a9'>";
                             if (val.IsApproved == 1)
                                 tbody += "<tr style='background:#bbffc9'>";
-                            
-                               
 
-
-                            tbody += "<td colspan='8'><i onclick=ShowHideEditor(this) class='fa fa-snowflake-o'>&nbsp;</i>" + val.TestName;
+                            tbody += "<td colspan='8'><i onclick=ShowHideEditor(this) class='fa fa-snowflake-o'>&nbsp;</i><a href='#' style='color:#007edb'>" + val.TestName + "</a>";
                             tbody += "<button data-testcode=" + val.testcode + " onclick=ApproveTest(this) class='btn btn-success btn-xs pull-right'><i class='fa fa-check-circle'>&nbsp;</i>Approve</button>";
                             tbody += "<button data-testcode=" + val.testcode + " onclick=TemplateByTestCode(this) class='btn btn-warning btn-xs pull-right'><i class='fa fa-file'>&nbsp;</i>Template</button>";
                             tbody += "<button data-testcode=" + val.testcode + " onclick=uploadFile(" + val.AutoTestId + ") class='btn btn-primary btn-xs pull-right'><i class='fa fa-upload'>&nbsp;</i>Add</button>";
                             tbody += "</td>";
+                            tbody += "<td class='hide'>" + val.testcode + "</td>";
                             tbody += "</tr>";
                             tbody += "<tr class=" + val.r_type + ">";
                             tbody += "<td class='hide'>" + val.AutoTestId + "</td>";
@@ -318,7 +434,7 @@ function ReportDetail() {
                             tbody += "<td colspan='8'><textarea id='txtTestContent" + val.AutoTestId + "' class='form-control'></textarea></td>";
                             tbody += "<td class='hide'>" + val.report_content + "</td>";
                             tbody += "</tr>";
-                        }                 
+                        }
                     });
                     $('#tblTestInfo tbody').append(tbody);
                 }

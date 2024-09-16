@@ -68,12 +68,12 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     RoundOff = Convert.ToDecimal(dr["roundoff"]);
                     NetPayable = Convert.ToDecimal(dr["NetPayable"]);
 
-                    b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px'>" + HospitalName + "</h1>");
-                    b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;'>" + HospitalAddress + "<br/>Phone No : " + HospitalPhone + ", Email : " + HospitalEmail + "</h3>");
+                    b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px;font-family:Calibri'>" + HospitalName + "</h1>");
+                    b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;font-family:Calibri'>" + HospitalAddress + "<br/>Phone No : " + HospitalPhone + ", Email : " + HospitalEmail + "</h3>");
                     //b.Append("<h2 style='text-align:center;font-size:21px;'></h2>");
-                    b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Bill</h3>");
+                    b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;;font-family:Calibri'>OPD Bill</h3>");
                     b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
-                    b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
+                    b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;font-family:Calibri'>");
                     b.Append("<tr>");
                     b.Append("<td>Room No</td>");
                     b.Append("<td>:</td>");
@@ -154,7 +154,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     CancelAgainstNo = dr["visitType"].ToString();
                 }
             }
-            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-top:10px;'>");
+            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-top:10px;;font-family:Calibri'>");
             b.Append("<tr>");
             b.Append("<th colspan='5'><hr style='margin-bottom:-6px;border:1px solid #000'></th>");
             b.Append("</tr>");
@@ -194,7 +194,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("<div style='width:60%;float:left'>");
             if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
             {
-                b.Append("<table style='width:80%;font-size:14px;text-align:left;' border='1' cellspacing='0'>");
+                b.Append("<table style='width:80%;font-size:14px;text-align:left;font-family:Calibri' border='1' cellspacing='0'>");
                 b.Append("<tr>");
                 b.Append("<th style='padding-left:5px'>Payment Mode</th>");
                 b.Append("<th style='padding-left:5px'>Receipt Date</th>");
@@ -215,7 +215,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             {
                 if (ds.Tables[1].Rows[0]["discountReason"].ToString().Length > 1)
                 {
-                    b.Append("<table style='width:80%;font-size:14px;text-align:left;' cellspacing='0'>");
+                    b.Append("<table style='width:80%;font-size:14px;text-align:left;font-family:Calibri' cellspacing='0'>");
 
 
                     b.Append("<tr>");
@@ -238,7 +238,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             //b.Append("<img src=" + BarcodeGenerator.GenerateBarCode(appNo, 300, 70) + " style='float:left;margin-top:25px;' />");
             b.Append("</div>");
             b.Append("<div style='width:40%;float:right'>");
-            b.Append("<table style='font-size:14px;float:right' border='0' cellspacing='0'>");
+            b.Append("<table style='font-size:14px;float:right;font-family:Calibri' border='0' cellspacing='0'>");
             b.Append("<tr style='font-size:16px'>");
             b.Append("<td colspan='3' style='width:80%;text-align:right'><b>Gross Amount : </b></td>");
             b.Append("<td style='width:20%;text-align:right;white-space: nowrap;'><b>" + GrossAmount.ToString("F") + "</b></td>");
@@ -297,7 +297,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("<p style='font-size:14px'><b>Please download our Chandan24x7 App.</b></p>");
             b.Append("<p style='font-size:11px'>Note : This is a computerized Bill and does not require Seal & Sign</p>");
             b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
-            b.Append("<table style='font-size:13px;border:0px solid #dcdcdc;width:100%'>");
+            b.Append("<table style='font-size:13px;border:0px solid #dcdcdc;width:100%;font-family:Calibri'>");
             b.Append("<tr>");
             b.Append("<td style='text-align:left'>Print Date & Time :" + DateTime.Now.ToString("dd-MM-yyyy hh:mm") + "</td>");
             b.Append("<td style='text-align:center'>Prepared By : " + preparedBy + "</td>");
@@ -728,13 +728,40 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             StringBuilder f = new StringBuilder();
             var AppNo = string.Empty;
             string NextFollowUpDate = string.Empty;
-            b.Append("<div style='height:110px;border-bottom:1px solid #000'></div>");
+        
             if (ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[1].Rows)
                 {
                     NextFollowUpDate = dr["NextFollowUpDate"].ToString();
-                    b.Append("<table style='width:100%;font-size:13px;text-align:left;border:0px solid #dcdcdc;'>");
+
+                    b.Append("<div style='height:125x;'>");
+                    b.Append("<table style='padding:2px;background:#fff;width:100%;;font-size:18px;text-align:left;margin-top:30px'>");
+
+                    b.Append("<tr>");
+                    b.Append("<td style='width:33%;text-align:left;'></td>");
+                    b.Append("<td style='width:67%;text-align:left;font-size:22px'><b>" + ds.Tables[0].Rows[0]["Hospital_Name"].ToString() + "<b/></td>");
+                    b.Append("</tr>");
+
+                    b.Append("<tr>");
+                    b.Append("<td style='width:33%;text-align:left;'></td>");
+                    b.Append("<td style='width:67%;text-align:left;font-size:18px'>" + dr["dept_name"].ToString() + "</td>");
+                    b.Append("</tr>");
+
+                    b.Append("<tr>");
+                    b.Append("<td style='width:33%;text-align:left;'></td>");
+                    b.Append("<td style='width:67%;text-align:left;font-size:13px'>" + dr["Full_Address"].ToString() + "</td>");
+                    b.Append("</tr>");
+
+                    b.Append("<tr>");
+                    b.Append("<td style='width:33%;text-align:left;'></td>");
+                    b.Append("<td style='width:67%;text-align:left;font-size:13px'>" + dr["Info"].ToString() + "</td>");
+                    b.Append("</tr>");
+
+                    b.Append("</table>");
+                    b.Append("</div>");
+
+                    b.Append("<table style='width:100%;font-size:13px;text-align:left;border:1px solid #dcdcdc;'>");
                     b.Append("<tr>");
                     b.Append("<td><b>Patient Name</b></td>");
                     b.Append("<td><b>:</b></td>");
@@ -803,6 +830,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             var tbodyDiagnosis = string.Empty;
             var tbodyHistory = string.Empty;
             var tbodyAdvice = string.Empty;
+            var tbodyRemark = string.Empty;
             var tbodyGlass = string.Empty;
             var tbodyVisualAcuity = string.Empty;
             var tbodyMCT = string.Empty;
@@ -1009,6 +1037,15 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     tbodyAdvice += "<li style='padding-left:5px'>" + dr["ItemName"].ToString() + "</li> ";
                 }
             }
+            if (ds.Tables.Count > 0 && ds.Tables[13].Rows.Count > 0)
+            {
+                var count = 0;
+                foreach (DataRow dr in ds.Tables[13].Rows)
+                {
+                    count++;
+                    tbodyRemark += "<li style='padding-left:5px'>" + dr["ItemName"].ToString() + "</li> ";
+                }
+            }
             if (ds.Tables.Count > 0 && ds.Tables[8].Rows.Count > 0)
             {
                 var count = 0;
@@ -1198,6 +1235,18 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
 
                 b.Append("</div>");
             }
+            if (!string.IsNullOrEmpty(tbodyAdvice))
+            {
+
+                b.Append("<div style='width:60%;font-size:13px;float:left;margin-bottom:20px'>");
+
+                //Remark            
+                b.Append("<p style='margin:0'><b>Note </b></p>");
+                b.Append("<ul style='margin:0;font-size:11px;list-style:none;letter-spacing: 1px;'>" + tbodyRemark + "</ul>");
+                //Remark End
+
+                b.Append("</div>");
+            }
             b.Append("</div>");
             f.Append("<div style='width:100%;'>");
             if (ds.Tables.Count > 0 && ds.Tables[6].Rows.Count > 0)
@@ -1224,9 +1273,9 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             pdfConverter.Footer_Enabled = true;
             pdfConverter.Footer_Hight = 70;
             pdfConverter.Header_Hight = 120;
-            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginLeft = 40;
             pdfConverter.PageMarginRight = 10;
-            pdfConverter.PageMarginBottom = 50;
+            pdfConverter.PageMarginBottom = 70;
             pdfConverter.PageMarginTop = 10;
             pdfConverter.PageMarginTop = 10;
             pdfConverter.PageName = "A4";
@@ -1285,12 +1334,12 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     RoundOff = Convert.ToDecimal(dr["roundoff"]);
                     NetPayable = Convert.ToDecimal(dr["NetPayable"]);
 
-                    b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px'>" + HospitalName + "</h1>");
-                    b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;'>" + HospitalAddress + "<br/>Phone No : " + HospitalPhone + ", Email : " + HospitalEmail + "</h3>");
+                    b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px;font-family:Calibri'>" + HospitalName + "</h1>");
+                    b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;;font-family:Calibri'>" + HospitalAddress + "<br/>Phone No : " + HospitalPhone + ", Email : " + HospitalEmail + "</h3>");
                     //b.Append("<h2 style='text-align:center;font-size:21px;'></h2>");
-                    b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;'>OPD Bill</h3>");
+                    b.Append("<h3 style='text-align:center;font-weight:bold;text-decoration: underline;;font-family:Calibri'>OPD Bill</h3>");
                     b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
-                    b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
+                    b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;font-family:Calibri'>");
                     b.Append("<tr>");
                     b.Append("<td>Visit No.</td>");
                     b.Append("<td><b>:</b></td>");
@@ -1360,7 +1409,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("</table>");
                 }
             }
-            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-top:10px;'>");
+            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-top:10px;font-family:Calibri'>");
             b.Append("<tr>");
             b.Append("<th colspan='5'><hr style='margin-bottom:-6px;border:1px solid #000'></th>");
             b.Append("</tr>");
@@ -1408,7 +1457,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("<div style='width:60%;float:left'>");
             if (ds.Tables.Count > 0 && ds.Tables[3].Rows.Count > 0)
             {
-                b.Append("<table style='width:80%;font-size:14px;text-align:left;' border='1' cellspacing='0'>");
+                b.Append("<table style='width:80%;font-size:14px;text-align:left;font-family:Calibri' border='1' cellspacing='0'>");
                 b.Append("<tr>");
                 b.Append("<th style='padding-left:5px'>Payment Mode</th>");
                 b.Append("<th style='padding-left:5px'>Receipt Date</th>");
@@ -1428,7 +1477,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             {
                 if (ds.Tables[1].Rows[0]["discountReason"].ToString().Length > 1)
                 {
-                    b.Append("<table style='width:80%;font-size:14px;text-align:left;' cellspacing='0'>");
+                    b.Append("<table style='width:80%;font-size:14px;text-align:left;font-family:Calibri' cellspacing='0'>");
 
 
                     b.Append("<tr>");
@@ -1446,7 +1495,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             //b.Append("<img src=" + BarcodeGenerator.GenerateBarCode(appNo, 300, 70) + " style='float:left;margin-top:25px;' />");
             b.Append("</div>");
             b.Append("<div style='width:40%;float:right'>");
-            b.Append("<table style='font-size:14px;float:right' border='0' cellspacing='0'>");
+            b.Append("<table style='font-size:14px;float:right;font-family:Calibri' border='0' cellspacing='0'>");
             b.Append("<tr style='font-size:16px'>");
             b.Append("<td colspan='3' style='width:80%;text-align:right'><b>Gross Amount : </b></td>");
             b.Append("<td style='width:20%;text-align:right;white-space: nowrap;'><b>" + GrossAmount.ToString("F") + "</b></td>");
@@ -1505,7 +1554,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("<p style='font-size:14px'><b>Please download our Chandan24x7 App.</b></p>");
             b.Append("<p style='font-size:11px'>Note : This is a computerized Bill and does not require Seal & Sign</p>");
             b.Append("<p><hr style='margin-top:-14px;margin-bottom:-14px;border:1px solid #000'></p>");
-            b.Append("<table style='font-size:13px;border:0px solid #dcdcdc;width:100%'>");
+            b.Append("<table style='font-size:13px;border:0px solid #dcdcdc;width:100%;font-family:Calibri'>");
             b.Append("<tr>");
             b.Append("<td style='text-align:left'>Print Date & Time :" + DateTime.Now.ToString("dd-MM-yyyy hh:mm") + "</td>");
             b.Append("<td style='text-align:center'>Prepared By : " + preparedBy + "</td>");
@@ -1531,6 +1580,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "ServiceReceipt.pdf");
         }
+
         public FileResult AdvanceReceipt(string ReceiptNo, string loginName)
         {
             PdfGenerator pdfConverter = new PdfGenerator();
@@ -1550,41 +1600,25 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    //b.Append("<div style='width:100%;float:left;margin-top:-12px;padding:8px'>");
-                    //string headerImageFile = HttpContext.Server.MapPath(@"/Content/logo/logo.png");
-                    //b.Append("<div style='text-align:left;width:30%;float:left'>");
-                    ////b.Append("<img src=" + headerImageFile + " style='width:170px;margin-top:18px;' />");
-                    //b.Append("</div>");
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         foreach (DataRow dr1 in ds.Tables[0].Rows)
                         {
-                            b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px'>" + dr1["Hospital_Name"].ToString() + "</h1>");
-                            b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;'>" + dr1["Full_Address"].ToString() + "<br/>Phone No : " + dr1["ContactInfo"].ToString() + ", Email : " + dr1["Website"].ToString() + "</h3>");
+                            b.Append("<h1 style='text-align:center;text-decoration: underline;margin-bottom:-8px;font-family:Calibri'>" + dr1["Hospital_Name"].ToString() + "</h1>");
+                            b.Append("<h2 style='text-align:center;font-weight:bold;font-size:19px;font-family:Calibri'>" + dr1["Full_Address"].ToString() + "<br/>Phone No : " + dr1["ContactInfo"].ToString() + ", Email : " + dr1["Website"].ToString() + "</h3>");
 
-
-                            //b.Append("<div style='text-align:left;width:70%;float:right;'>");
-                            //b.Append("<h3 style='font-weight:bold;margin-bottom:-2px'>" + dr1["Hospital_Name"].ToString() + "</h3>");
-                            //b.Append("<span style='text-align:left;'>" + dr1["Full_Address"].ToString() + "</span><br/>");
-                            //b.Append("<span style='text-align:left;'>" + dr1["ContactInfo"].ToString() + "</span><br/>");
-                            //b.Append("<span style='text-align:left;'><b>Website : " + dr1["Website"].ToString() + "</b></span>");
-                            //b.Append("</div>");
-                            //b.Append("</div>");
                         }
                     }
-
-                    b.Append("<div style='text-align:left;width:100%;float:left;'>");
+                    b.Append("<div style='text-align:left;width:100%;float:left;font-family:Calibri'>");
                     b.Append("<span style='text-align:left;width:33%;float:left;'><b>CIN : " + dr["CIN"].ToString() + "</b></span>");
                     b.Append("<span style='text-align:right;width:33%;float:left;'><b>GSTIN : " + dr["GSTIN"].ToString() + "</b></span>");
                     b.Append("<span style='text-align:right;width:33%;float:right;'><b>HSN : " + dr["HSN"].ToString() + "</b></span>");
                     b.Append("</div>");
                     b.Append("<hr/>");
-
                     foreach (DataRow dr2 in ds.Tables[1].Rows)
                     {
-                        b.Append("<h2 style='font-weight:bold;text-align:center;text-decoration:underline'>" + dr2["ipopType"].ToString() + " Receipt</h2>");
-                        b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
-
+                        b.Append("<h2 style='font-weight:bold;text-align:center;text-decoration:underline;font-family:Calibri'>" + dr2["ipopType"].ToString() + " Receipt</h2>");
+                        b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;font-family:Calibri'>");
                         b.Append("<tr>");
                         b.Append("<td style='width:15%'>UHID No.</td>");
                         b.Append("<td style='width:2%'><b>:</b></td>");
@@ -1614,13 +1648,16 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                         b.Append("<td style='width:2%'><b>:</b></td>");
                         b.Append("<td style='width:35%'>" + dr2["receiptDate"].ToString() + "</td>");
                         b.Append("<tr>");
-
-                        if (dr2["ipopType"].ToString() == "IPD")
+                        if(dr2["ipopType"].ToString() == "IPD")
                         {
                             b.Append("<tr>");
                             b.Append("<td>IPD No</td>");
                             b.Append("<td><b>:</b></td>");
-                            b.Append("<td colspan='4'>" + dr2["ipop_no"].ToString() + "</td>");
+                            b.Append("<td>" + dr2["ipop_no"].ToString() + "</td>");
+                            b.Append("<td style='width:2%'>&nbsp;</td>");
+                            b.Append("<td style='width:15%'>Relation</td>");
+                            b.Append("<td style='width:2%'><b>:</b></td>");
+                            b.Append("<td style='width:35%'>" + dr2["relation"].ToString() + "</td>");
                             b.Append("<tr>");
                         }
                         b.Append("<tr>");
@@ -1629,7 +1666,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                         b.Append("<td colspan='5'>" + dr2["address"].ToString() + "</td>");
                         b.Append("<tr>");
                         b.Append("</table>");
-                        PreparedBy = dr2["loginName"].ToString();
+
                     }
                 }
             }
@@ -1637,7 +1674,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             string temp = string.Empty;
             if (ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
             {
-                b.Append("<table style='width:100%;font-size:17px;text-align:left;margin-top:10px;border:1px solid #000;padding:3px' border='0' cellspacing='0'>");
+                b.Append("<table style='width:100%;font-size:17px;text-align:left;margin-top:10px;border:1px solid #000;padding:3px;font-family:Calibri' border='0' cellspacing='0'>");
                 b.Append("<tr>");
                 b.Append("<th style='padding-left:5px'>Advance/Return </th>");
                 b.Append("<th style='padding-left:5px'>Payment</th>");
@@ -1660,18 +1697,20 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     b.Append("<td style='text-align:right;padding-right:5px'>" + dr["Amount"].ToString() + "</td>");
                     b.Append("</tr>");
                     totalAmount += Convert.ToDecimal(dr["Amount"].ToString());
+                    PreparedBy = dr["loginName"].ToString();
                 }
                 b.Append("</table>");
             }
             b.Append("<br><hr/>");
-            b.Append("<div style='text-align:left;width:100%;float:left;'>");
+            b.Append("<div style='text-align:left;width:100%;float:left;font-family:Calibri'>");
             b.Append("<span style='text-align:left;width:70%;float:left;'><b>Received with thanks : </b>" + AmountConverter.ConvertToWords(Convert.ToString(totalAmount).ToString()) + "</span>");
             b.Append("</div>");
             b.Append("<p style='text-align:left;width:100%;float:left;font-sizr:17px'><b>Note : This is a computerised Bill and not require Seal & Sign.</b></p><br>");
 
             b.Append("<br><hr/>");
-            b.Append("<div style='text-align:left;width:100%;float:left;'>");
-            b.Append("<p style='font-size:15px;width:32%;float:left;'>Print Date :<b>" + DateTime.Now.ToString() + "</b></p>");
+            b.Append("<div style='text-align:left;width:100%;float:left;font-family:Calibri'>");
+            b.Append("<p style='font-size:15px;width:32%;float:left;'>Print Date :<b>" + DateTime.Now.ToString("dd-MM-yyyy h:mm tt") + "</b></p>");
+            //b.Append("<p style='font-size:15px;width:32%;float:left;'>Print Date :<b>" + DateTime.Now.ToString() + "</b></p>");
             b.Append("<p style='font-size:15px;width:32%;float:right;'>Prepared by : <b>" + PreparedBy + "</b></p>");
             b.Append("<p style='font-size:15px;width:32%;float:right;'>Printed by : <b>" + loginName + "</b></p>");
             b.Append("</div>");
@@ -1689,6 +1728,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "ServiceReceipt.pdf");
         }
+
         public FileResult MedicalCertificate(string UHID_No, string Autoid)
         {
             PdfGenerator pdfConverter = new PdfGenerator();
@@ -1701,6 +1741,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             string _result = string.Empty;
             StringBuilder b = new StringBuilder();
             StringBuilder h = new StringBuilder();
+            StringBuilder f = new StringBuilder();
             string No = "";
             string MedicalCertificateid = "";
             string UhidNo = "";
@@ -1713,22 +1754,10 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             string dTo = "";
             string currentdate = "";
             string Remark = "";
-      
             string imagePath = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/logo/ChandanLogo.jpg");
-            b.Append("<div class='row' style='padding:10px;padding-top:120px'>");
-            b.Append("<div>");
-            
-            //b.Append("<img src='" + imagePath + "' style='width:120px; height:60px;margin-top:-2%' />");
-            //b.Append("</div>");
-            //b.Append("<div style='margin-top:-9%'>");
-            //b.Append("<h1 style='text-align:center; color:red; text-transform:uppercase;margin-left:120px;'>Chandan Hospital</h1>");
-            //b.Append("</div>");
-            //b.Append("<div style='margin-top:-4%'>");
-            //b.Append("<h1 style='text-align:center; font-size:12px;color:black;margin-left:80px;'>Add.. Faizabad Road, Near Chinhat Flyover, Vijayant Khand,Gomti Nagar Lucknow-226010</h1>");
-            //b.Append("<h1 style='text-align:center; font-size:12px;color:black;margin-top:-1%;margin-left:70px;'>Email: care@chandanhospital.in Web.www.chandanhospital.in</h1>");
-
-            b.Append("<h1 style='text-align:center; font-size:16px; color:black;margin-top:-1%;'><u> MEDICAL CERTIFICATE </u></h1>");
-            b.Append("<h1 style='text-align:center; font-size:14px;color:black;margin-top:-1%'>To Whom It May Concern</h1>");
+            b.Append("<div class='row' style='padding:10px;padding-top:100px;font-family:Calibri'>");
+            b.Append("<h1 style='text-align:center; font-size:16px; color:black;margin-top:-1%;font-family:Calibri'><u> MEDICAL CERTIFICATE </u></h1>");
+            b.Append("<h1 style='text-align:center; font-size:14px;color:black;margin-top:-1%;font-family:Calibri'>To Whom It May Concern</h1>");
 
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -1749,7 +1778,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
                     Remark = dr["Remark"].ToString();
                 }
             }
-            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px'>");
+            b.Append("<table style='width:100%;font-size:15px;text-align:left;border:0px solid #dcdcdc;margin-bottom:-15px;font-family:Calibri'>");
             b.Append("<tr>");
             b.Append("<td style='text-align:left'><b>No:</b></td>");
             b.Append("<td style='text-align:left;margin-left:25px'>" + MedicalCertificateid + "</td>");
@@ -1766,18 +1795,17 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             b.Append("</table>");
 
             b.Append("<hr style='border: 1px solid black;margin-top:3%'>");
-            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex'><span style='white-space:pre'>This is certify that : &nbsp;</span><span style='margin-left:20px;width:80%;border-bottom:1px dashed;display:block'><b>" + PatientName + "</b></span>&nbsp;<span style='white-space:pre'>Age:&nbsp;</span><span style='margin-left:20px;width:20%;border-bottom:1px dashed;display:block'><b>" + ageInfo + "</b></span></p>");
-            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;width:15%;'>R/O: &nbsp;</span><span style='margin-left:20px;width:100%;border-bottom:1px dashed;display:block'><b>" + address + "</b></span></p>");
-            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;'>was under my treatrment due to complaint of </span>&nbsp;&nbsp;<span style='margin-left:100px;width:100%;border-bottom:1px dashed;display:block'><b>" + ChiefComplaint + "</b></span></p>");
-            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;width:10%'>From :</span>&nbsp;<span style='width:20%;border-bottom:1px dashed;display:block'><b>" + dFrom + "</b></span> &nbsp;<span style='white-space:pre;width:5%'>To : &nbsp;</span><span style='width:65%;border-bottom:1px dashed;display:block'><b>" + dTo + "</b></span></p>");
-            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre'>Remark &nbsp;</span><span style='margin-left:20px;width:100%;border-bottom:1px dashed;display:block'><b>" + Remark + "</b></span></p>");
-            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:75%'><span style='width:35%;'><b>Doctor Signature </b></span><span style='width:35%;'><b>Medical Superintendent <br>Signature</b></span><span style='width:30%;'><b>Patient/Guardian<br>Signature</b></span></p>");
-            b.Append("</div>");
-
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;font-family:Calibri'><span style='white-space:pre;font-family:Calibri'>This is certify that : &nbsp;</span><span style='margin-left:20px;width:80%;border-bottom:1px dashed;display:block'><b>" + PatientName + "</b></span>&nbsp;<span style='white-space:pre'>Age:&nbsp;</span><span style='margin-left:20px;width:20%;border-bottom:1px dashed;display:block'><b>" + ageInfo + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;width:15%;font-family:Calibri'>R/O: &nbsp;</span><span style='margin-left:20px;width:100%;border-bottom:1px dashed;display:block'><b>" + address + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;font-family:Calibri'>was under my treatrment due to complaint of </span>&nbsp;&nbsp;<span style='margin-left:100px;width:100%;border-bottom:1px dashed;display:block;text-align:justify;'><b>" + ChiefComplaint + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%'><span style='white-space:pre;width:10%;font-family:Calibri'>From :</span>&nbsp;<span style='width:20%;border-bottom:1px dashed;display:block'><b>" + dFrom + "</b></span> &nbsp;<span style='white-space:pre;width:5%'>To : &nbsp;</span><span style='width:65%;border-bottom:1px dashed;display:block'><b>" + dTo + "</b></span></p>");
+            b.Append("<p style='font-size:16px;float:left; width:100%;display:flex;margin-top:-1%;'><span style='white-space:pre;font-family:Calibri'>Remark &nbsp;</span><span style='margin-left:20px;width:100%;border-bottom:1px dashed;display:block;text-align:justify;'><b>" + Remark + "</b></span></p>");
+            f.Append("<p style='font-size:25px;float:left; width:100%;display:flex;margin-left:20px'><span style='width:35%;font-family:Calibri'><b>Doctor Signature </b></span><span style='width:35%;'><b>Medical Superintendent <br>Signature</b></span><span style='width:30%;margin-left:30px'><b>Patient/Guardian<br>Signature</b></span></p>");
             b.Append("</div>");
             pdfConverter.Header_Enabled = false;
-            pdfConverter.Footer_Enabled = false;
+            pdfConverter.Footer_Enabled = true;
             pdfConverter.Header_Hight = 150;
+            pdfConverter.Footer_Hight = 100;
             pdfConverter.PageMarginLeft = 10;
             pdfConverter.PageMarginRight = 10;
             pdfConverter.PageMarginBottom = 10;
@@ -1785,7 +1813,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Controllers
             pdfConverter.PageMarginTop = 10;
             pdfConverter.PageName = "A4";
             pdfConverter.PageOrientation = "Portrait";
-            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "", "MedicalCertificate.pdf");
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), f.ToString(), "MedicalCertificate.pdf");
         }
     }
 }

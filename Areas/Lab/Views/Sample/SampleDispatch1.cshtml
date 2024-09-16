@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewBag.Title = "SampleDispatch1";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Lab/JsModule/SampleDispatch1.js"></script>
+<style>
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .navigation div[class*=col-md-2] {
+        width: 10%;
+        padding: 2px;
+    }
+
+    .navigation div[class*=col-md-4] {
+        width: 38%;
+        padding: 2px;
+    }
+
+    .navigation input {
+        padding: 3px;
+    }
+
+    #tblReport thead th {
+        padding: 4px;
+    }
+
+    #tblReport tbody td {
+        padding: 3px;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+
+    .bn {
+        margin: 0px;
+        font-size: 10pt;
+        padding: 0px 10px;
+        border-radius: 0;
+        text-align: left;
+        height: 27px;
+    }
+
+    .btnDispatchGroup {
+        height: 17px;
+        line-height: 0;
+    }
+
+    .panel-heading button {
+        float: right;
+        margin: -26px 0px;
+    }
+
+    .text-white {
+        color: #fff;
+        margin: 7px 0px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="panel-heading" style="background-color:#026cbd; color:white; padding: 1px;margin-left: 26px;">
+                <h4 class="text-left" style="margin: 4px 2px;">Sample Dispatch By Barcode</h4>
+            </div>
+            <div class="col-md-8">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="flex">
+                                            <select id="ddlCategory" class="form-control bn"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="flex">
+                                            <input type="text" placeholder="Enter Barcode" class="form-control" id="txtBarcode" />
+                                            <button class="btn btn-success bn" id="btnadd" style="margin-left:15px;" onclick="AddDispatchNo()">ADD</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="scroll" style="height:505px;margin-top:10px; display:block; border:1px solid #2478a9; overflow:auto;padding-bottom:7px;">
+                                            <table class="table table-bordered" id="tblDispatch">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S.No</th>
+                                                        <th>VisitNo</th>
+                                                        <th>BarcodeNo</th>
+                                                        <th>Patient Name</th>
+                                                        <th>Date</th>
+                                                        <th>Gender</th>
+                                                        <th>AgeInfo</th>
+                                                        <th>Test</th>
+                                                        <th>Cmd</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalDispatch" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:5%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5 class="text-white">Test Dispatch</h5>
+                    <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="margin-top:-25px;">
+                        <div class="form-group flex">
+
+                            <input type="text" class="form-control bn" id="txtEmpName" style="width:45%" placeholder="Search By Name..">
+                            <button id="btnGetEmp" class="btn btn-success bn" style="width:13%">Get</button>&nbsp;&nbsp;
+                            <select id="ddlEmployee" class="form-control"></select>
+                        </div>
+                        <button class="btn btn-warning bn" onclick="FinalSubmitDispatch();" style="margin-left: 35%;"><span class="fa fa-sign-in"></span>Dispatch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -45,12 +45,9 @@ function GetData(Logicname) {
                         tbody += '</tr>';
                         Total = Total + val.Amount;
                     });
-                    tbody += '<tr style="background-color:lightGreen;font-size:15px;">';
-                    tbody += '<td colspan="9" style="text-align:right;font-weight:bold" >Balance Amount :</td>';
-                    tbody += '<td style="font-weight:bold" > ' + Total+'</td>';
-                    tbody += '<td></td>';
-                    tbody += '</tr>'
+
                     $('#tblReceiptNo tbody').append(tbody);
+                    $("#txttotal").text(Total.toFixed(0));
 
                 }
             }
@@ -76,3 +73,23 @@ function DownloadExcelReceipt() {
     objBO.OutPutType = 'Excel';
     Global_DownloadExcel(url, objBO, "ReceiptInfoReport" + ".xlsx");
 }
+
+function PrintData() {
+    var from = $('#txtFrom').val();
+    var to = $('#txtTo').val();
+    var Nameby = $("#txtByname").val();
+    var unidno = $("#txtSearchUHID").val();
+
+    if (logicexecl == "ReceptInfoByNo") {
+        var url = "../Print/ReceiptInfo?fromdate=" + from + "&todate=" + to + "&UHIDNO=" + unidno + "&Username=" + Nameby + "&Logicexcel=" + logicexecl;
+        window.open(url, '_blank');
+    }
+    else if (logicexecl == "ReceptInfoByDate") {
+        var url = "../Print/ReceiptInfo?fromdate=" + from + "&todate=" + to + "&UHIDNO=" + unidno + "&Username=" + Nameby + "&Logicexcel= " + logicexecl;
+        window.open(url, '_blank');
+    }
+    else if (logicexecl == "ReceptInfoByName") {
+        var url = "../Print/ReceiptInfo?fromdate=" + from + "&todate=" + to + "&UHIDNO=" + unidno + "&Username=" + Nameby + "&Logicexcel= " + logicexecl;
+        window.open(url, '_blank');
+    }
+} 

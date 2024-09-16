@@ -16,13 +16,13 @@ $(document).ready(function () {
     $('#tblVaccinationInfo tbody').on('change', '.groupday input[type=date]', function () {
         var val = $(this).val();
         var Tag = $(this).attr('id');
-        var eq = 0; 
+        var eq = 0;
 
         if (Tag == 'PlannedFrom')
             eq = $(this).closest('td').index() + 3;
         if (Tag == 'PlannedTo' || Tag == 'VaccinationDate')
             eq = $(this).closest('td').index() + 4;
-          
+
         if (eq == 4) {
             $(this).closest('tr').nextUntil('.groupday').find('td:eq(' + eq + ')').find('input[type=date]').val(val);
             eq += 1;
@@ -129,18 +129,14 @@ function GetPatientInfo() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            console.log(data)
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         $('#txtUHID').val(val.UHID).prop('disabled', true);
                         $('#txtPatientName').val(val.PatientName).prop('disabled', true);
                         $('#txtDistrict').val(val.District).prop('disabled', true);
-                        $('#txtDOB').val(val.dob.split('T')[0]);   
-                        if (val.StartDate !='ITDOSE')
-                            $('#txtStartDate').val(val.StartDate.substring(0, 10));
-                        else
-                            $('#txtStartDate').val(val.dob.split('T')[0]); 
+                        $('#txtDOB').val(val.dob.split('T')[0]);
+                        $('#txtStartDate').val(val.dob.split('T')[0]);
 
                         $('#txtMobileNo').val(val.mobileNo).prop('disabled', true);
                         $('#ddlGender').val(val.Gender).prop('disabled', true);
@@ -382,7 +378,7 @@ function InsertVaccinationDetail(group) {
         var url = config.baseUrl + "/api/Appointment/OPD_InsertVaccinationInfo";
         var objBO = [];
         if (group == 'ALL') {
-            $('#tblVaccinationInfo tbody tr:not(.groupday)').each(function () {              
+            $('#tblVaccinationInfo tbody tr:not(.groupday)').each(function () {
                 objBO.push({
                     'IPDNo': $('#txtSearchUHID').val(),
                     'UHID': $('#txtUHID').val(),

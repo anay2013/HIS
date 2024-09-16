@@ -32,6 +32,7 @@ $(document).ready(function () {
         $('#txtSearchValue').val('');
         $('#modalOldPatient').modal('show');
         Clear();
+
     });
     $('#btnSearchOldPatient').on('click', function () {
         GetOldPatient('GetOldPatient');
@@ -71,7 +72,7 @@ $(document).ready(function () {
         GetCityByState(sId, 'N');
     });
 
-    $('#tblOldPatient tbody').on('click', 'button', function () {
+    $('#tblOldPatient tbody').on('click', 'button.select', function () {
         var uhid = $(this).closest('tr').find('td:eq(1)').text();
         $('#BasicInformation').find('.infosection').removeClass('blockInfo');
         //if (uhid.includes('New'))
@@ -111,6 +112,35 @@ function CreateLocality() {
         return;
     }
     $('#modalLocality').modal('show');
+}
+function CancelPatientRecord(elem) {
+    if (confirm('Are you sure to Cancel?')) {
+        var url = config.baseUrl + "/api/Appointment/Opd_InsertAppointmentAssets";
+        var objBO = {};
+        objBO.hosp_id = Active.unitId;
+        objBO.prm_1 = $(elem).closest('tr').find('td:eq(1)').text();
+        objBO.login_id = Active.userId;
+        objBO.Logic = 'CancelPatientRecord';
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(objBO),
+            contentType: "application/json;charset=utf-8",
+            dataType: "JSON",
+            success: function (data) {
+                if (data.includes('Success')) {
+                    alert(data);
+                    $(elem).closest('tr').remove();
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function (response) {
+                alert('Server Error...!');
+            }
+        });
+    }
 }
 function InsertLocality() {
     if ($('#txtNewLocality').val() == '') {
@@ -382,7 +412,7 @@ function GetOldPatient(logic) {
                         $('#btnNewPatient').show();
                         $.each(data.ResultSet.Table, function (key, val) {
                             tbody += "<tr>";
-                            tbody += "<td><button class='btn-success btn-flat'>Select</button></td>";
+                            tbody += "<td><button class='btn-success btn-xs select'>Select</button></td>";
                             tbody += "<td>" + val.UHID + "</td>";
                             tbody += "<td>" + val.patient_name + "</td>";
                             tbody += "<td>" + val.gender + "</td>";
@@ -391,6 +421,12 @@ function GetOldPatient(logic) {
                             tbody += "<td>" + val.mobile_no + "</td>";
                             tbody += "<td>" + val.address + "</td>";
                             tbody += "<td>" + val.cr_date + "</td>";
+                            tbody += "<td><button onclick=CancelPatientRecord(this) class='btn-danger btn-xs cancel'><i class='fa fa-close'>&nbsp;</i>Cancel</button></td>";
+                            if (logic != 'GetOldPatientByKiosk')
+                                tbody += "<td><button data-abha=" + val.ABHANo + " onclick=LinkABHA(this) class='btn-" + ((val.ABHANo == null) ? 'warning' : 'success') + " btn-xs cancel'><i class='fa fa-" + ((val.ABHANo == null) ? 'link' : 'eye') +"'>&nbsp;</i>" + ((val.ABHANo == null)?'Link':'View') + " ABHA</button></td>";
+                            else
+                                tbody += "<td>-</td>";
+
                             tbody += "</tr>";
                         });
                         $('#tblOldPatient tbody').append(tbody);
@@ -409,6 +445,30 @@ function GetOldPatient(logic) {
             alert('Server Error...!');
         }
     });
+}
+function LinkABHA(elem) {
+    var obj = {};
+    var abhaAddress = $(elem).data('abha');
+    var uhid = $(elem).closest('tr').find('td:eq(1)').text();
+    var name = $(elem).closest('tr').find('td:eq(2)').text();
+    if (abhaAddress == null) {
+        obj.abhaAddress = abhaAddress;
+        obj.uhid = uhid;
+        obj.name = name;
+        obj.IsABHALink = false;
+        sessionStorage.setItem('ABHA_UHID_Info',JSON.stringify(obj));  
+        var url = config.rootUrl + '/Admin/ManageABHA1?mid=SM446';
+        window.open(url, '_blank')
+    }
+    else {
+        obj.abhaAddress = abhaAddress;
+        obj.uhid = uhid;
+        obj.name = name;
+        obj.IsABHALink = true;
+        sessionStorage.setItem('ABHA_UHID_Info', JSON.stringify(obj));       
+        var url = config.rootUrl + '/Admin/abha_Dashboard?mid=SM446';
+        window.open(url, '_blank')
+    }
 }
 function GetOnlinePatient() {
     $('#tblOnlinePatientBooking tbody').empty();
@@ -450,7 +510,7 @@ function GetOnlinePatient() {
                         tbody += "<td>" + val.ageInfo + "</td>";
                         tbody += "<td>" + val.mobile_no + "</td>";
                         tbody += "<td>" + val.address + "</td>";
-                        tbody += "<td>" + val.AppDate + "</td>";
+                        tbody += "<td>" + val.AppDate + "</td>";                      
                         tbody += "</tr>";
                         count++;
                     });

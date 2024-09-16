@@ -46,5 +46,14 @@ namespace MediSoftTech_HIS.Areas.Accounts.Controllers
         {
             return View();
         }
+
+        public ActionResult ReProcessVoucher()
+        {
+            return View();
+        }
+        public ActionResult AuditServiceCharge()
+        {
+            return View();
+        }
     }
 }

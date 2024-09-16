@@ -3,12 +3,13 @@
     Layout = "~/Views/Shared/_layout.cshtml";
 }
 
-<script src="~/Areas/Lab/JsModule/ReportEditing.js?v1.3"></script>
+<script src="~/Areas/Lab/JsModule/ReportEditing.js?v1.4"></script>
 <script src="~/JsModule/mdb.min.js?his-version-1.0"></script>
 <style>
     #tblDelta2 tbody td, #tblDelta2 thead th {
         white-space: pre;
     }
+
     #lblPatientInfo {
         text-transform: uppercase;
         background: #ffe8ca;
@@ -17,6 +18,25 @@
         display: block;
         border: 1px solid #f3d7b2;
     }
+
+    .urgent {
+        display: inline-block;
+        background: #ff3232;
+        color: #fff;
+        padding: 2px;
+        border-radius: 50px;
+        width: 14px;
+        text-align: center;
+        height: 14px;
+        line-height: 10px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .barcode {
+        color: #0076d0;
+    }
+
     #tblTestTrackingReport thead th {
         white-space: pre;
     }
@@ -29,6 +49,19 @@
         margin-bottom: 5px;
         overflow: auto;
         border: 1px solid #edd0af;
+    }
+
+    .colDate {
+        position: absolute;
+        display: none;
+        padding: 4px 4px;
+        display: block;
+        border: 1px solid #ddd;
+        background: #fff8e4;
+        right: 53px;
+        margin-top: -13px;
+        text-align: center;
+        border-radius: 3px;
     }
 
     .labelGroup {
@@ -370,8 +403,8 @@
                                                 <th style='width:13%'>Ref. Range</th>
 
                                                 @*
-                                                <th style='width:10%'>Method</th>
-                                                <th style='width:9%'>Mac. Name</th>*@
+                                                    <th style='width:10%'>Method</th>
+                                                    <th style='width:9%'>Mac. Name</th>*@
                                                 <th style='width:9%;white-space:pre'>Mac. Reading</th>
                                                 <th style='width:1%'>cmd</th>
                                                 <th style='width:1%;padding: 1px;'><input type="checkbox" checked /></th>

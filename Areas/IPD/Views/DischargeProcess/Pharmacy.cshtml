@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Pharmacy";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+
+<div id="page-content">
+    <div class="container">
+        @Html.Partial("_DischargeProcess")
+        <div class="row">
+            <div class="col-md-7 common">
+                <div class="section" style="height:155px;">
+                    <label class="title">
+                        Discharge Status
+                    </label>
+                    <div class="row" style="margin:3px 0 2px 0">
+                        <div class="col-md-12" style="padding:0 0 0 5px">
+                            <button class="btn btn-success" onclick="ItemInsert('Pharmacy_IN')"><i class="fa fa-sign-in">&nbsp;</i>In</button>
+                            <button class="btn btn-warning" onclick="ItemInsert('InsertRemark')"><i class="fa fa-sign-in">&nbsp;</i>Submit</button>
+                            <label class="catName">Pharmacy</label>
+                            <button class="btn btn-danger pull-right" onclick="ItemInsert('Pharmacy_Out')"><i class="fa fa-sign-out">&nbsp;</i>Out</button>
+                            <textarea id="txtRemark" class="form-control" style="border:1px solid #b9b9b9;margin-top:6px" rows="4" placeholder="Remark.."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+﻿
+
+@{
+    ViewBag.Title = "PaymentMismatch";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Accounts/JsModule/Payments/PaymentMismatch.js"></script>
+<style>
+
+    .flex {
+        display: flex !important;
+        align-items: center;
+    }
+
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .fileinput.input-group {
+        display: flex;
+    }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    .navigation div[class*=col-md-2] {
+        width: 10%;
+        padding: 2px;
+    }
+
+    .navigation div[class*=col-md-4] {
+        width: 38%;
+        padding: 2px;
+    }
+
+    .navigation input {
+        padding: 3px;
+    }
+
+    #tblReport thead th {
+        padding: 4px;
+    }
+
+    #tblReport tbody td {
+        padding: 5px;
+    }
+
+    .panel-heading {
+        padding: 1px 5px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="ml15">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5>PaymentMismatch</h5>
+                </div>
+            </div>
+            <div class="panel panel-primary" style="margin-top:-20px">
+                <div class="panel-body">
+                    <div class="row" style="background-color:#e3e3e3e3;margin-left: 0px;margin-right: 0px;height:65px;padding: 4px;">
+                        <div class="col-md-2">
+                            <label>From Date</label>
+                            <input type="date" id="txtSearchFrom" class="form-control" placeholder="from : dd-mm-yyyy" />
+                        </div>
+                        <div class="col-md-4">
+                            <label>To Date</label>
+                            <div style="display:flex">
+                                <input type="date" id="txtSearchTo" class="form-control" placeholder="to : dd-mm-yyyy" />
+                                <button id="btnAll" style="width:50%;height:27px" onclick="GetPaymentMisMatch()" class="btn btn-success"><i class="fa fa fa-sign-in">&nbsp;Search</i></button>
+                                <button id="btnExecl" style="width:50%;height:27px;margin-left:10px" onclick="ExeclPaymentMisMatch()" class="btn btn-warning"><i class="fa fa-file-excel-o">&nbsp;Excel</i></button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive" style="height:450px;overflow-y:auto;border:1px solid #3498db;margin-top:5px;">
+                                <table id="tblReport" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>PanelName</th>
+                                            <th>Date</th>
+                                            <th style="text-align:center;width:10%">Amount</th>
+                                            <th style="text-align:center;width:10%">Voucher Amount</th>
+                                            <th style='text-align:center;width:10%'>Different</th>
+                                            <th style='text-align:center;width:10%'>IsMisMatch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

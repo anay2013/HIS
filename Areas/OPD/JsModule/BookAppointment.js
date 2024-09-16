@@ -254,6 +254,7 @@ $(document).ready(function () {
         let index = itemIds.indexOf(itemid);
         itemIds.splice(index, 1);
         $(this).closest('tr').remove();
+        GetAppointmentRate($('#txtUHID').val(), $('#ddlPanel option:selected').val(), itemIds.join('|'))
         totalCal();
     });
     $('#tblItemInfoNull tbody').on('click', 'button', function () {
@@ -608,7 +609,7 @@ function GetVisitTypeByDoctor(DoctorId) {
             if (Object.keys(data.ResultSet).length > 0) {
                 if (Object.keys(data.ResultSet.Table3).length > 0) {
                     $.each(data.ResultSet.Table3, function (key, val) {
-                        $('.paymentSection span:eq(3) span:first').text(val.LastAppDate);
+                        $('.paymentSection span.tokenNo span:first').text(val.LastAppDate);
                         //$('.paymentSection span:eq(3) span').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
                     });
                 }
@@ -666,6 +667,18 @@ function GetDoctorSchedule(doctor) {
                         tbody += "</tr>";
                     });
                     $('#tblDoctorLeave tbody').append(tbody);
+                }
+            }
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table2).length > 0) {
+                    $.each(data.ResultSet.Table2, function (key, val) {
+                        $('.doctorInfo').html('')
+                        $('.doctorInfo').html(
+                            '<b>Doctor Id : </b> ' + val.DoctorId + ', ' +
+                            '<b>Doctor Name : </b> ' + val.DoctorName + ', ' +
+                            '<b>Mobile No : </b> ' + val.mobile_no
+                        );
+                    });
                 }
             }
         },

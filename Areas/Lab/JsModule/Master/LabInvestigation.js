@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    $("#btnInvestigationActive").hide();
+    $("#btnInvestigationDisactive").hide();
     $('#get-started').on('click', function () {
         var $xyz, $this;
         $this = $(this);
@@ -84,6 +86,7 @@
             $("#ddlSampleTemp").css('border', '1px solid red');
         }
     });
+
 });
 
 function Onload() {
@@ -165,6 +168,7 @@ function BindSubCategoryByCategory() {
     });
 }
 function InsertUpdateLabInvestigation() {
+    debugger
     if (validation()) {
         var arrsampledata = [];
         $('#ddlSamplesdata :selected').each(function () {
@@ -195,15 +199,16 @@ function InsertUpdateLabInvestigation() {
         objBO.abouttest = $("#txtAboutTest").val();
         objBO.samplelinkdata = (arrsampledata.length > 0) ? arrsampledata.join() : '-';
         objBO.defaultsample = (arrsampledata.length > 0) ? $("#ddlDefaultSample option:selected").text() : '-';
-        objBO.isoutsource = ($('#chkIsOutSource:checkbox:checked')) ? 'Y' : 'N';
-        objBO.incrementflag = ($('#chkIncementFlag:checkbox:checked')) ? 'Y' : 'N';
-        objBO.promotionflag = ($('#chkPromotionFlag:checkbox:checked')) ? 'Y' : 'N';
-        objBO.reportflag = ($('#chkReportFlag:checkbox:checked')) ? 'Y' : 'N';
-        objBO.ignortat = ($('#chkIgnorTat:checkbox:checked')) ? 'Y' : 'N';
-        objBO.inoutrequired = ($('#chkInoutRequired:checkbox:checked')) ? 'Y' : 'N';
-        objBO.displayinweb = ($('#chkDisplayInWeb:checkbox:checked')) ? 'Y' : 'N';
-        objBO.consentflag = ($('#chkConsentFlag:checkbox:checked')) ? 'Y' : 'N';
-        objBO.printsampleinreport = ($('#chkPrintSampleInReport:checkbox:checked')) ? 'Y' : 'N';
+        //objBO.isoutsource = ($('#chkIsOutSource:checkbox:checked')) ? 'Y' : 'N';
+        objBO.isoutsource = $('#chkIsOutSource').is(':checked') ? 'Y' : 'N';
+        objBO.incrementflag = $('#chkIncementFlag').is(':checked') ? 'Y' : 'N';
+        objBO.promotionflag = $('#chkPromotionFlag').is(':checked') ? 'Y' : 'N';
+        objBO.reportflag = $('#chkReportFlag').is(':checked') ? 'Y' : 'N';
+        objBO.ignortat = $('#chkIgnorTat').is(':checked') ? 'Y' : 'N';
+        objBO.inoutrequired = $('#chkInoutRequired').is(':checked') ? 'Y' : 'N';
+        objBO.displayinweb = $('#chkDisplayInWeb').is(':checked') ? 'Y' : 'N';
+        objBO.consentflag = $('#chkConsentFlag').is(':checked') ? 'Y' : 'N';
+        objBO.printsampleinreport = $('#chkPrintSampleInReport').is(':checked') ? 'Y' : 'N';
         objBO.login_id = Active.userId;
         objBO.Logic = ($("#btnInvestigationSample").val() == 'Save') ? 'Insert' : 'Update';
         //objBO.warehouseCartId = Active.warehouseId
@@ -272,6 +277,13 @@ function SearchBySubCategory() {
     });
 }
 function EditInvestigationDetails(testcode) {
+    if ($("#ddlStatus").val() === "Y") {
+        $("#btnInvestigationActive").hide();
+        $("#btnInvestigationDisactive").show();
+    } else if ($("#ddlStatus").val() === "N") {
+        $("#btnInvestigationDisactive").hide();
+        $("#btnInvestigationActive").show();
+    }
     var url = config.baseUrl + "/api/Lab/mInvestigationQueries";
     var objBO = {};
     objBO.Logic = "EditInvestigation";
@@ -283,7 +295,9 @@ function EditInvestigationDetails(testcode) {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
+            console.log(data);
             if (Object.keys(data.ResultSet).length > 0) {
+
                 if (Object.keys(data.ResultSet.Table).length > 0) {
                     $("#ddlCategory").val(data.ResultSet.Table[0].CatId);
                     $('#ddlCategory').trigger('change');
@@ -359,6 +373,7 @@ function EditInvestigationDetails(testcode) {
                             $("#ddlDefaultSample").append($("<option></option>").val($(this).val()).html($(this).text()));
                         }
                     });
+
                     $("#btnInvestigationSample").val('Update').addClass('btn-warning').removeClass('btn-success');
                 }
                 else {
@@ -603,3 +618,63 @@ function SearchByName() {
         }
     });
 }
+function UpdateActiveAndDisactive(flag) {
+    debugger
+    var objBO = {};
+    var url = config.baseUrl + "/api/Lab/mInvestigationInsertUpdate";
+    objBO.catid = '-';
+    objBO.subcateid = '-';
+    //testcode
+    objBO.investcode = $("#txtInvestCode").val();
+    objBO.extTestCode = '-';
+    objBO.investname = '-';
+    objBO.investreportname = '-';
+    objBO.investtype = '-';
+    objBO.bookfor = '-';
+    objBO.repotytype = '-';
+    objBO.rate = '-';
+    objBO.cost = '-';
+    objBO.maxtime = $("#txtMaxTime").val();
+    objBO.sampleoption = '-';
+    objBO.sampleqty = '-';
+    objBO.sampleremark = '-';
+    objBO.sampletemp = '-';
+    objBO.samplecontainer = '-';
+    objBO.sampletype = '-';
+    objBO.defaultsample = '-';
+    objBO.testprep = '-';
+    objBO.abouttest = '-';
+    objBO.samplelinkdata = '-';
+    objBO.defaultsample = '-';
+    objBO.isoutsource = '-';
+    objBO.incrementflag = '-';
+    objBO.promotionflag = '-';
+    objBO.reportflag = flag;
+    objBO.ignortat = '-';
+    objBO.inoutrequired = '-';
+    objBO.displayinweb = '-';
+    objBO.consentflag = '-';
+    objBO.printsampleinreport = '-';
+    objBO.login_id = Active.userId;
+    objBO.Logic = 'UpdateFlag';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data == 'success') {
+                alert('Update');
+
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+

@@ -487,7 +487,7 @@ function InsertPurchase() {
 			dataType: "json",
 			contentType: "application/json;charset=utf-8",
 			success: function (data) {
-				if (data.startsWith('WP') || data.startsWith('WC')) {
+                if (data.startsWith('WP') || data.startsWith('WC') || data.startsWith('HP') ) {
 					$('#BasicInfo').find('.form-control').attr('disabled', true).css({ 'background': '#fff', 'opacity': '100%' });
 					$('#tblPaymentDetails').find('.form-control').css({ 'background': '#fff', 'opacity': '100%' });
 					$('#BasicInfo').find('input:radio:not(:checked)').attr('disabled', true);
@@ -495,13 +495,16 @@ function InsertPurchase() {
 					$('#tblProductInfo').find('select').prop('selectedIndex', '0').change();
 					$('#ddlPackType').empty().append($('<option>Select Pack</option>')).change();
 					$("#ddlManufacture").empty().append($('<option>Select Manufacturer</option>')).change();
-					var purchaseId = data;
-					$('#txtPurchaseId').val(purchaseId);
+
+                    var purchaseId = data;
+
+                    $('#txtPurchaseId').val(purchaseId);
 					$('#tblProductInfo').find('#txtSearchProduct').val('').focus();
 					$('#tblProductInfo').find('#tblnavigate tbody').empty();
 					$('#tblProductInfo').find('#txtFree').val(0);
 					$('#tblProductInfo').find('#txtDisc').val(0);
-					CurrentPurchaseRecords(purchaseId);
+
+                    CurrentPurchaseRecords(purchaseId);
 				}
 				else {
 					alert(data);

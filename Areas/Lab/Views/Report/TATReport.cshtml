@@ -43,10 +43,14 @@
     }
 
     .panel-body {
-        /*box-shadow: 1px 1px 10px #d2d2d2;*/
         border-radius: 10px;
         padding: 5px 3px 0px 3px;
         position: relative;
+    }
+
+    .col-md-2 {
+        width: 13%;
+        padding: 0px 2px;
     }
 
     .ml15 {
@@ -63,39 +67,79 @@
         color: #fff;
         margin: 6px 2px;
     }
+
+    #tblReport thead th {
+        font-size: 13px
+    }
+
+    #tblReport tbody td {
+        font-size: 13px
+    }
 </style>
 <div id="page-content">
     <div class="container">
         <div class="ml15">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h5>TAT Report</h5>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h5>TAT Report</h5>
+                        </div>
+                        <div class="col-md-2">
+
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-1" style="width:7%;margin-left:7px">
+                            <label>Type</label>
+                            <select id="ddlIpOpType" class="form-control">
+                                <option>ALL</option>
+                                <option>IPD</option>
+                                <option>OPD</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1" style="width:14%">
+                            <label>Report Status</label>
+                            <select id="ddlReportType" class="form-control">
+                                <option value="Sample_IN">Sample/In</option>
+                                <option value="Sample_IN_NotDone">
+                                    Sample/In Not Done
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="width:9%;">
                             <label>From Date</label>
                             <input type="date" id="txtSearchFrom" class="form-control" />
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2" style="width:9%">
                             <label>To Date</label>
                             <input type="date" id="txtSearchTo" class="form-control" />
                         </div>
-                        <div class="col-md-3">
-                            <label>Department</label>
+                        <div class="col-md-2" style="width:11%">
+                            <label>Category</label>
                             <div style="display:flex">
-                                <select id="ddlDepartment" class="form-control" onchange="LoadTestData()"></select>
+                                <select id="ddlCategory" class="form-control" onchange="LoadSubCategory()"></select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
+                            <label>Sub Category</label>
+                            <div style="display:flex">
+                                <select id="ddlSubCatList" class="form-control" onchange="LoadTestData()"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="width:23%;">
                             <label>Test</label>
                             <div style="display:flex;">
-                                <select id="ddlTest" class="form-control" style="width:400px"></select>
+                                <select id="ddlTest" class="form-control" style="width:350px"></select>
                             </div>
                         </div>
-                        <div class="col-md-1">
-                            <div style="display:flex;">
-                                <button id="btnGet" style="width:95%;height: 28px;margin-top:23px;border:none" class="btn btn-success btn-flat" onclick="GetDataTATReport()"><i class="fa fa-search">&nbsp;</i>Search</button>
+
+                        <div class="col-md-1" style="width:14%;margin-left:-10px">
+                            <div style="display:flex">
+                                <button id="btnGet" style="width:50%;height: 28px;margin-top: 22px;border:none" class="btn btn-success btn-flat" onclick="GetDataTATReport()"><i class="fa fa-search">&nbsp;</i>Get</button>
+                                <button id="btnExecl" style="width:100%;height: 28px;margin-top: 22px;border:none" class="btn btn-warning btn-flat" onclick="ExeclTATReport()"><i class="fa fa-file-excel-o">&nbsp;</i>Execl Patient </button>
                             </div>
                         </div>
                     </div>
@@ -105,65 +149,67 @@
                                 <table class="table table-bordered" id="tblReport">
                                     <thead>
                                         <tr>
-                                            <th style="width:10%">IPOPType</th>
-                                            <th style="width:36%">Test Category</th>
+                                            <th style="width:40%">Test Category</th>
                                             <th style="width:10%;text-align:center">NoTest</th>
-                                            <th style="width:15%;text-align:center">OnTime </th>
-                                            <th style="width:15%;text-align:center">Delayed</th>
-                                            <th style="width:7%;text-align:center">ActualGap</th>
-                                            <th style="width:7%;text-align:center;">Action</th>
+                                            <th style="width:20%;text-align:center">Delayed(By Registration)</th>
+                                            <th style="width:20%;text-align:center">Delayed(By Sample/In)</th>
+                                            <th style="width:10%;text-align:center;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
                             </div>
+
+
+
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
 
-    <div class="modal fade modalProcess" id="TATReportDetails" tabindex="-1" role="dialog" aria-labelledby="True">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content" style="margin-top:15%; width:180%; margin-left:-18%;">
-                <div class="panel panel-primary">
-                    <div class="panel-heading" style="border:1px solid #337ab7eb;height:30px;">
-                        <h5 class="text-white">TAT Report Details</h5>
-                        <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
+<div class="modal fade modalProcess" id="TATReportDetails" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:15%; width:200%; margin-left:-50%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="border:1px solid #337ab7eb;height:30px;">
+                    <h5 class="text-white">TAT Report Details</h5>
+                    <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
 
-                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="section" style="height:175px;">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive" style="height:320px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7;margin-top:-15px;">
-                                            <table class="table table-bordered" id="tblTATDetailsDetails">
-                                                <thead>
-                                                    <tr>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section" style="height:175px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:420px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7;margin-top:-15px;">
+                                        <table class="table table-bordered" id="tblTATDetails">
+                                            <thead>
+                                                <tr>
 
-                                                        <th style="width:7%">IPOPType</th>
-                                                        <th style="width:9%">IPOPNo</th>
-                                                        @*<th style="width:9%">VisitNo</th>*@
-                                                        <th style="width:10%">TestCategory</th>
-                                                        <th style="width:10%">TestName</th>
-                                                        <th style="width:12%">RegDate</th>
-                                                        <th style="width:12%">SampleOrInDateTime</th>
-                                                        <th style="width:12%">ReportDateTime</th>
-                                                        <th style="width:12%">ApprovedDate</th>
-                                                        <th style="width:5%;text-align:center">TatHrs</th>
-                                                        <th style="width:5%;text-align:center">DelayHrs</th>
-                                                        <th style="width:5%;text-align:center">Time</th>
+                                                    <th>IPOPType</th>
+                                                    <th style="width:9%">IPOPNo</th>
+                                                    <th style="width:10%">TestCategory</th>
+                                                    <th style="width:10%">TestName</th>
+                                                    <th style="width:12%">RegDate</th>
+                                                    <th style="width:5%;text-align:center">R-S/I</th>
+                                                    <th style="width:12%">SampleOrInDateTime</th>
+                                                    <th style="width:5%;text-align:center">S/I-A</th>
+                                                    <th style="width:12%">ApprovedDate</th>
+                                                    <th style="width:12%">ReportDateTime</th>
+                                                    <th style="width:5%;text-align:center">TatHrs</th>
+                                                    <th style="width:5%;text-align:center">DelayHrs</th>
+                                                    <th style="width:5%;text-align:center">Time</th>
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -175,3 +221,52 @@
     </div>
 </div>
 
+<div class="modal fade modalProcess" id="TATReportDelayedDetails" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="margin-top:15%; width:200%; margin-left:-50%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="border:1px solid #337ab7eb;height:30px;">
+                    <h5 class="text-white">TAT Report Delayed Details</h5>
+                    <button data-dismiss="modal" class="btn btn-danger btn-xs">x</button>
+
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section" style="height:175px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive" style="height:420px;overflow-y:auto; overflow-x:auto;border:1px solid #337ab7;margin-top:-15px;">
+                                        <table class="table table-bordered" id="tblTATDelayedDetails">
+                                            <thead>
+                                                <tr>
+
+                                                    <th>IPOPType</th>
+                                                    <th style="width:9%">IPOPNo</th>
+                                                    <th style="width:10%">TestCategory</th>
+                                                    <th style="width:10%">TestName</th>
+                                                    <th style="width:12%">RegDate</th>
+                                                    <th style="width:5%;text-align:center">R-S/I</th>
+                                                    <th style="width:12%">SampleOrInDateTime</th>
+                                                    <th style="width:5%;text-align:center">S/I-A</th>
+                                                    <th style="width:12%">ApprovedDate</th>
+                                                    <th style="width:12%">ReportDateTime</th>
+                                                    <th style="width:5%;text-align:center">TatHrs</th>
+                                                    <th style="width:5%;text-align:center">DelayHrs</th>
+                                                    <th style="width:5%;text-align:center">Time</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

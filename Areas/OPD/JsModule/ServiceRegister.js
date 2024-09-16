@@ -44,6 +44,7 @@ function SearchByKey() {
                     tbody += "<td class='text-right'>" + val.discount + "</td>";
                     tbody += "<td class='text-right'>" + val.NetAmount + "</td>";
                     tbody += "<td class='text-right'>" + val.Received + "</td>";
+                    tbody += "<td class='text-right'>" + val.RegFee + "</td>";
                     tbody += "<td>" + val.TnxId + "</td>";
                     tbody += "<td>" + val.trnStatus + "</td>";
                     tbody += "<td class='flex'>";
@@ -103,6 +104,7 @@ function SearchByDate() {
                     tbody += "<td class='text-right'>" + val.discount + "</td>";
                     tbody += "<td class='text-right'>" + val.NetAmount + "</td>";
                     tbody += "<td class='text-right'>" + val.Received + "</td>";
+                    tbody += "<td class='text-right'>" + val.RegFee + "</td>";
                     tbody += "<td>" + val.TnxId + "</td>";
                     tbody += "<td>" + val.trnStatus + "</td>";
                     tbody += "<td class='flex'>";

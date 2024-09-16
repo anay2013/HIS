@@ -146,6 +146,14 @@
         <div class="panel">
             <div class="panel-body">
                 <div class="row colnospace" style="background-color:#bddeff;margin-bottom:2px;height:62px;padding:5px;border-radius: 2px;">
+                    <div class="col-md-1" style="width:11%">
+                        <label>Status</label>
+                        <select id="ddstatus" class="form-control">
+                            <option value="ALL">ALL</option>
+                            <option value="Provisional">Provisional</option>
+                        </select>
+                    </div>
+
                     <div class="col-md-2">
                         <label>IPOP Type</label>
                         <select id="ddlIPOPType" class="form-control">
@@ -153,11 +161,11 @@
                             <option>OPD</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label>Department</label>
                         <select id="ddlDepartment" onchange="LoadTest()" class="form-control"></select>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <label>Test Name</label>
                         <div class="flex">
                             <select id="ddlTest" class="form-control"></select>
@@ -172,8 +180,8 @@
                                 <tr>
                                     <th>UHID</th>
                                     <th>Visit No</th>
-                                    <th>Date</th>                                                                   
-                                    <th>Doctor Name</th>                               
+                                    <th>Date</th>
+                                    <th>Doctor Name</th>
                                     <th>Department/Test</th>
                                 </tr>
                             </thead>

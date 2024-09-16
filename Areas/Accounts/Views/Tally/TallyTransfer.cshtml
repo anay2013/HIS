@@ -1,73 +1,75 @@
 ﻿
 @{
-	ViewBag.Title = "TallyTransfer";
-	Layout = "~/Views/Shared/_layout.cshtml";
+    ViewBag.Title = "TallyTransfer";
+    Layout = "~/Views/Shared/_layout.cshtml";
 }
 <script src="~/Areas/Accounts/JsModule/Tally/TallyTransfer.js"></script>
 <style>
-	.btn-flat {
-		border-radius: 2px;
-		border: none;
-		padding: 6px;
-	}
-	.msg {
-		display:none;
-		font-size: 12px;
-		color: rgb(255 255 255);
-		width: max-content;
-		z-index: 1;
-		right: 52px;	
-		background: rgb(204 21 21);
-		position: absolute;
-		padding: 4px 6px;
-	}
-	.active {
-		color: green;
-	}
+    .btn-flat {
+        border-radius: 2px;
+        border: none;
+        padding: 6px;
+    }
 
-	.text-white {
-		color: #fff !important;
-	}
+    .msg {
+        display: none;
+        font-size: 12px;
+        color: rgb(255 255 255);
+        width: max-content;
+        z-index: 1;
+        right: 52px;
+        background: rgb(204 21 21);
+        position: absolute;
+        padding: 4px 6px;
+    }
 
-	hr {
-		margin-top: 35px;
-		margin-bottom: 5px;
-		border: 0;
-		border-top: 1px solid #eee;
-	}
+    .active {
+        color: green;
+    }
 
-	.custom-table {
-		width: 100%;
-		line-height: 29px;
-		font-size: 12px;
-	}
+    .text-white {
+        color: #fff !important;
+    }
 
-	.fileinput.input-group {
-		display: flex;
-	}
+    hr {
+        margin-top: 35px;
+        margin-bottom: 5px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
 
-	.text-17 {
-		font-size: 17px;
-	}
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
 
-	.scroll {
-		width: 100%;
-		background: #fff;
-		overflow: overlay;
-		max-height: 480px;
-		display: block;
-	}
+    .fileinput.input-group {
+        display: flex;
+    }
 
-	.panel-body {
-		/*box-shadow: 1px 1px 10px #d2d2d2;*/
-		border-radius: 10px;
-		padding: 5px 3px 0px 3px;
-		position: relative;
-	}
+    .text-17 {
+        font-size: 17px;
+    }
 
-	.ml15 {
-		margin-left: 15px;
-	}
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
 </style>
 <div id="page-content">
     <div class="container">
@@ -107,7 +109,8 @@
                                                             <th>Voucher No</th>
                                                             <th>Credit Ledger</th>
                                                             <th>Amount</th>
-                                                            <th style="width: 1%;">Send</th>
+                                                            @*<th style="width: 1%;">Send</th>*@
+                                                            <th style="text-align:center"><button title="send" class="btn-flat btn-success">Send All</button></th>
                                                             <th>Sync</th>
                                                             <th style="width: 1%;">Review</th>
                                                         </tr>

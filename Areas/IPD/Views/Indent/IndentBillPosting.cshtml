@@ -10,17 +10,21 @@
     .paymentSection {
         padding: 0px 6px !important;
     }
+
     #tblPaymentDetails tbody tr:nth-child(n+2) {
         display: none;
     }
+
     #tblPaymentDetails tbody td input, #tblPaymentDetails tbody td select {
         font-size: 11px;
         height: 17px !important;
         padding: 1px 2px;
     }
+
     .form-control {
         border-radius: 0;
     }
+
     div.dataTables_filter input, .chosen-container-single .chosen-search input, .input,
     .form-control, .dataTables_length select, .chosen-container-multi,
     .bootstrap-timepicker-widget table td input, .ui-toolbar select, .ui-toolbar input {
@@ -37,6 +41,7 @@
         -moz-box-shadow: inset 1px 1px 3px #f6f6f6;
         box-shadow: inset 1px 1px 3px #f6f6f6;
     }
+
     .btn-custom {
         border-radius: 0;
         width: 27%;
@@ -141,7 +146,7 @@
                                     <table id="tblItemInfo" class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Item Name</th>                                             
+                                                <th>Item Name</th>
                                                 <th>Batch No</th>
                                                 <th>Exp Date</th>
                                                 <th class="text-right">Pack Type</th>
@@ -268,29 +273,29 @@
                                         </div>
                                     </div>
                                 </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <button id="btnReceive" class="btn btn-info" style="position:relative;left:10px;padding:0 12px" onclick="MarkIndentReceived()"><i class="fa fa-sign-in">&nbsp;</i>Receive Indent</button>
-                                </div>
-                                <div class="col-md-2">
-                                </div>
-                                <div class="col-md-2">
-                                    <button id="btnHoldBill" class="btn btn-success" style="position:relative;left:10px;padding:0 12px" onclick="HoldBill()"><i class="fa fa-sign-in">&nbsp;</i>Hold Bill</button>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <button id="btnReceive" class="btn btn-info" style="position:relative;left:10px;padding:0 12px" onclick="MarkIndentReceived()"><i class="fa fa-sign-in">&nbsp;</i>Receive Indent</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button id="btnHoldBill" class="btn btn-success" style="position:relative;left:10px;padding:0 12px" onclick="HoldBill()"><i class="fa fa-sign-in">&nbsp;</i>Hold Bill</button>
 
-                                </div>
-                                <div class="col-md-2">
-                                    <button id="btnPostBill" class="btn btn-success" style="position:relative;left:10px;padding:0 12px" onclick="PostBill()"><i class="fa fa-sign-in">&nbsp;</i>Post Bill</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button id="btnPostBill" data-ajax class="btn btn-success" style="position:relative;left:10px;padding:0 12px" onclick="PostBill()"><i class="fa fa-sign-in">&nbsp;</i>Post Bill</button>
 
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-warning" style="position:relative;left:10px" onclick="ViewBill()"><i class="fa fa-eye">&nbsp;</i>Print</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-warning" style="position:relative;left:10px" onclick="ViewBill()"><i class="fa fa-eye">&nbsp;</i>Print</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
+</div>

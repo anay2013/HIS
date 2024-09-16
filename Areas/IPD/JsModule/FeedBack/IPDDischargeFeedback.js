@@ -347,7 +347,7 @@ function GetPatientDetails() {
                 html += "<tr>";
                 html += "<th>Admit Date</th>";
                 html += "<th>:</th>";
-                html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1><span2 style='display:none'>" + val.DoctorId + "</span2><span3 style='display:none'>" + val.FloorName + "</span3>";
+                html += "<td colspan='5'><span1>" + val.AdmitDate + "</span1><span2 style='display:none'>" + val.DoctorId + "</span2><span3 style='display:none'>" + val.FloorName + "</span3><span4 style='display:none'>" + val.mobile_no + "</span4>";
                 html += "<span class='text-right' style='margin: -4px 0;float:right'>";
 
                 if (val.isMarked == 'N')

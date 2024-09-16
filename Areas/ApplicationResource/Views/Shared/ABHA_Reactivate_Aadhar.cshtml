@@ -1,0 +1,211 @@
+﻿
+<style>
+    [id*=Step] {
+        display: none;
+    }
+
+    .info {
+        margin-top: 11px;
+        margin-left: -10px;
+        margin-right: -10px;
+        padding: 2px;
+        border: 1px solid #ddd;
+    }
+
+        .info label.titile {
+            padding: 6px;
+            text-align: center;
+            background: #1a5dd7;
+            color: white;
+            margin-bottom: 0px;
+        }
+
+        .info label {
+            padding: 2px;
+            font-size: 13px;
+            margin: 0
+        }
+
+        .info p {
+            padding: 2px;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 0
+        }
+
+    .profilePhoto {
+        height: 120px;
+        border: 1px solid #ddd;
+        width: 120px;
+    }
+
+    .QRCode {
+        height: 120px;
+        border: 1px solid #ddd;
+        width: 120px;
+    }
+
+    .fillForm {
+        margin: 0;
+        text-align: center;
+        width: 100% !important;
+        font-size: 12px !important;
+    }
+
+    .detailForm {
+        background: #f3f3f3;
+        padding: 7px 0px;
+        margin-top: 10px;
+        border: 1px solid #e9e9e9;
+    }
+
+        .detailForm .form-control {
+            margin-left: 5px;
+            height: 25px;
+            font-size: 11px;
+            padding: 5px;
+            width: 107px;
+        }
+
+        .detailForm label {
+            margin-bottom: 0;
+            margin-left: 5px;
+            height: 25px;
+            font-size: 11px;
+            padding: 5px;
+            width: 107px;
+        }
+
+    #AbhaAddressList {
+        overflow: auto;
+        height: 410px;
+        margin-bottom: 0;
+    }
+
+        #AbhaAddressList li {
+            cursor: pointer;
+            color: #0085d3;
+            padding: 2px;
+            font-size: 13px;
+        }
+
+            #AbhaAddressList li:hover {
+                color: green;
+            }
+
+    .btnProfile {
+        height: 23px;
+        line-height: 1;
+        color: white;
+        background: #17a2b8;
+        border: none;
+        float: right;
+    }
+
+    #responseMsg {
+        top: -12px;
+        right: 300px;
+        position: absolute;
+        width: max-content;
+        padding: 3px 15px;
+        font-size: 13px;
+        background: #f3f3f3;
+        color: #3f9b3f;
+        margin: 15px;
+        border-radius: 2px;
+        display: none;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .visible {
+        display: block !important;
+    }
+
+    .ProfileLoading {
+        width: 100%;
+        border: 0px solid;
+        margin-bottom: 10px;
+        display: none;
+    }
+
+    .abhaAddress {
+        padding: 2px 0px;
+        background: #f1f1f1;
+        white-space: pre;
+        text-align: center;
+        font-size: 13px;
+        display: block;
+        border-radius: 3px;
+        color: #bd4141;
+    }
+
+    .note {
+        list-style: none;
+        padding: 0;
+        margin: 0
+    }
+
+        .note li {
+            font-size: 11px;
+        }
+
+    .noteTitle {
+        margin: 0;
+        font-size: 12px;
+        text-align: center;
+        display: block;
+        border-bottom: 1px solid #ddd;
+        color: #d50909;
+    }
+
+    .noteBox {
+        border-radius: 3px;
+        border: 1px solid #ededed;
+        margin-top: 35px;
+        background: #fff5f5;
+    }
+
+    .createAbha {
+        border-radius: 3px;
+        padding: 6px 0;
+        display: flex;
+        background: #ffffff;
+    }
+</style>
+<script src="~/Areas/ApplicationResource/JsModule/ABHA_Reactivate_Aadhar.js?123"></script>
+<div id="Step1" class="visible">
+    <label class="bg-custom tittle" id="lblTitle">Reactivate Using Aadhar <p id="responseMsg"></p></label>
+    <div id="Authentication" class="tabcontent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12 flex">
+                        <label style="white-space:pre">ABHA Address : </label>
+                        <input type="text" id="txtABHAAddress" value="" class="form-control" style="width:170px" placeholder="Enter ABHA Address" />&nbsp;
+                        <button class="btn btn-warning btn-sm" onclick="GetOTP(this)"><i class="fa fa-check-circle">&nbsp;</i>Check</button>&nbsp;
+                        <input type="text" id="txtOTP" disabled class="form-control" style="width:95px;margin-left: 50px;" placeholder="Enter OTP" />&nbsp;
+                        <button class="btn btn-warning btn-sm" onclick="VerifyOTP(this)"><i class="fa fa-sign-in">&nbsp;</i>Verify</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function NextStep(stepName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(stepName).style.display = "block";
+        var _stepName = (stepName == 'CreateAbha') ? 'Create ABHA' : (stepName == 'CheckExistance') ? 'Check Existance' : stepName;
+        $('#lblTitle b').text(_stepName);
+        $('#responseMsg').empty().hide();
+    }
+</script>

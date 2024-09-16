@@ -195,6 +195,7 @@ function SaveCloseApproval(logic) {
         //    alert('Not Allowed.');
         //    return
         //}
+        $('#btnCloseBill').addClass('button-loading');
         $.ajax({
             method: "POST",
             url: url,
@@ -205,13 +206,16 @@ function SaveCloseApproval(logic) {
                 if (data.includes('Success')) {
                     alert(data);
                     SummarisedBilling();
+                    $('#btnCloseBill').removeClass('button-loading');
                 }
                 else {
                     alert(data);
+                    $('#btnCloseBill').removeClass('button-loading');
                 }
             },
             error: function (response) {
                 alert('Server Error...!');
+                $('#btnCloseBill').removeClass('button-loading');
             }
         });
     }

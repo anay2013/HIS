@@ -287,6 +287,7 @@
     }
 </style>
 <div class="example-box-wrapper">
+    <input type="hidden" id="autoId" />
     <div class="row amount-section">
         <div class="col-md-2">
             <label>Gross Amount</label>
@@ -596,16 +597,23 @@
             <!-- Modal Header -->
             <div class="modal-header bg-success" style="padding: 4px 10px;background: #dbdbdb;">
                 <p class="modal-title">
-                    Pharmacy Items
+                    Pharmacy Items&nbsp;
+                    <label class="headerInfo pull-right" style=" background: transparent;width: 74%;color: #02a310;" id="piInfo">-</label>
                     <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
                 </p>
             </div>
             <!-- Modal body -->
             <div class="modal-body" style="padding:0px 10px">
                 <div class="row" style="margin:10px 0">
+                    <div class="col-md-8" style="display:flex;margin-bottom:10px;">
+                       <label style="font:11px;background:#ddd;padding:5px;border-radius:3px;">Note : Please Select Date to Modify Medicine Billing Date</label>
+                    </div>
+                    <div class="col-md-4" style="display:flex;margin-bottom:10px;">
+                        <input type="date" id="txtTnxDate" class="form-control" style="border-radius: 0;border-color: #f39c12;" />
+                        <button onclick="UpdateTnxDate()" class="btn btn-warning" style="height: 28px;width: 65%;border-radius: 0;margin:0"><i class="fa fa-sign-in">&nbsp;</i>Update</button>
+                    </div>
                     <div class="col-md-12" style="padding:0">
                         <div class="table table-responsive">
-                            <label class="headerInfo hide" id="autoId">-</label>
                             <label class="headerInfo" id="piInfo">-</label>
                             <div id="ProductList" style="height: 350px;">
                                 <table id="tblPharmacyItems" class="table table-bordered">
@@ -620,7 +628,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>                                
+                    </div>
                 </div>
             </div>
         </div>

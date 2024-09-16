@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "Advertisement";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/Masters/JsModule/Advertisement.js"></script>
+
+<style>
+
+
+    .flex {
+        display: flex;
+        align-items: flex-end;
+    }
+
+
+    .custom-table {
+        width: 100%;
+        line-height: 29px;
+        font-size: 12px;
+    }
+
+        .custom-table td {
+            line-height: 24px;
+        }
+
+    .text-17 {
+        font-size: 17px;
+    }
+
+    .scroll {
+        width: 100%;
+        background: #fff;
+        overflow: overlay;
+        max-height: 480px;
+        display: block;
+    }
+
+    .panel-body {
+        /*box-shadow: 1px 1px 10px #d2d2d2;*/
+        border-radius: 10px;
+        padding: 5px 3px 0px 3px;
+        position: relative;
+    }
+
+    .ml15 {
+        margin-left: 15px;
+    }
+
+    #filePath {
+        margin-top: 10px;
+        width: 100%;
+        height: 422px;
+        border: 1px solid #ddd;
+    }
+
+    .uploadSection {
+        border: 1px solid #dcdcdc;
+        margin-top: 11px;
+        background: #f5f5f5dd;
+        padding: 5px;
+    }
+
+    .btnPDF {
+        width: 43%;
+        height: 28px;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .loading {
+        border-width: 2px;
+        border-image: url(/images/loading.gif) 60;
+    }
+
+    .btnget {
+        width: 45%;
+        height: 26px;
+        border-radius: 2px;
+    }
+
+    .panel-heading button {
+        float: right;
+        margin: -24px -1px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="ml15">
+                    <div class="">
+                        <div class="panel">
+                            <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                                <h4 class="text-white" style="font-size: 15px;">Advertisement</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Department</label>
+                                        <div class="flex">
+                                            <select id="ddlDepartment" class="form-control">
+                                                <option value="Select">Select</option>
+                                                <option value="Hospital">Hospital</option>
+                                                <option value="Pharmacy">Pharmacy</option>
+                                                <option value="Diagnosis">Diagnosis</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-8">
+                                        <div class="flex uploadSection">
+                                            <label style="white-space:pre">Choose File : </label>
+                                            <input type="file" id="txtfileUpload" name="fileUpload">
+                                            <button id="btnUpload" style="width:30%" onclick="UploadSheet(this)" class="btn btn-warning btnPDF"><i class="fa fa-file-pdf-o">&nbsp;</i>Uplaod</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Content</label>
+                                        <div class="flex">
+                                            <textarea id="txtcontent" class="form-control"></textarea>
+                                            <button class="btn btn-success pull-left btnPDF" id="btnSave" style="width: 15%;margin-left: 10px;" onclick="InsertAdvertisement('Insert')">Save</button>
+                                            <button class="btn btn-success pull-left btnPDF" id="btnUpdate" style="width: 15%;margin-left: 10px;display:none" onclick="InsertAdvertisement('Update')">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table table-responsive" style="height: 400px;border:#0076d0 1px solid;margin-top:5px">
+                                            <table id="tblReport" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%">Action</th>
+                                                        <th width="5%">Department</th>
+                                                        <th width="30%">Url</th>
+                                                        <th width="20%">Date</th>
+                                                        <th width="30%">Remark</th>
+                                                        <th width="10%">Cmd</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-5">
+                <div class="panel" style="height:600px">
+                    <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                        <h4 class="text-white" style="font-size: 15px;">Image Show</h4>
+                    </div>
+
+                    <div class="panel-body">
+                        <div>
+                            <div class="col-md-12">
+                                <iframe src="https://ik.imagekit.io/hnlpilvl5t/webapp_assets/no-preview.png" id="filePath"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+

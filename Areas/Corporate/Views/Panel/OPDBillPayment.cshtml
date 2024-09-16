@@ -9,7 +9,10 @@
         font-size: 15px;
         font-weight: bold;
     }
-
+    #txtTotalBadDebt {
+        font-size: 15px;
+        font-weight: bold;
+    }
     .row.colnospace [class*='col-'] {
         padding-right: 2px;
         padding-left: 2px;
@@ -32,6 +35,14 @@
     <div class="container">
         <div class="panel-body">
             <div class="row colnospace" style="background-color:#bddeff;margin-bottom:10px;height:60px;padding-top: 5px;">
+                <div class="col-md-2">
+                    Report
+                    <select id="ddlReport" class="form-control" onchange="GetPanel('PanelInfo')">
+                        <option value="Select">Select</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>
                 <div class="col-md-4">
                     Choose
                     <select id="ddlPanel" class="form-control border-imp"><option>Select</option></select>
@@ -46,7 +57,7 @@
                 </div>
                 <div class="col-md-1">
                     <br />
-                    <button id="btnCurrentPatient" onclick="BalanceInfo('OPD_BalanceInfo:BetweenDate')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
+                    <button id="btnCurrentPatient" onclick="BalanceInfo()" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
                 </div>
                 <div class="col-md-2">
                     By Claim No/Bill No
@@ -54,7 +65,7 @@
                 </div>
                 <div class="col-md-1">
                     <br />
-                    <button id="btnCurrentPatient" onclick="BalanceInfo('OPD_BalanceInfo:ByIPDNo')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
+                    <button id="btnCurrentPatient" onclick="BalanceInfoBillWise('OPD_BalanceInfo:ByIPDNo')" class="btn btn-warning"><i class="fa fa-search">&nbsp;</i>Search</button>
                 </div>
             </div>
             <div class="row colnospace">
@@ -65,12 +76,9 @@
                                 <th>CMD</th>
                                 <th><input type="text" id="txt3" style="width:100px;color:#000" onkeyup="searchTable('txt3','tblBillingInfo')" placeholder="Seach Claim No.." /></th>
                                 <th><input type="text" id="txt4" style="width:100px;color:#000" onkeyup="searchTable('txt4','tblBillingInfo')" placeholder="Seach Bill No.." /></th>
-                                <th><input type="text" id="txt1" style="width:100px;color:#000" onkeyup="searchTable('txt1','tblBillingInfo')" placeholder="Seach OPD No.." /></th>
+                                <th>Panel Name</th>
                                 <th>Patient Name</th>
-                                <th>Insurance Company Name</th>
                                 <th>Bill Date</th>
-                                <th>Total Amount</th>
-                                <th>Discount</th>
                                 <th>Net Payable</th>
                             </tr>
                         </thead>
@@ -84,13 +92,13 @@
                                 <th>CMD</th>
                                 <th>Claim No</th>
                                 <th>BillNo</th>
-                                <th>OPD No</th>
-                                <th>Patient Name</th>
                                 <th>Panel Name</th>
+                                <th>Patient Name</th>
                                 <th>Bill Date</th>
-                                <th>Total Amount</th>
-                                <th>Discount</th>
                                 <th>Net Payable</th>
+                                <th style="width: 100px;">Paid Amount</th>
+                                <th>Bad Debt</th>
+                                <th style="width: 140px;">Bad Debt Type</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -131,12 +139,19 @@
                         <input type="text" id="txtTotalReceivable" class="form-control" disabled />
                     </div>
                 </div>
+                <div class="col-md-2">
+                    <label>Total Bad Debt</label>
+                    <div class="flex">
+                        <input type="text" id="txtTotalBadDebt" class="form-control" disabled />
+                    </div>
+                </div>
             </div>
             <div class="row colnospace" style="margin-bottom:10px;height:60px;padding-top: 5px;">
                 <div class="col-md-3">
                     <div style="display: flex;align-items:baseline">
                         <label style="white-space:pre">Attachment : </label>
-                        <input type="file" id="txtReferenceNo" class="form-control" />
+                        <input type="file" id="uploadFile" onchange="readURL(this)" class="form-control" />
+                        <img id="imgFile" class="hide" />
                     </div>
                 </div>
                 <div class="col-md-7">

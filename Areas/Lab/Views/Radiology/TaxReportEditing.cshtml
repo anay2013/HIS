@@ -1,11 +1,10 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "TaxReportEditing";
     Layout = "~/Views/Shared/_layout.cshtml";
 
 
 }
-<script src="~/Areas/Lab/JsModule/Report/TextReportEditing.js?v1.1"></script>
+<script src="~/Areas/Lab/JsModule/Report/TextReportEditing.js?v1.3"></script>
 <style>
     .custom-table span {
         font-weight: bold;
@@ -13,6 +12,49 @@
 
     .flex {
         display: flex;
+    }
+
+    .VisitNo {
+        color: #0076d0;
+    }
+
+    .colDate {
+        position: absolute;
+        display: none;
+        padding: 4px 4px;
+        display: block;
+        border: 1px solid #ddd;
+        background: #fff8e4;
+        right: 16px;
+        margin-top: -43px;
+        text-align: center;
+        border-radius: 3px;
+    }
+
+    .urgent {
+        display: inline-block;
+        background: #ff3232;
+        color: #fff;
+        padding: 2px;
+        border-radius: 50px;
+        width: 14px;
+        text-align: center;
+        height: 14px;
+        line-height: 10px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .barcode {
+        color: #0076d0;
+    }
+
+    #tblTestTrackingReport thead th {
+        white-space: pre;
+    }
+
+    #tblTestTrackingReport tbody td {
+        white-space: pre;
     }
 
     #tblTestInfo tbody .fa-check-circle {
@@ -218,7 +260,7 @@
                                 </div>
                                 <div class="row" style="margin:5px 0">
                                     <div class="col-md-4" style="padding:0">
-                                        <select class="form-control" id="ddlStatus" style="padding:7px">
+                                        <select class="form-control" id="ddlStatus1" style="padding:7px">
                                             <option>Mobile No</option>
                                             <option>Barcode</option>
                                             <option>Visit No</option>
@@ -294,7 +336,8 @@
                                                 <th style='width:3%'>Flag</th>
                                                 <th style='width:13%'>Ref. Range</th>
                                                 <th style='width:1%'>cmd</th>
-                                                @*<th style='width:10%'>Method</th>
+                                                @*
+                                                    <th style='width:10%'>Method</th>
                                                     <th style='width:9%'>Mac. Name</th>
                                                     <th style='width:9%;white-space:pre'>Mac. Reading</th>*@
                                             </tr>
@@ -440,6 +483,59 @@
                                 <img id="imgFile" class="hide" />
                             </span>
                             <input type="button" id="btnSave" class="btn-success btn-flat" onclick="UploadLabReport()" value="Upload" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalDelta" tabindex="-1" role="dialog" aria-labelledby="True">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="margin-top:5%;">
+            <div class="panel-heading flex" style="background:#0076d0;padding:1px 5px;width:100%">
+                <h5 class="text-white">Info</h5>
+                @*<button data-dismiss="modal" class="btn btn-danger btn-close btn-xs pull-right" style="margin: -16px 0;height: 16px;line-height: 0;">x</button>*@
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="table table-responsive">
+                            <div class="scroll" style="max-height:220px">
+                                <table id="tblTestTrackingReport" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>IPOP Type</th>
+                                            <th>Barcode No</th>
+                                            <th>Reg Date</th>
+                                            <th>Item Code</th>
+                                            <th>Item Name</th>
+                                            <th>Test Category</th>
+                                            <th>Sample Code</th>
+                                            <th>Sample Collect Date</th>
+                                            <th>Sample Collect By</th>
+                                            <th>Sample Distributed Date</th>
+                                            <th>Sample Distributed By</th>
+                                            <th>Dispatch Date</th>
+                                            <th>Sample Dispatch By</th>
+                                            <th>Dispatch Received Time</th>
+                                            <th>Dispatch Received By</th>
+                                            <th>Lab Received Date</th>
+                                            <th>Lab Received By</th>
+                                            <th>Max Rep Time</th>
+                                            <th>Delivary Time</th>
+                                            <th>Approved Date</th>
+                                            <th>Approve By</th>
+                                            <th>Sample Required</th>
+                                            <th>Local Test</th>
+                                            <th>Cancelled</th>
+                                            <th>R Type</th>
+                                            <th>InOut Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

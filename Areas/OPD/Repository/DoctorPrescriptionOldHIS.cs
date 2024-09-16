@@ -28,7 +28,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             DataSet ds = dsResult.ResultSet;
             PdfDocument repDocument = new PdfDocument();
             repDocument.SerialNumber = "PXVUbG1Z-W3FUX09c-T0QMCBMN-HQwdDh0M-HQ4MEwwP-EwQEBAQ=";
-            PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(15, 10, 10, 80), PdfPageOrientation.Portrait);
+            PdfPage page1 = repDocument.AddPage(PdfPageSize.A4, new PdfDocumentMargins(40, 10, 10, 70), PdfPageOrientation.Portrait);
 
             string HtmlBody = GetBodyHTML(dsResult.ResultSet);
             PdfHtml htmlBody = new PdfHtml(HtmlBody, null);
@@ -47,11 +47,9 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
         public void htmlToPdfConverter_PageCreatingEvent(PdfPageCreatingParams eventParams)
         {
             PdfPage page1 = eventParams.PdfPage;
-
-            string HtmlBody = "<div style='float:left;width:1%;border-left: 1px solid #000;height:1000;margin-left:25.2%;margin-top:393px;position:absolute'></div><div style='float:left;height:1200px;margin-top:200px;width:100%;border-top:1px solid #000;border-left:1px solid #000;border-right:1px solid #000;'></div>";
+            string HtmlBody = "<div style='float:left;width:1%;border-left: 1px solid #000;height:1130;margin-left:25.2%;margin-top:393px;position:absolute'></div><div style='float:left;height:1330;margin-top:200px;width:100%;border-top:1px solid #000;border-left:1px solid #000;border-right:1px solid #000;'></div>";
             PdfHtml htmlBody = new PdfHtml(HtmlBody, null);
             page1.Layout(htmlBody);
-
             //Set Header
             SetHeader(page1);
             SetFooter(page1, false);
@@ -71,7 +69,7 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             if (pdfPage != null)
             {
                 string StrhtmlFooter = string.Empty;
-                pdfPage.CreateFooterCanvas(90);
+                pdfPage.CreateFooterCanvas(70);
 
                 StrhtmlFooter = GetFooterHTML(dsResult.ResultSet);
                 if (pdfPage.Footer != null)
@@ -420,6 +418,27 @@ namespace MediSoftTech_HIS.Areas.OPD.Repository
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
+
+                    b.Append("<div style='height:145px;'>");
+                    b.Append("<table style='padding:2px;background:#fff;width:100%;;font-size:18px;text-align:left;margin-top:50px'>");
+                    b.Append("<tr>");
+                    b.Append("<td style='width:35%;text-align:left;'></td>");
+                    b.Append("<td style='width:65%;text-align:left;font-size:32px'>" + ds.Tables[0].Rows[0]["dept_name"].ToString() + "</td>");
+                    b.Append("</tr>");
+
+                    b.Append("<tr>");
+                    b.Append("<td style='width:35%;text-align:left;'></td>");
+                    b.Append("<td style='width:65%;text-align:left;font-size:22px'>" + ds.Tables[0].Rows[0]["Full_Address"].ToString() + "</td>");
+                    b.Append("</tr>");
+
+                    b.Append("<tr>");
+                    b.Append("<td style='width:35%;text-align:left;'></td>");
+                    b.Append("<td style='width:65%;text-align:left;font-size:22px'>" + ds.Tables[0].Rows[0]["Info"].ToString() + "</td>");
+                    b.Append("</tr>");
+
+                    b.Append("</table>");
+                    b.Append("</div>");
+
                     b.Append("<table style='width:100%;border-bottom:1px solid #000; font-size:25px;float:left;margin-top:198px;padding:8px;font-family:calibri'>");
                     b.Append("<tr>");
                     b.Append("<td><b>Patient Name</b></td>");

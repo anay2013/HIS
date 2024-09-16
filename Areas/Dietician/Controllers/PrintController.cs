@@ -1,6 +1,7 @@
 ﻿using HIS.Repository;
 using HISWebApi.Models;
 using MediSoftTech_HIS.App_Start;
+using System;
 using System.Data;
 using System.Text;
 using System.Web.Mvc;
@@ -158,6 +159,76 @@ namespace MediSoftTech_HIS.Areas.Dietician.Controllers
             pdfConverter.Browser_Width = 760;
             pdfConverter.PageOrientation = "Portrait";
             return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "Diet_ReqSlip.pdf");
+        }
+
+        public FileResult RTFeedSchedule(string Date)
+        {
+
+            PdfGenerator pdfConverter = new PdfGenerator();
+            ipDietRTFeed obj = new ipDietRTFeed();
+            obj.IPDNo = "-";
+            obj.from = "1999-01-01";
+            obj.to = "1999-01-01";
+            obj.DietId = "-";
+            obj.Hourly = 0;
+            obj.FinishDateTime = DateTime.Now;
+            obj.StartDateTime = Convert.ToDateTime(Date);
+            obj.Logic = "GetRTDietsListDetails";
+            dataSet dsResult = APIProxy.CallWebApiMethod("Dietician/Diet_RTFeedQueries", obj);
+
+            DataSet ds = dsResult.ResultSet;
+            string _result = string.Empty;
+            StringBuilder b = new StringBuilder();
+            StringBuilder h = new StringBuilder();
+
+            b.Append("<div style='width:100%;float:left;'>");
+            string headerImageFile = HttpContext.Server.MapPath(@"/Content/logo/logo.png");
+            b.Append("<div style='text-align:center;width:auto;'>");
+            b.Append("<h2 style='font-weight:bold;text-align:center;text-decoration:underline'>RTFeed Diet Schedule</h2>");
+            b.Append($"<h3 style='font-weight:bold;text-align:center;text-decoration:underline;margin-top:-10px'>{obj.StartDateTime.ToString("dd/MM/yyyy hh:ss tt")}</h3>");
+            b.Append("</div>");
+            b.Append("</div>");
+
+            b.Append("<table style='width:100%;font-size:10px;text-align:left;margin-top:5px;border-collapse:collapse;' border='1' >");
+            b.Append("<tr>");
+            b.Append("<th style='white-space:nowrap;padding-left:3px;padding-right:3px;font-size:15px;'>Sr.No</th>");
+            b.Append("<th style='white-space:nowrap;padding-left:3px;padding-right:3px;font-size:15px;width:15%'>IPD No</th>");
+            b.Append("<th style='padding-left:3px;padding-right:3px; font-size:15px;width:20%'>Patient Name</th>");
+            b.Append("<th style='padding-left:3px;padding-right:3px;font-size:15px;width:20%'>Diet Name</th>");
+            b.Append("<th style='font-size:15px;width:20%'>Item Name</th>");
+            b.Append("<th style='padding-left:3px;padding-right:3px;font-size:15px;width:22%'>Remarks</th>");
+            b.Append("</tr>");
+
+            //Body			
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                var count = 0;
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    count++;
+                    b.Append("<tr>");
+                    b.Append("<td style='padding-left:3px;padding-right:3px;font-size:13px'>" + count.ToString() + "</td>");
+                    b.Append("<td style='padding-left:3px;padding-right:3px;font-size:13px;width:15%'>" + dr["IPDNo"].ToString() + "</td>");
+                    b.Append("<td style='padding-left:3px;padding-right:3px;font-size:13px;width:20%'>" + dr["patient_name"].ToString() + "</td>");
+                    b.Append("<td style='padding-left:3px;padding-right:3px;font-size:13px;width:20%'>" + dr["DietName"].ToString() + "</td>");
+                    b.Append("<td style='padding-left:3px;padding-right:3px;font-size:13px;width:20%'>" + dr["ItemName"].ToString() + "</td>");
+                    b.Append("<td style='padding-left:3px;padding-right:3px;font-size:13px;width:25%'>" + dr["Remark"].ToString() + "</td>");
+                    b.Append("</tr>");
+                }
+            }
+            b.Append("</table>");
+            pdfConverter.Header_Enabled = false;
+            pdfConverter.Footer_Enabled = false;
+            pdfConverter.Header_Hight = 150;
+            pdfConverter.PageMarginLeft = 10;
+            pdfConverter.PageMarginRight = 10;
+            pdfConverter.PageMarginBottom = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageMarginTop = 10;
+            pdfConverter.PageName = "A4";
+            pdfConverter.Browser_Width = 1150;
+            pdfConverter.PageOrientation = "Landscap";
+            return pdfConverter.ConvertToPdf(h.ToString(), b.ToString(), "-", "RTFeedSchedule.pdf");
         }
     }
 }

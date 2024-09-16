@@ -5,7 +5,7 @@
     ViewBag.Title = "bookAppointment";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/OPD/JsModule/BookAppointment.js?ver=1.2"></script>
+<script src="~/Areas/OPD/JsModule/BookAppointment.js?ver=1.4"></script>
 <style>
     #amountInfo {
         border-top: none !important;
@@ -251,10 +251,19 @@
         width: 99%;
         padding: 4px 5px;
     }
+
     .blockUI {
         pointer-events: none;
         opacity: 0.5;
     }
+
+    .doctorInfo {
+        background: #ddd;
+        border-radius: 3px;
+        padding: 7px;
+        text-align: center;
+    }
+
     .TimeSlot-Title {
         align-items: center;
         display: flex;
@@ -887,6 +896,9 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-md-12">
+                        <label class="doctorInfo"></label>
+                    </div>
                     <div class="col-md-12">
                         <table id="tblDoctorSchedule" class="table table-bordered">
                             <thead>

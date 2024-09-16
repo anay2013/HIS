@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<script src="~/Areas/ApplicationResource/JsModule/Dashboard.js"></script>
+<div id="page-content">
+    <div class="container">
+        <div class="panel">
+            <div class="panel-body">
+                <h4 class="custom-title">
+                    Code Factory
+                </h4>
+                <div class="example-box-wrapper">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <textarea rows="20" id="txtInput" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <textarea rows="20" id="txtOutPut" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <button onclick="Generate()" class="btn btn-warning">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

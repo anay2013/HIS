@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "MedicalCertificate";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
@@ -103,14 +102,14 @@
                                 <label>Remark</label>
                                 <label id="txtautoid" hidden></label>
                                 <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:inline-flex;align-items: baseline;">
-                                    <textarea id="txtRemark" style="padding:0px;font-size:12px" class="form-control" type="text" maxlength="500"></textarea>
+                                    <textarea id="txtRemark" style="padding:0px;font-size:12px;height:170px;" class="form-control" type="text" maxlength="5000"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <label></label>
                                 <div class="fileinput fileinput-new input-group" data-provides="fileinput" style="display:flex;align-items: baseline;">
-                                    <button class="btn-success" id="btnSave" style="width:40%;margin-top: 6%;border:none;height:27px" onclick="InsertMedicalData()"><i class="fa fa-save">&nbsp;</i>Save</button>
-                                    <button class="btn-success" id="btnUpdate" style="width:45%;margin-top: 6%;border:none;height:27px; display:none" onclick="UpdateMedical()"><i class="fa fa-save">&nbsp;</i>Update</button>
+                                    <button class="btn-success" id="btnSave" style="width:40%;margin-top:58%;border:none;height:27px" onclick="InsertMedicalData()"><i class="fa fa-save">&nbsp;</i>Save</button>
+                                    <button class="btn-success" id="btnUpdate" style="width:45%;margin-top:58%;border:none;height:27px; display:none" onclick="UpdateMedical()"><i class="fa fa-save">&nbsp;</i>Update</button>
 
                                 </div>
                             </div>
@@ -118,7 +117,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="table-responsive" style="overflow-y:auto;border: 1px solid #4f7ba1;">
+                                <div class="table-responsive" style="overflow:auto;border: 1px solid #4f7ba1;height:200px">
                                     <table class="table table-bordered" id="tblMedicalCertificate">
                                         <thead>
                                             <tr>

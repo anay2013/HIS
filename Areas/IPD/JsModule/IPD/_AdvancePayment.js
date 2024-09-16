@@ -248,6 +248,7 @@ function PatientAdvance() {
                     ReceiptInfo();
                 }
                 else {
+                    alert(data);
                 }
             },
             error: function (response) {

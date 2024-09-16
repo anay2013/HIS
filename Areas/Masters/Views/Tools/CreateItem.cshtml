@@ -3,7 +3,7 @@
     ViewBag.Title = "CreateItem";
     Layout = "~/Views/Shared/_layout.cshtml";
 }
-<script src="~/Areas/Masters/JsModule/CreateItem.js"></script>
+<script src="~/Areas/Masters/JsModule/CreateItem.js?v1.1"></script>
 
 <style>
     .panel {
@@ -44,6 +44,13 @@
                     <h4 style="width:7%">Create Item </h4>
                 </div>
                 <div class="panel-body" id="divItemCreation">
+                    <div class="col-sm-1 form-group">
+                        <label>Status</label>
+                        <select id="ddlActive" class="form-control">
+                            <option value="1" selected="selected">Active</option>
+                            <option value="0">Deactive</option>
+                        </select>
+                    </div>
                     <div class="col-sm-2 form-group">
                         <label>Category</label>
                         <select id="ddlCategory" class="form-control border-imp" style="border:1px solid #86b3de" onchange="BindSubCategoryByCategory()"></select>
@@ -52,7 +59,7 @@
                         <label>Sub Category</label>
                         <select id="ddlSubCategory" class="form-control border-imp" style="border:1px solid #86b3de"></select>
                     </div>
-                    <div class="col-sm-2 form-group">
+                    <div class="col-sm-1 form-group">
                         <label>CPT Codes</label>
                         <input type="text" id="txtCptCods" class="form-control" style="border:1px solid #86b3de" />
                     </div>
@@ -101,6 +108,7 @@
                                     <th style="width:25%">Item Name</th>
                                     <th>Is Discountable</th>
                                     <th>Is Shareable</th>
+                                    <th style="width:1%">Active/DeActive</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -112,10 +120,10 @@
     </div>
 
     @*<div class="col-lg-10">
-        <div class="row">
-            <div id="divItemTransPartial">
-        </div>
-          
-        </div>
-    </div>*@
+            <div class="row">
+                <div id="divItemTransPartial">
+            </div>
+
+            </div>
+        </div>*@
 </div>

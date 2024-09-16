@@ -49,8 +49,8 @@ function GetOPDRefund() {
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
         async: false,
-        success: function (data) {            
-            if (data.ResultSet.Table.length > 0) {              
+        success: function (data) {
+            if (data.ResultSet.Table.length > 0) {
                 total = 0;
                 amount = 0;
                 $('#txtTotal').val(0);
@@ -60,7 +60,7 @@ function GetOPDRefund() {
                 $('#tblPayment tbody').empty();
                 var tbody = "";
                 var html = "";
-                $.each(data.ResultSet.Table, function (key, val) { 
+                $.each(data.ResultSet.Table, function (key, val) {
                     $('#txtTranNo').val(objBO.prm_1);
                     if (val.trnStatus == 'Refunded') {
                         tbody += "<tr style='background:#ffb8b8'>";
@@ -107,7 +107,7 @@ function GetOPDRefund() {
                     html += "<td class='text-right'>" + val.GrossAmount + "</td>";
                     html += "<td class='text-right'>" + val.discount + "</td>";
                     html += "<td class='text-right'>" + val.NetAmount + "</td>";
-                    if (val.trnStatus == "Refunded" || val.trnStatus == "Cancelled"  )
+                    if (val.trnStatus == "Refunded" || val.trnStatus == "Cancelled")
                         html += "<td>-</td>";
                     else
                         html += "<td><input type='checkbox'/></td>";
@@ -137,13 +137,19 @@ function AppointmentCancellation() {
                 var itemid = $(this).find('td:eq(0)').text();
                 item.push(itemid);
             });
+            if (item.length == 0) {
+                alert('Please Select Item.');
+                return
+            }
+
+
             objBO.ItemIdList = item.join(',');
             objBO.amount = $('#txtTotal').val();
             objBO.PayMode = $('#ddlPayMode option:selected').text();
             objBO.CancellationType = $('input[name=type]:checked').val();
             objBO.IPAddress = '-';
             objBO.login_id = Active.userId;
-             $.ajax({
+            $.ajax({
                 method: "POST",
                 url: url,
                 data: JSON.stringify(objBO),
@@ -170,7 +176,7 @@ function AppointmentCancellation() {
     }
 }
 function Receipt(tnxid) {
-    var url = config.documentServerUrl+"/Print/AppointmentReceipt?TnxId=" + tnxid + "&ActiveUser=" + Active.userName;
+    var url = config.documentServerUrl + "/Print/AppointmentReceipt?TnxId=" + tnxid + "&ActiveUser=" + Active.userName;
     window.open(url, '_blank');
 }
 function Validation() {
@@ -179,23 +185,28 @@ function Validation() {
     var PayMode = $('#ddlPayMode option:selected').text();
     var Panel = $('#tblDetails tbody tr').find('td:eq(7)').text();
 
-    if (Panel == 'CASH') {
-        if (Total <= 0) {
-            alert('Please Choose Refund Amount..');
-            return false;
-        }
-        if (PayMode == 'Pay Mode') {
-            $('#ddlPayMode').focus();
-            alert('Please Choose Pay Mode..');
-            return false;
-        }
+    if (PayMode == 'Pay Mode') {
+        $('#ddlPayMode').focus();
+        alert('Please Choose Pay Mode..');
+        return false;
     }
-    else if (Panel != 'CASH') {
-        if (Total <= 0) {
-            alert('Please Choose Refund Amount..');
-            return false;
-        }
-    }
+    //if (Panel == 'CASH') {
+    //    //if (Total <= 0) {
+    //    //    alert('Please Choose Refund Amount..');
+    //    //    return false;
+    //    //}
+    //    if (PayMode == 'Pay Mode') {
+    //        $('#ddlPayMode').focus();
+    //        alert('Please Choose Pay Mode..');
+    //        return false;
+    //    }
+    //}
+    //else if (Panel != 'CASH') {
+    //    if (Total <= 0) {
+    //        alert('Please Choose Refund Amount..');
+    //        return false;
+    //    }
+    //}
     if (Remark == '') {
         $('#txtRemark').focus();
         alert('Please Provide Cancellation Remark..');

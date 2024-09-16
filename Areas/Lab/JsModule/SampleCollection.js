@@ -12,12 +12,12 @@ $(document).ready(function () {
         $('#modalTestPreview').modal('show');
     });
     $('#tblSampleInfoOfPatient tbody').on('click', '#btnHelp', function () {
-        var testcode = $(this).closest('tr').find('td:eq(1)').text();
+        var testcode = $(this).closest('tr').find('td:eq(1)').inner();
         SampleTakenHelp(testcode);
     });
     $('#tblPendingCollection tbody').on('click', 'button', function () {
         var name = $(this).closest('tr').find('td:eq(2)').text();
-        var visitno = $(this).closest('tr').find('td:eq(4)').text();
+        var visitno = $(this).closest('tr').find('td:eq(4)').text().replace('U', '').trim();
         var age = $(this).closest('tr').find('td:eq(3)').text();
         var TestList = $(this).closest('tr').find('td:last').text();
         selectRow($(this))
@@ -27,7 +27,7 @@ $(document).ready(function () {
         else
             $('#txtPatientInfo').html(TestList);
 
-        $('#txtPatientName').text(name);
+        $('#txtPatientNameInfo').text(name);
         $('#txtPatientVisitNo').text(visitno);
         $('#txtUHID').text($(this).closest('tr').find('td:eq(6)').text());
         $('#txtPatientAge').text(age);
@@ -108,7 +108,7 @@ function PendingCollection(logic) {
                         tbody += "<td>" + val.ipop_no + "</td>";
                         tbody += "<td>" + val.patient_name + "</td>";
                         tbody += "<td>" + val.Age + '/' + val.gender + "</td>";
-                        tbody += "<td>" + val.visitNo + "</td>";
+                        tbody += (eval(val.IsUrgent) > 0) ? "<td><i class='urgent'>U</i>&nbsp;" + val.visitNo + "" : "<td>" + val.visitNo;
                         tbody += "<td style=width:1%><button class='btn btn-success btn-xs'><span class='fa fa-arrow-right'></button></td>";
                         tbody += "<td style='display:none' >" + val.UHID + "</td>";
                         tbody += "<td style='display:none' >" + val.TestList + "</td>";

@@ -118,7 +118,6 @@ function DoctorScheduledList() {
         alert("Doctor is not selected");
         return;
     }
-    debugger;
     var DoctorId = $("#ddlDoctorName").val();
     var url = config.baseUrl + "/api/Online/DoctorAppQueries";
     var from = Properdate($("#dtolddate").val(), '-')

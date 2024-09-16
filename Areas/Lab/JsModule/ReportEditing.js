@@ -27,6 +27,15 @@ $(document).ready(function () {
         $('#modalDelta').modal('show')
         $('#modalDelta').find('h5').text(testName)
     });
+    $("#tblReport tbody").on('mouseover', '.barcode', function () {
+        $(this).closest('td').append('<div class="colDate"></div>')
+        CollecDateByBarcode(this)
+        $(this).closest('td').find('.colDate').show();
+    }).on('mouseout', '.barcode', function () {
+        CollecDateByBarcode(this)
+        $(this).closest('td').find('.colDate').remove();
+        $(this).closest('td').find('.colDate').hide();
+    });
     RowSequence(['#tblObservationDetails']);
     CloseSidebar();
     $('select').select2();
@@ -106,6 +115,42 @@ function readURL(input) {
         var files = $('#uploadFile').get(0).files;
     }
 }
+function CollecDateByBarcode(elem) {
+    $(elem).siblings('div.colDate').html('');
+    var url = config.baseUrl + "/api/sample/LabReporting_Queries";
+    var objBO = {};
+    objBO.LabCode = Active.HospId;
+    objBO.IpOpType = '-';
+    objBO.ReportStatus = '-';
+    objBO.VisitNo = '-';
+    objBO.BarccodeNo = $(elem).text();
+    objBO.SubCat = '-';
+    objBO.TestCategory = '-';
+    objBO.AutoTestId = 0;
+    objBO.TestCode = '-';
+    objBO.from = '1900/01/01';
+    objBO.to = '1900/01/01';
+    objBO.Logic = 'CollecDateByBarcode';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $(elem).siblings('div.colDate').html('Sample Coll. Date<br>' + val.collect_date);
+                    });
+                }
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function LabReporting(logic) {
     $('#tblReport tbody').empty();
     $('#tblTestInfo tbody').empty();
@@ -156,8 +201,8 @@ function LabReporting(logic) {
                         tbody += "<td class='hide'>" + val.SubCatId + "</td>";
                         tbody += "<td>" + val.RegDate + "</td>";
                         tbody += "<td>" + val.VisitNo + "</td>";
-                        tbody += "<td>" + val.barcodeNo + "</td>";
-                        tbody += "<td>" + val.testCategory + "</td>";
+                        tbody += "<td><a href='#' class='barcode'>" + val.barcodeNo + "</a></td>";
+                        tbody += (eval(val.IsUrgent) > 0) ? "<td><i class='urgent'>U</i>&nbsp;" + val.testCategory + "" : "<td>" + val.testCategory;
                         tbody += "<td style=width:1%><button class='btn btn-success btn-xs'><span class='fa fa-arrow-right'></button></td>";
                         tbody += "</tr>";
                     });
@@ -742,7 +787,7 @@ function UnApproveTest() {
                     'Logic': 'Un-Approved'
                 });
             }
-        });       
+        });
         $.ajax({
             method: "POST",
             url: url,
@@ -1159,28 +1204,28 @@ function DeltaReportByVisitNo(Testcode) {
         data: JSON.stringify(objBO),
         contentType: "application/json;charset=utf-8",
         dataType: "JSON",
-        success: function (data) {                 
+        success: function (data) {
             if (Object.keys(data.ResultSet).length == 1)
                 return
-      
+
             var thead = "";
-            var tbody = "";            
-            var lblPatientInfo = "";   
+            var tbody = "";
+            var lblPatientInfo = "";
             $.each(data.ResultSet.Table, function (key, val) {
                 lblPatientInfo += "<b>UHID : " + val.UHID + "</b>, ";
                 lblPatientInfo += "<b>Patient Name : " + val.patient_name + "</b>, ";
                 lblPatientInfo += "<b>Age Info : " + val.ageInfo + "</b>, ";
                 lblPatientInfo += "<b>Admit Date : " + val.AdmitDate + "</b>";
             });
-            var col = Object.keys(data.ResultSet.Table1[0]);          
+            var col = Object.keys(data.ResultSet.Table1[0]);
             thead += "<tr>";
-            for (var i = 0; i <col.length; i++) { thead += "<th>" + col[i] + "</th>" };   
+            for (var i = 0; i < col.length; i++) { thead += "<th>" + col[i] + "</th>" };
             thead += "</tr>";
             $.each(data.ResultSet.Table1, function (key, val) {
                 tbody += "<tr>";
-                for (var i = 0; i < col.length; i++) {                   
-                    tbody += "<td>" + val[col[i]] + "</td>";                  
-                }          
+                for (var i = 0; i < col.length; i++) {
+                    tbody += "<td>" + val[col[i]] + "</td>";
+                }
                 tbody += "</tr>";
             });
             $('#tblDelta2 thead').append(thead);

@@ -1,0 +1,157 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>ABHA Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script src="~/Content/js/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="~/JsModule/global.js"></script>
+    <link href="~/Content/css/custom.css?his-version-1.0" rel="stylesheet" />
+    <script src="~/Areas/ApplicationResource/JsModule/ABHADashboard.js?v.14"></script>
+    <style>
+        body {
+            background: #f1f1f3;
+        }
+
+        .linkABHA p {
+            margin: 0 5px;
+        }
+
+        .linkABHA {
+            background: #ffe8e8;
+            display: flex;
+            padding: 4px;
+            border-radius: 3px;
+            border: 1px solid #fff8f8;
+            width: max-content;
+            margin-top: -4px;
+        }
+
+        .outer_box {
+            overflow: hidden;
+        }
+
+        .topbar_header {
+            height: 50px;
+            background: #ffdbdb;
+            border-bottom: 1px solid #ddd;
+            padding: 13px;
+        }
+
+        .lu_photo {
+            width: 30px;
+            height: 30px;
+            border-radius: 40px;
+            border: 1px solid #e9e8e8;
+        }
+
+        .lu_username {
+            margin: 0 5px;
+            font-weight: 500;
+            font-size: 16px;
+            color: #2d70d9;
+        }
+
+        .lu_logout {
+            cursor: pointer;
+            color: #d30101;
+            font-size: 19px;
+            margin-left: 3px;
+        }
+
+        .dash_title {
+            font-size: 16px;
+            text-align: center;
+            color: #5a5a5a;
+        }
+
+        .menubar {
+            height: 85vh;
+            border-right: 1px solid #e5e5e5;
+        }
+
+            .menubar ul {
+                list-style: none;
+                padding: 0px;
+                background: #fff;
+            }
+
+                .menubar ul li {
+                    list-style: none;
+                    padding: 15px 40px;
+                    font-weight: bold;
+                    border-bottom: 2px solid #f1f1f3;
+                    font-size: 13px;
+                    cursor: pointer;
+                }
+
+                    .menubar ul li:hover {
+                        background: #efefef;
+                    }
+
+        .activeList {
+            color: #2055d1 !important;
+        }
+
+        .dashboard_body {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer_box">
+        <div class="topbar_header">
+            <div class="row">
+                <div class="col-md-1">
+                    <label class="dash_title">Dashboard</label>
+                </div>
+                <div class="col-md-8">
+                    <div class="linkABHA">
+                        <p><b>UHID :</b> <span> -</span></p>
+                        <p><b>Name :</b> <span> -</span></p>
+                        <p><b>ABHA Address :</b> <span>-</span></p>
+                        <button style="margin-left: 5px;" id="btnLinkAbha" onclick="LinkABHA()" class="btn btn-warning btn-xs"><i class="fa fa-link">&nbsp;</i>Link</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <img src="" class="lu_photo" />
+                    <label class="lu_username">Nitin Srivastava</label>
+                    <i onclick="logout_abha()" class="fa fa-power-off lu_logout"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="menubar">
+                    <ul>
+                        <li>My Account <i class="pull-right">>></i></li>
+                        <li onclick="loadBody(this)">ABHA card </li>
+                        <li onclick="loadBody(this)">Edit profile</li>
+                        <li onclick="loadBody(this)">Set password</li>
+                        <li onclick="loadBody(this)">Re-KYC verification</li>
+                        <li onclick="loadBody(this)">Deactivate/Delete</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="dashboard_body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

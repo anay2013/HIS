@@ -102,8 +102,7 @@ function SummarisedBilling() {
     });
 }
 function SaveDischargeStatus() {
-    if (confirm('Are you sure to Discharge?')) {
-
+    if (confirm('Are you sure to Discharge?')) {    
         var url = config.baseUrl + "/api/IPDNursingService/IPD_InsertDischargeStatus";
         var objBO = {};
         objBO.IPDNo = _IPDNo;

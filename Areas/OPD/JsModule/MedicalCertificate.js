@@ -2,7 +2,6 @@
     FillCurrentDate('txtfrom');
     FillCurrentDate('txtTo');
     $('#tblMedicalCertificate tbody').on('click', '.EditRow', function () {
-        debugger
         var Autoidd = $(this).closest('tr').find('td:eq(1)').text();
         var UhidNo = $(this).closest('tr').find('td:eq(2)').text();
         EditRowSingleBy(Autoidd, UhidNo);
@@ -10,7 +9,6 @@
     });
 });
 function Printdata(Autoid) {
-    debugger
     var UHIDNo = $("#txtUHIDNo").val();
     var url = "../Print/MedicalCertificate?UHID_No=" + UHIDNo + "&Autoid=" + Autoid;
     window.open(url, '_blank');
@@ -153,7 +151,6 @@ function InsertMedicalData() {
 
 }
 function EditRowSingleBy(Autoidd, UhidNo) {
-    debugger
     var url = config.baseUrl + "/api/Appointment/OPD_MedicalCertificateQueries";
     var objBO = {};
     objBO.Auto_id = Autoidd;

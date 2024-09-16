@@ -1,18 +1,221 @@
-﻿
+﻿var _app_no = "";
+var _doctorId = "";
+var _uhid = "";
 $(document).ready(function () {
-    GetVitalSign();
-    $('#btnSaveVital').on('click', function () {
-        var logic = ($(this).text() == 'Save') ? 'Insert' : 'Update';
-        InsertVitalSign(logic);
-    });
-    $('#tblVitalSign tbody').on('click', 'button', function () {
-        $('#btnSaveVital').text('Update');
-    });
+    CloseSidebar();
+    GetDoctor();
+    FillCurrentDate("txtSearchFrom");
+    FillCurrentDate("txtSearchTo");
+    $('#tblOPDRegister tbody').on('click', '#btnGetInfo', function () {
+        selectRow($(this));
+        var app_no = $(this).closest('tr').find('td:eq(2)').text();
+        SelectedPatientInfo(app_no);
+    })
 });
-function GetVitalSign() {
+function GetDoctor() {
     var url = config.baseUrl + "/api/Appointment/Opd_AppointmentQueries";
     var objBO = {};
-    objBO.AppointmentId = Active.AppId;
+    objBO.Logic = 'All';
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        async: false,
+        success: function (data) {
+
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table2).length) {
+                    $('#ddlDoctor').empty().append($('<option value="ALL">ALL</option>')).select2();
+                    $.each(data.ResultSet.Table2, function (key, val) {
+                        $('#ddlDoctor').append($('<option></option>').val(val.DoctorId).html(val.DoctorName));
+                    });
+                }
+            }
+            else {
+                alert('No Record Found..');
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function AppointmentList(logic) {
+    $('#tblOPDRegister tbody').empty();
+    $('#txtAppId').text('');
+    $('#txtPatientName').text('');
+    $('#txtMobileNo').text('');
+    $('#txtAge').text('');
+    $('#txtDoctorName').text('');
+    $('#txtAppDate').text('');
+    var url = config.baseUrl + "/api/Appointment/Opd_ExaminationRoomQueries";
+    var objBO = {};
+    objBO.Hosp_Id = Active.HospId;
+    objBO.SearcKey = $('#ddlStatus option:selected').text();
+    objBO.SearchValue = '-'
+    objBO.UHID = '-';
+    objBO.AppointmentId = $('#txtAppointmentId').val();
+    objBO.from = $('#txtSearchFrom').val();
+    objBO.to = $('#txtSearchTo').val();
+    objBO.login_id = Active.userId;
+    objBO.Logic = logic;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        async: false,
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    var tbody = "";
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        tbody += "<tr>";
+                        tbody += "<td><button id='btnGetInfo' class='btn-warning btn-tbl'><i class='fa fa-sign-in'>&nbsp;</i></button>";
+                        tbody += "<td>" + val.token_no + "</td>";
+                        tbody += "<td>" + val.app_no + "</td>";
+                        tbody += "<td>" + val.patient_name + "</td>";
+                        tbody += "<td>" + val.ageInfo + "</td>";
+                        tbody += "<td>" + val.DoctorName + "</td>";
+                        if (val.IsEmergencyVisit == '1')
+                            tbody += "<td style='background:#ed4f4f;color:#fff'>" + val.uStatus + "</td>";
+                        else
+                            tbody += "<td>" + val.uStatus + "</td>";
+                        tbody += "</tr>";
+                    });
+                    $('#tblOPDRegister tbody').append(tbody);
+                }
+            }
+            if (Object.keys(data.ResultSet).length > 1) {
+                $.each(data.ResultSet.Table1, function (key, val) {
+                    $('#txtBpSys').val(val.BP_Sys);
+                    $('#txtBpDys').val(val.BP_Dys);
+                    $('#txtPulse').val(val.Pulse);
+                    $('#txtResp').val(val.Resp);
+                    $('#txtTemprarture').val(val.Temprarture);
+                    $('#txtHT').val(val.HT);
+                    $('#txtWT').val(val.WT);
+                    $('#txtArmSpan').val(val.ArmSpan);
+                    $('#txtSittingHeight').val(val.SittingHeight);
+                    $('#txtIBW').val(val.IBW);
+                    $('#txtSPO2').val(val.SPO2);
+                    $('#btnSaveVital').text('Update');
+                });
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function SelectedPatientInfo(appNo) {
+    $('#btnCall').prop('disabled', true);
+    $('#btnIn').prop('disabled', true);
+    $('#btnOut').prop('disabled', true);
+    $('#btnSaveVital').prop('disabled', false);
+    $('#btnAbsent').prop('disabled', true);
+    $('#btnAbsent').prop('disabled', true);
+    $('#btnCancel').prop('disabled', true);
+
+    $('#txtBpSys').val('');
+    $('#txtBpDys').val('');
+    $('#txtPulse').val('');
+    $('#txtResp').val('');
+    $('#txtTemprarture').val('');
+    $('#txtHT').val('');
+    $('#txtWT').val('');
+    $('#txtArmSpan').val('');
+    $('#txtSittingHeight').val('');
+    $('#txtIBW').val('');
+    $('#txtSPO2').val('');
+    $('#btnSaveVital').text('Save');
+    var url = config.baseUrl + "/api/Appointment/Opd_ExaminationRoomQueries";
+    var objBO = {};
+    objBO.Hosp_Id = Active.HospId;
+    objBO.SearcKey = '-'
+    objBO.SearchValue = '-'
+    objBO.UHID = '-';
+    objBO.AppointmentId = appNo;
+    objBO.from = $('#txtSearchFrom').val();
+    objBO.to = $('#txtSearchTo').val();
+    objBO.login_id = Active.userId;
+    objBO.Logic = "AppointmentDetail";
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        contentType: "application/json;charset=utf-8",
+        dataType: "JSON",
+        async: false,
+        success: function (data) {
+            if (Object.keys(data.ResultSet).length > 0) {
+                if (Object.keys(data.ResultSet.Table).length > 0) {
+                    $.each(data.ResultSet.Table, function (key, val) {
+                        $('#txtAppId').text(val.app_no);
+                        $('#txtPatientName').text(val.patient_name);
+                        $('#txtMobileNo').text(val.mobile_no);
+                        $('#txtAge').text(val.ageInfo);
+                        $('#txtDoctorName').text(val.DoctorName);
+                        $('#txtAppDate').text(val.appDate);
+                        $('#txtDoctorId').text(val.DoctorId);
+                        $('#txtUHID').text(val.UHID);
+
+                        if (val.CallTime == null && val.InTime == null && val.outTime == null) {
+                            $('#btnCall').prop('disabled', false);
+                            $('#btnIn').prop('disabled', true);
+                            $('#btnOut').prop('disabled', true);
+                        }
+
+                        if (val.CallTime != null && val.InTime == null && val.outTime == null) {
+                            $('#btnCall').prop('disabled', true);
+                            $('#btnIn').prop('disabled', false);
+                            $('#btnOut').prop('disabled', true);
+                        }
+
+                        if (val.CallTime != null && val.InTime != null && val.outTime == null) {
+                            $('#btnCall').prop('disabled', true);
+                            $('#btnIn').prop('disabled', true);
+                            $('#btnOut').prop('disabled', false);
+                        }
+
+                        if (val.uStatus == 'Closed')
+                            $('.btnNavigation').prop('disabled', true);
+
+                    });
+                }
+                else {
+                    alert("Data Not Found..");
+                };
+            }
+            if (Object.keys(data.ResultSet.Table1).length > 0) {
+                $.each(data.ResultSet.Table1, function (key, val) {
+                    $('#txtBpSys').val(val.BP_Sys);
+                    $('#txtBpDys').val(val.BP_Dys);
+                    $('#txtPulse').val(val.Pulse);
+                    $('#txtResp').val(val.Resp);
+                    $('#txtTemprarture').val(val.Temprarture);
+                    $('#txtHT').val(val.HT);
+                    $('#txtWT').val(val.WT);
+                    $('#txtArmSpan').val(val.ArmSpan);
+                    $('#txtSittingHeight').val(val.SittingHeight);
+                    $('#txtIBW').val(val.IBW);
+                    $('#txtSPO2').val(val.SPO2);
+                    $('#btnSaveVital').text('Update');
+                });
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
+function GetVitalSign() {
+    var url = config.baseUrl + "/api/Appointment/Opd_ExaminationRoomQueries";
+    var objBO = {};
+    objBO.AppointmentId = _app_no;
     objBO.Logic = 'PatientForAdvice';
     $.ajax({
         method: "POST",
@@ -92,12 +295,16 @@ function VitalSignForUpdate() {
         }
     });
 }
-function InsertVitalSign(logic) {
+function InsertVitalSign() {
+    if ($('#txtAppId').text() == '') {
+        alert('Appointment No Not Found.');
+        return
+    }
     var url = config.baseUrl + "/api/Prescription/CPOE_InsertVitalSign";
     var objBO = {};
-    objBO.RefNo = $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(9)').text();;
-    objBO.UHID = $('#tblAdviceHeader tbody').find('tr:eq(1)').find('td:eq(5)').text();
-    objBO.DoctorId = 'doctorId-Test';
+    objBO.RefNo = $('#txtAppId').text();
+    objBO.UHID = $('#txtUHID').text();
+    objBO.DoctorId = $('#txtDoctorId').text();
     objBO.EntrySource = 'OPD';
     objBO.BP_Sys = $('#txtBpSys').val();
     objBO.BP_Dys = $('#txtBpDys').val();
@@ -111,7 +318,7 @@ function InsertVitalSign(logic) {
     objBO.IBW = $('#txtIBW').val();
     objBO.SPO2 = $('#txtSPO2').val();
     objBO.login_id = Active.userId;
-    objBO.Logic = logic;
+    objBO.Logic = ($('#btnSaveVital').text() == 'Save') ? 'Insert' : 'Update';
     $.ajax({
         method: "POST",
         url: url,
@@ -121,7 +328,6 @@ function InsertVitalSign(logic) {
         success: function (data) {
             if (data.includes('Success')) {
                 alert(data);
-                GetVitalSign();
                 Clear();
                 $('#btnSaveVital').text('Save');
             }
@@ -134,7 +340,59 @@ function InsertVitalSign(logic) {
         }
     });
 }
+function InOutMarking(logic) {
+    if ($('#txtAppId').text() == '') {
+        alert('Appointment No Not Found.');
+        return
+    }
+    var url = config.baseUrl + "/api/Appointment/Opd_InOutMarking";
+    var objBO = {};
+    objBO.DoctorId = $('#txtDoctorId').text();
+    objBO.BookingNo = $('#txtAppId').text();
+    objBO.inputDate = '1900/01/01';
+    objBO.Prm1 = '-';
+    objBO.LoginId = Active.userId;
+    objBO.Logic = logic;
+    $.ajax({
+        method: "POST",
+        url: url,
+        data: JSON.stringify(objBO),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.includes('Success')) {
+                Clear();
+                if (objBO.Logic == "ExaminationRoom_CALL") {
+                    $('#btnCall').prop('disabled', true);
+                    $('#btnIn').prop('disabled', false);
+                    $('#btnAbsent').prop('disabled', false);
+                }
 
+                if (objBO.Logic == "ExaminationRoom_IN") {
+                    $('#btnIn').prop('disabled', true);
+                    $('#btnOut').prop('disabled', false);
+                }
+
+                if (objBO.Logic == "ExaminationRoom_OUT" || objBO.Logic == "ExaminationRoom_Absent") {
+                    $('#btnCall').prop('disabled', true);
+                    $('#btnIn').prop('disabled', true);
+                    $('#btnOut').prop('disabled', true);
+                    $('#btnSaveVital').prop('disabled', false);
+                    $('#btnAbsent').prop('disabled', true);
+                    $('#btnAbsent').prop('disabled', true);
+                    $('#btnCancel').prop('disabled', true);
+                    AppointmentList('AppList:ExaminationRoom');
+                }
+            }
+            else {
+                alert(data);
+            }
+        },
+        error: function (response) {
+            alert('Server Error...!');
+        }
+    });
+}
 function Clear() {
     $('input:text').val('');
 }

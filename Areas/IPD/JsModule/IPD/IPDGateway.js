@@ -7,6 +7,7 @@ var _AdmitDate = '';
 var _AdmitDateServer = '';
 var _UHID = '';
 var _sectionForCommunication = '';
+var _IsDischarged = '';
 $(document).ready(function () {
     _sectionForCommunication = 'Nursing';
     CloseSidebar();
@@ -101,6 +102,7 @@ function PatientInfoByIPDNo() {
                         _AdmitDateServer = val.AdmitDateServer;
                         _UHID = val.UHID;
                         _RoomBillingCategory = val.RoomBillingCategory;
+                        _IsDischarged = val.IsDischarged;
                         $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(3)').text(val.patient_name);
                         $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(6)').text(val.ageInfo);
                         $('#tblAdviceHeader tbody').find('tr:eq(0)').find('td:eq(9)').text(val.IPDNo);

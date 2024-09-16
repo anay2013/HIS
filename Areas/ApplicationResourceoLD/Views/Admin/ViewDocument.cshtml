@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "ViewDocument";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<script src="~/Areas/ApplicationResource/JsModule/ViewDocument.js?v=1.0"></script>
+<style>
+    iframe {
+        width: 97%;
+        border: 1px solid #afaea9;
+        margin-top: 3px;
+        height: 500px
+    }
+
+    #txtDocName {
+        padding: 3px;
+        color: #fff;
+        position: absolute;
+        width: 93%;
+        height: 39px;
+        background: #323639;
+        top: -6px;
+        left: 8px;
+    }
+</style>
+<div id="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="ml151">
+                    <div class="panel">
+                        <div class="panel-heading" style="background:#0076d0;padding: 4px;">
+                            <h4 class="text-white">Document Info</h4>
+                        </div>
+                        <div class="panel-body" style="padding:10px">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="scroll" style="height:450px;max-height:450px;overflow:auto;border:1px solid #2492b3">
+                                        <table id="tblDocMaster" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:1%">#</th>
+                                                    <th>Document Name</th>
+                                                    <th style="width:1%">CMD</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="row">
+                    <h3 id="txtDocName">-</h3>
+                    <iframe></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

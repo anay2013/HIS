@@ -547,6 +547,7 @@ function PatientAdvance() {
         var MasterObject = {};
         MasterObject.objBooking = objBooking;
         MasterObject.objPayment = objPayment;
+        $('#btnGenerateBill').addClass('button-loading');
         $.ajax({
             method: "POST",
             url: url,
@@ -559,13 +560,16 @@ function PatientAdvance() {
                     _ReceiptNo = data.split('|')[1];
                     $('#tblPaymentDetails tbody').find('input[type=text]').val(0);
                     $('input[name=PaymentMode]:not(.cash)').prop('checked', false).trigger('change.select2');
+                    $('#btnGenerateBill').removeClass('button-loading');
                 }
                 else {
                     alert(data);
+                    $('#btnGenerateBill').removeClass('button-loading');
                 }
             },
             error: function (response) {
                 alert('Server Error...!');
+                $('#btnGenerateBill').removeClass('button-loading');
             }
         });
     }

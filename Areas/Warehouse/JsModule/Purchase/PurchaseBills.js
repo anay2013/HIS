@@ -82,7 +82,7 @@ function PurchaseBills() {
                         tbody += "<td><button class='btn-primary btn-flat attach' data-toggle='modal' data-target='#modalUploadDocument'>Attach</button></td>";
                     }
                     else {
-                        tbody += "<td><a class='btn-warning btn-flat attach' href='" + val.virtual_path + "' target='_blank'>View</a></td>";
+                        tbody += "<td><a class='btn-warning btn-flat attach' href='" + config.documentDownloadServerUrl+val.virtual_path + "' target='_blank'>View</a></td>";
                     }
                     tbody += "</tr>";
                 });

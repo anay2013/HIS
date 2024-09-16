@@ -35,7 +35,7 @@ $(document).ready(function () {
         $('#tblReferral tbody').empty();
     });
     $('#tblDoctorReport tbody').on('click', '.Viewrow', function () {
-       refcode = $(this).closest('tr').find('td:eq(3)').text();     
+        refcode = $(this).closest('tr').find('td:eq(3)').text();
         GetDataPatientWise(refcode);
     });
 
@@ -255,7 +255,7 @@ function GetDataDoctorWise(logic) {
         success: function (data) {
             if (Object.keys(data.ResultSet).length) {
                 var tbody = ""; var totalAmount1 = 0; var dtemp = "";
-                var tcount = 0;  var count = 0; var amount = 0;
+                var tcount = 0; var count = 0; var amount = 0;
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         totalAmount1 += parseInt(val.Amount);
@@ -302,7 +302,7 @@ function GetDataDoctorWise(logic) {
         },
 
         complete: function (response) {
-          
+
         },
         error: function (response) {
             alert('Server Error...!');
@@ -342,37 +342,30 @@ function GetDataPatientWise(refcode) {
             var totalAmount = 0;
             if (Object.keys(data.ResultSet).length) {
                 var tbody = ""; var Totalpatient = 0; var temp = "";
-                var temp1 = "";
                 if (Object.keys(data.ResultSet.Table).length) {
                     $.each(data.ResultSet.Table, function (key, val) {
                         totalAmount += parseInt(val.Amount);
-                        if (temp != val.ProName) {
+                        if (temp != val.ipop_no) {
                             count++;
-                            tbody += "<tr class='pr' style='background:#f3acac85;'>";
-                            tbody += "<td colspan='2' style='font-size:13px;'><b>Pro Name :" + val.ProName + "</b></td>";
+                            tbody += "<tr class='pr' style='background:#ffc0cba8;'>";
+                            tbody += "<td colspan='7' style='font-size:13px;'><b>IPOPNo : " + val.ipop_no + "</b></td>";
                             tbody += "<td style='font-size:13px;text-align:right;'><b>Total :</b></td>";
                             tbody += "<td style='font-size:13px;text-align:center;'><label>0</label></td>";
-                            
+
                             tbody += "</tr>";
-                            temp = val.ProName
+                            temp = val.ipop_no
                         }
-                        if (temp1 != val.ref_name) {
-                            tbody += "<tr class='rf' style='background:#e1f0f5;'>";
-                            tbody += "<td colspan='2' style='font-size:13px;'><b>Ref. Name :" + val.ref_name + "</b></td>";
-                            tbody += "<td style='font-size:13px;text-align:right;'><b>Total :</b></td>";
-                            tbody += "<td style='font-size:13px;text-align:center;'><label>0</label></td>";
-                            tbody += "</tr>";
-                            temp1 = val.ref_name
-                        }
+
                         tbody += "<tr class='pt'>";
-                        tbody += "<td hidden>" + val.ProCode + "</td>";
-                        tbody += "<td hidden>" + val.ProName + "</td>";
-                        tbody += "<td hidden>" + val.ref_code + "</td>";
-                        tbody += "<td hidden>" + val.ref_name + "</td>";
-                        tbody += "<td style='width:10%;height:25px'>" + val.IPOPType + "</td>";
-                        tbody += "<td style='width:40%;height:25px'>" + val.PanelName + "</td>";
-                        tbody += "<td style='width:40%;height:25px'>" + val.patient_name + "</td>";
-                        tbody += "<td style='width:10%;text-align:center;height:25px'>" + val.Amount + "</td>";
+                        tbody += "<td>" + val.IPOPType + "</td>";
+                        tbody += "<td>" + val.PanelName + "</td>";
+                        tbody += "<td>" + val.ProName + "</td>";
+                        tbody += "<td>" + val.ipop_no + "</td>";
+                        tbody += "<td>" + val.tnxDate + "</td>";
+                        tbody += "<td>" + val.CatName + "</td>";
+                        tbody += "<td>" + val.ItemName + "</td>";
+                        tbody += "<td style='width:9%;text-align:center;height:25px'>" + val.CatTotal + "</td>";
+                        tbody += "<td style='width:9%;text-align:center;height:25px'>" + val.Amount.toFixed(0) + "</td>";
                         tbody += "</tr>";
                     });
                     $('#tblPatientReport tbody').append(tbody);
@@ -397,12 +390,9 @@ function TotalCal() {
     $('#tblPatientReport tbody tr').each(function () {
         if ($(this).attr('class') == 'pt') {
             tcount++;
-            amount += parseInt($(this).find('td:eq(7)').text());
-            amount1 += parseInt($(this).find('td:eq(7)').text());
+            amount += parseInt($(this).find('td:eq(8)').text());
             if (count == $('#tblPatientReport tbody tr.pr').length)
                 $('#tblPatientReport tbody tr.pr:last').find('td:eq(2)').find('label').text(amount);
-            if (count1 == $('#tblPatientReport tbody tr.rf').length)
-                $('#tblPatientReport tbody tr.rf:last').find('td:eq(2)').find('label').text(amount1);
         }
 
         if ($(this).attr('class') == 'pr') {
@@ -415,23 +405,11 @@ function TotalCal() {
                 $('#tblPatientReport tbody tr.pr:last').find('td:eq(2)').find('label').text(amount);
             }
         }
-
-        if ($(this).attr('class') == 'rf') {
-            count1++;
-            if (count1 > 1 && count1 <= $('#tblPatientReport tbody tr.rf').length) {
-                $('#tblPatientReport tbody tr.rf').eq((count1 == 2) ? 0 : count1 - 2).find('td:eq(2)').find('label').text(amount1);
-                amount1 = 0;
-            }
-            else {
-                $('#tblPatientReport tbody tr.rf:last').find('td:eq(2)').find('label').text(amount1);
-            }
-        }
     });
 
- 
+
 }
-function ExcelReferral()
-{
+function ExcelReferral() {
     var url = config.baseUrl + "/api/master/Referral_BusinessQueries";
     var objBO = {};
     objBO.HospId = '-';

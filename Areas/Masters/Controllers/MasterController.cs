@@ -44,5 +44,14 @@ namespace MediSoftTech_HIS.Areas.Masters.Controllers
         {
             return View();
         }
+
+        public ActionResult DepartmentList()
+        {
+            return View();
+        }
+        public ActionResult Advertisement()
+        {
+            return View();
+        }
     }
 }
